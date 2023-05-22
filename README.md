@@ -1,5 +1,10 @@
 This project was bootstrapped with [DHIS2 Application Platform](https://github.com/dhis2/app-platform).
 
+## Designs of the app
+
+Follow this link to view [the proposed designs of the app in Figma](https://www.figma.com/proto/r5H9Zq1dAeJ0PXyKmMCJgG/Data-Quality-App---HISP-Rwanda?type=design&node-id=82-24&scaling=min-zoom&page-id=0%3A1&starting-point-node-id=1%3A3)
+
+
 ## Available Scripts
 
 In the project directory, you can run:
