@@ -1,0 +1,27 @@
+.reportContainer{
+    width: 100%;
+}
+
+.topParagraph{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: rgb(53, 32, 107);
+    height: 50px;
+    color: white;
+    margin-bottom: 32px;
+}
+
+.configsContainer {
+    flex-direction: column;
+    display: flex;
+    margin: auto;
+    width: 80%;
+    border: 1px solid black;
+    border-radius: 5px;
+}
+
+.configRows{
+    background-color:#CCD6EB;
+    margin: 10px 5px;
+}
