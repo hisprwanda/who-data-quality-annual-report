@@ -1,7 +1,7 @@
 import React from 'react'
 import { NavLink } from 'react-router-dom';
 import './menubar.css'
-import logo from '../assets/images/WHO_logo.png'
+import logo from '../../assets/images/WHO_logo.png'
 
 const MenuBar = () => {
   return (

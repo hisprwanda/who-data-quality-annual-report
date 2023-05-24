@@ -1,28 +1,33 @@
 .configurationsContainer{
-    width: 80%;
+    width: 100%;
+    font-size: 14px;
+}
+
+.subContainer {
+    display: flex;
+    flex-direction: column;
+    margin: auto;
+    width: 95%;
 }
 
 .descriptionText{
-    background-color: rgb(158, 169, 109);
     display: flex;
     justify-content: center;
     align-items: center;
 }
 
-.configMenu{
+/* .config-tabs-container{
     display: flex;
     justify-content: center;
     align-items: center;
     height: 50px;
-    background-color: rgb(192, 206, 206);
-}
+} */
 
 .tableParagraph{
     display: flex;
     justify-content: center;
     align-items: center;
     height: 40px;
-    background-color:cornflowerblue;
 }
 
 .configTable {
@@ -30,5 +35,4 @@
     justify-content: center;
     align-items: center;
     height: 300px;
-    background-color: bisque;
 }

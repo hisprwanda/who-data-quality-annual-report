@@ -2,13 +2,15 @@
   display: flex;
   width: 100%;
   padding: 10px;
-  background-color: aliceblue;
+  background-color: #e4e4e4;
+  height: 60px;
 }
 
 .logoContainer{
   display: flex;
-  /* background-color: aqua; */
   align-items: center;
+  justify-content: space-evenly;
+  width: 30%;
 
   
 }
@@ -30,8 +32,9 @@ nav ul {
   }
 
   nav ul li a{
-    font-size: 18px;
+    font-size: 15px;
     text-decoration: none;
+    text-transform: uppercase;
   }
   
 .logoImage {
@@ -42,4 +45,5 @@ nav ul {
 .navLinksContainer {
   display: flex;
   margin: auto;
+
 }

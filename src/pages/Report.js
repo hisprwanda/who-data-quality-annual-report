@@ -1,5 +1,5 @@
 import React from 'react'
-import MenuBar from '../components/MenuBar'
+import MenuBar from '../components/menu-bar/MenuBar'
 import './report.css'
 
 const Report = () => {
