@@ -75,3 +75,7 @@ button {
 .active-content {
   display: block;
 }
+
+.groupsContainer {
+  width: 100%;
+}
