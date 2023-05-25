@@ -303,6 +303,7 @@ function Tabs() {
           <hr />
           <p>Configure relavant numerator Relations</p>
 
+            </div>
         </div>
 
         <div className={toggleState === 4 ? "content  active-content" : "content"} >
@@ -318,34 +319,418 @@ function Tabs() {
             <li>Missing/zero values: Threshold for missing/zero values for variable completeness. Note: when zero values are not stored for a data element, zeros and missing are not differentiated. </li>
           </ul>
 
+          <div class="qualityParametersContainer">
+            <Table>
+                <TableHead>
+                    <TableRowHead>
+                        <TableCellHead>Group	</TableCellHead>
+                        <TableCellHead>Reference indicator/data element</TableCellHead>
+                        <TableCellHead>Local data element/indicator	</TableCellHead>
+                        <TableCellHead>Moderate outlier (SD)	</TableCellHead>
+                        <TableCellHead>Extreme outlier (SD)	</TableCellHead>
+                        <TableCellHead>Consistency (%)</TableCellHead>
+                        <TableCellHead>Expected trend	</TableCellHead>
+                        <TableCellHead>Compare orgunit consistency with	</TableCellHead>
+                        <TableCellHead>Missing/zero values (%)</TableCellHead>
+                    </TableRowHead>
+                </TableHead>
+                <TableBody>
+                  <TableRow>
+                      <TableCell>General Service Statistics	</TableCell>
+                      <TableCell>OPD visits	</TableCell>
+                      <TableCell>New cases_OPD	</TableCell>
+                      <TableCell>
+                        <DropdownButton component={<FlyoutMenu><MenuItem label=" 1" /><MenuItem label=" 2" /><MenuItem label=" 3" /></FlyoutMenu>} name="buttonName" value="buttonValue" > 2 </DropdownButton>
+                      </TableCell>
+                      <TableCell>
+                        <DropdownButton component={<FlyoutMenu><MenuItem label=" 1" /><MenuItem label=" 2" /><MenuItem label=" 3" /></FlyoutMenu>} name="buttonName" value="buttonValue" > 3 </DropdownButton>
+                      </TableCell>
+                      <TableCell>
+                        <DropdownButton component={<FlyoutMenu><MenuItem label=" 1" /><MenuItem label=" 2" /><MenuItem label=" 3" /></FlyoutMenu>} name="buttonName" value="buttonValue" > 33 </DropdownButton>
+                      </TableCell>
+                      <TableCell>
+                        <DropdownButton component={<FlyoutMenu><MenuItem label="Increasing" /><MenuItem label="Decreasing" /></FlyoutMenu>} name="buttonName" value="buttonValue" > Constant </DropdownButton>
+                      </TableCell>
+                      <TableCell>
+                        <DropdownButton component={<FlyoutMenu><MenuItem label="Expected" /></FlyoutMenu>} name="buttonName" value="buttonValue" > Overall result </DropdownButton>
+                      </TableCell>
+                      <TableCell>
+                        <DropdownButton component={<FlyoutMenu><MenuItem label=" 1" /><MenuItem label=" 2" /><MenuItem label=" 3" /></FlyoutMenu>} name="buttonName" value="buttonValue" > 90 </DropdownButton>
+                      </TableCell>
+                  </TableRow>
+                  <TableRow>
+                      <TableCell>General Service Statistics	</TableCell>
+                      <TableCell>OPD visits	</TableCell>
+                      <TableCell>New cases_OPD	</TableCell>
+                      <TableCell>
+                        <DropdownButton component={<FlyoutMenu><MenuItem label=" 1" /><MenuItem label=" 2" /><MenuItem label=" 3" /></FlyoutMenu>} name="buttonName" value="buttonValue" > 2 </DropdownButton>
+                      </TableCell>
+                      <TableCell>
+                        <DropdownButton component={<FlyoutMenu><MenuItem label=" 1" /><MenuItem label=" 2" /><MenuItem label=" 3" /></FlyoutMenu>} name="buttonName" value="buttonValue" > 3 </DropdownButton>
+                      </TableCell>
+                      <TableCell>
+                        <DropdownButton component={<FlyoutMenu><MenuItem label=" 1" /><MenuItem label=" 2" /><MenuItem label=" 3" /></FlyoutMenu>} name="buttonName" value="buttonValue" > 33 </DropdownButton>
+                      </TableCell>
+                      <TableCell>
+                        <DropdownButton component={<FlyoutMenu><MenuItem label="Increasing" /><MenuItem label="Decreasing" /></FlyoutMenu>} name="buttonName" value="buttonValue" > Constant </DropdownButton>
+                      </TableCell>
+                      <TableCell>
+                        <DropdownButton component={<FlyoutMenu><MenuItem label="Expected" /></FlyoutMenu>} name="buttonName" value="buttonValue" > Overall result </DropdownButton>
+                      </TableCell>
+                      <TableCell>
+                        <DropdownButton component={<FlyoutMenu><MenuItem label=" 1" /><MenuItem label=" 2" /><MenuItem label=" 3" /></FlyoutMenu>} name="buttonName" value="buttonValue" > 90 </DropdownButton>
+                      </TableCell>
+                  </TableRow>
+                  <TableRow>
+                      <TableCell>General Service Statistics	</TableCell>
+                      <TableCell>OPD visits	</TableCell>
+                      <TableCell>New cases_OPD	</TableCell>
+                      <TableCell>
+                        <DropdownButton component={<FlyoutMenu><MenuItem label=" 1" /><MenuItem label=" 2" /><MenuItem label=" 3" /></FlyoutMenu>} name="buttonName" value="buttonValue" > 2 </DropdownButton>
+                      </TableCell>
+                      <TableCell>
+                        <DropdownButton component={<FlyoutMenu><MenuItem label=" 1" /><MenuItem label=" 2" /><MenuItem label=" 3" /></FlyoutMenu>} name="buttonName" value="buttonValue" > 3 </DropdownButton>
+                      </TableCell>
+                      <TableCell>
+                        <DropdownButton component={<FlyoutMenu><MenuItem label=" 1" /><MenuItem label=" 2" /><MenuItem label=" 3" /></FlyoutMenu>} name="buttonName" value="buttonValue" > 33 </DropdownButton>
+                      </TableCell>
+                      <TableCell>
+                        <DropdownButton component={<FlyoutMenu><MenuItem label="Increasing" /><MenuItem label="Decreasing" /></FlyoutMenu>} name="buttonName" value="buttonValue" > Constant </DropdownButton>
+                      </TableCell>
+                      <TableCell>
+                        <DropdownButton component={<FlyoutMenu><MenuItem label="Expected" /></FlyoutMenu>} name="buttonName" value="buttonValue" > Overall result </DropdownButton>
+                      </TableCell>
+                      <TableCell>
+                        <DropdownButton component={<FlyoutMenu><MenuItem label=" 1" /><MenuItem label=" 2" /><MenuItem label=" 3" /></FlyoutMenu>} name="buttonName" value="buttonValue" > 90 </DropdownButton>
+                      </TableCell>
+                  </TableRow>
+                </TableBody>
+            </Table>
+
+          </div>
+
+          <p>Dataset completeness</p>
+          <p> Set the thresholds for various completeness in the table below. Only dataset linked to indicators are displayed.</p>
+          <hr />
+          <ul>
+            <li>Completeness: Threshold for completeness of reporting.</li>
+            <li>Extreme outliers: Number of standard deviations (SD) from the mean for a values to quality as an extreme outlier.</li>
+            <li>Consistency: Threshold for consistency over time (percentage change over time). </li>
+            <li>Expected trend: Whether the numerator value is expected to be constant over time or increase/decrease. </li>
+            <li>Missing/zero values: Whether to compare consistency over time across organisation units, or to the expected change (e.g. constant or increasing/decreasing). </li>
+            <li>Missing/zero values: Threshold for missing/zero values for variable completeness. Note: when zero values are not stored for a data element, zeros and missing are not differentiated. </li>
+          </ul>
+
+
+          <div class="qualityParametersContainer">
+            <Table>
+                <TableHead>
+                    <TableRowHead>
+                        <TableCellHead>Group	</TableCellHead>
+                        <TableCellHead>Completeness (%)	</TableCellHead>
+                        <TableCellHead>Timeliness(%)</TableCellHead>
+                        <TableCellHead>Consistency (%)	</TableCellHead>
+                        <TableCellHead>Expected trend</TableCellHead>
+                        <TableCellHead>Compare orgunit consistency with</TableCellHead>
+                    </TableRowHead>
+                </TableHead>
+                <TableBody>
+                  <TableRow>
+                      <TableCell>07 Antenatal Consultations</TableCell>
+                      <TableCell>
+                        <DropdownButton component={<FlyoutMenu><MenuItem label=" 1" /><MenuItem label=" 2" /><MenuItem label=" 3" /></FlyoutMenu>} name="buttonName" value="buttonValue" > 90 </DropdownButton>
+                      </TableCell>
+                      <TableCell>
+                        <DropdownButton component={<FlyoutMenu><MenuItem label=" 1" /><MenuItem label=" 2" /><MenuItem label=" 3" /></FlyoutMenu>} name="buttonName" value="buttonValue" > 75 </DropdownButton>
+                      </TableCell>
+                      <TableCell>
+                        <DropdownButton component={<FlyoutMenu><MenuItem label=" 1" /><MenuItem label=" 2" /><MenuItem label=" 3" /></FlyoutMenu>} name="buttonName" value="buttonValue" > 33 </DropdownButton>
+                      </TableCell>
+                      <TableCell>
+                      <DropdownButton component={<FlyoutMenu><MenuItem label="Increasing" /><MenuItem label="Decreasing" /></FlyoutMenu>} name="buttonName" value="buttonValue" > Constant </DropdownButton>
+                      </TableCell>
+                      <TableCell>
+                        <DropdownButton component={<FlyoutMenu><MenuItem label="Increasing" /><MenuItem label="Decreasing" /></FlyoutMenu>} name="buttonName" value="buttonValue" > Overall result </DropdownButton>
+                      </TableCell>
+                  </TableRow>
+                  <TableRow>
+                      <TableCell>ANC Antenatal Consultations</TableCell>
+                      <TableCell>
+                        <DropdownButton component={<FlyoutMenu><MenuItem label=" 1" /><MenuItem label=" 2" /><MenuItem label=" 3" /></FlyoutMenu>} name="buttonName" value="buttonValue" > 90 </DropdownButton>
+                      </TableCell>
+                      <TableCell>
+                        <DropdownButton component={<FlyoutMenu><MenuItem label=" 1" /><MenuItem label=" 2" /><MenuItem label=" 3" /></FlyoutMenu>} name="buttonName" value="buttonValue" > 75 </DropdownButton>
+                      </TableCell>
+                      <TableCell>
+                        <DropdownButton component={<FlyoutMenu><MenuItem label=" 1" /><MenuItem label=" 2" /><MenuItem label=" 3" /></FlyoutMenu>} name="buttonName" value="buttonValue" > 33 </DropdownButton>
+                      </TableCell>
+                      <TableCell>
+                      <DropdownButton component={<FlyoutMenu><MenuItem label="Increasing" /><MenuItem label="Decreasing" /></FlyoutMenu>} name="buttonName" value="buttonValue" > Constant </DropdownButton>
+                      </TableCell>
+                      <TableCell>
+                        <DropdownButton component={<FlyoutMenu><MenuItem label="Increasing" /><MenuItem label="Decreasing" /></FlyoutMenu>} name="buttonName" value="buttonValue" > Overall result </DropdownButton>
+                      </TableCell>
+                  </TableRow>
+                  <TableRow>
+                      <TableCell>OutPatient Consultations (OPD)</TableCell>
+                      <TableCell>
+                        <DropdownButton component={<FlyoutMenu><MenuItem label=" 1" /><MenuItem label=" 2" /><MenuItem label=" 3" /></FlyoutMenu>} name="buttonName" value="buttonValue" > 90 </DropdownButton>
+                      </TableCell>
+                      <TableCell>
+                        <DropdownButton component={<FlyoutMenu><MenuItem label=" 1" /><MenuItem label=" 2" /><MenuItem label=" 3" /></FlyoutMenu>} name="buttonName" value="buttonValue" > 75 </DropdownButton>
+                      </TableCell>
+                      <TableCell>
+                        <DropdownButton component={<FlyoutMenu><MenuItem label=" 1" /><MenuItem label=" 2" /><MenuItem label=" 3" /></FlyoutMenu>} name="buttonName" value="buttonValue" > 33 </DropdownButton>
+                      </TableCell>
+                      <TableCell>
+                        <DropdownButton component={<FlyoutMenu><MenuItem label="Increasing" /><MenuItem label="Decreasing" /></FlyoutMenu>} name="buttonName" value="buttonValue" > Constant </DropdownButton>
+                      </TableCell>
+                      <TableCell>
+                        <DropdownButton component={<FlyoutMenu><MenuItem label="Increasing" /><MenuItem label="Decreasing" /></FlyoutMenu>} name="buttonName" value="buttonValue" > Overall result </DropdownButton>
+                      </TableCell>
+                  </TableRow>
+                </TableBody>
+            </Table>
+
+          </div>
 
         </div>
 
         <div className={toggleState === 5 ? "content  active-content" : "content"} >
           <p>Please map alternative denominators for comparison, for example denominiators from the National Bureau of Statistics with denominators used by health programmes.</p>
           <hr />
-          <p>
-            Lorem ipsum dolor sit amet consectetur adipisicing elit. Sapiente
-            voluptatum qui adipisci.
-          </p>
+          
+          <div class="denominatorsContainer">
+            <Table>
+                <TableHead>
+                    <TableRowHead>
+                        <TableCellHead>Data element/indicator</TableCellHead>
+                        <TableCellHead>Type</TableCellHead>
+                        <TableCellHead>Actions</TableCellHead>
+                    </TableRowHead>
+                </TableHead>
+                <TableBody>
+                  <TableRow>
+                      <TableCell>AIDS clinical_OPDDH</TableCell>
+                      <TableCell>	Expected pregnancies</TableCell>
+                      <TableCell>
+                        <Button
+                            name="Primary button" onClick={() => window.alert('It works!')} 
+                            basic button value="default" icon={<IconEdit16 />}> Edit
+                        </Button>
+                        <Button
+                            name="Primary button" onClick={() => window.alert('It works!')} 
+                            destructive button value="default" icon={<IconDelete16 />}> Delete
+                        </Button>
+                      </TableCell>
+                  </TableRow>
+                  <TableRow>
+                      <TableCell>Obs Gyn surgery Post surgical Infection</TableCell>
+                      <TableCell>	 Total	Children {'<'} 1 year</TableCell>
+                      <TableCell>
+                        <Button
+                            name="Primary button" onClick={() => window.alert('It works!')} 
+                            basic button value="default" icon={<IconEdit16 />}> Edit
+                        </Button>
+                        <Button
+                            name="Primary button" onClick={() => window.alert('It works!')} 
+                            destructive button value="default" icon={<IconDelete16 />}> Delete
+                        </Button>
+                      </TableCell>
+                  </TableRow>
+                  <TableRow>
+                      <TableCell>Hosp_Malaria Simple in postpartum_Within 42 days after delivery	</TableCell>
+                      <TableCell>	People living with HIV</TableCell>
+                      <TableCell>
+                        <Button
+                            name="Primary button" onClick={() => window.alert('It works!')} 
+                            basic button value="default" icon={<IconEdit16 />}> Edit
+                        </Button>
+                        <Button
+                            name="Primary button" onClick={() => window.alert('It works!')} 
+                            destructive button value="default" icon={<IconDelete16 />}> Delete
+                        </Button>
+                      </TableCell>
+                  </TableRow>
+
+                  {/* Add button */}
+
+                  <TableRow>
+                      <TableCell></TableCell>
+                      <TableCell></TableCell>
+                      <TableCell> 
+                        <Button
+                            name="Primary button" onClick={() => window.alert('It works!')} 
+                            primary button value="default" icon={<IconAdd16 />}> Add Denominator
+                        </Button>
+                      </TableCell>
+                  </TableRow>
+                </TableBody>
+            </Table>
+
+          </div>
         </div>
 
         <div className={toggleState === 6 ? "content  active-content" : "content"} >
           <p>Please map alternative denominators for comparison, for example denominiators from the National Bureau of Statistics with denominators used by health programmes.</p>
           <hr />
-          <p>
-            Lorem ipsum dolor sit amet consectetur adipisicing elit. Sapiente
-            voluptatum qui adipisci.
-          </p>
+          <div class="denominatorRelationsContainer">
+              <Table>
+                  <TableHead>
+                      <TableRowHead>
+                          <TableCellHead>Name	</TableCellHead>
+                          <TableCellHead>	Denominator A	</TableCellHead>
+                          <TableCellHead>	Denominator B	</TableCellHead>
+                          <TableCellHead>Criteria</TableCellHead>
+                          <TableCellHead>Actions</TableCellHead>
+                      </TableRowHead>
+                  </TableHead>
+                  <TableBody>
+                    <TableRow>
+                        <TableCell>Total population - census to UN projection</TableCell>
+                        <TableCell>Hosp_Malaria Simple in postpartum_Within 42 days after delivery</TableCell>
+                        <TableCell>Obs Gyn surgery Post surgical Infection Total</TableCell>
+                        <TableCell>10%</TableCell>
+                        <TableCell>
+                          <Button
+                              name="Primary button" onClick={() => window.alert('It works!')} 
+                              basic button value="default" icon={<IconEdit16 />}> Edit
+                          </Button>
+                          <Button
+                              name="Primary button" onClick={() => window.alert('It works!')} 
+                              destructive button value="default" icon={<IconDelete16 />}> Delete
+                          </Button>
+                        </TableCell>
+                    </TableRow>
+                    <TableRow>
+                        <TableCell>Total population - census to UN projection</TableCell>
+                        <TableCell>Hosp_Malaria Simple in postpartum_Within 42 days after delivery</TableCell>
+                        <TableCell>Obs Gyn surgery Post surgical Infection Total</TableCell>
+                        <TableCell>10%</TableCell>
+                        <TableCell>
+                          <Button
+                              name="Primary button" onClick={() => window.alert('It works!')} 
+                              basic button value="default" icon={<IconEdit16 />}> Edit
+                          </Button>
+                          <Button
+                              name="Primary button" onClick={() => window.alert('It works!')} 
+                              destructive button value="default" icon={<IconDelete16 />}> Delete
+                          </Button>
+                        </TableCell>
+                    </TableRow>
+                    <TableRow>
+                        <TableCell>Total population - census to UN projection</TableCell>
+                        <TableCell></TableCell>
+                        <TableCell></TableCell>
+                        <TableCell></TableCell>
+                        <TableCell>
+                          <Button
+                              name="Primary button" onClick={() => window.alert('It works!')} 
+                              basic button value="default" icon={<IconEdit16 />}> Edit
+                          </Button>
+                          <Button
+                              name="Primary button" onClick={() => window.alert('It works!')} 
+                              destructive button value="default" icon={<IconDelete16 />}> Delete
+                          </Button>
+                        </TableCell>
+                    </TableRow>
+                    
+                    {/* Add button */}
+
+                    <TableRow>
+                        <TableCell></TableCell>
+                        <TableCell></TableCell>
+                        <TableCell></TableCell>
+                        <TableCell></TableCell>
+                        <TableCell> 
+                          <Button
+                              name="Primary button" onClick={() => window.alert('It works!')} 
+                              primary button value="default" icon={<IconAdd16 />}> Add Relations
+                          </Button>
+                        </TableCell>
+                    </TableRow>
+                  </TableBody>
+              </Table>
+
+            </div>
         </div>
 
         <div className={toggleState === 7 ? "content  active-content" : "content"} >
           <p>Please identify external (survey) data that can be used for comparison with routine data, e.g. ANC coverage, immunisation coverage etc. The "external data" should refer to calculated survey result (e.g. a percentage), whilst the numerator and denominator refer to the raw data</p>
           <hr />
-          <p>
-            Lorem ipsum dolor sit amet consectetur adipisicing elit. Sapiente
-            voluptatum qui adipisci.
-          </p>
+          
+            <div class="ExternalDataContainer">
+              <Table>
+                  <TableHead>
+                      <TableRowHead>
+                          <TableCellHead>Name</TableCellHead>
+                          <TableCellHead>Survey/external indicator</TableCellHead>
+                          <TableCellHead>Routine data numerator</TableCellHead>
+                          <TableCellHead>Routine data denominator</TableCellHead>
+                          <TableCellHead>Criteria</TableCellHead>
+                          <TableCellHead>Level</TableCellHead>
+                          <TableCellHead>Actions</TableCellHead>
+                      </TableRowHead>
+                  </TableHead>
+                  <TableBody>
+                    <TableRow>
+                        <TableCell>ANC 1 coverage - routine to surveyt</TableCell>
+                        <TableCell>AIDS clinical_OPDDH	</TableCell>
+                        <TableCell>ANC First standard visit 1st trimester</TableCell>
+                        <TableCell>AIDS clinical_OPDDH</TableCell>
+                        <TableCell>33 %	</TableCell>
+                        <TableCell>District</TableCell>
+                        <TableCell>
+                          <Button
+                              name="Primary button" onClick={() => window.alert('It works!')} 
+                              basic button value="default" icon={<IconEdit16 />}> Edit
+                          </Button>
+                          <Button
+                              name="Primary button" onClick={() => window.alert('It works!')} 
+                              destructive button value="default" icon={<IconDelete16 />}> Delete
+                          </Button>
+                        </TableCell>
+                    </TableRow>
+                    <TableRow>
+                        <TableCell>ANC 1 coverage - routine to surveyt</TableCell>
+                        <TableCell>AIDS clinical_OPDDH	</TableCell>
+                        <TableCell>ANC First standard visit 1st trimester</TableCell>
+                        <TableCell>AIDS clinical_OPDDH</TableCell>
+                        <TableCell>33 %	</TableCell>
+                        <TableCell>District</TableCell>
+                        <TableCell>
+                          <Button
+                              name="Primary button" onClick={() => window.alert('It works!')} 
+                              basic button value="default" icon={<IconEdit16 />}> Edit
+                          </Button>
+                          <Button
+                              name="Primary button" onClick={() => window.alert('It works!')} 
+                              destructive button value="default" icon={<IconDelete16 />}> Delete
+                          </Button>
+                        </TableCell>
+                    </TableRow>
+                    
+
+                     {/* Add button */}
+
+                     <TableRow>
+                        <TableCell></TableCell>
+                        <TableCell></TableCell>
+                        <TableCell></TableCell>
+                        <TableCell></TableCell>
+                        <TableCell></TableCell>
+                        <TableCell></TableCell>
+                        <TableCell> 
+                          <Button
+                              name="Primary button" onClick={() => window.alert('It works!')} 
+                              primary button value="default" icon={<IconAdd16 />}> Add Comparison
+                          </Button>
+                        </TableCell>
+                    </TableRow>
+                  </TableBody>
+              </Table>
+
+            </div>
         </div>
 
         
