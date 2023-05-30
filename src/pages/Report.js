@@ -1,27 +1,35 @@
 import React from 'react'
 import MenuBar from '../components/menu-bar/MenuBar'
 import './report.css'
+import { resources } from '../assets/str-resources/report-section'
+
+import { ReportStringResourceLoader } from '../utils/string-resource-loader/ReportStringResourceLoader'
 
 const Report = () => {
   return (
     <div className='reportContainer'>
       <MenuBar />
-
         <div className='topParagraph'>
-          <p>Annual Data Quality Report</p>
+          <p>{resources.report_title}</p>
+          <div>
+          </div>
         </div>
 
         <div className='configsContainer'>
             <div className='configRows'>
-              <p>Data</p>
+              <p>{resources.data}</p>
+              <div>
+                {ReportStringResourceLoader.period}
+                Division
+              </div>
             </div>
 
             <div className='configRows'>
-              <p>Period</p>
+              <p>{resources.period}</p>
             </div>
 
             <div className='configRows'>
-              <p>Organization Units</p>
+              <p>{resources.orgunit}</p>
             </div>
         </div>
       
