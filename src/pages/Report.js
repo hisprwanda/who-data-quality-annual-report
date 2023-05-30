@@ -18,10 +18,6 @@ const Report = () => {
         <div className='configsContainer'>
             <div className='configRows'>
               <p>{resources.data}</p>
-              <div>
-                {ReportStringResourceLoader.period}
-                Division
-              </div>
             </div>
 
             <div className='configRows'>
