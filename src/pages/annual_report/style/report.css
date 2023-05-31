@@ -1,0 +1,60 @@
+label {
+    margin: 0.5rem 0rem;
+    font-size: 1.3rem;
+}
+.reportContainer{
+    width: 100%;
+    background-color: #F3F5F7;
+    height: 100vh;
+}
+
+.topParagraph{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: rgb(53, 32, 107);
+    height: 50px;
+    color: white;
+    margin-bottom: 32px;
+}
+
+.configsContainer {
+    flex-direction: column;
+    display: flex;
+    margin: auto;
+    width: 80%;
+    border: 1px solid rgb(233, 231, 231);
+    background-color: #fff;
+    border-radius: 5px;
+}
+
+.title {
+    font-size: 1.5rem;
+    margin-bottom: 0.2rem;
+    cursor: pointer;
+}
+
+.set-visible {
+    display: block;
+    transition: all 3s;
+}
+
+.set-invisible {
+    display: none;
+    transition: all 3s;
+}
+
+.configRows .title {
+    border-radius: 5px;
+    background-color: #D5DDE5;
+    padding: 0.6rem;
+}
+
+.configRows:nth-child(2), .configRows:nth-child(3) {
+
+}
+
+#data-section, #period-section, #orgunit_section {
+    padding: 1.4rem;
+    width: 40%;
+}

@@ -3,7 +3,7 @@ import { DataQuery } from '@dhis2/app-runtime'
 import i18n from '@dhis2/d2-i18n'
 import classes from './App.module.css'
 
-import Report from './pages/Report'
+import Report from './pages/annual_report/Report'
 import Configurations from './pages/Configurations'
 
 import { BrowserRouter, Routes, Route } from "react-router-dom";
