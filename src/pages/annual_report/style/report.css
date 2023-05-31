@@ -10,12 +10,11 @@ label {
 
 .topParagraph{
     display: flex;
-    justify-content: center;
-    align-items: center;
-    background-color: rgb(53, 32, 107);
+    background-color: #F3F5F7;
     height: 50px;
-    color: white;
-    margin-bottom: 32px;
+    color: rgb(10, 10, 10);
+    font-size: 2.0rem;
+    margin-left: 10%;
 }
 
 .configsContainer {
@@ -26,6 +25,7 @@ label {
     border: 1px solid rgb(233, 231, 231);
     background-color: #fff;
     border-radius: 5px;
+    margin-top: 2.5rem;
 }
 
 .title {
@@ -50,11 +50,35 @@ label {
     padding: 0.6rem;
 }
 
-.configRows:nth-child(2), .configRows:nth-child(3) {
-
-}
-
 #data-section, #period-section, #orgunit_section {
     padding: 1.4rem;
     width: 40%;
+}
+
+#orgunit_section > div, #period-section > div {
+    display: flex;
+    flex-direction: row;
+    gap: 1.2rem;
+}
+
+#data-section > div {
+    display: flex;
+    flex-direction: row;
+    align-items: stretch;
+    gap: 1.5rem;
+    width: 100%;
+    padding: 0.4rem;
+}
+
+#data-section {
+    width: 100%;
+}
+
+#data-section > div div {
+    flex-grow: 1;
+    width: 100%;
+}
+
+.button {
+    font-size: 1.2rem;
 }
