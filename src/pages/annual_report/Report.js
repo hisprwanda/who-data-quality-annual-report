@@ -12,7 +12,7 @@ import React from 'react'
 import MenuBar from '../../components/menu-bar/MenuBar'
 import './style/report.css'
 import { resources } from '../../assets/str-resources/report-section'
-import { Modal, ModalContent, Button, CustomTransfer, TransferOption, SingleSelect, SingleSelectOption, OrganisationUnitTree, ModalActions, ButtonStrip, Card, Box } from '@dhis2/ui'
+import { Modal, ModalContent, Button, CustomTransfer, TransferOption, SingleSelect, SingleSelectOption, OrganisationUnitTree, ModalActions, ButtonStrip, Card, Box, Divider } from '@dhis2/ui'
 import { OrgUnitComponent } from '../../components/annual-report/OrgUnit.Component'
 import { PeriodComponent } from '../../components/annual-report/Period.Component'
 
@@ -171,9 +171,22 @@ const Report = () => {
                   </div>
                 
               </div>
-            </div>
+            </div>            
         </div>
-      
+        <div className='bottom-section'>
+              <div>
+                <div>
+                    <Button name="Primary button" onClick={manageModel} primary value="default" className='button'>
+                        <span className='button'>Generate</span>
+                    </Button>
+                </div>
+                <div>
+                    <Button name="basic_button" onClick={manageModel} value="default" className='button'>
+                        <span className='button'>Print</span>
+                    </Button>
+                </div>
+              </div>
+            </div>
     </div>
   )
 }
