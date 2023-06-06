@@ -1,32 +1,48 @@
+/*
+Author: Joseph MANZI
+Company: HISP Rwanda
+Date: May, 30 2023
+The page used to present the user interface for the user to manage the reports
+*/
+
+// Import of key features 
+
 import {useState} from 'react'
 import React from 'react'
 import MenuBar from '../../components/menu-bar/MenuBar'
 import './style/report.css'
 import { resources } from '../../assets/str-resources/report-section'
-import { SingleSelect, SingleSelectOption } from '@dhis2-ui/select'
-import { TransferOption } from '@dhis2-ui/transfer'
-import { Transfer, CustomTransfer } from '@dhis2-ui/transfer'
-import { Button } from '@dhis2-ui/button'
-import { Modal, ModalContent } from '@dhis2-ui/modal'
+import { Modal, ModalContent, Button, CustomTransfer, TransferOption, SingleSelect, SingleSelectOption, OrganisationUnitTree, ModalActions, ButtonStrip, Card, Box, Divider } from '@dhis2/ui'
+import { OrgUnitComponent } from '../../components/annual-report/OrgUnit.Component'
+import { PeriodComponent } from '../../components/annual-report/Period.Component'
 
+// End of imports
 
-const loadModal = () => {
-  console.log('Loading the modal');
-  <Modal onClose={() => {}}>
-    <ModalContent>
-      It is loading now ...
-    </ModalContent>
-  </Modal>
-}
-
+// Start of the functional component definition
 const Report = () => {
 
+  // Hook used to display or hide the 
   const [visibility, toggleVisibility] = useState({
     'data_section': 'set-visible',
     'period_section': 'set-invisible',
     'orgunit_section': 'set-invisible'
   })
 
+  // Hook used to display or hide different modal
+  let [open, openModal] = useState(false)
+  let [periodModal, openPeriodModal] = useState(false)
+  // Function used to change the value of the variable used to hide or display the modal
+  const manageModel = () => {
+    open = ! open
+    openModal(open)
+  }
+
+  const managePeriodModal = () => {
+    periodModal = ! periodModal
+    openPeriodModal(periodModal)
+  }
+
+  // Method used to 
   const setToggleState = (event) => {
     
     let data_section = 'set-invisible';
@@ -58,12 +74,21 @@ const Report = () => {
       'period_section': period_section,
       'orgunit_section': orgunit_section
     })
-      
+
   }
 
+  let modal = ''
+  if(open){
+    modal = <Modal><ModalContent><OrgUnitComponent/></ModalContent><ModalActions><ButtonStrip end><Button onClick={manageModel} secondary>Hide</Button><Button onClick={manageModel} primary>Update</Button></ButtonStrip></ModalActions></Modal>
+  }
+  let periodModalTrigger = ''
+  if(periodModal) {
+    periodModalTrigger = modal = <Modal><ModalContent><PeriodComponent/></ModalContent><ModalActions><ButtonStrip end><Button onClick={managePeriodModal} secondary>Hide</Button><Button onClick={managePeriodModal} primary>Update</Button></ButtonStrip></ModalActions></Modal>
+  }
   return (
     <div className='reportContainer'>
       <MenuBar />
+      {modal}
         <div className='topParagraph'>
           <p>{resources.report_title}</p>
         </div>
@@ -74,13 +99,35 @@ const Report = () => {
                 {resources.data}
               </div>
               <div className={visibility['data_section']} id='data-section'>
-                <label>Data Elements Groups</label>
-                <SingleSelect className="select" onChange={() => {console.log('Doing change element')}} selected='General Service'>
-                  <SingleSelectOption label="General Service" value="General Service" />
-                  <SingleSelectOption label="Maternity" value="Maternity" />
-                  <SingleSelectOption label="Malaria" value="Malaria" />
-                  <SingleSelectOption label="OPD" value="OPD" />
-                </SingleSelect>
+                <div>
+                  <div>
+                      <Box width="100%">
+                            <Card>
+                              <label>Data Elements</label>
+                              <SingleSelect className="select" onChange={() => {console.log('Doing change element')}} selected='General Service'>
+                                <SingleSelectOption label="General Service" value="General Service" />
+                                <SingleSelectOption label="Maternity" value="Maternity" />
+                                <SingleSelectOption label="Malaria" value="Malaria" />
+                                <SingleSelectOption label="OPD" value="OPD" />
+                              </SingleSelect>
+                            </Card>
+                      </Box>  
+                  </div>
+                  <div>
+                      <Box width="100%">
+                            <Card>
+                                <label>Data Sets</label>
+                                <SingleSelect className="select" onChange={() => {console.log('Doing change element')}} selected='General Service'>
+                                  <SingleSelectOption label="General Service" value="General Service" />
+                                  <SingleSelectOption label="Maternity" value="Maternity" />
+                                  <SingleSelectOption label="Malaria" value="Malaria" />
+                                  <SingleSelectOption label="OPD" value="OPD" />
+                                </SingleSelect>
+                              </Card>
+                          </Box>  
+                  </div>
+                </div>
+
               </div>
             </div>
 
@@ -89,102 +136,18 @@ const Report = () => {
                 {resources.period}
               </div>
               <div className={visibility['period_section']} id='period-section'>
-                <label>Period</label>
-                <Transfer
-                  filterable
-                  initialSearchTerm="2023"
-                  onChange={() => {}}
-                  options={[
-                      {
-                          label: '2023',
-                          value: 'anc_1st_visit'
-                      },
-                      {
-                          label: 'ANC 2nd visit',
-                          value: 'anc_2nd_visit'
-                      },
-                      {
-                          label: 'ANC 3rd visit',
-                          value: 'anc_3rd_visit'
-                      },
-                      {
-                          label: 'ANC 4th or more visits',
-                          value: 'anc_4th_or_more_visits'
-                      },
-                      {
-                          label: 'ARI treated with antibiotics (pneumonia) follow-up',
-                          value: 'ari_treated_with_antibiotics_(pneumonia)_follow-up'
-                      },
-                      {
-                          label: 'ARI treated with antibiotics (pneumonia) new',
-                          value: 'ari_treated_with_antibiotics_(pneumonia)_new'
-                      },
-                      {
-                          label: 'ARI treated with antibiotics (pneumonia) referrals',
-                          value: 'ari_treated_with_antibiotics_(pneumonia)_referrals'
-                      },
-                      {
-                          label: 'ARI treated without antibiotics (cough) follow-up',
-                          value: 'ari_treated_without_antibiotics_(cough)_follow-up'
-                      },
-                      {
-                          label: 'ARI treated without antibiotics (cough) new',
-                          value: 'ari_treated_without_antibiotics_(cough)_new'
-                      },
-                      {
-                          label: 'ARI treated without antibiotics (cough) referrals',
-                          value: 'ari_treated_without_antibiotics_(cough)_referrals'
-                      },
-                      {
-                          label: 'ART No clients who stopped TRT due to TRT failure',
-                          value: 'art_no_clients_who_stopped_trt_due_to_trt_failure'
-                      },
-                      {
-                          label: 'ART No clients who stopped TRT due to adverse clinical status/event',
-                          value: 'art_no_clients_who_stopped_trt_due_to_adverse_clinical_status/event'
-                      },
-                      {
-                          label: 'ART No clients with change of regimen due to drug toxicity',
-                          value: 'art_no_clients_with_change_of_regimen_due_to_drug_toxicity'
-                      },
-                      {
-                          label: 'ART No clients with new adverse drug reaction',
-                          value: 'art_no_clients_with_new_adverse_drug_reaction'
-                      },
-                      {
-                          label: 'ART No started Opportunist Infection prophylaxis',
-                          value: 'art_no_started_opportunist_infection_prophylaxis'
-                      },
-                      {
-                          label: 'ART clients with new adverse clinical event',
-                          value: 'art_clients_with_new_adverse_clinical_event'
-                      },
-                      {
-                          label: 'ART defaulters',
-                          value: 'art_defaulters'
-                      },
-                      {
-                          label: 'ART enrollment stage 1',
-                          value: 'art_enrollment_stage_1'
-                      },
-                      {
-                          label: 'ART enrollment stage 2',
-                          value: 'art_enrollment_stage_2'
-                      },
-                      {
-                          label: 'ART enrollment stage 3',
-                          value: 'art_enrollment_stage_3'
-                      },
-                      {
-                          label: 'ART enrollment stage 4',
-                          value: 'art_enrollment_stage_4'
-                      },
-                      {
-                          label: 'ART entry point: No PMTCT',
-                          value: 'art_entry_point:_no_pmtct'
-                      }
-                  ]}
-              />
+                  <div>
+                      <div>
+                          <Button name="basic_button" onClick={()=>{}} value="orgunit" className='button'>
+                            <span className='button'>Period</span>
+                          </Button>
+                      </div>
+                      <div>
+                          <Button name="basic_button" onClick={managePeriodModal} value="default" className='button'>
+                          <span className='button'>...</span>
+                          </Button>
+                      </div>
+                  </div>
               </div>
             </div>
 
@@ -193,12 +156,37 @@ const Report = () => {
                 {resources.orgunit}
               </div>
               <div className={visibility['orgunit_section']} id='orgunit_section'>
-                <label>Organization Unit</label>
-                <Button name="Basic button" onClick={loadModal} value="default">Label me!</Button>
+                
+                  <div>
+                    <div>
+                        <Button name="basic_button" onClick={()=>{}} value="orgunit" className='button'>
+                          <span className='button'>Organization Unit</span>
+                        </Button>
+                    </div>
+                    <div>
+                        <Button name="basic_button" onClick={manageModel} value="default" className='button'>
+                          <span className='button'>...</span>
+                        </Button>
+                    </div>
+                  </div>
+                
+              </div>
+            </div>            
+        </div>
+        <div className='bottom-section'>
+              <div>
+                <div>
+                    <Button name="Primary button" onClick={manageModel} primary value="default" className='button'>
+                        <span className='button'>Generate</span>
+                    </Button>
+                </div>
+                <div>
+                    <Button name="basic_button" onClick={manageModel} value="default" className='button'>
+                        <span className='button'>Print</span>
+                    </Button>
+                </div>
               </div>
             </div>
-        </div>
-      
     </div>
   )
 }

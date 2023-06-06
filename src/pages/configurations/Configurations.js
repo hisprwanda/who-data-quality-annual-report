@@ -1,6 +1,6 @@
 import React from 'react'
-import MenuBar from '../components/menu-bar/MenuBar'
-import ConfigTabs from '../components/config-tabs/ConfigTabs'
+import MenuBar from '../../components/menu-bar/MenuBar'
+import ConfigTabs from '../../components/config-tabs/ConfigTabs'
 import './configurations.css'
 
 const Configurations = () => {

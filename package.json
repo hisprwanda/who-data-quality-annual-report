@@ -14,6 +14,7 @@
     "@dhis2/cli-app-scripts": "^10.3.8"
   },
   "dependencies": {
+    "@dhis2/analytics": "^25.1.10",
     "@dhis2/app-runtime": "^3.9.3",
     "@dhis2/ui": "^8.13.3",
     "react-router-dom": "^6.11.1"
