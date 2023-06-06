@@ -16,8 +16,8 @@ import {
   IconSubtractCircle16,
   IconDelete16,
   IconAdd16,	
-
 } from '@dhis2/ui'
+import Denominators from "./Denominators";
 
 
 function Tabs() {
@@ -26,6 +26,7 @@ function Tabs() {
   const toggleTab = (index) => {
     setToggleState(index);
   };
+
 
   return (
     <div className="container">
@@ -61,136 +62,13 @@ function Tabs() {
 
       <div className="content-tabs">
         
-        <div className={toggleState === 1 ? "content  active-content" : "content"} >
-          <p>Please map the reference numerators to the corresponding data element/indicator in this database.</p>
-          <hr />
-
-          <div className='configTable'>
-
-            <Table>
-                <TableHead>
-                    <TableRowHead>
-                        <TableCellHead>Data</TableCellHead>
-                        <TableCellHead>Reference numerator</TableCellHead>
-                        <TableCellHead>Core</TableCellHead>
-                        <TableCellHead>Data element/indicator</TableCellHead>
-                        <TableCellHead>Dataset</TableCellHead>
-                        <TableCellHead>Actions</TableCellHead>
-                    </TableRowHead>
-                </TableHead>
-                <TableBody>
-                  <TableRow>
-                      <TableCell>General Service Statistics</TableCell>
-                      <TableCell>OPD visits</TableCell>
-                      <TableCell>✔️</TableCell>
-                      <TableCell>New cases_OPD</TableCell>
-                      <TableCell>OutPatient Consultations (OPD)</TableCell>
-                      <TableCell>
-                        <Button
-                            name="Primary button" onClick={() => window.alert('It works!')} 
-                            basic button value="default" icon={<IconEdit16 />}> Edit
-                        </Button>
-                        <Button
-                            name="Primary button" onClick={() => window.alert('It works!')} 
-                            basic button value="default" icon={<IconSubtractCircle16 />}> Clear
-                        </Button>
-                      </TableCell>
-                  </TableRow>
-                  <TableRow>
-                      <TableCell>HIV/Aids</TableCell>
-                      <TableCell>Retained on ART 12 months after initiation</TableCell>
-                      <TableCell></TableCell>
-                      <TableCell></TableCell>
-                      <TableCell></TableCell>
-                      <TableCell>
-                      <Button
-                            name="Primary button" onClick={() => window.alert('It works!')} 
-                            basic button value="default" icon={<IconEdit16 />}> Edit
-                        </Button>
-                        <Button
-                            name="Primary button" onClick={() => window.alert('It works!')} 
-                            destructive button value="default" icon={<IconDelete16 />}> Delete
-                        </Button>
-                      </TableCell>
-                  </TableRow>
-                  <TableRow>
-                      <TableCell>Immunization</TableCell>
-                      <TableCell>DPT 1</TableCell>
-                      <TableCell>✔️</TableCell>
-                      <TableCell>DTP_HepB_Hib1</TableCell>
-                      <TableCell> Vaccination </TableCell>
-                      <TableCell>
-                      <Button
-                            name="Primary button" onClick={() => window.alert('It works!')} 
-                            basic button value="default" icon={<IconEdit16 />}> Edit
-                        </Button>
-                        <Button
-                            name="Primary button" onClick={() => window.alert('It works!')} 
-                            basic button value="default" icon={<IconSubtractCircle16 />}> Clear
-                        </Button>
-                      </TableCell>
-                  </TableRow>
-                  <TableRow>
-                      <TableCell>Malaria</TableCell>
-                      <TableCell>Confirmed malaria cases</TableCell>
-                      <TableCell> ... </TableCell>
-                      <TableCell></TableCell>
-                      <TableCell> ... </TableCell>
-                      <TableCell>
-                      <Button
-                            name="Primary button" onClick={() => window.alert('It works!')} 
-                            basic button value="default" icon={<IconEdit16 />}> Edit
-                        </Button>
-                        <Button
-                            name="Primary button" onClick={() => window.alert('It works!')} 
-                            basic button value="default" icon={<IconSubtractCircle16 />}> Clear
-                        </Button>
-                      </TableCell>
-                  </TableRow>
-                  <TableRow>
-                      <TableCell>Maternal Health</TableCell>
-                      <TableCell> ... </TableCell>
-                      <TableCell>✔️</TableCell>
-                      <TableCell> ANC First standard visit 1st trimester </TableCell>
-                      <TableCell></TableCell>
-                      <TableCell>
-                      <Button
-                            name="Primary button" onClick={() => window.alert('It works!')} 
-                            basic button value="default" icon={<IconEdit16 />}> Edit
-                        </Button>
-                        <Button
-                            name="Primary button" onClick={() => window.alert('It works!')} 
-                            basic button value="default" icon={<IconSubtractCircle16 />}> Clear
-                        </Button>
-                      </TableCell>
-                  </TableRow>
-                  <TableRow>
-                      <TableCell>TB</TableCell>
-                      <TableCell> MDR-TB cases successfully treated </TableCell>
-                      <TableCell> ✔️ </TableCell>
-                      <TableCell>Ac Chlorhydrique disp</TableCell>
-                      <TableCell> TB Drug Management (CDT only) </TableCell>
-                      <TableCell>
-                      <Button
-                            name="Primary button" onClick={() => window.alert('It works!')} 
-                            basic button value="default" icon={<IconEdit16 />}> Edit
-                        </Button>
-                        <Button
-                            name="Primary button" onClick={() => window.alert('It works!')} 
-                            basic button value="default" icon={<IconSubtractCircle16 />}> Clear
-                        </Button>
-                      </TableCell>
-                  </TableRow>
-                </TableBody>
-            </Table>
-          </div>
-        </div>
+        <Denominators toggleState={toggleState}/>
 
         <div className={toggleState === 2 ? "content  active-content" : "content"} >
           <p>Add and remove numerators to/from groups, and to add new groups.</p>
           <hr />
-          <div class="groupsContainer">
-          <div class="group">
+          <div className="groupsContainer">
+          <div className="group">
               <h2>General Service Statistics</h2>
                 <Table>
                   <TableHead>
@@ -228,7 +106,7 @@ function Tabs() {
                 </Table>
               </div>
               
-              <div class="group">
+              <div className="group">
                 <h2>HIV/Aids</h2>
                 <Table>
                   <TableHead>
@@ -302,7 +180,7 @@ function Tabs() {
           <p>Numerator Relations</p>
           <hr />
 
-            <div class="relationsContainer">
+            <div className="relationsContainer">
             <Table>
                 <TableHead>
                     <TableRowHead>
@@ -436,7 +314,7 @@ function Tabs() {
             <li>Missing/zero values: Threshold for missing/zero values for variable completeness. Note: when zero values are not stored for a data element, zeros and missing are not differentiated. </li>
           </ul>
 
-          <div class="qualityParametersContainer">
+          <div className="qualityParametersContainer">
             <Table>
                 <TableHead>
                     <TableRowHead>
@@ -539,7 +417,7 @@ function Tabs() {
           </ul>
 
 
-          <div class="qualityParametersContainer">
+          <div className="qualityParametersContainer">
             <Table>
                 <TableHead>
                     <TableRowHead>
@@ -636,7 +514,7 @@ function Tabs() {
           <p>Please map alternative denominators for comparison, for example denominiators from the National Bureau of Statistics with denominators used by health programmes.</p>
           <hr />
           
-          <div class="denominatorsContainer">
+          <div className="denominatorsContainer">
             <Table>
                 <TableHead>
                     <TableRowHead>
@@ -710,7 +588,7 @@ function Tabs() {
         <div className={toggleState === 6 ? "content  active-content" : "content"} >
           <p>Please map alternative denominators for comparison, for example denominiators from the National Bureau of Statistics with denominators used by health programmes.</p>
           <hr />
-          <div class="denominatorRelationsContainer">
+          <div className="denominatorRelationsContainer">
               <Table>
                   <TableHead>
                       <TableRowHead>
@@ -795,7 +673,7 @@ function Tabs() {
           <p>Please identify external (survey) data that can be used for comparison with routine data, e.g. ANC coverage, immunisation coverage etc. The "external data" should refer to calculated survey result (e.g. a percentage), whilst the numerator and denominator refer to the raw data</p>
           <hr />
           
-            <div class="ExternalDataContainer">
+            <div className="ExternalDataContainer">
               <Table>
                   <TableHead>
                       <TableRowHead>
