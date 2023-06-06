@@ -12,7 +12,7 @@ import {
   } from '@dhis2/ui'
 
 
-const NumeratorRelations = ({toggleState}) => {
+export const NumeratorRelations = ({toggleState}) => {
   return (
     <div className={toggleState === 3 ? "content  active-content" : "content"} >
     <p>Numerator Relations</p>
@@ -140,5 +140,3 @@ const NumeratorRelations = ({toggleState}) => {
   </div>
   )
 }
-
-export default NumeratorRelations

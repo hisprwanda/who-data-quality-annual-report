@@ -13,10 +13,10 @@ import {
     IconSubtractCircle16	
   
   } from '@dhis2/ui'
-  import WarningModal from "../Modals/WarningModal";
+  import WarningModal from "../../Modals/WarningModal";
 
 
-const Numerators = ({toggleState}) => {
+export const Numerators = ({toggleState}) => {
     const [isHidden, setIsHidden] = useState(true);
 
     const onClose = () => {
@@ -159,5 +159,3 @@ const Numerators = ({toggleState}) => {
     </div>
   )
 }
-
-export default Numerators

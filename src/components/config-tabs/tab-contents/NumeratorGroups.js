@@ -14,7 +14,7 @@ import {
     IconAdd16,	
   } from '@dhis2/ui'
 
-function NumeratorGroups({toggleState}) {
+export const NumeratorGroups = ({toggleState}) => {
   return (
     <div className={toggleState === 2 ? "content  active-content" : "content"} >
           <p>Add and remove numerators to/from groups, and to add new groups.</p>
@@ -130,4 +130,3 @@ function NumeratorGroups({toggleState}) {
   )
 }
 
-export default NumeratorGroups
