@@ -10,7 +10,6 @@ import {
 
 const WarningModal = ({onClose, isHidden, onDelete}) => {
    
-
   return (
     <Modal onClose={onClose} hide={isHidden} position="middle">
         <ModalTitle>

@@ -13,20 +13,34 @@ import {
     IconSubtractCircle16	
   
   } from '@dhis2/ui'
-  import WarningModal from "../../Modals/WarningModal";
+import WarningModal from "../../Modals/WarningModal";
+import EditModal from '../../Modals/EditModal';
 
 
 export const Numerators = ({toggleState}) => {
     const [isHidden, setIsHidden] = useState(true);
+    const [isHiddenEdit, setIsHiddenEdit] = useState(true);
+    const [dataElements, setDataElements] = useState(null);
+
 
     const onClose = () => {
         setIsHidden(true);
-      }
+    }
+
+    const onCloseEdit = () => {
+        setIsHiddenEdit(true);
+    }
     
-      const onDelete = () => {
+    const onDelete = () => {
         setIsHidden(true);
-        console.log('Denominator Deleted');
-      }
+        setDataElements(null)
+    }
+
+    const onSave = (data) => {
+        setDataElements(data)
+        setIsHiddenEdit(true);
+        console.log('Saved the following data to the data store: ', dataElements);
+    }
 
 
   return (
@@ -53,10 +67,10 @@ export const Numerators = ({toggleState}) => {
                     <TableCell>OPD visits</TableCell>
                     <TableCell>✔️</TableCell>
                     <TableCell>New cases_OPD</TableCell>
-                    <TableCell>OutPatient Consultations (OPD)</TableCell>
+                    <TableCell>{dataElements? dataElements.name : "OutPatient Consultations (OPD)"}</TableCell>
                     <TableCell>
                     <Button
-                        name="Primary button" onClick={() => window.alert('It works!')} 
+                        name="Primary button" onClick={() => setIsHiddenEdit(false)} 
                         basic button value="default" icon={<IconEdit16 />}> Edit
                     </Button>
                     <Button
@@ -156,6 +170,7 @@ export const Numerators = ({toggleState}) => {
         </div>
 
         <WarningModal onClose={onClose} isHidden={isHidden} onDelete={onDelete}/>
+        <EditModal onClose={onCloseEdit} isHidden={isHiddenEdit} onSave={onSave}/>
     </div>
   )
 }
