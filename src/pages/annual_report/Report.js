@@ -28,6 +28,8 @@ const Report = () => {
     'orgunit_section': 'set-invisible'
   })
 
+  let [dateElementStatus, setDataElementStatus] = useState(true)
+
   // Hook used to display or hide different modal
   let [open, openModal] = useState(false)
   let [periodModal, openPeriodModal] = useState(false)
@@ -85,9 +87,13 @@ const Report = () => {
   if(periodModal) {
     periodModalTrigger = modal = <Modal><ModalContent><PeriodComponent/></ModalContent><ModalActions><ButtonStrip end><Button onClick={managePeriodModal} secondary>Hide</Button><Button onClick={managePeriodModal} primary>Update</Button></ButtonStrip></ModalActions></Modal>
   }
+
   return (
     <div className='reportContainer'>
       <MenuBar />
+      <Modal hide={dateElementStatus} onClose={() => setDataElementStatus(true)} position="middle">
+          <ModalContent>Status</ModalContent>
+      </Modal>
       {modal}
         <div className='topParagraph'>
           <p>{resources.report_title}</p>
@@ -100,31 +106,37 @@ const Report = () => {
               </div>
               <div className={visibility['data_section']} id='data-section'>
                 <div>
-                  <div>
-                      <Box width="100%">
-                            <Card>
-                              <label>Data Elements</label>
-                              <SingleSelect className="select" onChange={() => {console.log('Doing change element')}} selected='General Service'>
-                                <SingleSelectOption label="General Service" value="General Service" />
-                                <SingleSelectOption label="Maternity" value="Maternity" />
-                                <SingleSelectOption label="Malaria" value="Malaria" />
-                                <SingleSelectOption label="OPD" value="OPD" />
-                              </SingleSelect>
-                            </Card>
-                      </Box>  
+                  <div className='core-selection-parent'>
+                      <div className='data-element-section'>
+                          <div>
+                              <Button name="basic_button" onClick={()=>{}} value="orgunit" className='button button-label'>
+                                <span className='button'>Data Elements</span>
+                              </Button>
+                          </div>
+                          <div>
+                              <Button name="basic_button" onClick={()=>{setDataElementStatus(false)}} value="orgunit" className='button'>
+                                <span className='button'>...</span>
+                              </Button>
+                          </div>
+                      </div>
+                      <Divider />
+                      <div className='data-set-section'>
+                          <div>
+                              <Button name="basic_button" onClick={()=>{}} value="orgunit" className='button button-label'>
+                                <span className='button'>Data Sets</span>
+                              </Button>
+                          </div>
+                          <div>
+                              <Button name="basic_button" onClick={()=>{}} value="orgunit" className='button'>
+                                <span className='button'>...</span>
+                              </Button>
+                          </div>
+                      </div>
                   </div>
-                  <div>
-                      <Box width="100%">
-                            <Card>
-                                <label>Data Sets</label>
-                                <SingleSelect className="select" onChange={() => {console.log('Doing change element')}} selected='General Service'>
-                                  <SingleSelectOption label="General Service" value="General Service" />
-                                  <SingleSelectOption label="Maternity" value="Maternity" />
-                                  <SingleSelectOption label="Malaria" value="Malaria" />
-                                  <SingleSelectOption label="OPD" value="OPD" />
-                                </SingleSelect>
-                              </Card>
-                          </Box>  
+                  <div className='selected-element-value'>
+                      <div>
+                          Results of choice
+                      </div>
                   </div>
                 </div>
 
@@ -138,13 +150,13 @@ const Report = () => {
               <div className={visibility['period_section']} id='period-section'>
                   <div>
                       <div>
-                          <Button name="basic_button" onClick={()=>{}} value="orgunit" className='button'>
-                            <span className='button'>Period</span>
+                          <Button name="basic_button" onClick={()=>{}} value="orgunit" className='button button-label'>
+                            <span>Period</span>
                           </Button>
                       </div>
                       <div>
                           <Button name="basic_button" onClick={managePeriodModal} value="default" className='button'>
-                          <span className='button'>...</span>
+                          <span className='button-label'>...</span>
                           </Button>
                       </div>
                   </div>
