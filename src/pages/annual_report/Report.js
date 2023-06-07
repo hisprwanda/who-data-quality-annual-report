@@ -12,7 +12,7 @@ import React from 'react'
 import MenuBar from '../../components/menu-bar/MenuBar'
 import './style/report.css'
 import { resources } from '../../assets/str-resources/report-section'
-import { Modal, ModalContent, Button, CustomTransfer, TransferOption, SingleSelect, SingleSelectOption, OrganisationUnitTree, ModalActions, ButtonStrip, Card, Box, Divider } from '@dhis2/ui'
+import { Modal, ModalContent, Button, CustomTransfer, TransferOption, SingleSelect, SingleSelectOption, OrganisationUnitTree, ModalActions, ButtonStrip, Card, Box, Divider, MultiSelect, MultiSelectOption, MultiSelectField, ModalTitle } from '@dhis2/ui'
 import { OrgUnitComponent } from '../../components/annual-report/OrgUnit.Component'
 import { PeriodComponent } from '../../components/annual-report/Period.Component'
 
@@ -27,6 +27,15 @@ const Report = () => {
     'period_section': 'set-invisible',
     'orgunit_section': 'set-invisible'
   })
+
+  const addSelectedElement = (e) => {
+    //[e.selected[0],  ...selectedElement];
+    console.log(`${e.selected}`);
+  }
+
+  let [selectedElement, setSelectedElement] = useState([])
+  
+  let [dataSetStatus, setDataSetStatus] = useState(true)
 
   let [dateElementStatus, setDataElementStatus] = useState(true)
 
@@ -91,9 +100,44 @@ const Report = () => {
   return (
     <div className='reportContainer'>
       <MenuBar />
-      <Modal hide={dateElementStatus} onClose={() => setDataElementStatus(true)} position="middle">
-          <ModalContent>Status</ModalContent>
+      <Modal hide={dateElementStatus} onClose={() => setDataElementStatus(true)} position="top">
+          <ModalTitle>
+            Please select Data Elements
+          </ModalTitle>
+          <ModalContent>
+            <MultiSelect className="select" onChange={(e)=> { addSelectedElement(e)} } label="Select Data Elements" selected={selectedElement}>
+                <MultiSelectOption label="Ambulance Total available at the beginning of the month  (h) " value="1" />
+                <MultiSelectOption label="Adverse event type - specify other" value="2" />
+                <MultiSelectOption label="Appointment date " value="3" />
+                <MultiSelectOption label="Ambulance Credits at the beginning of the month " value="4" />
+            </MultiSelect>
+          </ModalContent>
+          <ModalActions>
+              <ButtonStrip end>
+                  <Button onClick={() => {}} secondary>Close</Button>
+              </ButtonStrip>
+          </ModalActions>
       </Modal>
+
+      <Modal hide={dataSetStatus} onClose={() => setDataSetStatus(true)} position="top">
+          <ModalTitle>
+            Please Select Data Sets
+          </ModalTitle>
+          <ModalContent>
+            <MultiSelect className="select" onChange={(e)=> { addSelectedElement(e)} } label="Select Data Elements" selected={selectedElement}>
+                <MultiSelectOption label="Malaria cases Weekly reporting" value="1" />
+                <MultiSelectOption label="Child Death Monthly Summary (aggregated)" value="2" />
+                <MultiSelectOption label="EPI e-tracker monthly aggregate" value="3" />
+                <MultiSelectOption label="TB_01_Registration of Cases by Susceptibility, Age and Sex" value="4" />
+            </MultiSelect>
+          </ModalContent>
+          <ModalActions>
+              <ButtonStrip end>
+                  <Button onClick={() => {}} secondary>Close</Button>
+              </ButtonStrip>
+          </ModalActions>
+      </Modal>
+
       {modal}
         <div className='topParagraph'>
           <p>{resources.report_title}</p>
@@ -114,7 +158,7 @@ const Report = () => {
                               </Button>
                           </div>
                           <div>
-                              <Button name="basic_button" onClick={()=>{setDataElementStatus(false)}} value="orgunit" className='button'>
+                              <Button name="basic_button" onClick={()=>{ setDataElementStatus(false) }} value="orgunit" className='button'>
                                 <span className='button'>...</span>
                               </Button>
                           </div>
@@ -127,7 +171,7 @@ const Report = () => {
                               </Button>
                           </div>
                           <div>
-                              <Button name="basic_button" onClick={()=>{}} value="orgunit" className='button'>
+                              <Button name="basic_button" onClick={() => { setDataSetStatus(false) }} value="orgunit" className='button'>
                                 <span className='button'>...</span>
                               </Button>
                           </div>
