@@ -1,5 +1,5 @@
 label {
-    margin: 0.5rem 0rem;
+    margin: 0.0rem 0rem;
     font-size: 1.3rem;
 }
 .reportContainer{
@@ -120,5 +120,9 @@ label {
 
 .button-label {
     width: 180px;
+}
+
+.clickable-button {
+    background-color: rgb(243, 241, 241);
 }
 

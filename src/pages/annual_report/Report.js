@@ -15,6 +15,7 @@ import { resources } from '../../assets/str-resources/report-section'
 import { Modal, ModalContent, Button, CustomTransfer, TransferOption, SingleSelect, SingleSelectOption, OrganisationUnitTree, ModalActions, ButtonStrip, Card, Box, Divider, MultiSelect, MultiSelectOption, MultiSelectField, ModalTitle } from '@dhis2/ui'
 import { OrgUnitComponent } from '../../components/annual-report/OrgUnit.Component'
 import { PeriodComponent } from '../../components/annual-report/Period.Component'
+import { PeriodModal } from '../../components/annual-report/modal/PeriodModal'
 
 // End of imports
 
@@ -41,7 +42,7 @@ const Report = () => {
 
   // Hook used to display or hide different modal
   let [open, openModal] = useState(false)
-  let [periodModal, openPeriodModal] = useState(false)
+  let [periodModalStatusl, setPeriodModalStatus] = useState(true)
   // Function used to change the value of the variable used to hide or display the modal
   const manageModel = () => {
     open = ! open
@@ -88,18 +89,10 @@ const Report = () => {
 
   }
 
-  let modal = ''
-  if(open){
-    modal = <Modal><ModalContent><OrgUnitComponent/></ModalContent><ModalActions><ButtonStrip end><Button onClick={manageModel} secondary>Hide</Button><Button onClick={manageModel} primary>Update</Button></ButtonStrip></ModalActions></Modal>
-  }
-  let periodModalTrigger = ''
-  if(periodModal) {
-    periodModalTrigger = modal = <Modal><ModalContent><PeriodComponent/></ModalContent><ModalActions><ButtonStrip end><Button onClick={managePeriodModal} secondary>Hide</Button><Button onClick={managePeriodModal} primary>Update</Button></ButtonStrip></ModalActions></Modal>
-  }
-
   return (
     <div className='reportContainer'>
       <MenuBar />
+      <PeriodModal visibility={periodModalStatusl} />
       <Modal hide={dateElementStatus} onClose={() => setDataElementStatus(true)} position="top">
           <ModalTitle>
             Please select Data Elements
@@ -138,7 +131,6 @@ const Report = () => {
           </ModalActions>
       </Modal>
 
-      {modal}
         <div className='topParagraph'>
           <p>{resources.report_title}</p>
         </div>
@@ -158,8 +150,8 @@ const Report = () => {
                               </Button>
                           </div>
                           <div>
-                              <Button name="basic_button" onClick={()=>{ setDataElementStatus(false) }} value="orgunit" className='button'>
-                                <span className='button'>...</span>
+                              <Button name="basic_button" onClick={()=>{ setDataElementStatus(false) }} value="orgunit" className='button clickable-button'>
+                                <span className='button' >...</span>
                               </Button>
                           </div>
                       </div>
@@ -171,7 +163,7 @@ const Report = () => {
                               </Button>
                           </div>
                           <div>
-                              <Button name="basic_button" onClick={() => { setDataSetStatus(false) }} value="orgunit" className='button'>
+                              <Button name="basic_button" onClick={() => { setDataSetStatus(false) }} value="orgunit" className='button clickable-button'>
                                 <span className='button'>...</span>
                               </Button>
                           </div>
@@ -199,7 +191,7 @@ const Report = () => {
                           </Button>
                       </div>
                       <div>
-                          <Button name="basic_button" onClick={managePeriodModal} value="default" className='button'>
+                          <Button name="basic_button" onClick={() => {setPeriodModalStatus(false)}} value="default" className='button'>
                           <span className='button-label'>...</span>
                           </Button>
                       </div>
