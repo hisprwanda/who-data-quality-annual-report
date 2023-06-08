@@ -53,12 +53,20 @@ label {
 #data-section, #period-section, #orgunit_section {
     padding: 0.4rem;
     width: 40%;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
 }
 
 #orgunit_section > div, #period-section > div {
     display: flex;
     flex-direction: row;
     gap: 1.2rem;
+
+}
+
+#orgunit_section > div {
+    padding: 0.4rem;
 }
 
 #data-section > div {
@@ -153,4 +161,20 @@ label {
     height: 20rem;
     margin-top: 1rem;
     overflow: scroll;
+}
+
+.orgunit-other-options > div {
+    display: flex;
+    gap: 0.8rem;
+}
+
+.orgunit-other-options {
+    display: flex;
+    flex-direction: column;
+    gap: 0.9rem;
+    padding: 0.4rem;
+}
+
+#period-section > div {
+    padding: 0.5rem;
 }

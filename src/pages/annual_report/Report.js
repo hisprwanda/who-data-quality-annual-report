@@ -16,7 +16,7 @@ import { Modal, ModalContent, Button, CustomTransfer, TransferOption, SingleSele
 import { OrgUnitComponent } from '../../components/annual-report/OrgUnit.Component'
 import { PeriodComponent } from '../../components/annual-report/Period.Component'
 import { PeriodModal } from '../../components/annual-report/modal/PeriodModal'
-import { IconEmptyFrame16 } from '@dhis2/ui'
+
 // End of imports
 
 // Start of the functional component definition
@@ -41,6 +41,10 @@ const Report = () => {
   let [dateElementStatus, setDataElementStatus] = useState(true)
 
   let [orgUnitStatus, setOrgnizationUnitStatus] = useState(true)
+
+  let [orgUnitGroupsStatus, setOrgUnitGroupStatus] = useState(true)
+
+  let [orgUnitLevelStatus, setOrgUnitLevelStatus] = useState(true)
 
   // Hook used to display or hide different modal
   let [open, openModal] = useState(false)
@@ -92,7 +96,7 @@ const Report = () => {
       <PeriodModal visibility={periodModalStatus} changePeriodModalStatus={() => { setPeriodModalStatus }}/>
       <Modal hide={dateElementStatus} onClose={() => setDataElementStatus(true)} position="top">
           <ModalTitle>
-            Please select Data Elements {periodModalStatus} -- 
+            Please select Data Elements 
           </ModalTitle>
           <ModalContent>
             <MultiSelect className="select" onChange={(e)=> { addSelectedElement(e)} } label="Select Data Elements" selected={selectedElement}>
@@ -128,7 +132,7 @@ const Report = () => {
           </ModalActions>
       </Modal>
 
-      <Modal hide={orgUnitStatus} onClose={() => {setOrgnizationUnitStatus(true)}} position="top">
+      <Modal hide={ orgUnitStatus } onClose={() => setOrgnizationUnitStatus(true)} position="top">
           <ModalTitle>
             Organization Unit
           </ModalTitle>
@@ -138,17 +142,17 @@ const Report = () => {
                 <ul>
                   <li>
                     <span>
-                    <IconEmptyFrame16/> User Organization Unit
+                      User Organization Unit
                     </span>
                   </li>
                   <li>
                     <span>
-                    <IconEmptyFrame16/> User Sub-Unit
+                      User Sub-Unit
                     </span>
                   </li>
                   <li>
                     <span>
-                    <IconEmptyFrame16/> User Sub-2x-Unit
+                      User Sub-2x-Unit
                     </span>
                   </li>
                 </ul>
@@ -162,9 +166,10 @@ const Report = () => {
                         Level
                       </label>
                       <SingleSelect className="select" onChange={() => {}} selected="1">
-                        <SingleSelectOption label="Group one" value="1" />
-                        <SingleSelectOption label="Group two" value="2" />
-                        <SingleSelectOption label="Group three" value="3" />
+                        <SingleSelectOption label="Province" value="1" />
+                        <SingleSelectOption label="District" value="2" />
+                        <SingleSelectOption label="Sector" value="3" />
+                        <SingleSelectOption label="Cell" value="3" />
                       </SingleSelect>
                   </div>
                   <div>
@@ -172,9 +177,10 @@ const Report = () => {
                         Group
                     </label>
                     <SingleSelect className="select" onChange={() => {}} selected="1">
-                        <SingleSelectOption label="Group one" value="1" />
-                        <SingleSelectOption label="Group two" value="2" />
-                        <SingleSelectOption label="Group three" value="3" />
+                        <SingleSelectOption label="Eastern Province" value="1" />
+                        <SingleSelectOption label="Southern Province" value="2" />
+                        <SingleSelectOption label="Northern Province" value="3" />
+                        <SingleSelectOption label="Western Province" value="3" />
                     </SingleSelect>
                   </div>
               </div>
@@ -188,6 +194,44 @@ const Report = () => {
       </Modal>
 
 
+      <Modal hide={orgUnitGroupsStatus} onClose={() => setOrgUnitGroupStatus(true)} position="top">
+          <ModalTitle>
+             Organization Unit Groups 
+          </ModalTitle>
+          <ModalContent>
+            <MultiSelect className="select" onChange={(e)=> { addSelectedElement(e)} } label="Select Data Elements" selected={selectedElement}>
+                <MultiSelectOption label="Eastern Province" value="1" />
+                <MultiSelectOption label="Northern Province" value="2" />
+                <MultiSelectOption label="Southern Province" value="3" />
+                <MultiSelectOption label="Western Province" value="4" />
+            </MultiSelect>
+          </ModalContent>
+          <ModalActions>
+              <ButtonStrip end>
+                  <Button onClick={() => {}} secondary>Close</Button>
+              </ButtonStrip>
+          </ModalActions>
+      </Modal>
+
+
+      <Modal hide={orgUnitLevelStatus} onClose={() => setOrgUnitLevelStatus(true)} position="top">
+          <ModalTitle>
+             Organization Unit Levels 
+          </ModalTitle>
+          <ModalContent>
+            <MultiSelect className="select" onChange={(e)=> { addSelectedElement(e)} } label="Select Data Elements" selected={selectedElement}>
+                <MultiSelectOption label="Province" value="1" />
+                <MultiSelectOption label="District" value="2" />
+                <MultiSelectOption label="Sector" value="3" />
+                <MultiSelectOption label="Cell" value="4" />
+            </MultiSelect>
+          </ModalContent>
+          <ModalActions>
+              <ButtonStrip end>
+                  <Button onClick={() => {}} secondary>Close</Button>
+              </ButtonStrip>
+          </ModalActions>
+      </Modal>
 
         <div className='topParagraph'>
           <p>{resources.report_title}</p>
@@ -204,12 +248,12 @@ const Report = () => {
                       <div className='data-element-section'>
                           <div>
                               <Button name="basic_button" onClick={()=>{}} value="orgunit" className='button button-label'>
-                                <span className='button'>Data Elements</span>
+                                <span>Data Elements</span>
                               </Button>
                           </div>
                           <div>
-                              <Button name="basic_button" onClick={()=>{ () => setDataElementStatus(false) }} value="orgunit" className='button clickable-button'>
-                                <span className='button' >...</span>
+                              <Button name="basic_button" onClick={() => { setDataElementStatus(false)} } value="orgunit" className='button clickable-button'>
+                                ....
                               </Button>
                           </div>
                       </div>
@@ -217,19 +261,18 @@ const Report = () => {
                       <div className='data-set-section'>
                           <div>
                               <Button name="basic_button" onClick={()=>{}} value="orgunit" className='button button-label'>
-                                <span className='button'>Data Sets</span>
+                                <span>Data Sets</span>
                               </Button>
                           </div>
                           <div>
-                              <Button name="basic_button" onClick={() => { () => setDataSetStatus(false) }} value="orgunit" className='button clickable-button'>
-                                <span className='button'>...</span>
+                              <Button name="basic_button" onClick={() => setDataElementStatus(false) } value="orgunit" className='button clickable-button'>
+                                <span>...</span>
                               </Button>
                           </div>
                       </div>
                   </div>
                   <div className='selected-element-value'>
                       <div>
-                          Results of choice
                       </div>
                   </div>
                 </div>
@@ -249,8 +292,8 @@ const Report = () => {
                           </Button>
                       </div>
                       <div>
-                          <Button name="basic_button" onClick={() => {() => setPeriodModalStatus(false)}} value="default" className='button'>
-                          <span className='button-label'>...</span>
+                          <Button name="basic_button" onClick={() => setPeriodModalStatus(false) } value="default" className='button'>
+                          <span>...</span>
                           </Button>
                       </div>
                   </div>
@@ -265,13 +308,39 @@ const Report = () => {
                 
                   <div>
                     <div>
-                        <Button name="basic_button" onClick={()=>{}} value="orgunit" className='button'>
-                          <span className='button'>Organization Unit</span>
+                        <Button name="basic_button" onClick={()=>{}} value="orgunit" className='button button-label'>
+                          <span>Organization Unit</span>
                         </Button>
                     </div>
                     <div>
-                        <Button name="basic_button" onClick={() => setOrgnizationUnitStatus(false)} value="default" className='button'>
-                          <span className='button'>...</span>
+                        <Button name="basic_button" onClick={() => setOrgnizationUnitStatus(false) } value="default" className='button'>
+                          <span>...</span>
+                        </Button>
+                    </div>
+                  </div>
+
+                  <div>
+                    <div>
+                        <Button name="basic_button" onClick={()=>{}} value="orgunit" className='button button-label'>
+                          <span>Groups</span>
+                        </Button>
+                    </div>
+                    <div>
+                        <Button name="basic_button" onClick={() => setOrgUnitGroupStatus(false) } value="default" className='button'>
+                          <span>...</span>
+                        </Button>
+                    </div>
+                  </div>
+
+                  <div>
+                    <div>
+                        <Button name="basic_button" onClick={()=>{}} value="orgunit" className='button button-label'>
+                          <span>Level</span>
+                        </Button>
+                    </div>
+                    <div>
+                        <Button name="basic_button" onClick={() => setOrgUnitLevelStatus(false) } value="default" className='button'>
+                          <span>...</span>
                         </Button>
                     </div>
                   </div>
