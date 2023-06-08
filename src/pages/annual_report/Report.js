@@ -16,7 +16,7 @@ import { Modal, ModalContent, Button, CustomTransfer, TransferOption, SingleSele
 import { OrgUnitComponent } from '../../components/annual-report/OrgUnit.Component'
 import { PeriodComponent } from '../../components/annual-report/Period.Component'
 import { PeriodModal } from '../../components/annual-report/modal/PeriodModal'
-
+import { IconEmptyFrame16 } from '@dhis2/ui'
 // End of imports
 
 // Start of the functional component definition
@@ -40,18 +40,15 @@ const Report = () => {
 
   let [dateElementStatus, setDataElementStatus] = useState(true)
 
+  let [orgUnitStatus, setOrgnizationUnitStatus] = useState(true)
+
   // Hook used to display or hide different modal
   let [open, openModal] = useState(false)
-  let [periodModalStatusl, setPeriodModalStatus] = useState(true)
+  let [periodModalStatus, setPeriodModalStatus] = useState(true)
   // Function used to change the value of the variable used to hide or display the modal
   const manageModel = () => {
     open = ! open
     openModal(open)
-  }
-
-  const managePeriodModal = () => {
-    periodModal = ! periodModal
-    openPeriodModal(periodModal)
   }
 
   // Method used to 
@@ -92,10 +89,10 @@ const Report = () => {
   return (
     <div className='reportContainer'>
       <MenuBar />
-      <PeriodModal visibility={periodModalStatusl} />
+      <PeriodModal visibility={periodModalStatus} changePeriodModalStatus={() => { setPeriodModalStatus }}/>
       <Modal hide={dateElementStatus} onClose={() => setDataElementStatus(true)} position="top">
           <ModalTitle>
-            Please select Data Elements
+            Please select Data Elements {periodModalStatus} -- 
           </ModalTitle>
           <ModalContent>
             <MultiSelect className="select" onChange={(e)=> { addSelectedElement(e)} } label="Select Data Elements" selected={selectedElement}>
@@ -131,6 +128,67 @@ const Report = () => {
           </ModalActions>
       </Modal>
 
+      <Modal hide={orgUnitStatus} onClose={() => {setOrgnizationUnitStatus(true)}} position="top">
+          <ModalTitle>
+            Organization Unit
+          </ModalTitle>
+          <ModalContent>
+            <div className='orgunit-parent'>
+              <div className='orgunit-topsection'>
+                <ul>
+                  <li>
+                    <span>
+                    <IconEmptyFrame16/> User Organization Unit
+                    </span>
+                  </li>
+                  <li>
+                    <span>
+                    <IconEmptyFrame16/> User Sub-Unit
+                    </span>
+                  </li>
+                  <li>
+                    <span>
+                    <IconEmptyFrame16/> User Sub-2x-Unit
+                    </span>
+                  </li>
+                </ul>
+              </div>
+              <div className='orgunit-middlesection'>
+                <OrgUnitComponent/>
+              </div>
+              <div className='orgunit-bottomsection'>
+                  <div>
+                      <label>
+                        Level
+                      </label>
+                      <SingleSelect className="select" onChange={() => {}} selected="1">
+                        <SingleSelectOption label="Group one" value="1" />
+                        <SingleSelectOption label="Group two" value="2" />
+                        <SingleSelectOption label="Group three" value="3" />
+                      </SingleSelect>
+                  </div>
+                  <div>
+                    <label>
+                        Group
+                    </label>
+                    <SingleSelect className="select" onChange={() => {}} selected="1">
+                        <SingleSelectOption label="Group one" value="1" />
+                        <SingleSelectOption label="Group two" value="2" />
+                        <SingleSelectOption label="Group three" value="3" />
+                    </SingleSelect>
+                  </div>
+              </div>
+            </div>
+          </ModalContent>
+          <ModalActions>
+              <ButtonStrip end>
+                  <Button onClick={() => {}} secondary>Close</Button>
+              </ButtonStrip>
+          </ModalActions>
+      </Modal>
+
+
+
         <div className='topParagraph'>
           <p>{resources.report_title}</p>
         </div>
@@ -150,7 +208,7 @@ const Report = () => {
                               </Button>
                           </div>
                           <div>
-                              <Button name="basic_button" onClick={()=>{ setDataElementStatus(false) }} value="orgunit" className='button clickable-button'>
+                              <Button name="basic_button" onClick={()=>{ () => setDataElementStatus(false) }} value="orgunit" className='button clickable-button'>
                                 <span className='button' >...</span>
                               </Button>
                           </div>
@@ -163,7 +221,7 @@ const Report = () => {
                               </Button>
                           </div>
                           <div>
-                              <Button name="basic_button" onClick={() => { setDataSetStatus(false) }} value="orgunit" className='button clickable-button'>
+                              <Button name="basic_button" onClick={() => { () => setDataSetStatus(false) }} value="orgunit" className='button clickable-button'>
                                 <span className='button'>...</span>
                               </Button>
                           </div>
@@ -191,7 +249,7 @@ const Report = () => {
                           </Button>
                       </div>
                       <div>
-                          <Button name="basic_button" onClick={() => {setPeriodModalStatus(false)}} value="default" className='button'>
+                          <Button name="basic_button" onClick={() => {() => setPeriodModalStatus(false)}} value="default" className='button'>
                           <span className='button-label'>...</span>
                           </Button>
                       </div>
@@ -212,7 +270,7 @@ const Report = () => {
                         </Button>
                     </div>
                     <div>
-                        <Button name="basic_button" onClick={manageModel} value="default" className='button'>
+                        <Button name="basic_button" onClick={() => setOrgnizationUnitStatus(false)} value="default" className='button'>
                           <span className='button'>...</span>
                         </Button>
                     </div>

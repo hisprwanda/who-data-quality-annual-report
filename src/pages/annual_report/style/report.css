@@ -126,3 +126,31 @@ label {
     background-color: rgb(243, 241, 241);
 }
 
+.orgunit-bottomsection {
+    display: flex;
+    flex-direction: row;
+    gap: 1.0rem;
+}
+
+.orgunit-bottomsection > div {
+    flex: 1 1 auto;
+    display: flex;
+    flex-direction: column;
+    gap: 0.3rem;
+}
+
+.orgunit-bottomsection > div label {
+    font-size: 1.0rem;
+}
+
+.orgunit-parent {
+    border: 1px solid #f1f1f1;
+    padding: 0.0rem;
+}
+
+.orgunit-middlesection {
+    padding: 0.2rem;
+    height: 20rem;
+    margin-top: 1rem;
+    overflow: scroll;
+}

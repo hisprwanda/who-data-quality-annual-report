@@ -13,7 +13,7 @@ export const PeriodModal = (props) => {
     let [selectedPeriod, setSelectedPeriod] = useState('Relative')
     return (
 
-        <Modal hide={props.visibility} onClose={() => {}} position="top" large>
+        <Modal hide={props.visibility} onClose={ () => {props.changePeriodModalStatus}} position="top" large>
             <ModalTitle>
                 Period
             </ModalTitle>
@@ -23,10 +23,10 @@ export const PeriodModal = (props) => {
                     <div className='data-source'>
                         <div className='data-source-menu'>
                             <ul>
-                                <li onClick={(e) => {setSelectedPeriod('Relative')}}>
+                                <li onClick={(e) => {setSelectedPeriod('Relative')}} className='source-relative-period'>
                                     Relative Periods
                                 </li>
-                                <li onClick={(e) => {setSelectedPeriod('Fixed')}}>
+                                <li onClick={(e) => {setSelectedPeriod('Fixed')}} className='source-fixed-period'>
                                     Fixed Periods
                                 </li>
                             </ul>
