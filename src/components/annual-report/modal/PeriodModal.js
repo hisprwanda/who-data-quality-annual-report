@@ -11,6 +11,7 @@ import { FixedPeriodList } from './FixedPeriodList'
 export const PeriodModal = (props) => {
 
     let [selectedPeriod, setSelectedPeriod] = useState('Relative')
+    //let [props.visibility, setVisibility] = useState(props.visibility)
     return (
 
         <Modal hide={props.visibility} onClose={ () => {props.changePeriodModalStatus}} position="top" large>

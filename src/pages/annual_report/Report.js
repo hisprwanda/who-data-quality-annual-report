@@ -11,11 +11,13 @@ import {useState} from 'react'
 import React from 'react'
 import MenuBar from '../../components/menu-bar/MenuBar'
 import './style/report.css'
+import './style/slide.css'
 import { resources } from '../../assets/str-resources/report-section'
 import { Modal, ModalContent, Button, CustomTransfer, TransferOption, SingleSelect, SingleSelectOption, OrganisationUnitTree, ModalActions, ButtonStrip, Card, Box, Divider, MultiSelect, MultiSelectOption, MultiSelectField, ModalTitle, Checkbox } from '@dhis2/ui'
 import { OrgUnitComponent } from '../../components/annual-report/OrgUnit.Component'
 import { PeriodComponent } from '../../components/annual-report/Period.Component'
 import { PeriodModal } from '../../components/annual-report/modal/PeriodModal'
+import { ChildComponent } from '../../components/annual-report/ChildComponent'
 
 // End of imports
 
@@ -31,8 +33,12 @@ const Report = () => {
 
   const addSelectedElement = (e) => {
     //[e.selected[0],  ...selectedElement];
-    console.log(`${e.selected}`);
+    console.log(e.target);
+    counting += 1
+    setCounting(counting)
   }
+
+  let [counting, setCounting] = useState(0)
 
   let [selectedElement, setSelectedElement] = useState([])
   
@@ -281,32 +287,7 @@ const Report = () => {
               <div className={visibility['data_section']} id='data-section'>
                 <div>
                   <div className='core-selection-parent'>
-                      <div className='data-element-section'>
-                          <div>
-                              <Button name="basic_button" onClick={()=>{}} value="orgunit" className='button button-label'>
-                                <span>Data Elements Groups</span>
-                              </Button>
-                          </div>
-                          <div>
-                              <Button name="basic_button" onClick={() => { setDataElementGroupsStatus(false)} } value="orgunit" className='button clickable-button'>
-                                ...
-                              </Button>
-                          </div>
-                      </div>
-                      <Divider />
-                      <div className='data-element-section'>
-                          <div>
-                              <Button name="basic_button" onClick={()=>{}} value="orgunit" className='button button-label'>
-                                <span>Data Elements</span>
-                              </Button>
-                          </div>
-                          <div>
-                              <Button name="basic_button" onClick={() => { setDataElementStatus(false)} } value="orgunit" className='button clickable-button'>
-                                ...
-                              </Button>
-                          </div>
-                      </div>
-                      <Divider />
+                      <ChildComponent counting={counting} exampleFunction={addSelectedElement}/>
                       <div className='data-set-section'>
                           <div>
                               <Button name="basic_button" onClick={()=>{}} value="orgunit" className='button button-label'>
@@ -410,7 +391,25 @@ const Report = () => {
                     </Button>
                 </div>
               </div>
+        </div>
+        <div className='report-container'>
+          <div className='data-container'>
+            <a href='#data-parent' className='first-anchor title'>Data</a>
+            <div className='data-below' id='data-parent'>
+              <div className='data-section-child'>
+
+              </div>
             </div>
+          </div>
+          <div className='period-container'>
+            <a href='#period-parent' className='period-anchor title'>Period</a>
+            <div id='period-parent'></div>
+          </div>
+          <div className='orgunit-container'>
+            <a href='#orgunit-parent' className='orgunit-anchor title'>Organization Unit</a>
+            <div id='orgunit-parent'></div>
+          </div>
+        </div>
     </div>
   )
 }
