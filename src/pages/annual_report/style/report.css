@@ -180,3 +180,15 @@ label {
 #period-section > div {
     padding: 0.5rem;
 }
+
+.group-element-selected ul {
+    padding: 0rem;
+    margin: 0rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.4rem;
+}
+
+.group-element-selected ul li {
+    list-style: none;
+}

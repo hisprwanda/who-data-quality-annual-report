@@ -12,7 +12,7 @@ import React from 'react'
 import MenuBar from '../../components/menu-bar/MenuBar'
 import './style/report.css'
 import { resources } from '../../assets/str-resources/report-section'
-import { Modal, ModalContent, Button, CustomTransfer, TransferOption, SingleSelect, SingleSelectOption, OrganisationUnitTree, ModalActions, ButtonStrip, Card, Box, Divider, MultiSelect, MultiSelectOption, MultiSelectField, ModalTitle } from '@dhis2/ui'
+import { Modal, ModalContent, Button, CustomTransfer, TransferOption, SingleSelect, SingleSelectOption, OrganisationUnitTree, ModalActions, ButtonStrip, Card, Box, Divider, MultiSelect, MultiSelectOption, MultiSelectField, ModalTitle, Checkbox } from '@dhis2/ui'
 import { OrgUnitComponent } from '../../components/annual-report/OrgUnit.Component'
 import { PeriodComponent } from '../../components/annual-report/Period.Component'
 import { PeriodModal } from '../../components/annual-report/modal/PeriodModal'
@@ -45,6 +45,8 @@ const Report = () => {
   let [orgUnitGroupsStatus, setOrgUnitGroupStatus] = useState(true)
 
   let [orgUnitLevelStatus, setOrgUnitLevelStatus] = useState(true)
+
+  let [dataElementGroupStatus, setDataElementGroupsStatus] = useState(true)
 
   // Hook used to display or hide different modal
   let [open, openModal] = useState(false)
@@ -94,9 +96,43 @@ const Report = () => {
     <div className='reportContainer'>
       <MenuBar />
       <PeriodModal visibility={periodModalStatus} changePeriodModalStatus={() => { setPeriodModalStatus }}/>
+      
+      <Modal hide={dataElementGroupStatus} onClose={() => setDataElementGroupsStatus(true)} position="top">
+          <ModalTitle>
+            Data Element Groups
+          </ModalTitle>
+          <ModalContent>
+            <MultiSelect className="select" onChange={(e)=> { addSelectedElement(e)} } label="Select Data Elements" selected={selectedElement}>
+                <MultiSelectOption label="Immunization" value="1" />
+                <MultiSelectOption label="Child Death Audit" value="2" />
+                <MultiSelectOption label="TB Treatement information" value="3" />
+                <MultiSelectOption label="LPS Program Enrollment Information" value="4" />
+            </MultiSelect>
+            <Divider/>
+            <div className='group-element-selected'>
+              <ul>
+                <li>
+                    <Checkbox label="Ambulance_Fuel (c)" name="Ex" onBlur = { () => {} } onChange = { () => {} } onFocus = { () => {}} valid value = "valid"   />
+                </li>
+                <li>
+                    <Checkbox label="Adherence on ART_FSW" name="Ex" onBlur = { () => {} } onChange = { () => {} } onFocus = { () => {}} valid value = "valid"   />
+                </li>
+                <li>
+                    <Checkbox label="Ambulance operations status" name="Ex" onBlur = { () => {} } onChange = { () => {} } onFocus = { () => {}} valid value = "valid"   />
+                </li>
+              </ul>
+            </div>
+          </ModalContent>
+          <ModalActions>
+              <ButtonStrip end>
+                  <Button onClick={() => {}} secondary>Close</Button>
+              </ButtonStrip>
+          </ModalActions>
+      </Modal>
+
       <Modal hide={dateElementStatus} onClose={() => setDataElementStatus(true)} position="top">
           <ModalTitle>
-            Please select Data Elements 
+            Data Elements 
           </ModalTitle>
           <ModalContent>
             <MultiSelect className="select" onChange={(e)=> { addSelectedElement(e)} } label="Select Data Elements" selected={selectedElement}>
@@ -115,7 +151,7 @@ const Report = () => {
 
       <Modal hide={dataSetStatus} onClose={() => setDataSetStatus(true)} position="top">
           <ModalTitle>
-            Please Select Data Sets
+            Data Sets
           </ModalTitle>
           <ModalContent>
             <MultiSelect className="select" onChange={(e)=> { addSelectedElement(e)} } label="Select Data Elements" selected={selectedElement}>
@@ -248,12 +284,25 @@ const Report = () => {
                       <div className='data-element-section'>
                           <div>
                               <Button name="basic_button" onClick={()=>{}} value="orgunit" className='button button-label'>
+                                <span>Data Elements Groups</span>
+                              </Button>
+                          </div>
+                          <div>
+                              <Button name="basic_button" onClick={() => { setDataElementGroupsStatus(false)} } value="orgunit" className='button clickable-button'>
+                                ...
+                              </Button>
+                          </div>
+                      </div>
+                      <Divider />
+                      <div className='data-element-section'>
+                          <div>
+                              <Button name="basic_button" onClick={()=>{}} value="orgunit" className='button button-label'>
                                 <span>Data Elements</span>
                               </Button>
                           </div>
                           <div>
                               <Button name="basic_button" onClick={() => { setDataElementStatus(false)} } value="orgunit" className='button clickable-button'>
-                                ....
+                                ...
                               </Button>
                           </div>
                       </div>
@@ -266,7 +315,7 @@ const Report = () => {
                           </div>
                           <div>
                               <Button name="basic_button" onClick={() => setDataElementStatus(false) } value="orgunit" className='button clickable-button'>
-                                <span>...</span>
+                                ...
                               </Button>
                           </div>
                       </div>
@@ -293,7 +342,7 @@ const Report = () => {
                       </div>
                       <div>
                           <Button name="basic_button" onClick={() => setPeriodModalStatus(false) } value="default" className='button'>
-                          <span>...</span>
+                              ...
                           </Button>
                       </div>
                   </div>
