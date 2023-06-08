@@ -16,14 +16,17 @@ import {
 import WarningModal from "../../Modals/WarningModal";
 import EditModal from '../../Modals/EditModal';
 import PeriodsModal from '../../Modals/PeriodsModal';
+import { DataSelectorModal } from '../../Modals/DataSelectorModal';
 
 
 export const Numerators = ({toggleState}) => {
     const [isHidden, setIsHidden] = useState(true);
     const [isHiddenEdit, setIsHiddenEdit] = useState(true);
     const [isHiddenPeriod, setIsHiddenPeriod] = useState(true);
+    const [isHiddenDataModal, setIsHiddenDataModal] = useState(true);
 
     const togglePeriodModal = () => setIsHiddenPeriod(state => !state)
+    const toggleDataModal = () => setIsHiddenDataModal(state => !state)
 
 
     const [dataElements, setDataElements] = useState(null);
@@ -51,7 +54,12 @@ export const Numerators = ({toggleState}) => {
 
     const onSavePeriod = (selected) => { 
         togglePeriodModal;
-        console.log('Saved the following period data to the data store: ', selected);
+        console.log('Saved period: ', selected);
+    }
+
+    const onSaveData = (selected) => { 
+        toggleDataModal;
+        console.log('Saved data: ', selected);
     }
 
 
@@ -101,6 +109,24 @@ export const Numerators = ({toggleState}) => {
                     <TableCell>
                     <Button
                         name="Primary button" onClick={togglePeriodModal} 
+                        basic button value="default" icon={<IconEdit16 />}> Edit period
+                    </Button>
+
+                    <Button
+                        name="Primary button" onClick={() => setIsHidden(false)} 
+                        basic button value="default" icon={<IconSubtractCircle16 />}> Clear
+                    </Button>
+                    </TableCell>
+                </TableRow>
+                <TableRow>
+                    <TableCell>General Service Statistics</TableCell>
+                    <TableCell>OPD visits</TableCell>
+                    <TableCell>✔️</TableCell>
+                    <TableCell>New cases_OPD</TableCell>
+                    <TableCell>{dataElements? dataElements.name : "OutPatient Consultations (OPD)"}</TableCell>
+                    <TableCell>
+                    <Button
+                        name="Primary button" onClick={toggleDataModal} 
                         basic button value="default" icon={<IconEdit16 />}> Edit period
                     </Button>
 
@@ -207,6 +233,14 @@ export const Numerators = ({toggleState}) => {
             currentlySelected={[]}
             toggleModal={togglePeriodModal}
             onSave={onSavePeriod}
+        />
+
+        
+        <DataSelectorModal
+            isHiddenDataModal={isHiddenDataModal}
+            currentlySelected={[]}
+            toggleModal={toggleDataModal}
+            onSave={onSaveData}
         />
 
         

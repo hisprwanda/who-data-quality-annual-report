@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import PropTypes from 'prop-types'
+
 import {
     Button,
     ButtonStrip,
@@ -8,23 +8,26 @@ import {
     ModalContent,
     ModalActions,
 } from '@dhis2/ui'
-import { PeriodDimension } from '@dhis2/analytics'
+import { DataDimension } from '@dhis2/analytics'
 import i18n from '../../locales'
 
-export function PeriodsModal({ isHiddenPeriod, currentlySelected = [], toggleModal, onSave, }) {
+
+export const DataSelectorModal = ({ isHiddenDataModal, currentlySelected = [], toggleModal, onSave, }) => {
     const [selected, setSelected] = useState(currentlySelected)
 
 
-    return (
-        <Modal onClose={toggleModal} hide={isHiddenPeriod} >
+  return (
+    <Modal onClose={toggleModal} hide={isHiddenDataModal} large>
             <ModalTitle>{i18n.t('Select period(s)')}</ModalTitle>
             <ModalContent>
-                <PeriodDimension
-                    maxSelections={2}
-                    selectedPeriods={selected}
+                <DataDimension
+                    displayNameProp='displayName'
+                    selectedDimensions={currentlySelected}
+                    infoBoxMessage=''
                     onSelect={({ items }) => setSelected(items)}
+                    onCalculationSave={onSave}
                 />
-                
+
             </ModalContent>
             <ModalActions>
                 <ButtonStrip end>
@@ -41,20 +44,5 @@ export function PeriodsModal({ isHiddenPeriod, currentlySelected = [], toggleMod
                 </ButtonStrip>
             </ModalActions>
         </Modal>
-    )
+  )
 }
-
-PeriodsModal.propTypes = {
-    toggleModal: PropTypes.func.isRequired,
-    onSave: PropTypes.func.isRequired,
-    currentlySelected: PropTypes.arrayOf(
-        PropTypes.shape({
-            id: PropTypes.string,
-            name: PropTypes.string,
-            path: PropTypes.string,
-        })
-    ),
-    open: PropTypes.bool,
-}
-
-export default PeriodsModal
