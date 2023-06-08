@@ -53,9 +53,6 @@ label {
 #data-section, #period-section, #orgunit_section {
     padding: 0.4rem;
     width: 40%;
-    display: flex;
-    flex-direction: column;
-    gap: 0.5rem;
 }
 
 #orgunit_section > div, #period-section > div {
@@ -145,6 +142,11 @@ label {
     display: flex;
     flex-direction: column;
     gap: 0.3rem;
+    padding: 0.4rem;
+}
+
+.orgunit-bottomsection {
+    background-color: rgb(245, 244, 244);
 }
 
 .orgunit-bottomsection > div label {
@@ -152,13 +154,13 @@ label {
 }
 
 .orgunit-parent {
-    border: 1px solid #f1f1f1;
+    border: 1px solid #dfdfdf;
     padding: 0.0rem;
 }
 
 .orgunit-middlesection {
     padding: 0.2rem;
-    height: 20rem;
+    height: 16rem;
     margin-top: 1rem;
     overflow: scroll;
 }
