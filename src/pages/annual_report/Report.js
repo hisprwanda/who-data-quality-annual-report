@@ -397,17 +397,31 @@ const Report = () => {
             <a href='#data-parent' className='first-anchor title'>Data</a>
             <div className='data-below' id='data-parent'>
               <div className='data-section-child'>
-
+                  <Button name="basic_button" onClick={() => setOrgUnitGroupStatus(false) } value="default" className='button'>
+                    <span>Select Data</span>
+                  </Button>
               </div>
             </div>
           </div>
           <div className='period-container'>
             <a href='#period-parent' className='period-anchor title'>Period</a>
-            <div id='period-parent'></div>
+            <div id='period-parent'>
+            <div className='data-section-child'>
+                  <Button name="basic_button" onClick={() => setOrgUnitGroupStatus(false) } value="default" className='button'>
+                    <span>Select Period</span>
+                  </Button>
+              </div>
+            </div>
           </div>
           <div className='orgunit-container'>
             <a href='#orgunit-parent' className='orgunit-anchor title'>Organization Unit</a>
-            <div id='orgunit-parent'></div>
+            <div id='orgunit-parent'>
+            <div className='data-section-child'>
+                  <Button name="basic_button" onClick={() => setOrgUnitGroupStatus(false) } value="default" className='button'>
+                    <span>Select Organization Unit</span>
+                  </Button>
+              </div>
+            </div>
           </div>
         </div>
     </div>

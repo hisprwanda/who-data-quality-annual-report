@@ -29,6 +29,7 @@
 #data-parent:target, #period-parent:target, #orgunit-parent:target {
     display: block;
     transition: all 3s ease;
+    background-color: #fff;
 }
 
 
