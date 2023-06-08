@@ -19,8 +19,10 @@ function Tabs() {
 
   return (
     <div className="container">
+
       <div className="bloc-tabs">
-        <button className={toggleState === 1 ? "tabs active-tabs" : "tabs"}
+        <button 
+          className={toggleState === 1 ? "tabs active-tabs" : "tabs"}
           onClick={() => toggleTab(1)} > Numerators
         </button>
         <button

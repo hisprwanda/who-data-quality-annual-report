@@ -72,10 +72,15 @@
     content: "";
     display: block;
     position: absolute;
-    top: -5px;
+    top: -1px;
     left: 50%;
     transform: translateX(-50%);
-    width: calc(100% + 2px);
-    height: 5px;
+    width: calc(100% + 1px);
+    height: 2px;
     background: rgb(88, 147, 241);
+    border-radius: 5px;
+  }
+
+  .dataElementsSelector .select {
+    margin-bottom: 5px;
   }

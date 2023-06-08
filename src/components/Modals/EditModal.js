@@ -77,16 +77,18 @@ const EditModal = ({onClose, isHidden, onSave}) => {
                 
                 <div className='content-tabs-modal'>
                     <div className={toggleStateModal === 1 ? "content-modal  active-content-modal" : "content-modal"} >
-                        <SingleSelect className="select" onChange={()=> console.log('selected')} placeholder="Data Element Groups">
-                            <SingleSelectOption label="Group one" value="1" />
-                            <SingleSelectOption label="Group two" value="2" />
-                            <SingleSelectOption label="Group three" value="3" />
-                        </SingleSelect>
-                        <SingleSelect className="select" onChange={()=> console.log('selected')} placeholder="Data Element Groups">
-                            <SingleSelectOption label="Group one" value="1" />
-                            <SingleSelectOption label="Group two" value="2" />
-                            <SingleSelectOption label="Group three" value="3" />
-                        </SingleSelect>
+                        <div className="dataElementsSelector">
+                            <SingleSelect className="select" onChange={()=> console.log('selected')} placeholder="Data Element Groups">
+                                <SingleSelectOption label="Group one" value="1" />
+                                <SingleSelectOption label="Group two" value="2" />
+                                <SingleSelectOption label="Group three" value="3" />
+                            </SingleSelect>
+                            <SingleSelect className="select" onChange={()=> console.log('selected')} placeholder="Data Element Groups">
+                                <SingleSelectOption label="Group one" value="1" />
+                                <SingleSelectOption label="Group two" value="2" />
+                                <SingleSelectOption label="Group three" value="3" />
+                            </SingleSelect>
+                        </div>
                 
 
                         <h3>Data set for completeness</h3>
