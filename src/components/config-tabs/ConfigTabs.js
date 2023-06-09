@@ -8,9 +8,10 @@ import {NumeratorRelations} from "./tab-contents/NumeratorRelations";
 import { NumeratorParameters } from "./tab-contents/NumeratorParameters";
 import {Numerators} from "./tab-contents/Numerators";
 import {ExternalDataComparison} from "./tab-contents/ExternalDataComparison";
+import { CircularLoader } from "@dhis2/ui";
 
 
-function Tabs() {
+function Tabs({loading, numerators}) {
   const [toggleState, setToggleState] = useState(1);
 
   const toggleTab = (index) => {
@@ -52,14 +53,21 @@ function Tabs() {
       </div>
 
       <div className="content-tabs">
-        
-        <Numerators toggleState={toggleState}/>
-        <NumeratorGroups toggleState={toggleState}/>
-        <NumeratorRelations toggleState={toggleState}/>
-        <NumeratorParameters toggleState={toggleState} />
-        <Denominators toggleState={toggleState} />
-        <DenominatorRelations toggleState={toggleState} />
-        <ExternalDataComparison toggleState={toggleState} />
+        {loading? 
+            <div className='circularLoader'>
+              <CircularLoader large/>
+            </div>
+            : 
+        <>
+          <Numerators toggleState={toggleState} numerators={numerators}/>
+          <NumeratorGroups toggleState={toggleState}/>
+          <NumeratorRelations toggleState={toggleState}/>
+          <NumeratorParameters toggleState={toggleState} />
+          <Denominators toggleState={toggleState} />
+          <DenominatorRelations toggleState={toggleState} />
+          <ExternalDataComparison toggleState={toggleState} />
+        </>
+      } 
         
       </div>
     </div>
