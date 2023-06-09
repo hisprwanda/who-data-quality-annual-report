@@ -19,7 +19,7 @@ import PeriodsModal from '../../Modals/PeriodsModal';
 import { DataSelectorModal } from '../../Modals/DataSelectorModal';
 
 
-export const Numerators = ({toggleState}) => {
+export const Numerators = ({toggleState, numerators}) => {
     const [isHidden, setIsHidden] = useState(true);
     const [isHiddenEdit, setIsHiddenEdit] = useState(true);
     const [isHiddenPeriod, setIsHiddenPeriod] = useState(true);
@@ -82,11 +82,12 @@ export const Numerators = ({toggleState}) => {
                 </TableRowHead>
             </TableHead>
             <TableBody>
-                <TableRow>
+                {numerators? numerators.map((numerator, key ) => (
+                    <TableRow>
                     <TableCell>General Service Statistics</TableCell>
                     <TableCell>OPD visits</TableCell>
-                    <TableCell>✔️</TableCell>
-                    <TableCell>New cases_OPD</TableCell>
+                    <TableCell>{numerator.core ? "✔️": ""}</TableCell>
+                    <TableCell>{numerator.name}</TableCell>
                     <TableCell>{dataElements? dataElements.name : "OutPatient Consultations (OPD)"}</TableCell>
                     <TableCell>
                     <Button
@@ -100,6 +101,13 @@ export const Numerators = ({toggleState}) => {
                     </Button>
                     </TableCell>
                 </TableRow>
+
+                ))
+                :
+
+                <p>hello</p>
+}
+                
                 <TableRow>
                     <TableCell>General Service Statistics</TableCell>
                     <TableCell>OPD visits</TableCell>
@@ -136,7 +144,6 @@ export const Numerators = ({toggleState}) => {
                     </Button>
                     </TableCell>
                 </TableRow>
-
                 <TableRow>
                     {/*<TableCell>HIV/Aids</TableCell>
                     <TableCell>Retained on ART 12 months after initiation</TableCell>
