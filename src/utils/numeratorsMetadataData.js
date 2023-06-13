@@ -1,3 +1,10 @@
+import {
+  Button,
+  IconSubtractCircle16,
+  TableCell,
+  TableRow} from '@dhis2/ui'
+
+
 
 // TODO: in the future, pass the data from a global state or context api 
 
@@ -16,8 +23,8 @@ export const getNumeratorMemberGroups = (configurations, code) => {
 
 return  (
   <>
-    {memberGroups.map((group) => 
-          <Chip dense> {group} </Chip>
+    {memberGroups.map((group, key) => 
+          <Chip key={key} dense> {group} </Chip>
     )}
   </>
 )
@@ -46,3 +53,36 @@ export const getNumeratorDataElement = (configurations, dataID) => {
   }
 }
 
+export const getNumeratorsInGroup = (numerators, group) => {
+  const numeratorsInGroup = [];
+
+  for (let key in numerators) {
+    const numerator = numerators[key]
+    if (group.members.includes(numerator.code)) { 
+      numeratorsInGroup.push(numerator)
+    }
+  }
+
+  return(
+    <>
+      {numeratorsInGroup.map((numerator, key ) => (
+
+      <TableRow key={key}>
+        <TableCell>
+          {numerator.name}
+        </TableCell>
+        <TableCell>
+          <Button
+              name="Primary button" onClick={() => window.alert('It works!')} 
+              basic button value="default" icon={<IconSubtractCircle16 />}> Clear
+              </Button>
+        </TableCell>
+      </TableRow>
+
+
+      ))
+      }
+    </>
+  )
+  
+}

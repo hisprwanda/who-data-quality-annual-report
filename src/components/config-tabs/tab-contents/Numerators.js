@@ -87,7 +87,7 @@ export const Numerators = ({toggleState, configurations}) => {
             </TableHead>
             <TableBody>
                 {numerators? numerators.map((numerator, key ) => (
-                    <TableRow>
+                    <TableRow key={key}>
                         <TableCell>{getNumeratorMemberGroups(configurations, numerator.code)}</TableCell>
                         <TableCell>{numerator.name}</TableCell>
                         <TableCell>{numerator.core ? "✔️": ""}</TableCell>
@@ -112,7 +112,7 @@ export const Numerators = ({toggleState, configurations}) => {
                 ""
                 }
                 
-                <TableRow>
+                {/* <TableRow>
                     <TableCell>General Service Statistics</TableCell>
                     <TableCell>OPD visits</TableCell>
                     <TableCell>✔️</TableCell>
@@ -147,7 +147,7 @@ export const Numerators = ({toggleState, configurations}) => {
                         basic button value="default" icon={<IconSubtractCircle16 />}> Clear
                     </Button>
                     </TableCell>
-                </TableRow>
+                </TableRow> */}
             </TableBody>
         </Table>
         </div>

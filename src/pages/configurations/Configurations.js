@@ -15,8 +15,9 @@ const readDataStoreQuery = {
 
 const Configurations = () => {
 let configurations = [];
+
   // A dynamic alert to communicate success or failure 
-  const { show } = useAlert(
+  const { show } = useAlert( 
     ({ message }) => message,
     ({ status }) => {
         if (status === 'success') return { success: true }
@@ -33,9 +34,8 @@ if (data) {
   
     configurations = data.dataStore;
     const message = 'Successfully retrieved configurations'
-    // TODO: do your logic here
-    show({ message, status: 'success' })
-    console.log("*** datastore values: ", configurations );
+
+    // show({ message, status: 'success' })  //TODO: find the error in the console caused by AlertsProvider
 }
 
   return (
