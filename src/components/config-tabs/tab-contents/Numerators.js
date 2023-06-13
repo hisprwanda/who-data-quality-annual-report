@@ -17,7 +17,7 @@ import WarningModal from "../../Modals/WarningModal";
 import EditModal from '../../Modals/EditModal';
 import PeriodsModal from '../../Modals/PeriodsModal';
 import { DataSelectorModal } from '../../Modals/DataSelectorModal';
-import { getNumeratorMemberGroups } from '../../../utils/numeratorsMetadataData';
+import { getNumeratorDataElement, getNumeratorDataset, getNumeratorMemberGroups } from '../../../utils/numeratorsMetadataData';
 
 
 export const Numerators = ({toggleState, configurations}) => {
@@ -89,10 +89,10 @@ export const Numerators = ({toggleState, configurations}) => {
                 {numerators? numerators.map((numerator, key ) => (
                     <TableRow>
                         <TableCell>{getNumeratorMemberGroups(configurations, numerator.code)}</TableCell>
-                        <TableCell>OPD visits</TableCell>
-                        <TableCell>{numerator.core ? "✔️": ""}</TableCell>
                         <TableCell>{numerator.name}</TableCell>
-                        <TableCell>{dataElements? dataElements.name : "OutPatient Consultations (OPD)"}</TableCell>
+                        <TableCell>{numerator.core ? "✔️": ""}</TableCell>
+                        <TableCell>{getNumeratorDataElement(configurations, numerator.dataID)}</TableCell>
+                        <TableCell>{getNumeratorDataset(configurations, numerator.dataSetID)}</TableCell>
                         <TableCell>
                         <Button
                             name="Primary button" onClick={() => setIsHiddenEdit(false)} 
@@ -148,91 +148,6 @@ export const Numerators = ({toggleState, configurations}) => {
                     </Button>
                     </TableCell>
                 </TableRow>
-                <TableRow>
-                    {/*<TableCell>HIV/Aids</TableCell>
-                    <TableCell>Retained on ART 12 months after initiation</TableCell>
-                    <TableCell></TableCell>
-                    <TableCell></TableCell>
-                    <TableCell></TableCell>
-                    <TableCell>
-                    <Button
-                        name="Primary button" onClick={() => window.alert('It works!')} 
-                        basic button value="default" icon={<IconEdit16 />}> Edit
-                    </Button>
-                    <Button
-                        name="Primary button" onClick={() => window.alert('It works!')} 
-                        destructive button value="default" icon={<IconDelete16 />}> Delete
-                    </Button>
-                    </TableCell>
-                </TableRow>
-                <TableRow>
-                    <TableCell>Immunization</TableCell>
-                    <TableCell>DPT 1</TableCell>
-                    <TableCell>✔️</TableCell>
-                    <TableCell>DTP_HepB_Hib1</TableCell>
-                    <TableCell> Vaccination </TableCell>
-                    <TableCell>
-                    <Button
-                        name="Primary button" onClick={() => window.alert('It works!')} 
-                        basic button value="default" icon={<IconEdit16 />}> Edit
-                    </Button>
-                    <Button
-                        name="Primary button" onClick={() => window.alert('It works!')} 
-                        basic button value="default" icon={<IconSubtractCircle16 />}> Clear
-                    </Button>
-                    </TableCell>
-                </TableRow>
-                <TableRow>
-                    <TableCell>Malaria</TableCell>
-                    <TableCell>Confirmed malaria cases</TableCell>
-                    <TableCell> ... </TableCell>
-                    <TableCell></TableCell>
-                    <TableCell> ... </TableCell>
-                    <TableCell>
-                    <Button
-                        name="Primary button" onClick={() => window.alert('It works!')} 
-                        basic button value="default" icon={<IconEdit16 />}> Edit
-                    </Button>
-                    <Button
-                        name="Primary button" onClick={() => window.alert('It works!')} 
-                        basic button value="default" icon={<IconSubtractCircle16 />}> Clear
-                    </Button>
-                    </TableCell>
-                </TableRow>
-                <TableRow>
-                    <TableCell>Maternal Health</TableCell>
-                    <TableCell> ... </TableCell>
-                    <TableCell>✔️</TableCell>
-                    <TableCell> ANC First standard visit 1st trimester </TableCell>
-                    <TableCell></TableCell>
-                    <TableCell>
-                    <Button
-                        name="Primary button" onClick={() => window.alert('It works!')} 
-                        basic button value="default" icon={<IconEdit16 />}> Edit
-                    </Button>
-                    <Button
-                        name="Primary button" onClick={() => window.alert('It works!')} 
-                        basic button value="default" icon={<IconSubtractCircle16 />}> Clear
-                    </Button>
-                    </TableCell>
-                </TableRow>
-                <TableRow>
-                    <TableCell>TB</TableCell>
-                    <TableCell> MDR-TB cases successfully treated </TableCell>
-                    <TableCell> ✔️ </TableCell>
-                    <TableCell>Ac Chlorhydrique disp</TableCell>
-                    <TableCell> TB Drug Management (CDT only) </TableCell>
-                    <TableCell>
-                    <Button
-                        name="Primary button" onClick={() => window.alert('It works!')} 
-                        basic button value="default" icon={<IconEdit16 />}> Edit
-                    </Button>
-                    <Button
-                        name="Primary button" onClick={() => window.alert('It works!')} 
-                        basic button value="default" icon={<IconSubtractCircle16 />}> Clear
-                    </Button>
-                    </TableCell>*/}
-                </TableRow> 
             </TableBody>
         </Table>
         </div>
