@@ -59,13 +59,14 @@ function Tabs({loading, configurations}) {
             </div>
             : 
         <>
-          <Numerators toggleState={toggleState} configurations={configurations}/>
-          <NumeratorGroups toggleState={toggleState}/>
-          <NumeratorRelations toggleState={toggleState}/>
-          <NumeratorParameters toggleState={toggleState} />
-          <Denominators toggleState={toggleState} />
-          <DenominatorRelations toggleState={toggleState} />
-          <ExternalDataComparison toggleState={toggleState} />
+          {/* TODO: find a way to pass the state globally or use the context api to share these data */}
+          <Numerators toggleState={toggleState} configurations={configurations}/>   
+          <NumeratorGroups toggleState={toggleState} configurations={configurations}/>
+          <NumeratorRelations toggleState={toggleState} configurations={configurations}/>
+          <NumeratorParameters toggleState={toggleState}  configurations={configurations}/>
+          <Denominators toggleState={toggleState}  configurations={configurations}/>
+          <DenominatorRelations toggleState={toggleState}  configurations={configurations}/>
+          <ExternalDataComparison toggleState={toggleState}  configurations={configurations}/>
         </>
       } 
         
