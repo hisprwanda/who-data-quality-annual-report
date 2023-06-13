@@ -11,7 +11,7 @@ import {ExternalDataComparison} from "./tab-contents/ExternalDataComparison";
 import { CircularLoader } from "@dhis2/ui";
 
 
-function Tabs({loading, numerators}) {
+function Tabs({loading, configurations}) {
   const [toggleState, setToggleState] = useState(1);
 
   const toggleTab = (index) => {
@@ -59,7 +59,7 @@ function Tabs({loading, numerators}) {
             </div>
             : 
         <>
-          <Numerators toggleState={toggleState} numerators={numerators}/>
+          <Numerators toggleState={toggleState} configurations={configurations}/>
           <NumeratorGroups toggleState={toggleState}/>
           <NumeratorRelations toggleState={toggleState}/>
           <NumeratorParameters toggleState={toggleState} />

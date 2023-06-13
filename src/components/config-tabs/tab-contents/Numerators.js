@@ -17,9 +17,10 @@ import WarningModal from "../../Modals/WarningModal";
 import EditModal from '../../Modals/EditModal';
 import PeriodsModal from '../../Modals/PeriodsModal';
 import { DataSelectorModal } from '../../Modals/DataSelectorModal';
+import { getNumeratorMemberGroups } from '../../../utils/numeratorsMetadataData';
 
 
-export const Numerators = ({toggleState, numerators}) => {
+export const Numerators = ({toggleState, configurations}) => {
     const [isHidden, setIsHidden] = useState(true);
     const [isHiddenEdit, setIsHiddenEdit] = useState(true);
     const [isHiddenPeriod, setIsHiddenPeriod] = useState(true);
@@ -27,10 +28,9 @@ export const Numerators = ({toggleState, numerators}) => {
 
     const togglePeriodModal = () => setIsHiddenPeriod(state => !state)
     const toggleDataModal = () => setIsHiddenDataModal(state => !state)
-
-
     const [dataElements, setDataElements] = useState(null);
 
+    let numerators = configurations? configurations.numerators : []
 
     const onClose = () => {
         setIsHidden(true);
@@ -54,14 +54,18 @@ export const Numerators = ({toggleState, numerators}) => {
 
     const onSavePeriod = (selected) => { 
         togglePeriodModal;
-        console.log('Saved period: ', selected);
+        // console.log('Saved period: ', selected);
+        const dataFromUtils = getNumeratorMemberGroups()
+        console.log('From utils: ', dataFromUtils);
     }
+
 
     const onSaveData = (selected) => { 
         toggleDataModal;
         console.log('Saved data: ', selected);
     }
 
+    //TODO: create utils functions to get different values for each numerator ie: groups, datasets etc
 
   return (
     <div className={toggleState === 1 ? "content  active-content" : "content"} >
@@ -84,29 +88,29 @@ export const Numerators = ({toggleState, numerators}) => {
             <TableBody>
                 {numerators? numerators.map((numerator, key ) => (
                     <TableRow>
-                    <TableCell>General Service Statistics</TableCell>
-                    <TableCell>OPD visits</TableCell>
-                    <TableCell>{numerator.core ? "✔️": ""}</TableCell>
-                    <TableCell>{numerator.name}</TableCell>
-                    <TableCell>{dataElements? dataElements.name : "OutPatient Consultations (OPD)"}</TableCell>
-                    <TableCell>
-                    <Button
-                        name="Primary button" onClick={() => setIsHiddenEdit(false)} 
-                        basic button value="default" icon={<IconEdit16 />}> Edit
-                    </Button>
-                    
-                    <Button
-                        name="Primary button" onClick={() => setIsHidden(false)} 
-                        basic button value="default" icon={<IconSubtractCircle16 />}> Clear
-                    </Button>
-                    </TableCell>
-                </TableRow>
+                        <TableCell>{getNumeratorMemberGroups(configurations, numerator.code)}</TableCell>
+                        <TableCell>OPD visits</TableCell>
+                        <TableCell>{numerator.core ? "✔️": ""}</TableCell>
+                        <TableCell>{numerator.name}</TableCell>
+                        <TableCell>{dataElements? dataElements.name : "OutPatient Consultations (OPD)"}</TableCell>
+                        <TableCell>
+                        <Button
+                            name="Primary button" onClick={() => setIsHiddenEdit(false)} 
+                            basic button value="default" icon={<IconEdit16 />}> Edit
+                        </Button>
+                        
+                        <Button
+                            name="Primary button" onClick={() => setIsHidden(false)} 
+                            basic button value="default" icon={<IconSubtractCircle16 />}> Clear
+                        </Button>
+                        </TableCell>
+                    </TableRow>
 
                 ))
                 :
 
-                <p>hello</p>
-}
+                ""
+                }
                 
                 <TableRow>
                     <TableCell>General Service Statistics</TableCell>

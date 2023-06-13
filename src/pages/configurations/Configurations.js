@@ -5,17 +5,16 @@ import './configurations.css'
 import { useDataQuery, useAlert } from "@dhis2/app-runtime";
 
 
-
-
+//TODO: use a global state or context api to share these settings accross components
 const readDataStoreQuery = {
   dataStore: {
-    resource: 'dataStore/dataQualityTool/settings',
+    resource: 'dataStore/who-dqa/configurations',
   },
 };
 
 
 const Configurations = () => {
-let numerators = [];
+let configurations = [];
   // A dynamic alert to communicate success or failure 
   const { show } = useAlert(
     ({ message }) => message,
@@ -32,11 +31,11 @@ let numerators = [];
 
 if (data) {  
   
-    numerators = data.dataStore.numerators;
+    configurations = data.dataStore;
     const message = 'Successfully retrieved configurations'
     // TODO: do your logic here
     show({ message, status: 'success' })
-    console.log("*** datastore values: ", numerators );
+    console.log("*** datastore values: ", configurations );
 }
 
   return (
@@ -53,7 +52,7 @@ if (data) {
           </div>
 
           <div className='config-tabs-container' >
-              <ConfigTabs loading={loading} numerators={numerators}/>
+              <ConfigTabs loading={loading} configurations={configurations}/>
           </div>
 
         </div>
