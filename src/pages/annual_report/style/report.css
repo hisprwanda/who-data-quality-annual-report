@@ -11,7 +11,6 @@ label {
 .topParagraph{
     display: flex;
     background-color: #F3F5F7;
-    height: 50px;
     color: rgb(10, 10, 10);
     font-size: 2.0rem;
     margin-left: 10%;
@@ -30,7 +29,6 @@ label {
 
 .title {
     font-size: 1.5rem;
-    margin-bottom: 0.2rem;
     cursor: pointer;
 }
 
@@ -44,10 +42,10 @@ label {
     transition: all 3s;
 }
 
-.configRows .title {
+.configRows {
     border-radius: 5px;
     background-color: #e9e9e9;
-    padding: 0.6rem;
+    padding: 0.1rem;
 }
 
 #data-section, #period-section, #orgunit_section {
@@ -192,3 +190,51 @@ label {
 .group-element-selected ul li {
     list-style: none;
 }
+
+
+.report-container {
+    width: 80%;
+    margin: auto;
+    background-color: #fff;
+    border: 1px solid #e4e4e4;
+    padding: 0rem;
+}
+
+.data-container, .period-container, .orgunit-container {
+    display: flex;
+    flex-direction: column;
+    gap: 1.2rem;
+    margin: 0.0rem 0rem;
+    border: 1px solid #f3f3f3;
+    height: auto;
+}
+
+.report-container a {
+    background-color: #e4e4e4;
+    width: 100%;
+    display: block;
+    padding: 0.6rem;
+    text-decoration: none;
+    color: #171717;
+}
+
+#data-parent, #period-parent, #orgunit-parent {
+    display: none;
+    transition: all 4s ease;
+}
+
+#data-parent:target, #period-parent:target, #orgunit-parent:target {
+    display: block;
+    transition: all 3s ease;
+    background-color: #fff;
+}
+
+.data-section-child {
+    display: flex;
+    align-items: center;
+    padding: 0.4rem;
+}
+
+
+
+
