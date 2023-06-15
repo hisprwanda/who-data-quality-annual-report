@@ -1,3 +1,4 @@
+import {useState, useEffect} from 'react'
 import {
     Button,
     Table,
@@ -11,8 +12,16 @@ import {
     IconEdit16,
     IconAdd16	
   } from '@dhis2/ui'
+import { getDenominatorType } from '../../../utils/denominatorsMetadataData';
 
-export const Denominators = ({toggleState}) => {
+export const Denominators = ({toggleState, configurations}) => {
+  const [denominators, setDenominators] = useState(null);
+
+  useEffect(() => {
+    setDenominators(configurations.denominators)
+  }, [])
+      
+
   return (
     
     <div className={toggleState === 5 ? "content  active-content" : "content"} >
@@ -29,48 +38,26 @@ export const Denominators = ({toggleState}) => {
               </TableRowHead>
           </TableHead>
           <TableBody>
-            <TableRow>
-                <TableCell>AIDS clinical_OPDDH</TableCell>
-                <TableCell>	Expected pregnancies</TableCell>
-                <TableCell>
-                  <Button
-                      name="Primary button" onClick={() => window.alert('It works!')} 
-                      basic button value="default" icon={<IconEdit16 />}> Edit
-                  </Button>
-                  <Button
-                      name="Primary button" onClick={() => window.alert('It works!')} 
-                      destructive button value="default" icon={<IconDelete16 />}> Delete
-                  </Button>
-                </TableCell>
-            </TableRow>
-            <TableRow>
-                <TableCell>Obs Gyn surgery Post surgical Infection</TableCell>
-                <TableCell>	 Total	Children {'<'} 1 year</TableCell>
-                <TableCell>
-                  <Button
-                      name="Primary button" onClick={() => window.alert('It works!')} 
-                      basic button value="default" icon={<IconEdit16 />}> Edit
-                  </Button>
-                  <Button
-                      name="Primary button" onClick={() => window.alert('It works!')} 
-                      destructive button value="default" icon={<IconDelete16 />}> Delete
-                  </Button>
-                </TableCell>
-            </TableRow>
-            <TableRow>
-                <TableCell>Hosp_Malaria Simple in postpartum_Within 42 days after delivery	</TableCell>
-                <TableCell>	People living with HIV</TableCell>
-                <TableCell>
-                  <Button
-                      name="Primary button" onClick={() => window.alert('It works!')} 
-                      basic button value="default" icon={<IconEdit16 />}> Edit
-                  </Button>
-                  <Button
-                      name="Primary button" onClick={() => window.alert('It works!')} 
-                      destructive button value="default" icon={<IconDelete16 />}> Delete
-                  </Button>
-                </TableCell>
-            </TableRow>
+            {denominators? denominators.map((denominator, key) => (
+              <TableRow key={key}>
+                  <TableCell>{denominator.name}</TableCell>
+                  <TableCell>	{getDenominatorType(denominator.type).displayName}</TableCell>
+                  <TableCell>
+                    <Button
+                        name="Primary button" onClick={() => window.alert('It works!')} 
+                        basic button value="default" icon={<IconEdit16 />}> Edit
+                    </Button>
+                    <Button
+                        name="Primary button" onClick={() => window.alert('It works!')} 
+                        destructive button value="default" icon={<IconDelete16 />}> Delete
+                    </Button>
+                  </TableCell>
+              </TableRow>
+              
+            ))
+            :
+            <TableRow><TableCell></TableCell></TableRow>
+          }
 
             {/* Add button */}
 
