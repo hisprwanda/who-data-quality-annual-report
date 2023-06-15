@@ -9,6 +9,7 @@ import {
 // TODO: in the future, pass the data from a global state or context api 
 
 import { Chip } from "@dhis2/ui-core";
+import relationTypes from '../data/relationTypes.json';
 
 export const getNumeratorMemberGroups = (configurations, code) => {
   const groups = configurations.groups;
@@ -65,7 +66,7 @@ export const getNumeratorsInGroup = (numerators, group) => {
 
   return(
     <>
-      {numeratorsInGroup.map((numerator, key ) => (
+      {numeratorsInGroup.length > 0? numeratorsInGroup.map((numerator, key ) => (
 
       <TableRow key={key}>
         <TableCell>
@@ -81,8 +82,30 @@ export const getNumeratorsInGroup = (numerators, group) => {
 
 
       ))
+      :
+        <TableRow>
+          <TableCell>
+            No numerators added, please add them.
+          </TableCell>
+          <TableCell>
+            
+          </TableCell>
+
+        </TableRow>
       }
     </>
   )
   
 }
+
+
+export const getNumeratorRelations = (numerators, code) => {
+  let numeratorObj = numerators.find((numerator) => numerator.code == code);
+  if (numeratorObj){ return numeratorObj.name }
+}
+
+
+export const getRelationType = (type) => {
+  const relationType = relationTypes.find((relation) => relation.code == type);
+  return relationType ;
+};

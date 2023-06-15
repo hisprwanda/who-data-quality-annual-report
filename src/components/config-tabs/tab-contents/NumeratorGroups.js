@@ -39,7 +39,7 @@ const [numerators, setNumerators] = useState(null);
                     <TableHead>
                         <TableRowHead>
                             <TableCellHead>Data</TableCellHead>
-                            <TableCellHead>Action</TableCellHead>
+                            <TableCellHead>Actions</TableCellHead>
                         </TableRowHead>
                     </TableHead>
                     <TableBody>
@@ -64,7 +64,7 @@ const [numerators, setNumerators] = useState(null);
                         </TableCell> */}
                         <TableCell>
                         <Button
-                            name="Primary button" onClick={() => window.alert('Make this a transfer ui and transfer numerators!')} 
+                            name="Primary button" onClick={() => window.alert('Make this a transfer ui and!')} 
                             primary button value="default" icon={<IconAdd16 />}> Add Numerators
                         </Button>
                         </TableCell>
