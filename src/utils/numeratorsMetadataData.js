@@ -109,3 +109,14 @@ export const getRelationType = (type) => {
   const relationType = relationTypes.find((relation) => relation.code == type);
   return relationType ;
 };
+
+export const makeOutlierOptions= () =>{
+  var opts = [];
+  opts.push({"val": '-1', "label": "Ignore"});
+  for (let i = 1.5; i <= 4.05; i += 0.1) {
+    opts.push({"val": (Math.round(10*i)/10).toString(), "label": (Math.round(10*i)/10).toString()});
+  }
+
+  console.log('optionsss: ', opts)
+  return opts;
+}

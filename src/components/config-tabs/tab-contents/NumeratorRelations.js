@@ -20,7 +20,7 @@ export const NumeratorRelations = ({toggleState, configurations}) => {
 
     useEffect(() => {
         setRelations(configurations.numeratorRelations)
-      })
+      }, [])
       
 
   return (
