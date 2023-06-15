@@ -1,6 +1,7 @@
 import React from 'react'
 import {IconDimensionEventDataItem16} from '@dhis2/ui-icons'
 
+
 export const SearchResultComponent = () => {
     return (
         <div>

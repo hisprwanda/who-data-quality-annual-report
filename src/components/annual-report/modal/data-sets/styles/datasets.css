@@ -7,16 +7,17 @@
     border: 1px solid #e1e1e1;
 }
 
-.data-set-modal-parent div:nth-child(1) {
-    flex: 4 4 auto;
+.data-set-modal-parent > div:nth-child(1) {
+    flex: 6 6 auto;
 }
 
-.data-set-modal-parent div:nth-child(2) {
+.data-set-modal-parent > div:nth-child(2) {
     flex: 0.8 0.8 auto;
     display: flex;
     align-content: center;
 }
 
-.data-set-modal-parent div:nth-child(3) {
-    flex: 5 5 auto;
+
+.data-set-modal-parent > div:nth-child(3) {
+    flex: 4 4 auto;
 }

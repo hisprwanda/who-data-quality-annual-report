@@ -5,6 +5,10 @@
 
 .search-data-parent > div:nth-child(1) {
     border-bottom: 1px solid #e1e1e1;
+    padding: 0.9rem;
+    display: flex;
+    flex-direction: column;
+    gap: 1.0rem;
 }
 
 .search-data-parent > div:nth-child(1) ul, .search-data-parent > div:nth-child(1) ul{
@@ -12,7 +16,7 @@
     padding: 0rem;
     display: flex;
     flex-direction: column;
-    gap: 0.1rem;
+    gap: 1.0rem;
 }
 
 .search-data-parent > div:nth-child(2) {
@@ -22,11 +26,15 @@
 .search-data-parent > div:nth-child(1) ul li {
     list-style: none;
     width: 100%;
-    padding: 0.9rem;
     display: flex;
     flex-direction: column;
-    gap: 0.5rem;
+    gap: 0.9rem;
+}
+
+.search-data-parent > div:nth-child(1) ul li:nth-child(2) {
     display: flex;
+    gap: 0.6rem;
+    flex-direction: column;
 }
 
 .search-data-parent > div:nth-child(2) ul li {
@@ -38,19 +46,6 @@
     padding: 0.1rem;
 }
 
-
-label {
-    font-size: 1.1rem;
-}
-
-select {
-    margin-top: 0.3rem;
-}
-
-.icon-size {
-    font-size: 1.2rem;
-}
-
 .destination-parent {
     display: flex;
     flex-direction: column;
@@ -59,10 +54,31 @@ select {
 .destination-parent > div:nth-child(1) {
     border-bottom: 1px solid #f4f4f4;
     padding: 0.8rem;
-    font-size: 1.2rem;
+    font-size: 0.9rem;
 }
 
 .destination-parent > div:nth-child(2) {
     padding: 0.4rem;
     font-size: 1.0rem;
+}
+
+.indicator-group-parent {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    padding: 0.5rem;
+}
+
+.data-element-group-list-parent, .data-set-group-list-parent {
+    display: flex;
+    flex-direction: row;
+    padding: 0.5rem;
+    gap: 0.3rem;
+}
+
+.data-element-group-list-parent > div, .data-set-group-list-parent > div {
+    flex: 1 1 auto;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
 }

@@ -9,5 +9,11 @@ ul {
 }
 ul li {
     list-style: none;
-
 }
+
+.modal-data-transfer-parent {
+    display: flex;
+    width: 100%;
+    justify-content: center;
+}
+

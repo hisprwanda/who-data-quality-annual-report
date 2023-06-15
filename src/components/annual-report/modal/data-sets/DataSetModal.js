@@ -9,7 +9,6 @@ import React from 'react'
 import { Modal, ModalTitle, ModalActions, ModalContent, MultiSelect, MultiSelectField, MultiSelectOption, ButtonStrip, Button} from '@dhis2/ui'
 import './styles/datasets.css'
 import { ModalDataTransfer } from './ModalDataTransfer'
-import './styles/datatransfer.css'
 import { SearchDataComponent } from '../../search-data/SearchData.Component'
 import { ModalDataTransferDestination } from './ModalDataTransferDestination'
 export const DataSetModal = (props) => {
