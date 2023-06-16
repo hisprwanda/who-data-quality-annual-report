@@ -15,6 +15,7 @@ import { resources } from '../../assets/str-resources/report-section'
 import { Button } from '@dhis2/ui'
 import { DataSetModal } from '../../components/annual-report/modal/data-sets/DataSetModal'
 import { PeriodModal } from '../../components/annual-report/modal/period/PeriodModal'
+import { OrganizationUnitModal } from '../../components/annual-report/modal/organizationunit/OrganizationUnitModal'
 
 // End of imports
 
@@ -38,6 +39,7 @@ const Report = () => {
       <MenuBar />
       <DataSetModal status = { dataSetModalStatus } changeDataModalStatus = {setDataSetModalStatus}/>
       <PeriodModal status = { periodModalStatus } changePeriodModalStatus = {setPeriodModalStatus} />
+      <OrganizationUnitModal status = { orgUnitModalStatus } changeOrganisationUnitStatus = { setOrgUnitModalStatus } />
         <div className='topParagraph'>
           <p>{resources.report_title}</p>
         </div>
@@ -57,7 +59,7 @@ const Report = () => {
             <a href='#period-parent' className='period-anchor title'>Period</a>
             <div id='period-parent'>
               <div className='data-section-child'>
-                  <Button name="basic_button" onClick={() => {() => setPeriodModalStatus(false)} } value="default" className='button'>
+                  <Button name="basic_button" onClick={() => setPeriodModalStatus(false) } value="default" className='button'>
                     <span>Choose Period</span>
                   </Button>
               </div>
@@ -67,7 +69,7 @@ const Report = () => {
             <a href='#orgunit-parent' className='orgunit-anchor title'>Organization Unit</a>
             <div id='orgunit-parent'>
             <div className='data-section-child'>
-                  <Button name="basic_button" onClick={() => {} } value="default" className='button'>
+                  <Button name="basic_button" onClick={() => setOrgUnitModalStatus(false) } value="default" className='button'>
                     <span>Choose Organization Unit</span>
                   </Button>
               </div>

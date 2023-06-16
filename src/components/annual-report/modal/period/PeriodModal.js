@@ -1,10 +1,8 @@
-import React from 'react'
-import {useState} from 'react'
+import React, { useState } from 'react'
 import { Modal, ModalActions, ModalTitle, ModalContent, ButtonStrip, Button, SingleSelect, SingleSelectField, SingleSelectOption, Divider } from '@dhis2/ui'
 import {IconArrowLeftMulti24, IconArrowRightMulti24, IconArrowLeft24, IconArrowRight24} from '@dhis2/ui'
 import './style/periodmodal.css'
 import { FixedPeriodElement } from '../FixedPeriodElement'
-import { RelativePeriodList } from '../RelativePeriodList'
 import { RelativePeriodComponent } from '../RelativePeriod.component'
 import { RelativePeriodResultComponent } from '../RelativePeriodResult.component'
 
@@ -14,7 +12,7 @@ export const PeriodModal = (props) => {
     let [modalStatus, setModalStatus] = useState(props.status)
 
     return (
-        <Modal hide={props.modalStatus} onClose={ () => {props.changePeriodModalStatus}} position="top" fluid>
+        <Modal hide={props.status} onClose={ () => {props.changePeriodModalStatus(true)}} position="top" fluid>
             <ModalTitle>
                 Period
             </ModalTitle>
@@ -78,7 +76,7 @@ export const PeriodModal = (props) => {
             </ModalContent>
             <ModalActions>
                 <ButtonStrip end>
-                    <Button onClick={() => {}} >Hide</Button>
+                    <Button onClick={() => {props.changePeriodModalStatus(true)}} >Hide</Button>
                 </ButtonStrip>
                 <div className='divider'></div>
                 <ButtonStrip end>
