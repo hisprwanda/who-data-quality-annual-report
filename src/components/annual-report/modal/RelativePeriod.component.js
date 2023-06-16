@@ -1,10 +1,10 @@
 import React from 'react'
 import { SingleSelect, SingleSelectField, SingleSelectOption } from '@dhis2/ui'
 
-export const SingleSelectElement = () => {
+export const RelativePeriodComponent = () => {
 
     return (
-        <div className='emballage'>
+        <div className='relative-period-component-parent'>
             <label>
                 Period Type
             </label>

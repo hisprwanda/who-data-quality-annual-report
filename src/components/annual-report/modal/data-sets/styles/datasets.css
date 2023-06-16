@@ -21,3 +21,7 @@
 .data-set-modal-parent > div:nth-child(3) {
     flex: 4 4 auto;
 }
+
+.divider {
+    width: 0.8rem;
+}

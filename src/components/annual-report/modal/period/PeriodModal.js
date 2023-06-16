@@ -3,26 +3,26 @@ import {useState} from 'react'
 import { Modal, ModalActions, ModalTitle, ModalContent, ButtonStrip, Button, SingleSelect, SingleSelectField, SingleSelectOption, Divider } from '@dhis2/ui'
 import {IconArrowLeftMulti24, IconArrowRightMulti24, IconArrowLeft24, IconArrowRight24} from '@dhis2/ui'
 import './style/periodmodal.css'
-import { SingleSelectElement } from './SingleSelectElement'
-import { FixedPeriodElement } from './FixedPeriodElement'
-import { RelativePeriodList } from './RelativePeriodList'
-import { FixedPeriodList } from './FixedPeriodList'
+import { FixedPeriodElement } from '../FixedPeriodElement'
+import { RelativePeriodList } from '../RelativePeriodList'
+import { RelativePeriodComponent } from '../RelativePeriod.component'
+import { RelativePeriodResultComponent } from '../RelativePeriodResult.component'
 
 export const PeriodModal = (props) => {
 
     let [selectedPeriod, setSelectedPeriod] = useState('Relative')
-    //let [props.visibility, setVisibility] = useState(props.visibility)
-    return (
+    let [modalStatus, setModalStatus] = useState(props.status)
 
-        <Modal hide={props.visibility} onClose={ () => {props.changePeriodModalStatus}} position="top" large>
+    return (
+        <Modal hide={props.modalStatus} onClose={ () => {props.changePeriodModalStatus}} position="top" fluid>
             <ModalTitle>
                 Period
             </ModalTitle>
             <ModalContent>
                 
-                <div className='parent-element'>
-                    <div className='data-source'>
-                        <div className='data-source-menu'>
+                <div className='period-modal-parent-element'>
+                    <div className='period-modal-data-source'>
+                        <div className='period-modal-data-source-menu'>
                             <ul>
                                 <li onClick={(e) => {setSelectedPeriod('Relative')}} className='source-relative-period'>
                                     Relative Periods
@@ -32,13 +32,13 @@ export const PeriodModal = (props) => {
                                 </li>
                             </ul>
                         </div>
-                        <Divider/>
-                        <div className='data-source-center'>
-                            { selectedPeriod === 'Relative' ? <SingleSelectElement/> : <FixedPeriodElement/> }
+                        
+                        <div className='period-modal-data-source-center'>
+                            { selectedPeriod === 'Relative' ? <RelativePeriodComponent/> : <FixedPeriodElement/> }
                         </div>
-                        <Divider/>
-                        <div className='data-source-result'>
-                            { selectedPeriod === 'Relative' ? <RelativePeriodList/> : <FixedPeriodList/>}
+
+                        <div className='period-modal-data-source-result'>
+                            <RelativePeriodResultComponent />
                         </div>
                     </div>
                     <div className='transfer-element'>
@@ -65,7 +65,7 @@ export const PeriodModal = (props) => {
                             </li>
                         </ul>
                     </div>
-                    <div className='data-destination'>
+                    <div className='period-modal-data-destination'>
                         <div>
                             Selected Period
                         </div>
@@ -78,7 +78,11 @@ export const PeriodModal = (props) => {
             </ModalContent>
             <ModalActions>
                 <ButtonStrip end>
-                    <Button onClick={() => {}} primary>Close</Button>
+                    <Button onClick={() => {}} >Hide</Button>
+                </ButtonStrip>
+                <div className='divider'></div>
+                <ButtonStrip end>
+                    <Button onClick={() => {}} primary>Update</Button>
                 </ButtonStrip>
             </ModalActions>
         </Modal>

@@ -31,9 +31,13 @@ export const DataSetModal = (props) => {
             </div>
           </ModalContent>
           <ModalActions>
-              <ButtonStrip end>
-                  <Button onClick={() => {props.changeDataModalStatus(true)}} secondary>Close</Button>
-              </ButtonStrip>
+                <ButtonStrip end>
+                    <Button onClick={() => {}} >Hide</Button>
+                </ButtonStrip>
+                <div className='divider'></div>
+                <ButtonStrip end>
+                    <Button onClick={() => {}} primary>Update</Button>
+                </ButtonStrip>
           </ModalActions>
       </Modal>
     )

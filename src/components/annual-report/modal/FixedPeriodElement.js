@@ -1,11 +1,11 @@
 import React from 'react'
-import { SingleSelect, SingleSelectField, SingleSelectOption } from '@dhis2/ui'
+import { SingleSelect, SingleSelectField, SingleSelectOption, Input } from '@dhis2/ui'
 
 
 export const FixedPeriodElement = () => {
     return (
         <div className='fixed-element-parent'>
-            <div className='emballage'>
+            <div>
                 <label>
                     Period Type
                 </label>
@@ -16,17 +16,11 @@ export const FixedPeriodElement = () => {
                     <SingleSelectOption label="Daily" value="4" />
                 </SingleSelect>
             </div>
-            <div className='emballage'>
+            <div>
                 <label>
                     Year
                 </label>
-                <SingleSelect className="select" onChange={()=>{}} placeholder="Select Year">
-                    <SingleSelectOption label="2023" value="1" />
-                    <SingleSelectOption label="2022" value="2" />
-                    <SingleSelectOption label="2021" value="3" />
-                    <SingleSelectOption label="2020" value="4" />
-                    <SingleSelectOption label="2019" value="5" />
-                </SingleSelect>
+                <Input max="2030" min="2023" name="defaultName" onChange={() => {}} step="1" type="number" />
             </div>
         </div>
     );

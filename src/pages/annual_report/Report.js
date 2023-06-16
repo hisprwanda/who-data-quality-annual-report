@@ -2,7 +2,7 @@
 Author: Joseph MANZI
 Company: HISP Rwanda
 Date: May, 30 2023
-The page used to present the user interface for the user to manage the reports
+The component to manage the period modal
 */
 
 // Import of key features 
@@ -14,6 +14,7 @@ import './style/report.css'
 import { resources } from '../../assets/str-resources/report-section'
 import { Button } from '@dhis2/ui'
 import { DataSetModal } from '../../components/annual-report/modal/data-sets/DataSetModal'
+import { PeriodModal } from '../../components/annual-report/modal/period/PeriodModal'
 
 // End of imports
 
@@ -21,13 +22,22 @@ import { DataSetModal } from '../../components/annual-report/modal/data-sets/Dat
 const Report = () => {
 
   // Hook for managing data set modals
-  let [dataSetModalStatus, setDataSetModalStatus] = useState(false)
+  let [dataSetModalStatus, setDataSetModalStatus] = useState(true)
   // End of hook for managing data set modals
+
+  // Hook for managing period modal
+  let [periodModalStatus, setPeriodModalStatus] = useState(true)
+  // End of hook for managing period modal
+
+  // Hook for managing org unit modal
+  let [orgUnitModalStatus, setOrgUnitModalStatus] = useState(true)
+  // End of hook for managing org unit modal
 
   return (
     <div className='reportContainer'>
       <MenuBar />
-      <DataSetModal status={dataSetModalStatus} changeDataModalStatus = {setDataSetModalStatus}/>
+      <DataSetModal status = { dataSetModalStatus } changeDataModalStatus = {setDataSetModalStatus}/>
+      <PeriodModal status = { periodModalStatus } changePeriodModalStatus = {setPeriodModalStatus} />
         <div className='topParagraph'>
           <p>{resources.report_title}</p>
         </div>
@@ -47,7 +57,7 @@ const Report = () => {
             <a href='#period-parent' className='period-anchor title'>Period</a>
             <div id='period-parent'>
               <div className='data-section-child'>
-                  <Button name="basic_button" onClick={() => {} } value="default" className='button'>
+                  <Button name="basic_button" onClick={() => {() => setPeriodModalStatus(false)} } value="default" className='button'>
                     <span>Choose Period</span>
                   </Button>
               </div>
