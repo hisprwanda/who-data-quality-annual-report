@@ -43,7 +43,7 @@ export const Numerators = ({toggleState, configurations}) => {
     const [dataElements, setDataElements] = useState(null);
 
     let numerators = configurations? configurations.numerators : []
-
+    const [numeratorToEdit, setNumeratorToEdit] = useState(null);
 
     const [mutate, { error, data }] = useDataMutation( updateNumeratorsMutation )
 
@@ -95,7 +95,12 @@ export const Numerators = ({toggleState, configurations}) => {
         // setIsHidden(false);    //TODO: uncomment after implementing warning modal
         const updatedConfigurations = updateConfigurations(configurations, 'numerators', 'delete', code);
         await mutate({ configurations: updatedConfigurations })
+    }
 
+    const onEditting = (numerator) => {
+        console.log('editing initialted');
+        setIsHiddenEdit(false);
+        setNumeratorToEdit(numerator);
     }
 
 
@@ -127,7 +132,7 @@ export const Numerators = ({toggleState, configurations}) => {
                         <TableCell>{getNumeratorDataset(configurations, numerator.dataSetID)}</TableCell>
                         <TableCell>
                         <Button
-                            name="Primary button" onClick={() => setIsHiddenEdit(false)} 
+                            name="Primary button" onClick={() => onEditting(numerator)} 
                             basic button value="default" icon={<IconEdit16 />}> Edit
                         </Button>
                         
@@ -185,7 +190,11 @@ export const Numerators = ({toggleState, configurations}) => {
         </div>
 
         {/* <WarningModal onClose={onClose} isHidden={isHidden} onDelete={onDelete}/> */}
-        <EditModal onClose={onCloseEdit} isHidden={isHiddenEdit} onSave={onSave}/>
+        {numeratorToEdit? 
+            <EditModal onClose={onCloseEdit} isHidden={isHiddenEdit} onSave={onSave} numeratorToEdit={numeratorToEdit}/>
+        :
+        ''
+        }
         <PeriodsModal 
             isHiddenPeriod={isHiddenPeriod}
             currentlySelected={[]}

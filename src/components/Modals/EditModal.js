@@ -1,9 +1,10 @@
-import {useState} from 'react'
+import {useState, useEffect} from 'react'
 import {
     Button,
     ButtonStrip,
     Checkbox,
     Input,
+    InputField,
     Modal,
     ModalActions,
     ModalContent,
@@ -14,18 +15,29 @@ import {
 
   import '../Modals/edit_modal_styles.css'
 
-const EditModal = ({onClose, isHidden, onSave}) => {
+const EditModal = ({onClose, isHidden, onSave, numeratorToEdit}) => {
     const [editData, setEditData] = useState(null);
-    const handleInputChange = (e) => {
-        console.log('Current e: ', e.value)
-    }
-
     const [toggleStateModal, setToggleStateModal] = useState(1);
+    const [name, setName] = useState('');
+    const [definition, setDefinition] = useState('');
+    const [groups, setGroups] = useState(null);
+    const [isCore, setIsCore] = useState(false);
+
+    // TODO: remember to improve the seeting and populating of the this modal in editing 
+    const [numerator, setNumerator] = useState({
+        name: '',
+        definition: '',
+        core:numeratorToEdit.core,
+    });
+
 
     const toggleTabModal = (index) => {
       setToggleStateModal(index);
     };
 
+    useEffect(() => { 
+        setNumerator({...numerator, name:numeratorToEdit.name, definition:numeratorToEdit.definition})
+    }, []);
 
   return (
     <div>
@@ -43,23 +55,24 @@ const EditModal = ({onClose, isHidden, onSave}) => {
                     </div>
                     <div className="right">
                         
-                        <Input label="Default label" name="defaultName" onChange={(e) => handleInputChange(e)} required className='input'/>
-                        <Input label="Default label" name="defaultName" onChange={(e) => handleInputChange(e)} required className='input' />
+                        <Input label="Name" name="name"value={numerator.name} onChange={(e) => setNumerator({...numerator, name:e.value})} required className='input'/>
+                        <Input label="Definition" name="definition" value={numerator.definition} onChange={(e) => setNumerator({...numerator, definition:e.value})} required className='input' />
                         
+                        {/* Use the multiselect ui */}
                         <div className='input groups'>
                             <div className='group_item'>
-                                <Input label="Default label" name="defaultName" onChange={(e) => handleInputChange(e)} required />
+                                <Input label="Default label" name="defaultName" onChange={(e) => setGroups(e.value)} required />
                             </div>
                             <div className='group_item'>
                                 <p>Core</p>
                             </div>
                             <div className='group_item'>
                                 <Checkbox
-                                    checked
+                                    checked={numerator.core}
                                     name="Ex"
-                                    onChange={()=> console.log('cheched...')}
+                                    onChange={()=> setNumerator({...numerator, core:!numerator.core})}
                                     onFocus={()=> console.log('focused.. .')}
-                                    value="checked"
+                                    // value="checked"
                                 />
                             </div>
                         </div>
