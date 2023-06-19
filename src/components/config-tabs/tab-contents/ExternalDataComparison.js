@@ -39,7 +39,8 @@ export const ExternalDataComparison = ({toggleState, configurations}) => {
                     <TableCellHead>Routine data numerator</TableCellHead>
                     <TableCellHead>Routine data denominator</TableCellHead>
                     <TableCellHead>Criteria</TableCellHead>
-                    <TableCellHead>Level</TableCellHead>  {/* TODO: have dhis2 metadata objects you will neen into a context api objt */}
+                    {/* TODO: have dhis2 metadata objects you will neen into a context api objt */}
+                    <TableCellHead>Level</TableCellHead>
                     <TableCellHead>Actions</TableCellHead>
                 </TableRowHead>
             </TableHead>
@@ -51,7 +52,7 @@ export const ExternalDataComparison = ({toggleState, configurations}) => {
                   <TableCell>{getNumeratorDataElement(configurations, relation.externalData)}</TableCell>
                   <TableCell>{getDenominatorRelations(configurations.numerators, relation.numerator)}</TableCell>
                   <TableCell>{getDenominatorRelations(configurations.denominators, relation.denominator)}</TableCell>
-                  <TableCell>{relation.criteria} %	</TableCell>
+                  <TableCell>{relation.criteria}%</TableCell>
                   <TableCell>District</TableCell>
                   <TableCell>
                     <Button

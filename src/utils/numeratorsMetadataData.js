@@ -98,12 +98,10 @@ export const getNumeratorsInGroup = (numerators, group) => {
   
 }
 
-
 export const getNumeratorRelations = (numerators, code) => {
   let numeratorObj = numerators.find((numerator) => numerator.code == code);
   if (numeratorObj){ return numeratorObj.name }
 }
-
 
 export const getRelationType = (type) => {
   const relationType = relationTypes.find((relation) => relation.code == type);
@@ -116,7 +114,5 @@ export const makeOutlierOptions= () =>{
   for (let i = 1.5; i <= 4.05; i += 0.1) {
     opts.push({"val": (Math.round(10*i)/10).toString(), "label": (Math.round(10*i)/10).toString()});
   }
-
-  console.log('optionsss: ', opts)
   return opts;
 }

@@ -6,7 +6,6 @@ import denominatorTypes from "../data/denominatorTypes.json";
 
 export const getDenominatorType = (type) => {
   const denominatorType = denominatorTypes.find((denominator) => denominator.code == type);
-  console.log('Denominator: ', denominatorType);
   return denominatorType ;
 };
 

@@ -1,4 +1,4 @@
-import {useState} from 'react'
+import {useState, useEffect} from 'react'
 
 import {
     Button,
@@ -51,7 +51,6 @@ export const Numerators = ({toggleState, configurations}) => {
         console.log('Saved the following data to the data store: ', dataElements);
     }
 
-
     const onSavePeriod = (selected) => { 
         togglePeriodModal;
         // console.log('Saved period: ', selected);
@@ -59,13 +58,28 @@ export const Numerators = ({toggleState, configurations}) => {
         console.log('From utils: ', dataFromUtils);
     }
 
-
     const onSaveData = (selected) => { 
         toggleDataModal;
         console.log('Saved data: ', selected);
     }
 
-    //TODO: create utils functions to get different values for each numerator ie: groups, datasets etc
+    // FIXME: this is running every time a tab is switched find why and fix
+    const isDisabled = (dataID, dataSetID) => {
+        const element = configurations.denominators.find((element) => element.dataID == dataID);
+        const dataset = configurations.dataSets.find((dataset) => dataset.id == dataSetID);
+        
+        if (element || dataset) {
+            console.log('elemnt and dataset ', element + ' ' +dataset);
+            return false
+        }else{
+            return true
+        }
+    }
+
+    const clearNumeratorElements = () =>{
+        setIsHidden(false)
+    }
+
 
   return (
     <div className={toggleState === 1 ? "content  active-content" : "content"} >
@@ -100,8 +114,8 @@ export const Numerators = ({toggleState, configurations}) => {
                         </Button>
                         
                         <Button
-                            name="Primary button" onClick={() => setIsHidden(false)} 
-                            basic button value="default" icon={<IconSubtractCircle16 />}> Clear
+                            name="Primary button" onClick={() => clearNumeratorElements()} 
+                            basic button value="default" icon={<IconSubtractCircle16 />} disabled={isDisabled(numerator.dataID, numerator.dataSetID)}> Clear
                         </Button>
                         </TableCell>
                     </TableRow>
