@@ -35,7 +35,6 @@ const EditModal = ({onClose, isHidden, onSave}) => {
         </ModalTitle>
         <ModalContent>
             <div className='modal_content'>
-
                 <div className='modal_top_content'>
                     <div className='left'>
                         <p>Name</p> 
@@ -66,15 +65,11 @@ const EditModal = ({onClose, isHidden, onSave}) => {
                         </div>
                     </div>
                 </div>
-                
-
                 <h3>Data Mapping</h3>
                     <div className='dataElementsIndicatorToggle bloc-tabs-modal'>
                         <button className={toggleStateModal === 1 ? "tabs-modal active-tabs-modal" : "tabs-modal"} onClick={() => toggleTabModal(1)} >Data elements </button>
                         <button className={toggleStateModal === 2 ? "tabs-modal active-tabs-modal" : "tabs-modal"} onClick={() => toggleTabModal(2)}>Indicators</button>
-                    </div>
-
-                
+                    </div>                
                 <div className='content-tabs-modal'>
                     <div className={toggleStateModal === 1 ? "content-modal  active-content-modal" : "content-modal"} >
                         <div className="dataElementsSelector">
@@ -83,7 +78,7 @@ const EditModal = ({onClose, isHidden, onSave}) => {
                                 <SingleSelectOption label="Group two" value="2" />
                                 <SingleSelectOption label="Group three" value="3" />
                             </SingleSelect>
-                            <SingleSelect className="select" onChange={()=> console.log('selected')} placeholder="Data Element Groups">
+                            <SingleSelect className="select" onChange={()=> console.log('selected')} placeholder="Select Data Element">
                                 <SingleSelectOption label="Group one" value="1" />
                                 <SingleSelectOption label="Group two" value="2" />
                                 <SingleSelectOption label="Group three" value="3" />
@@ -108,12 +103,28 @@ const EditModal = ({onClose, isHidden, onSave}) => {
                     </div>
 
                     <div className={toggleStateModal === 2 ? "content-modal  active-content-modal" : "content-modal"}>
-                        <SingleSelect className="select" onChange={()=> console.log('selected')} placeholder="Indicators Groups">
+                        <div className="dataElementsSelector">
+                            <SingleSelect className="select" onChange={()=> console.log('selected')} placeholder="Indicators Groups">
+                                <SingleSelectOption label="Group one" value="1" />
+                                <SingleSelectOption label="Group two" value="2" />
+                                <SingleSelectOption label="Group three" value="3" />
+                            </SingleSelect>
+                            <SingleSelect className="select" onChange={()=> console.log('selected')} placeholder="Select Indicators">
+                                <SingleSelectOption label="Group one" value="1" />
+                                <SingleSelectOption label="Group two" value="2" />
+                                <SingleSelectOption label="Group three" value="3" />
+                            </SingleSelect>
+                        </div>
+
+                        <h3>Data set for completeness</h3>
+                        <SingleSelect className="select" onChange={()=> console.log('selected')} placeholder="Select Dataset">
                             <SingleSelectOption label="Group one" value="1" />
                             <SingleSelectOption label="Group two" value="2" />
                             <SingleSelectOption label="Group three" value="3" />
                         </SingleSelect>
-                        <SingleSelect className="select" onChange={()=> console.log('selected')} placeholder="Indicators Groups">
+
+                        <h3>Variable for completeness</h3>
+                        <SingleSelect className="select" onChange={()=> console.log('selected')} placeholder="Select Variable">
                             <SingleSelectOption label="Group one" value="1" />
                             <SingleSelectOption label="Group two" value="2" />
                             <SingleSelectOption label="Group three" value="3" />

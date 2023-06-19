@@ -1,4 +1,5 @@
 import {useState, useEffect} from 'react'
+import { useDataMutation, useDataQuery } from '@dhis2/app-runtime'
 
 import {
     Button,
@@ -18,6 +19,17 @@ import EditModal from '../../Modals/EditModal';
 import PeriodsModal from '../../Modals/PeriodsModal';
 import { DataSelectorModal } from '../../Modals/DataSelectorModal';
 import { getNumeratorDataElement, getNumeratorDataset, getNumeratorMemberGroups } from '../../../utils/numeratorsMetadataData';
+import { updateConfigurations } from '../../../utils/updateConfigurations';
+
+// TODO: move different queries to their own file when they become many
+const updateNumeratorsMutation = {
+    resource: 'dataStore/who-dqa/configurations',
+    type: 'update',
+    data: ({ configurations }) => ({
+        ...configurations,
+        lastUpdated: new Date().toJSON(),
+    }),
+}
 
 
 export const Numerators = ({toggleState, configurations}) => {
@@ -31,6 +43,9 @@ export const Numerators = ({toggleState, configurations}) => {
     const [dataElements, setDataElements] = useState(null);
 
     let numerators = configurations? configurations.numerators : []
+
+
+    const [mutate, { error, data }] = useDataMutation( updateNumeratorsMutation )
 
     const onClose = () => {
         setIsHidden(true);
@@ -55,12 +70,12 @@ export const Numerators = ({toggleState, configurations}) => {
         togglePeriodModal;
         // console.log('Saved period: ', selected);
         const dataFromUtils = getNumeratorMemberGroups()
-        console.log('From utils: ', dataFromUtils);
+        // console.log('From utils: ', dataFromUtils);
     }
 
     const onSaveData = (selected) => { 
         toggleDataModal;
-        console.log('Saved data: ', selected);
+        // console.log('Saved data: ', selected);
     }
 
     // FIXME: this is running every time a tab is switched find why and fix
@@ -69,15 +84,18 @@ export const Numerators = ({toggleState, configurations}) => {
         const dataset = configurations.dataSets.find((dataset) => dataset.id == dataSetID);
         
         if (element || dataset) {
-            console.log('elemnt and dataset ', element + ' ' +dataset);
+            // console.log('elemnt and dataset ', element + ' ' +dataset);
             return false
         }else{
             return true
         }
     }
 
-    const clearNumeratorElements = () =>{
-        setIsHidden(false)
+    const clearNumeratorElements = async(code) =>{
+        // setIsHidden(false);    //TODO: uncomment after implementing warning modal
+        const updatedConfigurations = updateConfigurations(configurations, 'numerators', 'delete', code);
+        await mutate({ configurations: updatedConfigurations })
+
     }
 
 
@@ -114,8 +132,8 @@ export const Numerators = ({toggleState, configurations}) => {
                         </Button>
                         
                         <Button
-                            name="Primary button" onClick={() => clearNumeratorElements()} 
-                            basic button value="default" icon={<IconSubtractCircle16 />} disabled={isDisabled(numerator.dataID, numerator.dataSetID)}> Clear
+                            name="Primary button" onClick={() => clearNumeratorElements(numerator.code)} 
+                            basic button icon={<IconSubtractCircle16 />} disabled={isDisabled(numerator.dataID, numerator.dataSetID)}> Clear
                         </Button>
                         </TableCell>
                     </TableRow>
@@ -166,7 +184,7 @@ export const Numerators = ({toggleState, configurations}) => {
         </Table>
         </div>
 
-        <WarningModal onClose={onClose} isHidden={isHidden} onDelete={onDelete}/>
+        {/* <WarningModal onClose={onClose} isHidden={isHidden} onDelete={onDelete}/> */}
         <EditModal onClose={onCloseEdit} isHidden={isHiddenEdit} onSave={onSave}/>
         <PeriodsModal 
             isHiddenPeriod={isHiddenPeriod}
