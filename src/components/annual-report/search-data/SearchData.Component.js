@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useRef, useEffect } from 'react'
 import './styles/search_section.css'
 import { SingleSelect, SingleSelectOption, Input } from '@dhis2/ui';
 import { SearchResultComponent } from './SearchResult.Component';
@@ -12,7 +12,18 @@ import {IconDimensionEventDataItem16} from '@dhis2/ui-icons'
 export const SearchDataComponent = (props) => {
 
     let [selectedItem, setSelectedItem] = useState("0")
+    const myRef = useRef()
+    let [trackedElementVisibility, setTrackedElementVisibility] = useState(false)
+    let [pageIncrementer, setPageIncrementor] = useState(1)
 
+    useEffect(() => {
+        const observer = new IntersectionObserver((entries) => {
+            const entry = entries[0]
+            setTrackedElementVisibility(entry.isIntersecting)
+            trackedElementVisibility === true ? setPageIncrementor(prevCount => prevCount + 1) : ''
+        })
+        observer.observe(myRef.current)
+    }, [])
     return (
         <div className='search-data-parent'>
             <div>
@@ -23,7 +34,7 @@ export const SearchDataComponent = (props) => {
                         </li>
                         <li>
                             <label>
-                                Data Type
+                                Data Type -- {pageIncrementer} {typeof(trackedElementVisibility)}
                             </label>
                             <SingleSelect className="select" onChange={(e) => {setSelectedItem(e.selected)}} selected={selectedItem}>
                                 <SingleSelectOption label = "All Types" value = "0"/>
@@ -49,10 +60,13 @@ export const SearchDataComponent = (props) => {
             </div>
             <div>
                 <ul>
-                {
-                    props.info && props.info.results.dataItems.map(item => <li key={item.id}><span className='icon-size'><IconDimensionEventDataItem16 className="icon-size"/></span><span>{item.displayName}</span></li>)
-                }
+                    {
+                        props.info && props.info.results.dataItems.map(item => <li key={item.id}><span className='search-result-data'><span className='icon-size'><IconDimensionEventDataItem16 className="icon-size"/></span><span>{item.displayName}</span></span></li>)
+                    }
                 </ul>
+                <div id='scroll-element' ref={myRef}>
+                    Below it
+                </div>
             </div>
         </div>
     );

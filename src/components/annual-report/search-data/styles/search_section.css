@@ -20,9 +20,14 @@
 }
 
 .search-data-parent > div:nth-child(2) {
-    padding: 0.2rem;
     height: 30rem;
     overflow: scroll;
+    position: relative;
+}
+
+.bottom-info {
+    background-color: red;
+    color: #f0f0f0;
 }
 
 .search-data-parent > div:nth-child(1) ul li {
@@ -40,9 +45,24 @@
 }
 
 .search-data-parent > div:nth-child(2) ul li {
+    width: 100%;
+    list-style: none;
+}
+
+.search-data-parent > div:nth-child(2) ul {
+    display: flex;
+    flex-direction: column;
+    gap: 0.7rem;
+    margin: 0rem;
+    padding: 0.5rem;
+}
+
+.search-result-data {
     border-radius: 2px;
-    padding: 0.1rem;  
+    padding: 0.2rem;  
     width: 100%;  
+    display: inline;
+    background-color: #f0f0f0;
 }
 
 .destination-parent {
@@ -54,10 +74,6 @@
     border-bottom: 1px solid #f4f4f4;
     padding: 0.8rem;
     font-size: 0.9rem;
-}
-
-.destination-parent > div:nth-child(2) {
-    font-size: 1.0rem;
 }
 
 .indicator-group-parent {
@@ -80,3 +96,4 @@
     flex-direction: column;
     gap: 0.5rem;
 }
+

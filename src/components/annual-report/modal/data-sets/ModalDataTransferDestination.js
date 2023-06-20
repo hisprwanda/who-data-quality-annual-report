@@ -7,7 +7,9 @@ export const ModalDataTransferDestination = () => {
                 Selected Item
             </div>
             <div>
-                No Item Selected
+                
+                Nothing selected
+
             </div>
         </div>
     );

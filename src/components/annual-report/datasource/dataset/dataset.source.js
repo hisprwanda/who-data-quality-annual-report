@@ -10,6 +10,3 @@ export const dataSetQueryStructure = {
         },
     },
 }
-
-
-// dataItems?fields=id,displayName~rename(name),dimensionItemType&order=displayName:asc&paging=true&page=

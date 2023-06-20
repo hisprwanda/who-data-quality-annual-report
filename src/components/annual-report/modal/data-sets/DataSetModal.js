@@ -14,10 +14,11 @@ import { ModalDataTransferDestination } from './ModalDataTransferDestination'
 import { dataSetQueryStructure, dataSetsSource$ } from '../../datasource/dataset/dataset.source'
 import { useDataQuery } from '@dhis2/app-runtime'
 
-//#!/usr/bin/env bash
+
 export const DataSetModal = (props) => {
-    let {loading, error, data} = {}
-    !props.status ? {loading, error, data} = useDataQuery(dataSetQueryStructure) : {loading, error, data} = {}
+
+    let {loading, error, data} = useDataQuery(dataSetQueryStructure, {}, {}, {}, {}, {})
+    
     return (
         <Modal hide={props.status} position="top" fluid onClose={() => props.changeDataModalStatus(true)}>
           <ModalTitle>
