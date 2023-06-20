@@ -1,9 +1,8 @@
 .menubarContainer{
   display: flex;
   width: 100%;
-  padding: 10px;
   background-color: #e4e4e4;
-  height: 60px;
+  flex-direction: column;
 }
 
 .logoContainer{
@@ -16,26 +15,19 @@
 }
 nav ul {
   display: flex;
-  list-style-type: none;
+  flex-direction: row;
   margin: 0;
-  width: 304px;
   padding: 0;
-  justify-content: space-between;
-  }
+}
   
-  nav ul li {
-    display: inline;
-    margin-right: 10px;
-    margin-bottom: 20px;
-    text-decoration: none;
+nav ul li {
+  list-style: none;
+}
 
-  }
-
-  nav ul li a{
-    font-size: 15px;
-    text-decoration: none;
-    text-transform: uppercase;
-  }
+nav ul li a{
+  text-decoration: none;
+  text-transform: uppercase;
+}
   
 .logoImage {
   width: 50px;
@@ -43,7 +35,7 @@ nav ul {
 }
 
 .navLinksContainer {
-  display: flex;
-  margin: auto;
-
+  background-color: #f3f5f7;
+  width: 100%;
+  padding: 1.0rem;
 }

@@ -1,6 +1,6 @@
 .data-set-modal-parent {
     display: flex;
-    width: 57rem;
+    width: 55rem;
 }
 
 .data-set-modal-parent > div:nth-child(1), .data-set-modal-parent > div:nth-child(3) {
@@ -8,18 +8,19 @@
 }
 
 .data-set-modal-parent > div:nth-child(1) {
-    flex: 6 6 auto;
+    flex: 6;
 }
 
 .data-set-modal-parent > div:nth-child(2) {
-    flex: 0.8 0.8 auto;
+    flex: 0.8;
     display: flex;
     align-content: center;
+
 }
 
 
 .data-set-modal-parent > div:nth-child(3) {
-    flex: 4 4 auto;
+    flex: 4;
 }
 
 .divider {

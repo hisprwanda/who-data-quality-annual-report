@@ -6,8 +6,10 @@ import { useState } from 'react'
 import { IndicatorGroupList } from './IndicatorGroupList';
 import { DataElementGroupList } from './DataElementGroupList';
 import { DataSetGroupList } from './DataSetGroupList';
+import {IconDimensionEventDataItem16} from '@dhis2/ui-icons'
 
-export const SearchDataComponent = () => {
+
+export const SearchDataComponent = (props) => {
 
     let [selectedItem, setSelectedItem] = useState("0")
 
@@ -45,9 +47,12 @@ export const SearchDataComponent = () => {
                     
                 </div>
             </div>
-            
             <div>
-                <SearchResultComponent />
+                <ul>
+                {
+                    props.info && props.info.results.dataItems.map(item => <li key={item.id}><span className='icon-size'><IconDimensionEventDataItem16 className="icon-size"/></span><span>{item.displayName}</span></li>)
+                }
+                </ul>
             </div>
         </div>
     );
