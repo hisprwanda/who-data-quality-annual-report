@@ -27,7 +27,7 @@ const EditModal = ({onClose, isHidden, onSave, numeratorToEdit}) => {
     const [numerator, setNumerator] = useState({
         name: '',
         definition: '',
-        core:numeratorToEdit.core,
+        core:false,
     });
 
 
@@ -36,8 +36,13 @@ const EditModal = ({onClose, isHidden, onSave, numeratorToEdit}) => {
     };
 
     useEffect(() => { 
-        setNumerator({...numerator, name:numeratorToEdit.name, definition:numeratorToEdit.definition})
-    }, []);
+        setNumerator({
+            ...numerator, 
+            name:numeratorToEdit.name, 
+            definition:numeratorToEdit.definition,
+            core:numeratorToEdit.core
+        })
+    }, [numeratorToEdit]);
 
   return (
     <div>
