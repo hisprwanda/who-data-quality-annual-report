@@ -7,6 +7,9 @@ import { IndicatorGroupList } from './IndicatorGroupList';
 import { DataElementGroupList } from './DataElementGroupList';
 import { DataSetGroupList } from './DataSetGroupList';
 import {IconDimensionEventDataItem16} from '@dhis2/ui-icons'
+import { DataQuery, useDataQuery } from '@dhis2/app-runtime'
+import { allDataTypesQuery, dataElementQuery, dataSetQuery, indicatorQuery } from '../datasource/dataset/dataset.source';
+import { TestQuery } from '../utils/test.query';
 
 
 export const SearchDataComponent = (props) => {
@@ -15,6 +18,26 @@ export const SearchDataComponent = (props) => {
     const myRef = useRef()
     let [trackedElementVisibility, setTrackedElementVisibility] = useState(false)
     let [pageIncrementer, setPageIncrementor] = useState(1)
+    let [allDataTypes, setAllDataTypes] = useState({})
+    let [query, setQuery] = useState(allDataTypesQuery)
+    let [clickedElement, setClickedElement] = useState('')
+
+    let x = dataSetQuery
+    let _dataSetQuery = dataSetQuery
+    let _allDataTypesQuery = allDataTypesQuery
+    let _dataElementQuery = dataElementQuery
+    let _indicatorQuery = indicatorQuery
+
+    useEffect(() => {
+        if(selectedItem === 'Data Set'){
+            setQuery('dataSets')
+        }
+    }, [selectedItem])
+
+    useEffect(() => {
+        props.clickedElement(clickedElement)
+    }, [clickedElement])
+
 
     useEffect(() => {
         const observer = new IntersectionObserver((entries) => {
@@ -24,6 +47,7 @@ export const SearchDataComponent = (props) => {
         })
         observer.observe(myRef.current)
     }, [])
+
     return (
         <div className='search-data-parent'>
             <div>
@@ -34,7 +58,7 @@ export const SearchDataComponent = (props) => {
                         </li>
                         <li>
                             <label>
-                                Data Type -- {pageIncrementer} {typeof(trackedElementVisibility)}
+                                Data Type
                             </label>
                             <SingleSelect className="select" onChange={(e) => {setSelectedItem(e.selected)}} selected={selectedItem}>
                                 <SingleSelectOption label = "All Types" value = "0"/>
@@ -59,11 +83,10 @@ export const SearchDataComponent = (props) => {
                 </div>
             </div>
             <div>
-                <ul>
-                    {
-                        props.info && props.info.results.dataItems.map(item => <li key={item.id}><span className='search-result-data'><span className='icon-size'><IconDimensionEventDataItem16 className="icon-size"/></span><span>{item.displayName}</span></span></li>)
-                    }
-                </ul>
+                {selectedItem === 'Data Set' && <TestQuery query={_dataSetQuery} obj='dataSets' clicke clickedElement={setClickedElement}dElement={setClickedElement}/>}
+                {selectedItem === '0' && <TestQuery query={_allDataTypesQuery} obj='dataItems' clickedElement={setClickedElement}/>}
+                {selectedItem === 'Indicators' && <TestQuery query={_indicatorQuery} obj='indicators' clickedElement={setClickedElement}/>}
+                {selectedItem === 'Data Element' && <TestQuery query={_dataElementQuery} obj='dataElements' clickedElement={setClickedElement}/>}
                 <div id='scroll-element' ref={myRef}>
                     Below it
                 </div>

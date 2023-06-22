@@ -26,3 +26,22 @@
 .divider {
     width: 0.8rem;
 }
+
+.destination-parent {
+    display: flex;
+    flex-direction: column;
+    gap: 0.2rem;
+}
+
+.destination-parent > div:nth-child(2) ul {
+    padding: 0rem;
+    margin: 0.9rem;
+}
+
+.destination-parent > div:nth-child(2) ul li {
+    list-style-type: none;
+}
+
+.search-result-data {
+    cursor: pointer;
+}

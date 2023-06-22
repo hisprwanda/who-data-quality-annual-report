@@ -11,13 +11,12 @@ import './styles/datasets.css'
 import { ModalDataTransfer } from './ModalDataTransfer'
 import { SearchDataComponent } from '../../search-data/SearchData.Component'
 import { ModalDataTransferDestination } from './ModalDataTransferDestination'
-import { dataSetQueryStructure, dataSetsSource$ } from '../../datasource/dataset/dataset.source'
-import { useDataQuery } from '@dhis2/app-runtime'
-
+import { dataSetQueryStructure } from '../../datasource/dataset/dataset.source'
 
 export const DataSetModal = (props) => {
 
-    let {loading, error, data} = useDataQuery(dataSetQueryStructure, {}, {}, {}, {}, {})
+    const [_selectedElement, setSelectedItem] = useState('')
+    const [allSelectedElement, setAllSelectedElements] = useState([])
     
     return (
         <Modal hide={props.status} position="top" fluid onClose={() => props.changeDataModalStatus(true)}>
@@ -27,13 +26,13 @@ export const DataSetModal = (props) => {
           <ModalContent>
             <div className='data-set-modal-parent'>
                 <div>
-                    {!props.status && <SearchDataComponent info = {data}/>}
+                    {!props.status && <SearchDataComponent clickedElement={setSelectedItem}/>}
                 </div>
                 <div>
                     <ModalDataTransfer />
                 </div>
                 <div>
-                    <ModalDataTransferDestination />
+                    <ModalDataTransferDestination selectedElement={_selectedElement}/>
                 </div>
             </div>
           </ModalContent>

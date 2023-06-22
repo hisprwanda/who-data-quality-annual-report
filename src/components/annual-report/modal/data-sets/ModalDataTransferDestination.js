@@ -1,15 +1,17 @@
 import React from 'react'
 
-export const ModalDataTransferDestination = () => {
+export const ModalDataTransferDestination = (props) => {
     return (
         <div className='destination-parent'>
             <div>
                 Selected Item
             </div>
             <div>
-                
-                Nothing selected
-
+                <ul>
+                    <li>
+                        {props.selectedElement}
+                    </li>
+                </ul>
             </div>
         </div>
     );
