@@ -11,13 +11,24 @@ import './styles/datasets.css'
 import { ModalDataTransfer } from './ModalDataTransfer'
 import { SearchDataComponent } from '../../search-data/SearchData.Component'
 import { ModalDataTransferDestination } from './ModalDataTransferDestination'
-import { dataSetQueryStructure } from '../../datasource/dataset/dataset.source'
+import { dataInitialState, dataSetQueryStructure } from '../../datasource/dataset/dataset.source'
+import { ItemReducer } from '../../reducer/items.reducer'
 
 export const DataSetModal = (props) => {
 
     const [_selectedElement, setSelectedItem] = useState('')
     const [allSelectedElement, setAllSelectedElements] = useState([])
     
+    useEffect(() => {
+        setAllSelectedElements([...allSelectedElement, _selectedElement])
+    }, [_selectedElement])
+
+    const [state, dispatch] = useReducer(ItemReducer, dataInitialState)
+
+    useEffect(() => {
+        dispatch({type: 'addition'})
+    }, [_selectedElement])
+
     return (
         <Modal hide={props.status} position="top" fluid onClose={() => props.changeDataModalStatus(true)}>
           <ModalTitle>
@@ -26,13 +37,15 @@ export const DataSetModal = (props) => {
           <ModalContent>
             <div className='data-set-modal-parent'>
                 <div>
+                    {state.count}
+                    
                     {!props.status && <SearchDataComponent clickedElement={setSelectedItem}/>}
                 </div>
                 <div>
                     <ModalDataTransfer />
                 </div>
                 <div>
-                    <ModalDataTransferDestination selectedElement={_selectedElement}/>
+                    <ModalDataTransferDestination state = {state} selectedElement={allSelectedElement}/>
                 </div>
             </div>
           </ModalContent>

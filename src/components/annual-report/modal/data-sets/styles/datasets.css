@@ -45,3 +45,8 @@
 .search-result-data {
     cursor: pointer;
 }
+
+.search-result-data:hover {
+    background-color: rgb(1, 11, 96);
+    color: #fff;
+}

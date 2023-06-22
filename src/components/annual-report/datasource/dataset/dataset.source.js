@@ -55,3 +55,6 @@ export const dataElementQuery = {
     },
 }
 
+
+export let allDataState = {count: 0}
+export let dataInitialState = {count: 0}

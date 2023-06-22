@@ -128,6 +128,7 @@
 
 .orgunit-topsection > ul li {
     font-size: 0.9rem;
+    list-style: none;
 }
 
 .period-modal-data-source-menu ul {
@@ -135,6 +136,11 @@
     padding: 0rem;
     margin: 0rem;
     flex-direction: row;
+    gap: 0.9rem;
+}
+
+.period-modal-data-source-menu ul li {
+    list-style: none;
 }
 
 .period-modal-data-source-menu {
@@ -167,6 +173,8 @@
     margin: 0.6rem;
     padding: 0.2rem;
 }
+
+
 
 
 
