@@ -19,7 +19,8 @@ import EditModal from '../../Modals/EditModal';
 import PeriodsModal from '../../Modals/PeriodsModal';
 import { DataSelectorModal } from '../../Modals/DataSelectorModal';
 import { getNumeratorDataElement, getNumeratorDataset, getNumeratorMemberGroups } from '../../../utils/numeratorsMetadataData';
-import { updateConfigurations } from '../../../utils/updateConfigurations';
+import { clearConfigurations, updateConfigurations } from '../../../utils/updateConfigurations';
+import { Chip } from "@dhis2/ui-core";
 
 // TODO: move different queries to their own file when they become many
 const updateNumeratorsMutation = {
@@ -60,10 +61,14 @@ export const Numerators = ({toggleState, configurations}) => {
         setDataElements(null)
     }
 
-    const onSave = (data) => {
-        setDataElements(data)
+    const onSave = async(numerator) => {
+        // setDataElements(data)
+        console.log("numerator data: ", numerator);
         setIsHiddenEdit(true);
-        console.log('Saved the following data to the data store: ', dataElements);
+        const updatedConfigurations = updateConfigurations(configurations, 'numerators', 'update', numerator);
+        await mutate({ configurations: updatedConfigurations })
+
+        console.log('Saved the following data to the data store: ', data);
     }
 
     const onSavePeriod = (selected) => { 
@@ -91,11 +96,17 @@ export const Numerators = ({toggleState, configurations}) => {
         }
     }
 
-    const clearNumeratorElements = async(code) =>{
+    const clearNumeratorElements = async(numerator) =>{
         // setIsHidden(false);    //TODO: uncomment after implementing warning modal
-        const updatedConfigurations = updateConfigurations(configurations, 'numerators', 'delete', code);
+        const updatedConfigurations = clearConfigurations(configurations, 'numerators', 'delete', numerator);
         await mutate({ configurations: updatedConfigurations })
     }
+
+    const updateNumeratorElements = async(numerator) =>{
+        const updatedConfigurations = updateConfigurations(configurations, 'numerators', 'update', code);
+        await mutate({ configurations: updatedConfigurations })
+    }
+
 
     const onEditting = (numerator) => {
         console.log('editing initialted');
@@ -125,7 +136,9 @@ export const Numerators = ({toggleState, configurations}) => {
             <TableBody>
                 {numerators? numerators.map((numerator, key ) => (
                     <TableRow key={key}>
-                        <TableCell>{getNumeratorMemberGroups(configurations, numerator.code)}</TableCell>
+                        <TableCell>{getNumeratorMemberGroups(configurations, numerator.code).map((group, key) =>(
+                            <Chip key={key} dense> {group} </Chip>
+                        ))}</TableCell>
                         <TableCell>{numerator.name}</TableCell>
                         <TableCell>{numerator.core ? "✔️": ""}</TableCell>
                         <TableCell>{getNumeratorDataElement(configurations, numerator.dataID)}</TableCell>
@@ -137,18 +150,16 @@ export const Numerators = ({toggleState, configurations}) => {
                         </Button>
                         
                         <Button
-                            name="Primary button" onClick={() => clearNumeratorElements(numerator.code)} 
+                            name="Primary button" onClick={() => clearNumeratorElements(numerator)} 
                             basic button icon={<IconSubtractCircle16 />} disabled={isDisabled(numerator.dataID, numerator.dataSetID)}> Clear
                         </Button>
                         </TableCell>
                     </TableRow>
-
                 ))
                 :
-
                 ""
                 }
-                
+{/*                 
                 <TableRow>
                     <TableCell>General Service Statistics</TableCell>
                     <TableCell>OPD visits</TableCell>
@@ -166,7 +177,7 @@ export const Numerators = ({toggleState, configurations}) => {
                         basic button value="default" icon={<IconSubtractCircle16 />}> Clear
                     </Button>
                     </TableCell>
-                </TableRow>
+                </TableRow>*/}
                 <TableRow>
                     <TableCell>General Service Statistics</TableCell>
                     <TableCell>OPD visits</TableCell>
@@ -184,6 +195,16 @@ export const Numerators = ({toggleState, configurations}) => {
                         basic button value="default" icon={<IconSubtractCircle16 />}> Clear
                     </Button>
                     </TableCell>
+                </TableRow> 
+                <TableRow>
+                    <TableCell></TableCell>
+                    <TableCell></TableCell>
+                    <TableCell></TableCell>
+                    <TableCell></TableCell>
+                    <TableCell></TableCell>
+                    <TableCell>
+                        <Button name="Primary button" onClick={() => onEditting([])} button value="default" icon={<IconEdit16 />} primary> Add new numerator </Button>    
+                    </TableCell>
                 </TableRow>
             </TableBody>
         </Table>
@@ -191,7 +212,7 @@ export const Numerators = ({toggleState, configurations}) => {
 
         {/* <WarningModal onClose={onClose} isHidden={isHidden} onDelete={onDelete}/> */}
         {numeratorToEdit? 
-            <EditModal onClose={onCloseEdit} isHidden={isHiddenEdit} onSave={onSave} numeratorToEdit={numeratorToEdit}/>
+            <EditModal configurations={configurations} onClose={onCloseEdit} isHidden={isHiddenEdit} onSave={onSave} numeratorToEdit={numeratorToEdit}/>
         :
         ''
         }

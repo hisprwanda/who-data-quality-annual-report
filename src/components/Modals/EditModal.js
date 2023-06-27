@@ -9,19 +9,19 @@ import {
     ModalActions,
     ModalContent,
     ModalTitle,
+    MultiSelectOption,
+    MultiSelectField,
     SingleSelect,
     SingleSelectOption 
   } from '@dhis2/ui'
+  import { Chip } from "@dhis2/ui-core";
 
   import '../Modals/edit_modal_styles.css'
+import { getNumeratorMemberGroups } from '../../utils/numeratorsMetadataData';
 
-const EditModal = ({onClose, isHidden, onSave, numeratorToEdit}) => {
-    const [editData, setEditData] = useState(null);
+const EditModal = ({configurations, onClose, isHidden, onSave, numeratorToEdit}) => {
     const [toggleStateModal, setToggleStateModal] = useState(1);
-    const [name, setName] = useState('');
-    const [definition, setDefinition] = useState('');
-    const [groups, setGroups] = useState(null);
-    const [isCore, setIsCore] = useState(false);
+    const [selectedGroups, setSelectedGroup] = useState(['G1']);
 
     // TODO: remember to improve the seeting and populating of the this modal in editing 
     const [numerator, setNumerator] = useState({
@@ -38,6 +38,7 @@ const EditModal = ({onClose, isHidden, onSave, numeratorToEdit}) => {
     useEffect(() => { 
         setNumerator({
             ...numerator, 
+            code:numeratorToEdit.code,
             name:numeratorToEdit.name, 
             definition:numeratorToEdit.definition,
             core:numeratorToEdit.core
@@ -65,8 +66,22 @@ const EditModal = ({onClose, isHidden, onSave, numeratorToEdit}) => {
                         
                         {/* Use the multiselect ui */}
                         <div className='input groups'>
-                            <div className='group_item'>
-                                <Input label="Default label" name="defaultName" onChange={(e) => setGroups(e.value)} required />
+                            <div 
+                                style={{
+                                    maxWidth: 400
+                                }}
+                                className='group_item'
+                            >
+                            <MultiSelectField
+                                onChange={()=>console.log('selected')}
+                                selected={selectedGroups}
+                            >
+                                {configurations.groups.map((group, key) =>(
+                                    <MultiSelectOption label={group.displayName} key={key} value={group.code} />
+                                ))}
+                                
+                            </MultiSelectField>
+                                {/* <Input label="Default label" name="defaultName" onChange={(e) => setGroups(e.value)} required /> */}
                             </div>
                             <div className='group_item'>
                                 <p>Core</p>
@@ -91,11 +106,18 @@ const EditModal = ({onClose, isHidden, onSave, numeratorToEdit}) => {
                 <div className='content-tabs-modal'>
                     <div className={toggleStateModal === 1 ? "content-modal  active-content-modal" : "content-modal"} >
                         <div className="dataElementsSelector">
-                            <SingleSelect className="select" onChange={()=> console.log('selected')} placeholder="Data Element Groups">
-                                <SingleSelectOption label="Group one" value="1" />
-                                <SingleSelectOption label="Group two" value="2" />
-                                <SingleSelectOption label="Group three" value="3" />
-                            </SingleSelect>
+                        <MultiSelectField
+                                onChange={()=>console.log('selected')}
+                                placeholder="Data Element Group"
+                                selected={[
+                                    'G1'
+                                ]}
+                            >
+                                {configurations.groups.map((group, key) =>(
+                                    <MultiSelectOption label={group.displayName} key={key} value={group.code} />
+                                ))}
+                                
+                            </MultiSelectField>
                             <SingleSelect className="select" onChange={()=> console.log('selected')} placeholder="Select Data Element">
                                 <SingleSelectOption label="Group one" value="1" />
                                 <SingleSelectOption label="Group two" value="2" />
@@ -159,7 +181,7 @@ const EditModal = ({onClose, isHidden, onSave, numeratorToEdit}) => {
                 <Button  secondary onClick={onClose}>
                     Cancel
                 </Button>
-                <Button  primary onClick={() => onSave (editData)}> 
+                <Button  primary onClick={() => onSave (numerator)}> 
                     Save
                 </Button>
             </ButtonStrip>

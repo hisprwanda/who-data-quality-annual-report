@@ -1,12 +1,8 @@
 import {useState, useEffect} from 'react'
-//TODO: get the current configurations & assign it to an object [ plan to use a global context API ]
-//TODO: Create different states in which to assign different parts of configurations ex:   const [numerators, setNumerators] = useState([]);
-//TODO: manupulate these objects and assign them back to the configurations object
-//TODO: populate these objects properties using spread syntax (...).
-//TODO: send back the updated object and test it. 
 
-
-export const updateConfigurations = (configurations, configurationType, updateType, identifier) => {
+// TODO: Implemement the global context api to share configurations accross compoments
+// TODO: Merge these clear and update configurations methods to make it dynamic 
+export const clearConfigurations = (configurations, configurationType, updateType, numeratorToUpdate) => {
    
         const metaDataVersion = configurations.metaDataVersion; 
         const numerators = configurations.numerators;
@@ -20,7 +16,7 @@ export const updateConfigurations = (configurations, configurationType, updateTy
       
     const configurationsToSave = {
         metaDataVersion,
-        numerators: updateNumerator(numerators, identifier),
+        numerators: clearNumerator(numerators, numeratorToUpdate),
         coreIndicators,
         dataSets,
         denominators,
@@ -35,12 +31,55 @@ export const updateConfigurations = (configurations, configurationType, updateTy
     return configurationsToSave;
 }
 
-const updateNumerator = (numerators, code) => {
-    console.log('deleting numerator: ', code);
-    const numerator = numerators.find(numerator => numerator.code === code);
+
+export const updateConfigurations = (configurations, configurationType, updateType, updatedNumerator) => {
+   
+  const metaDataVersion = configurations.metaDataVersion; 
+  const numerators = configurations.numerators;
+  const coreIndicators = configurations.coreIndicators;
+  const dataSets = configurations.dataSets;
+  const denominatorRelations = configurations.denominatorRelations;
+  const denominators = configurations.denominators;
+  const externalRelations = configurations.externalRelations; 
+  const numeratorRelations = configurations.numeratorRelations;
+  const groups = configurations.groups;
+
+const configurationsToSave = {
+  metaDataVersion,
+  numerators: updateNumerator(numerators, updatedNumerator),
+  coreIndicators,
+  dataSets,
+  denominators,
+  denominatorRelations,
+  externalRelations,
+  numeratorRelations,
+  groups
+}
+
+console.log('updated configurations: ', configurationsToSave);
+
+return configurationsToSave;
+}
+
+// TODO: can u use the spread operator ?
+const clearNumerator = (numerators, numeratorToUpdate) => {
+    const numerator = numerators.find(numerator => numerator.code === numeratorToUpdate.code);
   if (numerator) {
     numerator.dataSetID = null;
     numerator.dataID = null;
+  }
+  return numerators;
+}
+
+// TODO: can u use the spread operator ?
+// TODO: check all changed data and update them accordingly. i.e: core, groups, etc
+const updateNumerator = (numerators, updatedNumerator) => {
+    const numerator = numerators.find(numerator => numerator.code === updatedNumerator.code);
+  if (numerator) {
+    // numerator.dataSetID = updatedNumerator.dataSetID;
+    // numerator.dataID = updatedNumerator.dataID;
+    numerator.name = updatedNumerator.name;
+    numerator.definition = updatedNumerator.definition;
   }
   return numerators;
 }

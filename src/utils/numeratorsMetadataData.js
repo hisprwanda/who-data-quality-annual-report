@@ -22,13 +22,7 @@ export const getNumeratorMemberGroups = (configurations, code) => {
     }
   }
 
-return  (
-  <>
-    {memberGroups.map((group, key) => 
-          <Chip key={key} dense> {group} </Chip>
-    )}
-  </>
-)
+return  memberGroups;
 
 }
 

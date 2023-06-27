@@ -18,31 +18,33 @@ export const DataSelectorModal = ({ isHiddenDataModal, currentlySelected = [], t
 
   return (
     <Modal onClose={toggleModal} hide={isHiddenDataModal} large>
-            <ModalTitle>{i18n.t('Select period(s)')}</ModalTitle>
-            <ModalContent>
-                <DataDimension
-                    displayNameProp='displayName'
-                    selectedDimensions={currentlySelected}
-                    infoBoxMessage=''
-                    onSelect={({ items }) => setSelected(items)}
-                    onCalculationSave={onSave}
-                />
+        <ModalTitle>{i18n.t('Select period(s)')}</ModalTitle>
+        <ModalContent>
+            <DataDimension
+                displayNameProp='displayName'
+                selectedDimensions={currentlySelected}
+                infoBoxMessage=''
+                onSelect={({ items }) => setSelected(items)}
+                onCalculationSave={onSave}
+            />
 
-            </ModalContent>
-            <ModalActions>
-                <ButtonStrip end>
-                    <Button onClick={toggleModal}>{i18n.t('Cancel')}</Button>
-                    <Button
-                        primary
-                        onClick={() => {
-                            onSave(selected)
-                            toggleModal()
-                        }}
-                    >
-                        {i18n.t('Save')}
-                    </Button>
-                </ButtonStrip>
-            </ModalActions>
-        </Modal>
+        </ModalContent>
+        <ModalActions>
+            <ButtonStrip end>
+                <Button onClick={toggleModal}>{i18n.t('Cancel')}</Button>
+                <Button
+                    primary
+                    onClick={() => {
+                        onSave(selected)
+                        toggleModal()
+                    }}
+                >
+                    {i18n.t('Save')}
+                </Button>
+            </ButtonStrip>
+        </ModalActions>
+    </Modal>
   )
 }
+
+
