@@ -18,7 +18,7 @@ export const getNumeratorMemberGroups = (configurations, code) => {
     const currentGroup = groups[key]
     for (let key in currentGroup.members) {
       const currentMember = currentGroup.members[key]
-      if (currentMember === code) { memberGroups.push(currentGroup.displayName ) }
+      if (currentMember === code) { memberGroups.push(currentGroup ) }
     }
   }
 

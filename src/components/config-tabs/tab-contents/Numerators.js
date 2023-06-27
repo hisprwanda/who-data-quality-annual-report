@@ -109,7 +109,6 @@ export const Numerators = ({toggleState, configurations}) => {
 
 
     const onEditting = (numerator) => {
-        console.log('editing initialted');
         setIsHiddenEdit(false);
         setNumeratorToEdit(numerator);
     }
@@ -137,7 +136,7 @@ export const Numerators = ({toggleState, configurations}) => {
                 {numerators? numerators.map((numerator, key ) => (
                     <TableRow key={key}>
                         <TableCell>{getNumeratorMemberGroups(configurations, numerator.code).map((group, key) =>(
-                            <Chip key={key} dense> {group} </Chip>
+                            <Chip key={key} dense> {group.displayName} </Chip>
                         ))}</TableCell>
                         <TableCell>{numerator.name}</TableCell>
                         <TableCell>{numerator.core ? "✔️": ""}</TableCell>

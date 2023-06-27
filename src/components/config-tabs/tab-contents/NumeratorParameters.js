@@ -15,7 +15,8 @@ import {
     TableHead,
     TableRow,
     TableRowHead,
-    IconAdd16
+    IconAdd16,
+    Chip
   } from '@dhis2/ui'
 import { getNumeratorMemberGroups, getNumeratorDataElement, makeOutlierOptions } from '../../../utils/numeratorsMetadataData'
 
@@ -66,7 +67,10 @@ export const NumeratorParameters = ({toggleState, configurations}) => {
           <TableBody>
             {numerators? numerators.map((numerator, key) =>(
               <TableRow key={key}>
-                  <TableCell>{getNumeratorMemberGroups(configurations, numerator.code)}	</TableCell>
+                  <TableCell>{getNumeratorMemberGroups(configurations, numerator.code).map((group, key) =>(
+                          <Chip key={key} dense> {group.displayName} </Chip>
+                      ))}
+                  </TableCell>
                   <TableCell>{numerator.name}</TableCell>
                   <TableCell>{getNumeratorDataElement(configurations, numerator.dataID)}	</TableCell>
                   <TableCell>

@@ -30,6 +30,14 @@ const EditModal = ({configurations, onClose, isHidden, onSave, numeratorToEdit})
         core:false,
     });
 
+    // TODO: is there a way to combine these two functions? handleSelectedGroups & handleGroupSelection that seem to do similar task
+    const handleSelectedGroups = () => {
+        setSelectedGroup(getNumeratorMemberGroups(configurations, numeratorToEdit.code).map((group) => group.code) )
+    }
+
+    const handleGroupSelection = (selectedG) => {
+        setSelectedGroup(selectedG.selected)
+    }
 
     const toggleTabModal = (index) => {
       setToggleStateModal(index);
@@ -43,6 +51,8 @@ const EditModal = ({configurations, onClose, isHidden, onSave, numeratorToEdit})
             definition:numeratorToEdit.definition,
             core:numeratorToEdit.core
         })
+
+        handleSelectedGroups()
     }, [numeratorToEdit]);
 
   return (
@@ -73,7 +83,7 @@ const EditModal = ({configurations, onClose, isHidden, onSave, numeratorToEdit})
                                 className='group_item'
                             >
                             <MultiSelectField
-                                onChange={()=>console.log('selected')}
+                                onChange={handleGroupSelection}
                                 selected={selectedGroups}
                             >
                                 {configurations.groups.map((group, key) =>(
