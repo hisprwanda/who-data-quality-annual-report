@@ -1,0 +1,180 @@
+.period-modal-parent-element {
+    border: rgb(245, 243, 243);
+    display: flex;
+    flex-direction: row;
+    width: 52rem;
+}
+
+.period-modal-data-source {
+    flex: 6 6 auto;
+    display: flex;
+    flex-direction: column;
+    gap: 0.9rem;
+}
+
+
+
+.transfer-element {
+    flex: 0.3 0.3 auto;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.period-modal-data-destination {
+    flex: 4 4 auto;
+}
+
+.period-modal-data-source, .period-modal-data-destination {
+    border: 1px solid #e7e7e7;
+}
+
+.transfer-element ul {
+    padding: 0rem;
+    margin: 0rem;
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 0.4rem;
+}
+
+.transfer-element ul li {
+    padding: 0rem;
+    margin: 0rem;
+}
+
+.period-modal-data-source-center {
+    border-bottom: 1px solid #e6e6e6;
+    padding: 0.9rem;
+}
+
+.period-modal-data-source-result ul {
+    padding: 0rem;
+    margin: 0rem;
+    list-style: none;
+    display: flex;
+    gap: 0.2rem;
+    flex-direction: column;
+}
+
+.fixed-element-parent {
+    display: flex;
+    flex-direction: row;
+    gap: 0.6rem;
+}
+
+.divider {
+    width: 0.8rem;
+}
+
+.fixed-element-parent > div:nth-child(1) {
+    flex: 5 5 auto;
+}
+
+.fixed-element-parent > div:nth-child(2) {
+    flex: 1 1 auto;
+}
+
+.emballage {
+    display: flex;
+    flex-direction: column;
+    gap: 0.2rem
+}
+
+.fixed-period-list ul {
+    padding: 0rem;
+    margin: 0rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.6rem;
+}
+
+
+
+.fixed-period-list ul li span {
+    background-color: #e7e7e7;
+    padding: 0.2rem;
+    margin: 0.4rem;
+}
+
+.period-modal-data-destination > div:nth-child(1) {
+    border-bottom: 1px solid #e7e7e7;
+    padding: 0.8rem;
+}
+
+.period-modal-data-destination > div:nth-child(2) {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: rgb(74, 75, 75);
+    padding-top: 1.5rem;
+}
+
+.source-relative-period:hover, .source-fixed-period:hover {
+    color: rgb(14, 37, 108);
+    cursor: pointer;
+    border-bottom: 3px solid rgb(8, 35, 116);
+}
+
+.orgunit-topsection > ul {
+    list-style: none;
+    display: flex;
+    gap: 1.9rem;
+    margin: 0rem;
+    padding: 0rem;
+    padding: 0.3rem;
+    background-color: #e9e9e9;
+}
+
+.orgunit-topsection > ul li {
+    font-size: 0.9rem;
+    list-style: none;
+}
+
+.period-modal-data-source-menu ul {
+    display: flex;
+    padding: 0rem;
+    margin: 0rem;
+    flex-direction: row;
+    gap: 0.9rem;
+}
+
+.period-modal-data-source-menu ul li {
+    list-style: none;
+}
+
+.period-modal-data-source-menu {
+    display: flex;
+    align-content: flex-start;
+    padding: 1.0rem;
+    border-bottom: 1px solid #e6e6e6;
+    
+}
+
+.relative-period-component-parent {
+    display: flex;
+    flex-direction: column;
+    gap: 0.2rem;
+}
+
+.relative-period-result-component-parent ul {
+    display: flex;
+    flex-direction: column;
+}
+
+.relative-period-result-component-parent ul li {
+    width: 100%;
+    margin: 0.2rem;
+}
+
+.relative-period-result-component-parent ul li span {
+    background-color: #e6e6e6;
+    border-radius: 3px;
+    margin: 0.6rem;
+    padding: 0.2rem;
+}
+
+
+
+
+
