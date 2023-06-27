@@ -1,3 +1,4 @@
+import {useState, useEffect} from 'react'
 import {
     Button,
     Table,
@@ -10,9 +11,18 @@ import {
     IconDelete16,
     IconEdit16	
   } from '@dhis2/ui'
+import { getNumeratorRelations, getRelationType } from '../../../utils/numeratorsMetadataData';
 
 
-export const NumeratorRelations = ({toggleState}) => {
+export const NumeratorRelations = ({toggleState, configurations}) => {
+    const [relations, setRelations] = useState(null);
+
+
+    useEffect(() => {
+        setRelations(configurations.numeratorRelations)
+      }, [])
+      
+
   return (
     <div className={toggleState === 3 ? "content  active-content" : "content"} >
     <p>Numerator Relations</p>
@@ -33,106 +43,35 @@ export const NumeratorRelations = ({toggleState}) => {
               </TableRowHead>
           </TableHead>
           <TableBody>
+
+            {relations? relations.map((relation, key) => (
+                <TableRow key={key}>
+                    <TableCell>{relation.name}</TableCell>
+                    <TableCell>{getNumeratorRelations(configurations.numerators, relation.A)}</TableCell>
+                    <TableCell>{getNumeratorRelations(configurations.numerators, relation.B)}</TableCell>
+                    <TableCell>{getRelationType(relation.type).displayName}</TableCell>
+                    <TableCell>{relation.criteria}</TableCell>
+                    <TableCell>{getRelationType(relation.type).thresholdDescription}</TableCell>
+                    <TableCell>{getRelationType(relation.type).description}</TableCell>
+                    <TableCell>
+                        <Button
+                            name="Primary button" onClick={() => window.alert('It works!')} 
+                            basic button value="default" icon={<IconEdit16 />}> Edit
+                        </Button>
+                        <Button
+                            name="Primary button" onClick={() => window.alert('It works!')} 
+                            destructive button value="default" icon={<IconDelete16 />}> Delete
+                        </Button>
+                    </TableCell>
+                </TableRow>
+            ))
+            :
             <TableRow>
-                <TableCell>ANC 1 - TT1 ratio</TableCell>
-                <TableCell>ANC First standard visit 1st trimester</TableCell>
-                <TableCell>ANC TT 1given</TableCell>
-                <TableCell>A ≈ B</TableCell>
-                <TableCell>5</TableCell>
-                <TableCell>% difference between A and B.</TableCell>
-                <TableCell>A and B should be roughly equal</TableCell>
                 <TableCell>
-                  <Button
-                      name="Primary button" onClick={() => window.alert('It works!')} 
-                      basic button value="default" icon={<IconEdit16 />}> Edit
-                  </Button>
-                  <Button
-                      name="Primary button" onClick={() => window.alert('It works!')} 
-                      destructive button value="default" icon={<IconDelete16 />}> Delete
-                  </Button>
+                    No numerator relations found.
                 </TableCell>
             </TableRow>
-            
-            <TableRow>
-                <TableCell>ANC 1 - TT1 ratio</TableCell>
-                <TableCell>ANC First standard visit 1st trimester</TableCell>
-                <TableCell>ANC TT 1given</TableCell>
-                <TableCell>A ≈ B</TableCell>
-                <TableCell>5</TableCell>
-                <TableCell>% difference between A and B.</TableCell>
-                <TableCell>A and B should be roughly equal</TableCell>
-                <TableCell>
-                  <Button
-                      name="Primary button" onClick={() => window.alert('It works!')} 
-                      basic button value="default" icon={<IconEdit16 />}> Edit
-                  </Button>
-                  <Button
-                      name="Primary button" onClick={() => window.alert('It works!')} 
-                      destructive button value="default" icon={<IconDelete16 />}> Delete
-                  </Button>
-                </TableCell>
-            </TableRow>
-            
-            <TableRow>
-                <TableCell>ANC 1 - TT1 ratio</TableCell>
-                <TableCell>ANC First standard visit 1st trimester</TableCell>
-                <TableCell>ANC TT 1given</TableCell>
-                <TableCell>A ≈ B</TableCell>
-                <TableCell>5</TableCell>
-                <TableCell>% difference between A and B.</TableCell>
-                <TableCell>A and B should be roughly equal</TableCell>
-                <TableCell>
-                  <Button
-                      name="Primary button" onClick={() => window.alert('It works!')} 
-                      basic button value="default" icon={<IconEdit16 />}> Edit
-                  </Button>
-                  <Button
-                      name="Primary button" onClick={() => window.alert('It works!')} 
-                      destructive button value="default" icon={<IconDelete16 />}> Delete
-                  </Button>
-                </TableCell>
-            </TableRow>
-            
-            <TableRow>
-                <TableCell>ANC 1 - TT1 ratio</TableCell>
-                <TableCell>ANC First standard visit 1st trimester</TableCell>
-                <TableCell>ANC TT 1given</TableCell>
-                <TableCell>A ≈ B</TableCell>
-                <TableCell>5</TableCell>
-                <TableCell>% difference between A and B.</TableCell>
-                <TableCell>A and B should be roughly equal</TableCell>
-                <TableCell>
-                  <Button
-                      name="Primary button" onClick={() => window.alert('It works!')} 
-                      basic button value="default" icon={<IconEdit16 />}> Edit
-                  </Button>
-                  <Button
-                      name="Primary button" onClick={() => window.alert('It works!')} 
-                      destructive button value="default" icon={<IconDelete16 />}> Delete
-                  </Button>
-                </TableCell>
-            </TableRow>
-            
-            <TableRow>
-                <TableCell>ANC 1 - TT1 ratio</TableCell>
-                <TableCell>ANC First standard visit 1st trimester</TableCell>
-                <TableCell>ANC TT 1given</TableCell>
-                <TableCell>A ≈ B</TableCell>
-                <TableCell>5</TableCell>
-                <TableCell>% difference between A and B.</TableCell>
-                <TableCell>A and B should be roughly equal</TableCell>
-                <TableCell>
-                  <Button
-                      name="Primary button" onClick={() => window.alert('It works!')} 
-                      basic button value="default" icon={<IconEdit16 />}> Edit
-                  </Button>
-                  <Button
-                      name="Primary button" onClick={() => window.alert('It works!')} 
-                      destructive button value="default" icon={<IconDelete16 />}> Delete
-                  </Button>
-                </TableCell>
-            </TableRow>
-            
+            }
           </TableBody>
       </Table>
 

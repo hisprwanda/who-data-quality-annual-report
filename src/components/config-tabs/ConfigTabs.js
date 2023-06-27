@@ -8,9 +8,10 @@ import {NumeratorRelations} from "./tab-contents/NumeratorRelations";
 import { NumeratorParameters } from "./tab-contents/NumeratorParameters";
 import {Numerators} from "./tab-contents/Numerators";
 import {ExternalDataComparison} from "./tab-contents/ExternalDataComparison";
+import { CircularLoader } from "@dhis2/ui";
 
 
-function Tabs() {
+function Tabs({loading, configurations}) {
   const [toggleState, setToggleState] = useState(1);
 
   const toggleTab = (index) => {
@@ -19,8 +20,10 @@ function Tabs() {
 
   return (
     <div className="container">
+
       <div className="bloc-tabs">
-        <button className={toggleState === 1 ? "tabs active-tabs" : "tabs"}
+        <button 
+          className={toggleState === 1 ? "tabs active-tabs" : "tabs"}
           onClick={() => toggleTab(1)} > Numerators
         </button>
         <button
@@ -50,14 +53,22 @@ function Tabs() {
       </div>
 
       <div className="content-tabs">
-        
-        <Numerators toggleState={toggleState}/>
-        <NumeratorGroups toggleState={toggleState}/>
-        <NumeratorRelations toggleState={toggleState}/>
-        <NumeratorParameters toggleState={toggleState} />
-        <Denominators toggleState={toggleState} />
-        <DenominatorRelations toggleState={toggleState} />
-        <ExternalDataComparison toggleState={toggleState} />
+        {loading? 
+            <div className='circularLoader'>
+              <CircularLoader large/>
+            </div>
+            : 
+        <>
+          {/* TODO: find a way to pass the state globally or use the context api to share these data */}
+          <Numerators toggleState={toggleState} configurations={configurations}/>   
+          <NumeratorGroups toggleState={toggleState} configurations={configurations}/>
+          <NumeratorRelations toggleState={toggleState} configurations={configurations}/>
+          <NumeratorParameters toggleState={toggleState}  configurations={configurations}/>
+          <Denominators toggleState={toggleState}  configurations={configurations}/>
+          <DenominatorRelations toggleState={toggleState}  configurations={configurations}/>
+          <ExternalDataComparison toggleState={toggleState}  configurations={configurations}/>
+        </>
+      } 
         
       </div>
     </div>

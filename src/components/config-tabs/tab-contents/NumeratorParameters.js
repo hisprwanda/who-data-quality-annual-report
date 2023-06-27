@@ -1,8 +1,13 @@
+import {useEffect, useState} from 'react'
 import {
     Button,
     DropdownButton,
+    Input,
     FlyoutMenu,
     MenuItem,
+    SingleSelect,
+    SingleSelectField,
+    SingleSelectOption,
     Table,
     TableBody,
     TableCell,
@@ -12,9 +17,22 @@ import {
     TableRowHead,
     IconAdd16
   } from '@dhis2/ui'
+import { getNumeratorMemberGroups, getNumeratorDataElement, makeOutlierOptions } from '../../../utils/numeratorsMetadataData'
 
 
-export const NumeratorParameters = ({toggleState}) => {
+export const NumeratorParameters = ({toggleState, configurations}) => {
+  const [numerators, setNumerators] = useState(null);
+  const [outlierOptions, setOutlierOptions] = useState(null);
+  const [datasets, setDatasets] = useState(null);
+
+
+  useEffect(() => {
+    setNumerators(configurations.numerators)
+    setOutlierOptions(makeOutlierOptions());
+    setDatasets(configurations.dataSets)
+  }, [])
+      
+
   return (
     
     <div className={toggleState === 4 ? "content  active-content" : "content"} >
@@ -46,75 +64,58 @@ export const NumeratorParameters = ({toggleState}) => {
               </TableRowHead>
           </TableHead>
           <TableBody>
-            <TableRow>
-                <TableCell>General Service Statistics	</TableCell>
-                <TableCell>OPD visits	</TableCell>
-                <TableCell>New cases_OPD	</TableCell>
-                <TableCell>
-                  <DropdownButton component={<FlyoutMenu><MenuItem label=" 1" /><MenuItem label=" 2" /><MenuItem label=" 3" /></FlyoutMenu>} name="buttonName" value="buttonValue" > 2 </DropdownButton>
-                </TableCell>
-                <TableCell>
-                  <DropdownButton component={<FlyoutMenu><MenuItem label=" 1" /><MenuItem label=" 2" /><MenuItem label=" 3" /></FlyoutMenu>} name="buttonName" value="buttonValue" > 3 </DropdownButton>
-                </TableCell>
-                <TableCell>
-                  <DropdownButton component={<FlyoutMenu><MenuItem label=" 1" /><MenuItem label=" 2" /><MenuItem label=" 3" /></FlyoutMenu>} name="buttonName" value="buttonValue" > 33 </DropdownButton>
-                </TableCell>
-                <TableCell>
-                  <DropdownButton component={<FlyoutMenu><MenuItem label="Increasing" /><MenuItem label="Decreasing" /></FlyoutMenu>} name="buttonName" value="buttonValue" > Constant </DropdownButton>
-                </TableCell>
-                <TableCell>
-                  <DropdownButton component={<FlyoutMenu><MenuItem label="Expected" /></FlyoutMenu>} name="buttonName" value="buttonValue" > Overall result </DropdownButton>
-                </TableCell>
-                <TableCell>
-                  <DropdownButton component={<FlyoutMenu><MenuItem label=" 1" /><MenuItem label=" 2" /><MenuItem label=" 3" /></FlyoutMenu>} name="buttonName" value="buttonValue" > 90 </DropdownButton>
-                </TableCell>
-            </TableRow>
-            <TableRow>
-                <TableCell>General Service Statistics	</TableCell>
-                <TableCell>OPD visits	</TableCell>
-                <TableCell>New cases_OPD	</TableCell>
-                <TableCell>
-                  <DropdownButton component={<FlyoutMenu><MenuItem label=" 1" /><MenuItem label=" 2" /><MenuItem label=" 3" /></FlyoutMenu>} name="buttonName" value="buttonValue" > 2 </DropdownButton>
-                </TableCell>
-                <TableCell>
-                  <DropdownButton component={<FlyoutMenu><MenuItem label=" 1" /><MenuItem label=" 2" /><MenuItem label=" 3" /></FlyoutMenu>} name="buttonName" value="buttonValue" > 3 </DropdownButton>
-                </TableCell>
-                <TableCell>
-                  <DropdownButton component={<FlyoutMenu><MenuItem label=" 1" /><MenuItem label=" 2" /><MenuItem label=" 3" /></FlyoutMenu>} name="buttonName" value="buttonValue" > 33 </DropdownButton>
-                </TableCell>
-                <TableCell>
-                  <DropdownButton component={<FlyoutMenu><MenuItem label="Increasing" /><MenuItem label="Decreasing" /></FlyoutMenu>} name="buttonName" value="buttonValue" > Constant </DropdownButton>
-                </TableCell>
-                <TableCell>
-                  <DropdownButton component={<FlyoutMenu><MenuItem label="Expected" /></FlyoutMenu>} name="buttonName" value="buttonValue" > Overall result </DropdownButton>
-                </TableCell>
-                <TableCell>
-                  <DropdownButton component={<FlyoutMenu><MenuItem label=" 1" /><MenuItem label=" 2" /><MenuItem label=" 3" /></FlyoutMenu>} name="buttonName" value="buttonValue" > 90 </DropdownButton>
-                </TableCell>
-            </TableRow>
-            <TableRow>
-                <TableCell>General Service Statistics	</TableCell>
-                <TableCell>OPD visits	</TableCell>
-                <TableCell>New cases_OPD	</TableCell>
-                <TableCell>
-                  <DropdownButton component={<FlyoutMenu><MenuItem label=" 1" /><MenuItem label=" 2" /><MenuItem label=" 3" /></FlyoutMenu>} name="buttonName" value="buttonValue" > 2 </DropdownButton>
-                </TableCell>
-                <TableCell>
-                  <DropdownButton component={<FlyoutMenu><MenuItem label=" 1" /><MenuItem label=" 2" /><MenuItem label=" 3" /></FlyoutMenu>} name="buttonName" value="buttonValue" > 3 </DropdownButton>
-                </TableCell>
-                <TableCell>
-                  <DropdownButton component={<FlyoutMenu><MenuItem label=" 1" /><MenuItem label=" 2" /><MenuItem label=" 3" /></FlyoutMenu>} name="buttonName" value="buttonValue" > 33 </DropdownButton>
-                </TableCell>
-                <TableCell>
-                  <DropdownButton component={<FlyoutMenu><MenuItem label="Increasing" /><MenuItem label="Decreasing" /></FlyoutMenu>} name="buttonName" value="buttonValue" > Constant </DropdownButton>
-                </TableCell>
-                <TableCell>
-                  <DropdownButton component={<FlyoutMenu><MenuItem label="Expected" /></FlyoutMenu>} name="buttonName" value="buttonValue" > Overall result </DropdownButton>
-                </TableCell>
-                <TableCell>
-                  <DropdownButton component={<FlyoutMenu><MenuItem label=" 1" /><MenuItem label=" 2" /><MenuItem label=" 3" /></FlyoutMenu>} name="buttonName" value="buttonValue" > 90 </DropdownButton>
-                </TableCell>
-            </TableRow>
+            {numerators? numerators.map((numerator, key) =>(
+              <TableRow key={key}>
+                  <TableCell>{getNumeratorMemberGroups(configurations, numerator.code)}	</TableCell>
+                  <TableCell>{numerator.name}</TableCell>
+                  <TableCell>{getNumeratorDataElement(configurations, numerator.dataID)}	</TableCell>
+                  <TableCell>
+                    <SingleSelectField inputWidth='20px' selected='2' onChange={()=> console.log('changed option')}  >
+                        {outlierOptions? outlierOptions.map((opt, key) => (
+                          <SingleSelectOption key={key} label={opt.label} value={opt.val} />
+                        ))
+                        :
+                        <SingleSelectOption label="option one" value="1" />
+                      }
+                    </SingleSelectField>
+                  </TableCell>
+                  <TableCell>
+                    <SingleSelectField inputWidth='2px' selected='2' onChange={()=> console.log('changed option')}  >
+                          {outlierOptions? outlierOptions.map((opt, key) => (
+                            <SingleSelectOption key={key} label={opt.label} value={opt.val} />
+                          ))
+                          :
+                          <SingleSelectOption label="option one" value="1" />
+                        }
+                      </SingleSelectField>                  
+                  </TableCell>
+                  <TableCell>
+                    <Input max="100" min="0" name="defaultName" onChange={()=> console.log('changed option')} step="1" type="number" />                                          
+                  </TableCell>
+                  <TableCell>
+                    <SingleSelectField onChange={()=> console.log('changed option')}  >
+                      <SingleSelectOption  label='Constant' value='Constant' />
+                      <SingleSelectOption  label='Increasing' value='Increasing' />
+                      <SingleSelectOption  label='Decreasing' value='Decreasing' />
+                    </SingleSelectField>          
+
+                  </TableCell>
+                  <TableCell>
+                    <SingleSelectField onChange={()=> console.log('changed option')}  >
+                      <SingleSelectOption  label='Overall result' value='Overall result' />
+                      <SingleSelectOption  label='Expected result' value='Expected result' />
+                    </SingleSelectField>          
+                  </TableCell>
+                  <TableCell>
+                      <Input max="100" min="0" name="defaultName" onChange={()=> console.log('changed option')} step="1" type="number" />                                          
+                  </TableCell>
+              </TableRow>
+            ))
+              :
+              <TableRow>
+                <TableCell></TableCell>
+              </TableRow>
+            }
           </TableBody>
       </Table>
 
@@ -146,62 +147,36 @@ export const NumeratorParameters = ({toggleState}) => {
               </TableRowHead>
           </TableHead>
           <TableBody>
-            <TableRow>
-                <TableCell>07 Antenatal Consultations</TableCell>
-                <TableCell>
-                  <DropdownButton component={<FlyoutMenu><MenuItem label=" 1" /><MenuItem label=" 2" /><MenuItem label=" 3" /></FlyoutMenu>} name="buttonName" value="buttonValue" > 90 </DropdownButton>
-                </TableCell>
-                <TableCell>
-                  <DropdownButton component={<FlyoutMenu><MenuItem label=" 1" /><MenuItem label=" 2" /><MenuItem label=" 3" /></FlyoutMenu>} name="buttonName" value="buttonValue" > 75 </DropdownButton>
-                </TableCell>
-                <TableCell>
-                  <DropdownButton component={<FlyoutMenu><MenuItem label=" 1" /><MenuItem label=" 2" /><MenuItem label=" 3" /></FlyoutMenu>} name="buttonName" value="buttonValue" > 33 </DropdownButton>
-                </TableCell>
-                <TableCell>
-                <DropdownButton component={<FlyoutMenu><MenuItem label="Increasing" /><MenuItem label="Decreasing" /></FlyoutMenu>} name="buttonName" value="buttonValue" > Constant </DropdownButton>
-                </TableCell>
-                <TableCell>
-                  <DropdownButton component={<FlyoutMenu><MenuItem label="Increasing" /><MenuItem label="Decreasing" /></FlyoutMenu>} name="buttonName" value="buttonValue" > Overall result </DropdownButton>
-                </TableCell>
-            </TableRow>
-            <TableRow>
-                <TableCell>ANC Antenatal Consultations</TableCell>
-                <TableCell>
-                  <DropdownButton component={<FlyoutMenu><MenuItem label=" 1" /><MenuItem label=" 2" /><MenuItem label=" 3" /></FlyoutMenu>} name="buttonName" value="buttonValue" > 90 </DropdownButton>
-                </TableCell>
-                <TableCell>
-                  <DropdownButton component={<FlyoutMenu><MenuItem label=" 1" /><MenuItem label=" 2" /><MenuItem label=" 3" /></FlyoutMenu>} name="buttonName" value="buttonValue" > 75 </DropdownButton>
-                </TableCell>
-                <TableCell>
-                  <DropdownButton component={<FlyoutMenu><MenuItem label=" 1" /><MenuItem label=" 2" /><MenuItem label=" 3" /></FlyoutMenu>} name="buttonName" value="buttonValue" > 33 </DropdownButton>
-                </TableCell>
-                <TableCell>
-                <DropdownButton component={<FlyoutMenu><MenuItem label="Increasing" /><MenuItem label="Decreasing" /></FlyoutMenu>} name="buttonName" value="buttonValue" > Constant </DropdownButton>
-                </TableCell>
-                <TableCell>
-                  <DropdownButton component={<FlyoutMenu><MenuItem label="Increasing" /><MenuItem label="Decreasing" /></FlyoutMenu>} name="buttonName" value="buttonValue" > Overall result </DropdownButton>
-                </TableCell>
-            </TableRow>
-            <TableRow>
-                <TableCell>OutPatient Consultations (OPD)</TableCell>
-                <TableCell>
-                  <DropdownButton component={<FlyoutMenu><MenuItem label=" 1" /><MenuItem label=" 2" /><MenuItem label=" 3" /></FlyoutMenu>} name="buttonName" value="buttonValue" > 90 </DropdownButton>
-                </TableCell>
-                <TableCell>
-                  <DropdownButton component={<FlyoutMenu><MenuItem label=" 1" /><MenuItem label=" 2" /><MenuItem label=" 3" /></FlyoutMenu>} name="buttonName" value="buttonValue" > 75 </DropdownButton>
-                </TableCell>
-                <TableCell>
-                  <DropdownButton component={<FlyoutMenu><MenuItem label=" 1" /><MenuItem label=" 2" /><MenuItem label=" 3" /></FlyoutMenu>} name="buttonName" value="buttonValue" > 33 </DropdownButton>
-                </TableCell>
-                <TableCell>
-                  <DropdownButton component={<FlyoutMenu><MenuItem label="Increasing" /><MenuItem label="Decreasing" /></FlyoutMenu>} name="buttonName" value="buttonValue" > Constant </DropdownButton>
-                </TableCell>
-                <TableCell>
-                  <DropdownButton component={<FlyoutMenu><MenuItem label="Increasing" /><MenuItem label="Decreasing" /></FlyoutMenu>} name="buttonName" value="buttonValue" > Overall result </DropdownButton>
-                </TableCell>
-            </TableRow>
-
-            
+            {datasets? datasets.map((dataset, key) => (
+              <TableRow key={key}>
+                  <TableCell>{dataset.name}</TableCell>
+                  <TableCell>
+                      <Input max="100" min="0" name="defaultName" onChange={()=> console.log('changed option')} step="1" type="number" />                                          
+                  </TableCell>
+                  <TableCell>
+                      <Input max="100" min="0" name="defaultName" onChange={()=> console.log('changed option')} step="1" type="number" />                                          
+                  </TableCell>
+                  <TableCell>
+                      <Input max="100" min="0" name="defaultName" onChange={()=> console.log('changed option')} step="1" type="number" />                                          
+                  </TableCell>
+                  <TableCell>
+                    <SingleSelectField onChange={()=> console.log('changed option')}  >
+                        <SingleSelectOption  label='Constant' value='Constant' />
+                        <SingleSelectOption  label='Increasing' value='Increasing' />
+                        <SingleSelectOption  label='Decreasing' value='Decreasing' />
+                    </SingleSelectField>                     
+                  </TableCell>
+                  <TableCell>
+                    <SingleSelectField onChange={()=> console.log('changed option')}  >
+                      <SingleSelectOption  label='Overall result' value='Overall result' />
+                      <SingleSelectOption  label='Expected result' value='Expected result' />
+                    </SingleSelectField>          
+                  </TableCell>
+              </TableRow>
+            ))
+            :
+            <TableRow><TableCell></TableCell></TableRow>
+          }
 
             {/* Save button */}
 

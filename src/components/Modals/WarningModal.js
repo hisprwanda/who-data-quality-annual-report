@@ -16,7 +16,7 @@ const WarningModal = ({onClose, isHidden, onDelete}) => {
             Warning
         </ModalTitle>
         <ModalContent>
-        Are you sure you want to clear this denominator's content?
+        Are you sure you want to clear this numerator's content?
         </ModalContent>
         <ModalActions>
             <ButtonStrip end>

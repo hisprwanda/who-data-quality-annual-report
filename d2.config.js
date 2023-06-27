@@ -1,7 +1,7 @@
 const config = {
     type: 'app',
     name: 'who-data-quality-annual-report',
-    title: 'Who Data Quality Annual Report',
+    title: 'DQA Report',
     coreApp: false,
 
     entryPoints: {

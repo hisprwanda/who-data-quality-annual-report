@@ -17,6 +17,8 @@
     "@dhis2/analytics": "^25.1.10",
     "@dhis2/app-runtime": "^3.9.3",
     "@dhis2/ui": "^8.13.3",
-    "react-router-dom": "^6.11.1"
+    "@dhis2/ui-core": "^6.24.0",
+    "react-router-dom": "^6.11.1",
+    "rxjs": "^7.8.1"
   }
 }

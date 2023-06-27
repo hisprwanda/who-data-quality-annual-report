@@ -1,41 +1,40 @@
 .menubarContainer{
   display: flex;
   width: 100%;
-  padding: 10px;
   background-color: #e4e4e4;
-  height: 60px;
+  flex-direction: column;
 }
 
 .logoContainer{
   display: flex;
   align-items: center;
-  justify-content: space-evenly;
-  width: 30%;
-
-  
+  gap: 2rem;
+  padding: 0.3rem;
 }
 nav ul {
   display: flex;
-  list-style-type: none;
+  flex-direction: row;
   margin: 0;
-  width: 304px;
   padding: 0;
-  justify-content: space-between;
-  }
+  gap: 1.2rem;
+}
   
-  nav ul li {
-    display: inline;
-    margin-right: 10px;
-    margin-bottom: 20px;
-    text-decoration: none;
+nav ul li {
+  list-style: none;
+}
 
-  }
+nav ul li a{
+  text-decoration: none;
+  text-transform: uppercase;
+  font-size: 1.1rem;
+}
 
-  nav ul li a{
-    font-size: 15px;
-    text-decoration: none;
-    text-transform: uppercase;
-  }
+nav ul li a:hover {
+  background-color: rgb(222, 221, 221);
+  border: 1px solid #e4e4e4;
+  padding: 0.3rem;
+  border-radius: 5px;
+}
   
 .logoImage {
   width: 50px;
@@ -43,7 +42,10 @@ nav ul {
 }
 
 .navLinksContainer {
+  background-color: #f3f5f7;
+  width: 100%;
+  padding: 1.0rem;
   display: flex;
-  margin: auto;
-
+  align-content: center;
+  justify-content:flex-end;
 }
