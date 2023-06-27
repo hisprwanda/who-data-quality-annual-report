@@ -30,13 +30,12 @@ const EditModal = ({configurations, onClose, isHidden, onSave, numeratorToEdit})
         core:false,
     });
 
-    // TODO: is there a way to combine these two functions? handleSelectedGroups & handleGroupSelection that seem to do similar task
-    const handleSelectedGroups = () => {
-        setSelectedGroup(getNumeratorMemberGroups(configurations, numeratorToEdit.code).map((group) => group.code) )
-    }
-
     const handleGroupSelection = (selectedG) => {
         setSelectedGroup(selectedG.selected)
+        setNumerator({
+            ...numerator,
+            groups: selectedGroups
+        })
     }
 
     const toggleTabModal = (index) => {
@@ -44,6 +43,7 @@ const EditModal = ({configurations, onClose, isHidden, onSave, numeratorToEdit})
     };
 
     useEffect(() => { 
+        // set numerator with existin data
         setNumerator({
             ...numerator, 
             code:numeratorToEdit.code,
@@ -51,9 +51,13 @@ const EditModal = ({configurations, onClose, isHidden, onSave, numeratorToEdit})
             definition:numeratorToEdit.definition,
             core:numeratorToEdit.core
         })
-
-        handleSelectedGroups()
-    }, [numeratorToEdit]);
+        
+        // set groups with existin data
+        setSelectedGroup(
+            getNumeratorMemberGroups(configurations, numeratorToEdit.code)
+            .map((group) => group.code)
+        )
+    }, [isHidden]);
 
   return (
     <div>
