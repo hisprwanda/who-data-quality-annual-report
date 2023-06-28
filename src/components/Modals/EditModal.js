@@ -2,6 +2,7 @@ import {useState, useEffect} from 'react'
 import {
     Button,
     ButtonStrip,
+    Box,
     Checkbox,
     Input,
     InputField,
@@ -12,7 +13,8 @@ import {
     MultiSelectOption,
     MultiSelectField,
     SingleSelect,
-    SingleSelectOption 
+    SingleSelectOption,
+    Transfer
   } from '@dhis2/ui'
   import { Chip } from "@dhis2/ui-core";
 
@@ -22,6 +24,33 @@ import { getNumeratorMemberGroups } from '../../utils/numeratorsMetadataData';
 const EditModal = ({configurations, onClose, isHidden, onSave, numeratorToEdit}) => {
     const [toggleStateModal, setToggleStateModal] = useState(1);
     const [selectedGroups, setSelectedGroup] = useState(['G1']);
+    const [isHiddenElements, setIsHiddenElements] = useState(true);
+    const [selectedElementGroups, setSelectedElementGroups] = useState([
+        'anc_1st_visit'
+    ]);
+
+    const dataElements = [
+            {
+                label: 'ANC 1st visit',
+                value: 'anc_1st_visit'
+            },
+            {
+                label: 'ANC 2nd visit',
+                value: 'anc_2nd_visit'
+            },
+            {
+                label: 'ANC 3rd visit',
+                value: 'anc_3rd_visit'
+            },
+            {
+                label: 'ANC 4th or more visits',
+                value: 'anc_4th_or_more_visits'
+            },
+            {
+                label: 'ART No clients who stopped TRT due to TRT failure',
+                value: 'art_no_clients_who_stopped_trt_due_to_trt_failure'
+            }
+    ]
 
     // TODO: remember to improve the seeting and populating of the this modal in editing 
     const [numerator, setNumerator] = useState({
@@ -61,6 +90,7 @@ const EditModal = ({configurations, onClose, isHidden, onSave, numeratorToEdit})
 
   return (
     <div>
+        {/* Main edit modal */}
         <Modal onClose={onClose} hide={isHidden} position="middle" large>
         <ModalTitle>
             Numerators Mapping to Data Elements
@@ -82,7 +112,8 @@ const EditModal = ({configurations, onClose, isHidden, onSave, numeratorToEdit})
                         <div className='input groups'>
                             <div 
                                 style={{
-                                    maxWidth: 400
+                                    maxWidth: 400,
+                                    minWidth: 300
                                 }}
                                 className='group_item'
                             >
@@ -119,19 +150,36 @@ const EditModal = ({configurations, onClose, isHidden, onSave, numeratorToEdit})
                     </div>                
                 <div className='content-tabs-modal'>
                     <div className={toggleStateModal === 1 ? "content-modal  active-content-modal" : "content-modal"} >
-                        <div className="dataElementsSelector">
-                        <MultiSelectField
-                                onChange={()=>console.log('selected')}
-                                placeholder="Data Element Group"
-                                selected={[
-                                    'G1'
-                                ]}
+                        <div className="dataElementsSelector">                            
+                            <div
+                                style={{
+                                    border: '1px solid rgb(160, 173, 186)',
+                                    borderRadius: '3px',
+                                    marginBottom: '2px',
+                                    minHeight: '40px',
+                                    cursor: 'pointer',
+                                    color: '#6c7787',
+                                    display:'flex',
+                                    alignItems: 'center',
+                                    fontSize: "14px",
+                                    lineHeight: "16px",
+                                    paddingLeft: "11px"
+
+                                }}
+                                onClick={() => setIsHiddenElements(false)}
                             >
-                                {configurations.groups.map((group, key) =>(
-                                    <MultiSelectOption label={group.displayName} key={key} value={group.code} />
-                                ))}
-                                
-                            </MultiSelectField>
+                                <Box >
+                                    {selectedElementGroups.length != 0? selectedElementGroups.map((group, key) => 
+                                        <Chip key={key}>{group}</Chip>
+                                    
+                                    )
+                                    :
+
+                                    "Select data element groups"
+                                }
+                                </Box>
+                            </div>
+
                             <SingleSelect className="select" onChange={()=> console.log('selected')} placeholder="Select Data Element">
                                 <SingleSelectOption label="Group one" value="1" />
                                 <SingleSelectOption label="Group two" value="2" />
@@ -197,6 +245,31 @@ const EditModal = ({configurations, onClose, isHidden, onSave, numeratorToEdit})
                 </Button>
                 <Button  primary onClick={() => onSave (numerator)}> 
                     Save
+                </Button>
+            </ButtonStrip>
+        </ModalActions>
+    </Modal>
+
+    {/* Data elements selection group */}
+    <Modal hide={isHiddenElements} position='middle'>
+        <ModalContent>
+            <Transfer
+                filterLabel="Filter with placeholder"
+                filterPlaceholder="Search"
+                filterable
+                onChange={(selected) => 
+                    setSelectedElementGroups(selected.selected)}
+                options={dataElements}
+                selected={selectedElementGroups}
+            />
+        </ModalContent>
+        <ModalActions>
+            <ButtonStrip end>
+                <Button  secondary onClick={() =>setIsHiddenElements(true)}>
+                    Cancel
+                </Button>
+                <Button  primary onClick={() =>setIsHiddenElements(true)}> 
+                    Select
                 </Button>
             </ButtonStrip>
         </ModalActions>

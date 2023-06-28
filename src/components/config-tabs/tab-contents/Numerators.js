@@ -62,20 +62,15 @@ export const Numerators = ({toggleState, configurations}) => {
     }
 
     const onSave = async(numerator) => {
-        // setDataElements(data)
         console.log("numerator data: ", numerator);
         setIsHiddenEdit(true);
         const updatedConfigurations = updateConfigurations(configurations, 'numerators', 'update', numerator);
         await mutate({ configurations: updatedConfigurations })
-
-        console.log('Saved the following data to the data store: ', data);
     }
 
     const onSavePeriod = (selected) => { 
         togglePeriodModal;
-        // console.log('Saved period: ', selected);
         const dataFromUtils = getNumeratorMemberGroups()
-        // console.log('From utils: ', dataFromUtils);
     }
 
     const onSaveData = (selected) => { 
