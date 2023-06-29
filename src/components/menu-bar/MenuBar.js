@@ -7,7 +7,6 @@ const MenuBar = () => {
   return (
     <div className='menubarContainer'>
       <div className='logoContainer'>
-
         <ul>
           <li>
             <img src={logo} alt="Image" className='logoImage' />
