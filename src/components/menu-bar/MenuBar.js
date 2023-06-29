@@ -21,25 +21,6 @@ const MenuBar = () => {
               <NavLink to="/configurations">Configurations</NavLink>
             </li>
         </ul>
-
-        {/* <div>
-          <img src={logo} alt="Image" className='logoImage' />
-        </div>
-        <div>
-          <p>WHO Data Quality Annual Report</p>
-        </div>
-      </div>
-      <div className='navLinksContainer'>
-        <nav>
-          <ul>
-            <li>
-            <NavLink to="/">Annual Report</NavLink>
-            </li>
-            <li>
-              <NavLink to="/configurations">Configurations</NavLink>
-            </li>
-          </ul>
-        </nav> */}
       </div>
     </div>
 
