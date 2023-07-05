@@ -20,10 +20,11 @@ import {
 
   import '../Modals/edit_modal_styles.css'
 import { getNumeratorMemberGroups } from '../../utils/numeratorsMetadataData';
+import { generateNumeratorCode } from '../../utils/generateNumeratorCode';
 
-const EditModal = ({configurations, onClose, isHidden, onSave, numeratorToEdit}) => {
+const CreateNumeratorModal = ({configurations, onClose, isHidden, onCreate}) => {
     const [toggleStateModal, setToggleStateModal] = useState(1);
-    const [selectedGroups, setSelectedGroup] = useState(['G1']);
+    const [selectedGroups, setSelectedGroup] = useState([]);
     const [isHiddenElementsGroups, setIsHiddenElementsGroups] = useState(true);
     const [selectedElementGroups, setSelectedElementGroups] = useState([]);
     const [isHiddenElements, setIsHiddenElements] = useState(true);
@@ -33,15 +34,18 @@ const EditModal = ({configurations, onClose, isHidden, onSave, numeratorToEdit})
     const dataElements = [
             {
                 label: 'ANC 1st visit',
-                value: 'ANC 1st visit'
+                value: 'ANC 1st visit',
+                id: 'DsmvMflRNm1'
             },
             {
                 label: 'ANC 2nd visit',
-                value: 'ANC 2st visit'
+                value: 'ANC 2st visit',
+                id: 'DsmvMflRNm2'
             },
             {
                 label: 'ART No clients who stopped TRT due to TRT failure',
-                value: 'ART No clients who stopped TRT due to TRT failure'
+                value: 'ART No clients who stopped TRT due to TRT failure',
+                id: 'DsmvMflRNm3'
             }
     ]
     const dataElementGroups = [
@@ -60,16 +64,19 @@ const EditModal = ({configurations, onClose, isHidden, onSave, numeratorToEdit})
     const dataSets = [
         {
             label: '001 Outpatient Consultation (OPD)',
-            value: '001 Outpatient Consultation (OPD)'
+            value: '001 Outpatient Consultation (OPD)',
+            id: 'SsmvMflRNm1'
         }, {
             label: '002 Malaria Dataset',
-            value: '002_Malaria_Dataset'
+            value: '002_Malaria_Dataset',
+            id: 'SsmvMflRNm2'
         }, {
             label: '003 Hospitalization',
-            value: '003 Hospitalization'
-        },
+            value: '003 Hospitalization',
+            id: 'SsmvMflRNm3'
+        }
     ]
-
+    
     // TODO: remove these styles from here
     const boxStyles = {
         border: '1px solid rgb(160, 173, 186)',
@@ -85,8 +92,8 @@ const EditModal = ({configurations, onClose, isHidden, onSave, numeratorToEdit})
         paddingLeft: "11px"
     }
 
+    const newCode = generateNumeratorCode(configurations.numerators);
 
-    // TODO: remember to improve the seeting and populating of the this modal in editing 
     const [numerator, setNumerator] = useState({
         name: '',
         definition: '',
@@ -97,6 +104,7 @@ const EditModal = ({configurations, onClose, isHidden, onSave, numeratorToEdit})
         setSelectedGroup(selectedG.selected)
         setNumerator({
             ...numerator,
+            code: newCode,
             groups: selectedGroups
         })
     }
@@ -106,29 +114,15 @@ const EditModal = ({configurations, onClose, isHidden, onSave, numeratorToEdit})
     };
 
     useEffect(() => { 
-        // set numerator with existin data
-        if (numeratorToEdit.length != 0) {
-            setNumerator({
-                ...numerator, 
-                code:numeratorToEdit.code,
-                name:numeratorToEdit.name, 
-                definition:numeratorToEdit.definition,
-                core:numeratorToEdit.core
-            })
-        }else{
-            setNumerator({
-                name: '',
-                definition: '',
-                core:false,
-            })
-        }
-        
-        // set groups with existin data
-        setSelectedGroup(
-            getNumeratorMemberGroups(configurations, numeratorToEdit.code)
-            .map((group) => group.code)
-        )
+        // resetting state values
+        setNumerator({
+            name: '',
+            definition: '',
+            core:false,
+        })
+        setSelectedGroup([])
     }, [isHidden]);
+
 
   return (
     <div>
@@ -168,7 +162,6 @@ const EditModal = ({configurations, onClose, isHidden, onSave, numeratorToEdit})
                                     ))}
                                     
                                 </MultiSelectField>
-                                    {/* <Input label="Default label" name="defaultName" onChange={(e) => setGroups(e.value)} required /> */}
                                 </div>
                                 <div className='group_item'>
                                     <p>Core</p>
@@ -275,8 +268,8 @@ const EditModal = ({configurations, onClose, isHidden, onSave, numeratorToEdit})
                     <Button  secondary onClick={onClose}>
                         Cancel
                     </Button>
-                    <Button  primary onClick={() => onSave (numerator)}> 
-                        Save
+                    <Button  primary onClick={() => onCreate(numerator)}> 
+                        Create
                     </Button>
                 </ButtonStrip>
             </ModalActions>
@@ -332,4 +325,4 @@ const EditModal = ({configurations, onClose, isHidden, onSave, numeratorToEdit})
   )
 }
 
-export default EditModal
+export default CreateNumeratorModal

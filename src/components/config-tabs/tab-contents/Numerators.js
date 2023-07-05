@@ -19,8 +19,10 @@ import EditModal from '../../Modals/EditModal';
 import PeriodsModal from '../../Modals/PeriodsModal';
 import { DataSelectorModal } from '../../Modals/DataSelectorModal';
 import { getNumeratorDataElement, getNumeratorDataset, getNumeratorMemberGroups } from '../../../utils/numeratorsMetadataData';
-import { clearConfigurations, updateConfigurations } from '../../../utils/updateConfigurations';
+import { clearConfigurations, createNewNumerator, updateConfigurations } from '../../../utils/updateConfigurations';
 import { Chip } from "@dhis2/ui-core";
+import CreateNumeratorModal from '../../Modals/CreateNumeratorModal';
+
 
 // TODO: move different queries to their own file when they become many
 const updateNumeratorsMutation = {
@@ -38,6 +40,7 @@ export const Numerators = ({toggleState, configurations}) => {
     const [isHiddenEdit, setIsHiddenEdit] = useState(true);
     const [isHiddenPeriod, setIsHiddenPeriod] = useState(true);
     const [isHiddenDataModal, setIsHiddenDataModal] = useState(true);
+    const [isHiddenCreate, setIsHiddenCreate] = useState(true);
 
     const togglePeriodModal = () => setIsHiddenPeriod(state => !state)
     const toggleDataModal = () => setIsHiddenDataModal(state => !state)
@@ -55,6 +58,10 @@ export const Numerators = ({toggleState, configurations}) => {
     const onCloseEdit = () => {
         setIsHiddenEdit(true);
     }
+
+    const onCloseCreate = () => {
+        setIsHiddenCreate(true);
+    }
     
     const onDelete = () => {
         setIsHidden(true);
@@ -65,6 +72,18 @@ export const Numerators = ({toggleState, configurations}) => {
         console.log("numerator data: ", numerator);
         setIsHiddenEdit(true);
         const updatedConfigurations = updateConfigurations(configurations, 'numerators', 'update', numerator);
+        await mutate({ configurations: updatedConfigurations })
+    }
+
+    const onCreateNumerator = async(newNumeratorInfo) => {
+        // Find how the data elemnt operand id is generated
+        // find how data id is found
+        // find how dataset id is found
+        // leave others as default
+
+        console.log('Created numerator ', newNumeratorInfo);
+        setIsHiddenCreate(true)
+        const updatedConfigurations =  createNewNumerator(configurations, newNumeratorInfo);       
         await mutate({ configurations: updatedConfigurations })
     }
 
@@ -197,7 +216,7 @@ export const Numerators = ({toggleState, configurations}) => {
                     <TableCell></TableCell>
                     <TableCell></TableCell>
                     <TableCell>
-                        <Button name="Primary button" onClick={() => onEditting([])} button value="default" icon={<IconEdit16 />} primary> Add new numerator </Button>    
+                        <Button name="Primary button" onClick={() => setIsHiddenCreate(false)} button value="default" icon={<IconEdit16 />} primary> Add new numerator </Button>    
                     </TableCell>
                 </TableRow>
             </TableBody>
@@ -206,10 +225,25 @@ export const Numerators = ({toggleState, configurations}) => {
 
         {/* <WarningModal onClose={onClose} isHidden={isHidden} onDelete={onDelete}/> */}
         {numeratorToEdit? 
-            <EditModal configurations={configurations} onClose={onCloseEdit} isHidden={isHiddenEdit} onSave={onSave} numeratorToEdit={numeratorToEdit}/>
+            <EditModal 
+            configurations={configurations} 
+            onClose={onCloseEdit} 
+            isHidden={isHiddenEdit} 
+            onSave={onSave} 
+            numeratorToEdit={numeratorToEdit}
+            />
         :
         ''
         }
+
+        {/* TODO:  Merge the edit and create numerator modals | keep one and make it dynamic */}
+
+        <CreateNumeratorModal
+            configurations={configurations}
+            onClose={onCloseCreate}
+            isHidden={isHiddenCreate}
+            onCreate={onCreateNumerator}
+        />
         <PeriodsModal 
             isHiddenPeriod={isHiddenPeriod}
             currentlySelected={[]}
