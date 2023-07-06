@@ -16,6 +16,11 @@ import { Button } from '@dhis2/ui'
 import { DataSetModal } from '../../components/annual-report/modal/data-sets/DataSetModal'
 import { PeriodModal } from '../../components/annual-report/modal/period/PeriodModal'
 import { OrganizationUnitModal } from '../../components/annual-report/modal/organizationunit/OrganizationUnitModal'
+<<<<<<< HEAD
+=======
+import ReportPreviewModal from '../../components/annual-report/report-preview-modal/ReportPreviewModal'
+
+>>>>>>> parent of 7b55227 (s)
 
 // End of imports
 
@@ -34,6 +39,18 @@ const Report = () => {
   let [orgUnitModalStatus, setOrgUnitModalStatus] = useState(true)
   // End of hook for managing org unit modal
 
+<<<<<<< HEAD
+=======
+  const [isHiddenReportModal, setIsHiddenReportModal] = useState(true);
+  const onClose = () => { setIsHiddenReportModal(true)}
+
+  // Printing the report
+  const onPrintReport = () =>{
+    console.log("Printing initiated...");
+  }
+
+
+>>>>>>> parent of 7b55227 (s)
   return (
     <div className='reportContainer'>
       <MenuBar />
@@ -75,7 +92,24 @@ const Report = () => {
               </div>
             </div>
           </div>
+<<<<<<< HEAD
         </div>
+=======
+
+          {/* Report Action Buttons  */}
+          <div>
+              <ButtonStrip end>
+                  <Button onClick={() => setIsHiddenReportModal(false)} primary>
+                      Generate
+                  </Button>
+              </ButtonStrip>
+          </div>
+        </div>
+
+      {/* Report preview modal */}
+      <ReportPreviewModal isHidden={isHiddenReportModal} onClose={onClose} onPrintReport={onPrintReport}/>
+
+>>>>>>> parent of 7b55227 (s)
     </div>
   )
 }
