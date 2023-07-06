@@ -6,7 +6,7 @@ The page used to present the user interface for the user to manage the reports
 */
 
 import React, { useEffect, useReducer, useState } from 'react'
-import { Modal, ModalTitle, ModalActions, ModalContent, ButtonStrip, Button} from '@dhis2/ui'
+import { Modal, ModalTitle, ModalActions, ModalContent, MultiSelect, MultiSelectField, MultiSelectOption, ButtonStrip, Button} from '@dhis2/ui'
 import './styles/datasets.css'
 import { ModalDataTransfer } from './ModalDataTransfer'
 import { SearchDataComponent } from '../../search-data/SearchData.Component'

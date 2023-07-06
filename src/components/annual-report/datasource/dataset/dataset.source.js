@@ -55,11 +55,6 @@ export const dataElementQuery = {
     },
 }
 
-export const loadDataStore = {
-    results: {
-        resource: 'dataStore/dataQualityTool/settings',
-    }
-}
 
 export let allDataState = {count: 0}
 export let dataInitialState = {count: 0}

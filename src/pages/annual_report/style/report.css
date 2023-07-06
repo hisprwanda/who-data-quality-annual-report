@@ -234,31 +234,6 @@ label {
     padding: 0.4rem;
 }
 
-.data-section-child {
-    display: flex;
-    flex-direction: column;
-    gap: 0.8rem;
-    align-items: start;
-}
-
-.action-container {
-    display: flex;
-    padding: 1.2rem;
-    justify-content: end;
-}
-
-.action-container ul {
-    padding: 0rem;
-    margin: 0rem;
-    display: flex;
-    gap: 0.8rem;
-    align-items: flex-end;
-}
-
-.action-container ul li {
-    list-style: none;
-}
-
 
 
 

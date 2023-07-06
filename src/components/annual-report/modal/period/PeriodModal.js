@@ -68,6 +68,7 @@ export const PeriodModal = (props) => {
                             Selected Period
                         </div>
                         <div>
+                            No period selected
                         </div>
                     </div>
                 </div>

@@ -167,15 +167,6 @@
     margin: 0.2rem;
 }
 
-.relative-period-result-component-parent ul li span:hover {
-    background-color: #050429;
-    color: #fff;
-}
-
-.relative-period-result-component-parent ul li span {
-    cursor: pointer;
-}
-
 .relative-period-result-component-parent ul li span {
     background-color: #e6e6e6;
     border-radius: 3px;
