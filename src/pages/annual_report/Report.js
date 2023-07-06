@@ -12,10 +12,12 @@ import React from 'react'
 import MenuBar from '../../components/menu-bar/MenuBar'
 import './style/report.css'
 import { resources } from '../../assets/str-resources/report-section'
-import { Button } from '@dhis2/ui'
+import { Button, ButtonStrip } from '@dhis2/ui'
 import { DataSetModal } from '../../components/annual-report/modal/data-sets/DataSetModal'
 import { PeriodModal } from '../../components/annual-report/modal/period/PeriodModal'
 import { OrganizationUnitModal } from '../../components/annual-report/modal/organizationunit/OrganizationUnitModal'
+import ReportPreviewModal from '../../components/annual-report/report-preview-modal/ReportPreviewModal'
+
 
 // End of imports
 
@@ -33,6 +35,15 @@ const Report = () => {
   // Hook for managing org unit modal
   let [orgUnitModalStatus, setOrgUnitModalStatus] = useState(true)
   // End of hook for managing org unit modal
+
+  const [isHiddenReportModal, setIsHiddenReportModal] = useState(true);
+  const onClose = () => { setIsHiddenReportModal(true)}
+
+  // Printing the report
+  const onPrintReport = () =>{
+    console.log("Printing initiated...");
+  }
+
 
   return (
     <div className='reportContainer'>
@@ -75,7 +86,20 @@ const Report = () => {
               </div>
             </div>
           </div>
+
+          {/* Report Action Buttons  */}
+          <div>
+              <ButtonStrip end>
+                  <Button onClick={() => setIsHiddenReportModal(false)} primary>
+                      Generate
+                  </Button>
+              </ButtonStrip>
+          </div>
         </div>
+
+      {/* Report preview modal */}
+      <ReportPreviewModal isHidden={isHiddenReportModal} onClose={onClose} onPrintReport={onPrintReport}/>
+
     </div>
   )
 }
