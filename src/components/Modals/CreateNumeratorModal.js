@@ -113,6 +113,11 @@ const CreateNumeratorModal = ({configurations, onClose, isHidden, onCreate}) => 
       setToggleStateModal(index);
     };
 
+    const handleElementsGroupSelection = (selected) =>{
+        console.log('selected :', selected);
+        setSelectedElementGroups(selected)
+    }
+
     useEffect(() => { 
         // resetting state values
         setNumerator({
@@ -155,10 +160,12 @@ const CreateNumeratorModal = ({configurations, onClose, isHidden, onCreate}) => 
                                 >
                                 <MultiSelectField
                                     onChange={handleGroupSelection}
+                                    filterable
+                                    noMatchText="No group found"
                                     selected={selectedGroups}
                                 >
                                     {configurations.groups.map((group, key) =>(
-                                        <MultiSelectOption label={group.displayName} key={key} value={group.code} />
+                                        <MultiSelectOption label={group.displayName} key={key} value={group.name} />
                                     ))}
                                     
                                 </MultiSelectField>
@@ -285,9 +292,10 @@ const CreateNumeratorModal = ({configurations, onClose, isHidden, onCreate}) => 
                     filterable
                     maxSelections={1}
                     onChange={(selected) => 
-                        setSelectedElementGroups(selected.selected)}
+                        handleElementsGroupSelection(selected.selected)} //FIXME: why can't i get the object i selected? 
                     options={dataElementGroups}
                     selected={selectedElementGroups}
+                    
                 />
             </ModalContent>
             <ModalActions>
