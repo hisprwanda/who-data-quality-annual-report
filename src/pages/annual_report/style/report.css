@@ -259,6 +259,35 @@ label {
     list-style: none;
 }
 
+.menu-parent {
+    display: flex;
+    border-bottom: 1px solid #dfdfdf;
+    background-color:#f1f1f1;
+}
+
+.menu-parent > div > ul {
+    margin: 0rem;
+    padding: 0rem;
+    display: flex;
+    flex-direction: row;
+    gap: 0.3rem;
+}
+
+.menu-parent > div > ul li {
+    list-style: none;
+    border-right: 1px solid #dfdfdf;
+    padding: 0.7rem;
+    cursor: pointer;
+}
+
+.menu-parent > div > ul li:nth-child(1) {
+    flex: 2 1 1;
+}
+
+.menu-parent > div > ul li:nth-child(2) {
+    flex: 4 2 2;
+}
+
 
 
 

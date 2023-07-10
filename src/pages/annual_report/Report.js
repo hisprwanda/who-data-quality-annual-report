@@ -57,11 +57,36 @@ const Report = () => {
       <DataSetModal status = { dataSetModalStatus } changeDataModalStatus = {setDataSetModalStatus}/>
       <PeriodModal status = { periodModalStatus } changePeriodModalStatus = {setPeriodModalStatus} />
       <OrganizationUnitModal status = { orgUnitModalStatus } changeOrganisationUnitStatus = { setOrgUnitModalStatus } />
-        <div className='topParagraph'>
-          <p>{resources.report_title}</p>
+      <div className='menu-parent'>
+          <div>
+            <ul>
+              <li>
+                  <div>
+                      Data Sets
+                  </div>
+                  <div>
+                    
+                  </div>
+              </li>
+              <li>
+                  <div>
+                      Period
+                  </div>
+              </li>
+              <li>
+                  <div>
+                      Organization Unit
+                  </div>
+              </li>
+              <li>
+                  <div>
+                      Sections for other options
+                  </div>
+              </li>
+            </ul>
+          </div>
         </div>
-
-        <div className='report-container'>
+        {/* <div className='report-container'>
           <div className='data-container'>
             <a href='#data-parent' className='first-anchor title'>Data</a>
             <div className='data-below' id='data-parent'>
@@ -110,19 +135,7 @@ const Report = () => {
               </li>
             </ul>
           </div>
-        </div>
-        <div className='report-container'>
-          
-          <ul>
-            <b>Selected Group: </b>{filteredItem[0]?.name}
-          </ul>
-          <ul>
-            <b>Period: </b>{_selectedPeriod}
-          </ul>
-          <ul>
-            <b>Organization Unit: </b>{_selectedOrgUnit}
-          </ul>
-          </div>
+        </div> */}
         
     </div>
   )
