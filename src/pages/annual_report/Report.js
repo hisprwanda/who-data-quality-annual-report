@@ -20,6 +20,8 @@ import { SingleSelect, SingleSelectOption } from '@dhis2/ui'
 import { loadDataStore } from '../../components/annual-report/datasource/dataset/dataset.source'
 import { useDataQuery } from '@dhis2/app-runtime'
 import { groupBy } from 'rxjs'
+import { OrgUnitComponent } from '../../components/annual-report/OrgUnit.Component'
+import { PeriodComponent } from '../../components/period/period.component'
 
 // End of imports
 
@@ -47,8 +49,7 @@ const Report = () => {
   useEffect(() => {
     let groups = data?.results.groups.filter(i => i.code === selectedItem)
     setFilteredItem(groups) 
-    console.log(groups)
-}, [selectedItem])
+  }, [selectedItem])
   // console.log(data?.results.groups)
   // End of variable declaration
   return (
@@ -58,33 +59,61 @@ const Report = () => {
       <PeriodModal status = { periodModalStatus } changePeriodModalStatus = {setPeriodModalStatus} />
       <OrganizationUnitModal status = { orgUnitModalStatus } changeOrganisationUnitStatus = { setOrgUnitModalStatus } />
       <div className='menu-parent'>
-          <div>
-            <ul>
-              <li>
+          <div className='menu-parent-container'>
+            <div className='data-set-container'>
+              <div className='indication'>
+                 <div>
+                    Data Set
+                 </div>
+                 <div>
+                    {selectedItem}
+                 </div>
+              </div>
+              <div className='data-showable'>
+                <ul>
+                    {
+                      data?.results.groups.map((element, info) => {
+                          return <li key={element.code} onClick={(e) =>{e.persist(); setSelectedItem(e.target.textContent)}}>{element.name}</li>
+                      })
+                    }
+                </ul>
+              </div>
+            </div>
+            <div className='orgunit-container'>
+              <div>
+                Organization Unit
+              </div>
+              <div className='ou-showable'>
+                <div>
                   <div>
-                      Data Sets
+                      <OrgUnitComponent/>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div className='period-container'>
+              <div>
+                Period
+              </div>
+              <div className='period-showable'>
+                <PeriodComponent/>
+              </div>
+            </div>
+            <div>
+              <div>
+                  <div>
+                      <Button name="Basic button" onClick={() => console.log('kigali')} default value="default">Load Report</Button>
                   </div>
                   <div>
-                    
+                    <Button name="Primary button" onClick={console.log('done')} primary value="Print">Print</Button>
                   </div>
-              </li>
-              <li>
-                  <div>
-                      Period
-                  </div>
-              </li>
-              <li>
-                  <div>
-                      Organization Unit
-                  </div>
-              </li>
-              <li>
-                  <div>
-                      Sections for other options
-                  </div>
-              </li>
-            </ul>
+              </div>
+              <div className='other-showable'>
+                
+              </div>
+            </div>
           </div>
+    
         </div>
         {/* <div className='report-container'>
           <div className='data-container'>
