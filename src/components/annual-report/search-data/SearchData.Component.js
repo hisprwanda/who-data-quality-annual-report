@@ -1,14 +1,11 @@
 import React, { useRef, useEffect } from 'react'
 import './styles/search_section.css'
 import { SingleSelect, SingleSelectOption, Input } from '@dhis2/ui';
-import { SearchResultComponent } from './SearchResult.Component';
 import { useState } from 'react'
 import { IndicatorGroupList } from './IndicatorGroupList';
 import { DataElementGroupList } from './DataElementGroupList';
 import { DataSetGroupList } from './DataSetGroupList';
-import {IconDimensionEventDataItem16} from '@dhis2/ui-icons'
-import { DataQuery, useDataQuery } from '@dhis2/app-runtime'
-import { allDataTypesQuery, dataElementQuery, dataSetQuery, indicatorQuery } from '../datasource/dataset/dataset.source';
+import { allDataTypesQuery, dataElementQuery, dataSetQuery, indicatorQuery, loadDataStore } from '../datasource/dataset/dataset.source';
 import { TestQuery } from '../utils/test.query';
 
 
