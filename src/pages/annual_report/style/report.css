@@ -202,7 +202,7 @@ label {
 .data-container, .period-container, .orgunit-container {
     display: flex;
     flex-direction: column;
-    gap: 1.2rem;
+    gap: 0.2rem;
     margin: 0.0rem 0rem;
     border: 1px solid #f3f3f3;
     height: auto;
@@ -233,6 +233,132 @@ label {
     align-items: center;
     padding: 0.4rem;
 }
+
+.data-section-child {
+    display: flex;
+    flex-direction: column;
+    gap: 0.8rem;
+    align-items: start;
+}
+
+.action-container {
+    display: flex;
+    padding: 1.2rem;
+    justify-content: end;
+}
+
+.action-container ul {
+    padding: 0rem;
+    margin: 0rem;
+    display: flex;
+    align-items: flex-end;
+}
+
+.action-container ul li {
+    list-style: none;
+}
+
+.menu-parent {
+    display: flex;
+    flex-direction: column;
+}
+
+.menu-parent > div {
+    margin: 0rem;
+    padding: 0rem;
+    display: flex;
+    flex-direction: row;
+    width: 100%;
+}
+
+.menu-parent > div > div > div:nth-child(1) {
+    padding: 0.7rem;
+    border-bottom: 1px solid #e0dfdf;
+    border-right: 1px solid #e0dfdf;
+}
+
+.menu-parent > div > div:nth-child(1), .menu-parent > div > div:nth-child(2), .menu-parent > div > div:nth-child(2) {
+    flex: 1 1 auto;
+}
+
+.menu-parent > div > div:nth-child(4) {
+    flex: 5 1 auto;
+    color: #fff;
+}
+
+.menu-parent > div > div:nth-child(4) > div:nth-child(1){
+    display: flex;
+    flex-direction: row;
+    margin: 0rem;
+    padding: 0rem;
+    padding: 0.2rem;
+    gap: 0.6rem;
+    align-items: end;
+    justify-content: flex-end;
+}
+
+
+
+.ou-showable, .data-showable, .period-showable {
+    display: none;
+}
+
+.data-showable ul {
+    padding: 0rem;
+    margin: 0rem;
+    margin-left: 0.5rem;
+}
+
+.data-showable ul li {
+    list-style: none;
+    margin: 0.4rem;
+    padding: 0.3rem;
+    cursor: pointer;
+}
+
+.menu-parent > div > div:nth-child(1):hover .data-showable {
+    display: block;
+    box-shadow: rgba(0, 0, 0, 0.12) 0px 1px 3px, rgba(0, 0, 0, 0.24) 0px 1px 2px;
+}
+
+.ou-showable {
+    width: 20rem;
+    margin: 0rem;
+}
+
+.menu-parent > div > div:nth-child(3):hover .period-showable {
+    display: block;
+    box-shadow: rgba(0, 0, 0, 0.12) 0px 1px 3px, rgba(0, 0, 0, 0.24) 0px 1px 2px;
+    margin-top: 0.1rem;
+}
+
+.menu-parent > div > div:nth-child(2):hover .ou-showable {
+    display: block;
+    box-shadow: rgba(0, 0, 0, 0.12) 0px 1px 3px, rgba(0, 0, 0, 0.24) 0px 1px 2px;
+}
+
+.indication {
+    display: flex;
+    flex-direction: row;
+    gap: 1.2rem;
+}
+
+.indication > div:nth-child(1) {
+    background-color: #fcf9f9;
+    height:fit-content;
+}
+
+.indication > div:nth-child(2) {
+    background-color: rgb(250, 249, 251);
+}
+
+.data-showable ul li:hover {
+    background-color: #0a1646;
+    color: #fff;
+}
+
+
+
 
 
 

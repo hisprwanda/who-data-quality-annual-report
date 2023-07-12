@@ -2,6 +2,10 @@
     width: 52rem;
 }
 
+.organisation-unit-modal-parent ul li {
+    list-style: none;
+}
+
 .organisation-unit-modal-parent > div:nth-child(1) > ul {
     display: flex;
     flex-direction: row;
