@@ -1,13 +1,24 @@
-.modal-header{
+.report-preview-container {
     display: flex;
-    justify-content: center; /* Horizontally center */
-    align-items: center; /* Vertically center */
-    width: 1048px;
-    
+    border: 1px solid #CCD6EB;
+    border-radius: 5px;
+    width: 100%;
+    justify-content: center;
+    align-items: center;
+    margin-top: 10px;
+    padding: 5px
 }
 
-.modal-image {
+
+/* .modal-image {
     margin-right: 15px;
+} */
+
+.report-preview {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    /* align-items: center; */
 }
 
 
