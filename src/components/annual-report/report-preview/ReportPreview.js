@@ -14,7 +14,7 @@ import logo from '../../../assets/images/WHO_logo.png'
 
 
 
-const ReportPreviewModal = ({isHidden, onClose, onPrintReport}) => {
+const ReportPreview = ({isHidden, onClose, onPrintReport}) => {
 
 
   return (
@@ -178,4 +178,4 @@ const ReportPreviewModal = ({isHidden, onClose, onPrintReport}) => {
   )
 }
 
-export default ReportPreviewModal
+export default ReportPreview
