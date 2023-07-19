@@ -18,18 +18,18 @@ const ReportPreview = ({isHidden, onClose, onPrintReport}) => {
 
 
   return (
-    <div className='report-preview report-preview-container'>
-        <div className='report-preview report-preview-title'>
+    <div className='report-preview-container'>
+        <div className='report-section report-preview-title'>
             <div className='modal-header'>
-                <div className='modal-image'>
-                   <img src={logo} alt="Image" className='logoImage' />   {/* TODO: will remove this logo icon */}
+                {/* <div className='modal-image'>
+                   <img src={logo} alt="Image" className='logoImage' />   TODO: will remove this logo icon
                 </div>
                 <div>
                     WHO Data Quality Annual Report | Rwanda - 2022
-                </div>
+                </div> */}
             </div>
         </div>
-        <div className='report-preview report-preview-content'>
+        <div className='report-section report-preview-content'>
 
             <div class="section-header">
                 <p>SUMMARY</p>

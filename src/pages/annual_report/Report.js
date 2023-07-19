@@ -22,6 +22,7 @@ import { useDataQuery } from '@dhis2/app-runtime'
 import { groupBy } from 'rxjs'
 import { OrgUnitComponent } from '../../components/annual-report/OrgUnit.Component'
 import { PeriodComponent } from '../../components/period/period.component'
+import ReportPreview from '../../components/annual-report/report-preview/ReportPreview'
 
 // End of imports
 
@@ -115,8 +116,8 @@ const Report = () => {
           </div>
     
         </div>
-        {/* <div className='report-container'>
-          <div className='data-container'>
+         <div className='report-container'>
+          {/*<div className='data-container'>
             <a href='#data-parent' className='first-anchor title'>Data</a>
             <div className='data-below' id='data-parent'>
               <div className='data-section-child'>
@@ -163,8 +164,10 @@ const Report = () => {
                   <Button name = "Basic button" onClick = {() => {}} basic value = "default">Print</Button>  
               </li>
             </ul>
-          </div>
-        </div> */}
+          </div>*/}
+        </div> 
+
+        <ReportPreview />
         
     </div>
   )

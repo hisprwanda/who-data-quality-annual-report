@@ -2,9 +2,13 @@ label {
     margin: 0.0rem 0rem;
 }
 .reportContainer{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
     width: 100%;
     background-color: #F3F5F7;
-    height: 100vh;
+    height: 100%;
 }
 
 .topParagraph{
@@ -261,6 +265,7 @@ label {
 .menu-parent {
     display: flex;
     flex-direction: column;
+    width: 100%;
 }
 
 .menu-parent > div {
