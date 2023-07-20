@@ -12,16 +12,20 @@ import React from 'react'
 import MenuBar from '../../components/menu-bar/MenuBar'
 import './style/report.css'
 import { resources } from '../../assets/str-resources/report-section'
-import { Button } from '@dhis2/ui'
+import { Button, IconArrowLeftMulti24, IconArrowRightMulti24, IconArrowLeft24, IconArrowRight24, IconClock16 } from '@dhis2/ui'
 import { DataSetModal } from '../../components/annual-report/modal/data-sets/DataSetModal'
 import { PeriodModal } from '../../components/annual-report/modal/period/PeriodModal'
 import { OrganizationUnitModal } from '../../components/annual-report/modal/organizationunit/OrganizationUnitModal'
-import { SingleSelect, SingleSelectOption } from '@dhis2/ui'
 import { loadDataStore } from '../../components/annual-report/datasource/dataset/dataset.source'
 import { useDataQuery } from '@dhis2/app-runtime'
 import { groupBy } from 'rxjs'
 import { OrgUnitComponent } from '../../components/annual-report/OrgUnit.Component'
 import { PeriodComponent } from '../../components/period/period.component'
+import tb_positive from '../../assets/images/tb_positive.svg'
+import down_allow from '../../assets/images/downarrow.png'
+import { useSearchParams } from 'react-router-dom'
+import ReportPreview from '../../components/annual-report/report-preview/ReportPreview'
+
 
 // End of imports
 
@@ -41,15 +45,39 @@ const Report = () => {
   // End of hook for managing org unit modal
   let [_dataStore, setDataStore] = useState(loadDataStore)
 
+  // Hook for managing levels
+  let [selectedLevel, setSelectedLevel] = useState("Select Levels")
+  // Hook for managing groups
+  let [selectedGroup, setSelectedGroup] = useState("Select Groups")
+
+  let [reportStatus, setReportStatus] = useState(false)
+
   let [selectedItem, setSelectedItem] = useState('0')
   let [filteredItem, setFilteredItem] = useState([])
   let [_selectedPeriod, setSelectedPeriod] = useState('2000')
   let [_selectedOrgUnit, setSelectedOrgUnit] = useState('Nyamata')
   let {loading, error, data} = useDataQuery(_dataStore, {}, {}, {}, {}, {})
+  
+  // Definition of use effect hooks
   useEffect(() => {
     let groups = data?.results.groups.filter(i => i.code === selectedItem)
     setFilteredItem(groups) 
   }, [selectedItem])
+
+  useEffect(() => {
+    reportStatus != reportStatus
+  }, reportStatus)
+
+  useEffect(() => {
+    console.log(selectedGroup);
+  }, [selectedGroup])
+
+  useEffect(() => {
+    console.log(selectedLevel)
+  }, [selectedLevel])
+
+
+
   // console.log(data?.results.groups)
   // End of variable declaration
   return (
@@ -84,11 +112,54 @@ const Report = () => {
                 Organization Unit
               </div>
               <div className='ou-showable'>
-                <div>
                   <div>
                       <OrgUnitComponent/>
                   </div>
-                </div>
+                  <div className='dividing'>
+                    
+                  </div>
+                  <div className='level-and-groups'>
+                      <div className='level'>
+                          <div className='select-title'>
+                            <div className='select-title-data'>
+                              {selectedLevel}
+                            </div>
+                            <div className='select-title-icon'>
+                              <img src={down_allow}/>
+                            </div>
+                          </div>
+                          <div className='select-options'>
+                            <ul>
+                              <li onClick={(e) =>{e.persist(); setSelectedLevel(e.target.textContent)}}>
+                                  Province
+                              </li>
+                              <li onClick={(e) =>{e.persist(); setSelectedLevel(e.target.textContent)}}>
+                                  District
+                              </li>
+                            </ul>
+                          </div>
+                      </div>
+                      <div className='group'>
+                          <div className='select-title'>
+                              <div className='select-title-data'>
+                                {selectedGroup}
+                              </div>
+                              <div className='select-title-icon'>
+                                <img src={down_allow}/>
+                              </div>
+                          </div>
+                          <div className='select-options'>
+                              <ul>
+                                <li onClick={(e) =>{e.persist(); setSelectedGroup(e.target.textContent)}}>
+                                    Military Hospital
+                                </li>
+                                <li onClick={(e) =>{e.persist(); setSelectedGroup(e.target.textContent)}}>
+                                    District Province
+                                </li>
+                              </ul>
+                          </div>
+                      </div>
+                  </div>
               </div>
             </div>
             <div className='period-container'>
@@ -96,76 +167,109 @@ const Report = () => {
                 Period
               </div>
               <div className='period-showable'>
-                <PeriodComponent/>
+                  <div className='period-showable-container'>
+                      <div className='period-selection'>
+                        <div className='period-section-container'>
+                          <div className='select-period-type'>
+                            <ul>
+                              <li>
+                                <a href='#relative'>
+                                  Relative Period
+                                </a>
+                              </li>
+                              <li>
+                                <a href = '#fixed'>
+                                  Fixed Period
+                                </a>
+                              </li>
+                            </ul>
+                          </div>
+                          <div className='select-period-result'>
+                          <ul>
+                              <li>
+                                  <span><IconClock16/> Today</span>
+                              </li>
+                              <li>
+                                  <span><IconClock16/> Yesterday</span>
+                              </li>
+                              <li>
+                                  <span><IconClock16/> Last 7 days</span>
+                              </li>
+                              <li>
+                                  <span><IconClock16/> Last 14 days</span>
+                              </li>
+                              <li>
+                                  <span><IconClock16/> Last 30 days</span>
+                              </li>
+                              <li>
+                                  <span><IconClock16/> Last 60 days</span>
+                              </li>
+                              <li>
+                                  <span><IconClock16/> Last 90 days</span>
+                              </li>
+                              <li>
+                                  <span><IconClock16/> Last 180 days</span>
+                              </li>
+                          </ul>
+                          </div>
+                        </div>
+                      </div>
+                      <div className='period-middle-section'>
+                          <ul>
+                                <li>
+                                    <Button name="Small button" onClick={() => {}} small value="default">
+                                        <IconArrowRightMulti24/>
+                                    </Button>
+                                </li>
+                                <li>
+                                    <Button name="Small button" onClick={() => {}} small value="default">
+                                        <IconArrowLeft24/>
+                                    </Button>
+                                </li>
+                                <li>
+                                    <Button name="Small button" onClick={() => {}} small value="default">
+                                        <IconArrowLeftMulti24/>
+                                    </Button>
+                                </li>
+                                <li>
+                                    <Button name="Small button" onClick={() => {}} small value="default">
+                                        <IconArrowRight24/>
+                                    </Button>
+                                </li>
+                            </ul>
+                      </div>
+                      <div className='period-result'>
+                        <div>
+                          Selected Period
+                        </div>
+                        <div>
+                        </div>
+                      </div>
+                  </div>
               </div>
             </div>
             <div>
               <div>
                   <div>
-                      <Button name="Basic button" onClick={() => console.log('kigali')} default value="default">Load Report</Button>
+                      <Button name="Basic button" onClick={() => setReportStatus(true)} default value="default">Load Report</Button>
                   </div>
                   <div>
                     <Button name="Primary button" onClick={console.log('done')} primary value="Print">Print</Button>
                   </div>
               </div>
               <div className='other-showable'>
-                
+                    How is it now
               </div>
             </div>
           </div>
     
         </div>
-        {/* <div className='report-container'>
-          <div className='data-container'>
-            <a href='#data-parent' className='first-anchor title'>Data</a>
-            <div className='data-below' id='data-parent'>
-              <div className='data-section-child'>
-                  <label>Group</label>
-                  <SingleSelect className="select" onChange={(e) => {setSelectedItem(e.selected)}} selected={selectedItem}>
-                    <SingleSelectOption label = "Please select a group" value = "0"/>
-                    {
-                      data?.results.groups.map((element, info) => {
-                          return <SingleSelectOption label = {element.name} value={element.code} key = {element.code}/>
-                          console.log(element.code)
-                      })
-                    }
-                  </SingleSelect>
-              </div>
-            </div>
-          </div>
-          <div className='period-container'>
-            <a href='#period-parent' className='period-anchor title'>Period</a>
-            <div id='period-parent'>
-              <div className='data-section-child'>
-                  <Button name="basic_button" onClick={() => setPeriodModalStatus(false) } value="default" className='button'>
-                    <span>Choose Period</span>
-                  </Button>
-              </div>
-            </div>
-          </div>
-          <div className='orgunit-container'>
-            <a href='#orgunit-parent' className='orgunit-anchor title'>Organization Unit</a>
-            <div id='orgunit-parent'>
-            <div className='data-section-child'>
-                  <Button name="basic_button" onClick={() => setOrgUnitModalStatus(false) } value="default" className='button'>
-                    <span>Choose Organization Unit</span>
-                  </Button>
-              </div>
-            </div>
-          </div>
-          <div className='action-container'>
-
-            <ul>
-              <li>
-                  <Button name = "Primary button" onClick = {() => {}} primary value = "default">Generate</Button>
-              </li>
-              <li>
-                  <Button name = "Basic button" onClick = {() => {}} basic value = "default">Print</Button>  
-              </li>
-            </ul>
-          </div>
-        </div> */}
         
+        <div className='report-section'>
+          {reportStatus}
+          {reportStatus && <ReportPreview/>}
+          
+        </div>
     </div>
   )
 }

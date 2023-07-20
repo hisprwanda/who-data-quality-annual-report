@@ -1,24 +1,14 @@
 .report-preview-container {
-    display: flex;
-    border: 1px solid #CCD6EB;
+    box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
     border-radius: 5px;
-    width: 100%;
-    justify-content: center;
-    align-items: center;
-    margin-top: 10px;
-    padding: 5px
+    border: 1px solid #5b92e5;
 }
 
-
-/* .modal-image {
-    margin-right: 15px;
-} */
 
 .report-preview {
     display: flex;
     flex-direction: column;
     justify-content: center;
-    /* align-items: center; */
 }
 
 
@@ -26,5 +16,5 @@
     background-color: #5b92e5;
     color: #FFF;
     padding: 5px;
-    font-size: 16px;;
+    font-size: 16px;
 }
