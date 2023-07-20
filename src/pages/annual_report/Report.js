@@ -52,10 +52,11 @@ const Report = () => {
 
   let [reportStatus, setReportStatus] = useState(false)
 
-  let [selectedItem, setSelectedItem] = useState('0')
+  let [selectedItem, setSelectedItem] = useState('Choose a data set')
   let [filteredItem, setFilteredItem] = useState([])
   let [_selectedPeriod, setSelectedPeriod] = useState('2000')
   let [_selectedOrgUnit, setSelectedOrgUnit] = useState('Nyamata')
+  let [relativePeriodSelected, setRelativePeriodSelected] = useState('')
   let {loading, error, data} = useDataQuery(_dataStore, {}, {}, {}, {}, {})
   
   // Definition of use effect hooks
@@ -89,12 +90,15 @@ const Report = () => {
       <div className='menu-parent'>
           <div className='menu-parent-container'>
             <div className='data-set-container'>
-              <div className='indication'>
+              <div className='dataset-indication'>
                  <div>
-                    Data Set
+                    Data set
                  </div>
                  <div>
                     {selectedItem}
+                 </div>
+                 <div>
+                  <img src={down_allow}/>
                  </div>
               </div>
               <div className='data-showable'>
@@ -108,8 +112,16 @@ const Report = () => {
               </div>
             </div>
             <div className='orgunit-container'>
-              <div>
-                Organization Unit
+              <div className='ou-indication'>
+                <div>
+                    Organisation Unit
+                 </div>
+                 <div>
+                    {_selectedOrgUnit}
+                 </div>
+                 <div>
+                  <img src={down_allow}/>
+                 </div>
               </div>
               <div className='ou-showable'>
                   <div>
@@ -163,9 +175,17 @@ const Report = () => {
               </div>
             </div>
             <div className='period-container'>
-              <div>
-                Period
-              </div>
+                <div className='period-indication'>
+                  <div>
+                    Period
+                  </div>
+                  <div>
+                    {_selectedPeriod}
+                  </div>
+                  <div>
+                    <img src={down_allow}/>
+                  </div>
+                </div>
               <div className='period-showable'>
                   <div className='period-showable-container'>
                       <div className='period-selection'>
@@ -173,44 +193,91 @@ const Report = () => {
                           <div className='select-period-type'>
                             <ul>
                               <li>
-                                <a href='#relative'>
+                                <a id='relative' href='#'>
                                   Relative Period
                                 </a>
                               </li>
                               <li>
-                                <a href = '#fixed'>
+                                <a id = 'fixed' href='#'>
                                   Fixed Period
                                 </a>
                               </li>
                             </ul>
                           </div>
+                          <div className='period-suboptions'>
+                            <div className='period-suboptions-container'>
+                              <div className='period-suboptions-title'>
+                                Period Type
+                              </div>
+                              <div className='period-suboptions-control'>
+                                <div className='group'>
+                                  <div className='select-title'>
+                                    <div className='select-title-data'>
+                                      {relativePeriodSelected}
+                                    </div>
+                                    <div className='select-title-icon'>
+                                      <img src={down_allow}/>
+                                    </div>
+                                  </div>
+                                  <div className='select-options'>
+                                    <ul>
+                                      <li onClick={(e) =>{e.persist(); setRelativePeriodSelected(e.target.textContent)}}>
+                                        Days
+                                      </li>
+                                      <li onClick={(e) =>{e.persist(); setRelativePeriodSelected(e.target.textContent)}}>
+                                        Weeks
+                                      </li>
+                                      <li onClick={(e) =>{e.persist(); setRelativePeriodSelected(e.target.textContent)}}>
+                                        Months
+                                      </li>
+                                      <li onClick={(e) =>{e.persist(); setRelativePeriodSelected(e.target.textContent)}}>
+                                        Bi-Months
+                                      </li>
+                                      <li onClick={(e) =>{e.persist(); setRelativePeriodSelected(e.target.textContent)}}>
+                                        Quarters
+                                      </li>
+                                      <li onClick={(e) =>{e.persist(); setRelativePeriodSelected(e.target.textContent)}}>
+                                        Six Months
+                                      </li>
+                                      <li onClick={(e) =>{e.persist(); setRelativePeriodSelected(e.target.textContent)}}>
+                                        Financial Year
+                                      </li>
+                                      <li onClick={(e) =>{e.persist(); setRelativePeriodSelected(e.target.textContent)}}>
+                                        Years
+                                      </li>
+                                    </ul>
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
                           <div className='select-period-result'>
-                          <ul>
-                              <li>
-                                  <span><IconClock16/> Today</span>
-                              </li>
-                              <li>
-                                  <span><IconClock16/> Yesterday</span>
-                              </li>
-                              <li>
-                                  <span><IconClock16/> Last 7 days</span>
-                              </li>
-                              <li>
-                                  <span><IconClock16/> Last 14 days</span>
-                              </li>
-                              <li>
-                                  <span><IconClock16/> Last 30 days</span>
-                              </li>
-                              <li>
-                                  <span><IconClock16/> Last 60 days</span>
-                              </li>
-                              <li>
-                                  <span><IconClock16/> Last 90 days</span>
-                              </li>
-                              <li>
-                                  <span><IconClock16/> Last 180 days</span>
-                              </li>
-                          </ul>
+                            <ul>
+                                <li>
+                                    <span><IconClock16/> Today</span>
+                                </li>
+                                <li>
+                                    <span><IconClock16/> Yesterday</span>
+                                </li>
+                                <li>
+                                    <span><IconClock16/> Last 7 days</span>
+                                </li>
+                                <li>
+                                    <span><IconClock16/> Last 14 days</span>
+                                </li>
+                                <li>
+                                    <span><IconClock16/> Last 30 days</span>
+                                </li>
+                                <li>
+                                    <span><IconClock16/> Last 60 days</span>
+                                </li>
+                                <li>
+                                    <span><IconClock16/> Last 90 days</span>
+                                </li>
+                                <li>
+                                    <span><IconClock16/> Last 180 days</span>
+                                </li>
+                            </ul>
                           </div>
                         </div>
                       </div>
@@ -256,9 +323,6 @@ const Report = () => {
                   <div>
                     <Button name="Primary button" onClick={console.log('done')} primary value="Print">Print</Button>
                   </div>
-              </div>
-              <div className='other-showable'>
-                    How is it now
               </div>
             </div>
           </div>
