@@ -318,7 +318,7 @@ const Report = () => {
             <div>
               <div>
                   <div>
-                      <Button name="Basic button" onClick={() => setReportStatus(true)} default value="default">Load Report</Button>
+                      <Button name="Basic button" onClick={() => setReportStatus(true)} default value="default">Generate Report</Button>
                   </div>
                   <div>
                     <Button name="Primary button" onClick={console.log('done')} primary value="Print">Print</Button>
