@@ -1,21 +1,20 @@
 .report-preview-container {
-    width: 80%;
-    border: 1px solid #CCD6EB;
+    box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
     border-radius: 5px;
-    margin-top: 20px;
-    padding: 8px
+    border: 1px solid #5b92e5;
 }
 
 
-/* .modal-image {
-    margin-right: 15px;
-} */
-
+.report-preview {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
 
 
 .section-sub-header, .section-header{
     background-color: #5b92e5;
     color: #FFF;
     padding: 5px;
-    font-size: 16px;;
+    font-size: 16px;
 }
