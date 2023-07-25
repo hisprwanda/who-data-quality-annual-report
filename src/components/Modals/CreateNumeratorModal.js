@@ -17,10 +17,23 @@ import {
     Transfer
   } from '@dhis2/ui'
   import { Chip } from "@dhis2/ui-core";
+  import { useDataQuery, useAlert } from "@dhis2/app-runtime";
+
 
   import '../Modals/edit_modal_styles.css'
 import { getNumeratorMemberGroups } from '../../utils/numeratorsMetadataData';
 import { generateNumeratorCode } from '../../utils/generateNumeratorCode';
+
+
+const dataElementsQuery = {
+    elements: {
+      resource: 'dataElementGroups',
+      params: {
+        paging: false,
+      }
+    }
+  };
+
 
 const CreateNumeratorModal = ({configurations, onClose, isHidden, onCreate}) => {
     const [toggleStateModal, setToggleStateModal] = useState(1);
@@ -30,6 +43,13 @@ const CreateNumeratorModal = ({configurations, onClose, isHidden, onCreate}) => 
     const [isHiddenElements, setIsHiddenElements] = useState(true);
     const [selectedElements, setSelectedElements] = useState([]);
     const [selectedDataSets, setSelectedDataSets] = useState('');
+    let updatedDataElementGroups = [];
+
+    // run the querry
+    const { loading: lementGroupsLoading, error:elementGroupsError, data:datalementGroupsData, refetch:lementGroupsRefetch } = useDataQuery(dataElementsQuery, {
+        lazy: false,
+    });
+
 
     const dataElements = [
             {
@@ -48,6 +68,22 @@ const CreateNumeratorModal = ({configurations, onClose, isHidden, onCreate}) => 
                 id: 'DsmvMflRNm3'
             }
     ]
+
+    if (datalementGroupsData) {
+        console.log("*** lementGroups data: ", datalementGroupsData.elements.dataElementGroups);
+        let deGroups  = datalementGroupsData.elements.dataElementGroups;
+
+        updatedDataElementGroups = deGroups.map(({ id, displayName }) => ({
+            value: id,
+            label: displayName
+          }));
+
+          console.log('updatedDataElementGroups ', updatedDataElementGroups);
+    
+      }
+    
+      
+
     const dataElementGroups = [
         {
             label: '009-ANC',
@@ -283,10 +319,9 @@ const CreateNumeratorModal = ({configurations, onClose, isHidden, onCreate}) => 
                     filterLabel="Select or search below"
                     filterPlaceholder="Search"
                     filterable
-                    maxSelections={1}
                     onChange={(selected) => 
                         setSelectedElementGroups(selected.selected)}
-                    options={dataElementGroups}
+                    options={updatedDataElementGroups}
                     selected={selectedElementGroups}
                 />
             </ModalContent>
