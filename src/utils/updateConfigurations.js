@@ -131,15 +131,14 @@ const updateNumerator = (numerators, updatedNumerator) => {
 }
 
 const updateGroups = (groups, newNumeratorInfo) => {
+  console.log('Groups before: ', groups);
   const chosenGroups = newNumeratorInfo.groups
-
+  console.log('Chosen groups ', chosenGroups);
   for (const key in chosenGroups) {
-    if (Object.hasOwnProperty.call(chosenGroups, key)) {
       const chosenGroup = chosenGroups[key];
         console.log('chosen group: ', chosenGroup);
 
         for (const key in groups) {
-          if (Object.hasOwnProperty.call(groups, key)) {
             const currentGroup = groups[key];
               if (currentGroup.code == chosenGroup) {
                 currentGroup.members.push(newNumeratorInfo.code);
@@ -147,10 +146,9 @@ const updateGroups = (groups, newNumeratorInfo) => {
               }else {
                 console.log('Not equal');
               }
-
-          }
         }
-    }
   }  
+  console.log('Groups after: ', groups);
+
   return groups;
 }
