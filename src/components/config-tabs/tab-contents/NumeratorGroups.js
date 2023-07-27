@@ -12,14 +12,16 @@ import {
     TableRow,
     TableRowHead,
     IconSubtractCircle16,
-    IconAdd16,	
+    IconAdd16,
+    SingleSelect,
+    SingleSelectOption	
   } from '@dhis2/ui'
 import { getNumeratorsInGroup } from '../../../utils/numeratorsMetadataData';
 
 export const NumeratorGroups = ({toggleState, configurations}) => {
 const [groups, setGroups] = useState(null)
 const [numerators, setNumerators] = useState(null);
-
+const [selectedNumerator, setSelectedNumerator] = useState(null)
 
   useEffect(() => {
     setGroups(configurations.groups)
@@ -47,24 +49,22 @@ const [numerators, setNumerators] = useState(null);
                       
     
                       <TableRow>
-                        {/* <TableCell>
-                          <DropdownButton
-                            component={
-                              <FlyoutMenu>
-                                {numerators.map((numerator, key) =>
-                                  <MenuItem 
-                                    key={key} 
-                                    label={numerator.name} 
-                                  />
+                        <TableCell>
+
+                        <SingleSelect className="select" 
+                                onChange={(selected)=> setSelectedNumerator(selected.selected)} 
+                                placeholder="Select Dataset"
+                                selected={selectedNumerator}
+                            >
+                                {numerators.map((numerator, key) => 
+                                    <SingleSelectOption label={numerator.name} value={numerator.code} key={key} />
                                 )}
-                              </FlyoutMenu>
-                            }
-                            name="buttonName" value="buttonValue" > Select item to add to General Service Statistics group...
-                        </DropdownButton>
-                        </TableCell> */}
+                            </SingleSelect>
+ 
+                        </TableCell>
                         <TableCell>
                         <Button
-                            name="Primary button" onClick={() => window.alert('Make this a transfer ui and!')} 
+                            name="Primary button" onClick={() => console.log(selectedNumerator)} 
                             primary button value="default" icon={<IconAdd16 />}> Add Numerators
                         </Button>
                         </TableCell>
