@@ -1,4 +1,4 @@
-const reducer = function(state = { category: 'Contribution' }, action ) {
+const reducer = function(state = { category: 'Is it known ?' }, action ) {
 
     switch(action.type) {
         case 'Change':
@@ -9,7 +9,7 @@ const reducer = function(state = { category: 'Contribution' }, action ) {
         default: 
             return state
     }  
-      
+
 }
 
 export default reducer;

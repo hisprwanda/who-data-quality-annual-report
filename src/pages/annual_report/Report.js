@@ -20,14 +20,16 @@ import { useDataQuery } from '@dhis2/app-runtime'
 import { OrgUnitComponent } from '../../components/annual-report/OrgUnit.Component'
 import down_allow from '../../assets/images/downarrow.png'
 import ReportPreview from '../../components/annual-report/report-preview/ReportPreview'
-import { useDispatch } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 
 // End of imports
 
 // Start of the functional component definition
 const Report = function() {
-  // Redux state selector
-  let stateSelector = 'a'
+  // Redux state selector hook
+  let stateSelector = useSelector(state => state.category)
+  // Redux state dispatch hook
+  let dispatch = useDispatch()
   // Hook for managing data set modals
   let [dataSetModalStatus, setDataSetModalStatus] = useState(true)
   // End of hook for managing data set modals
@@ -73,8 +75,6 @@ const Report = function() {
     console.log(selectedLevel)
   }, [selectedLevel])
 
-
-
   // console.log(data?.results.groups)
   // End of variable declaration
   return (
@@ -88,7 +88,7 @@ const Report = function() {
             <div className='data-set-container'>
               <div className='dataset-indication'>
                  <div>
-                    Data set {stateSelector}
+                    Data set
                  </div>
                  <div>
                     {selectedItem}
