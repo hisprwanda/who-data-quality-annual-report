@@ -27,7 +27,7 @@ import { useDispatch, useSelector } from 'react-redux'
 // Start of the functional component definition
 const Report = function() {
   // Redux state selector hook
-  let stateSelector = useSelector(state => state.category)
+  let stateSelector = useSelector(state => state)
   // Redux state dispatch hook
   let dispatch = useDispatch()
   // Hook for managing data set modals
@@ -50,10 +50,10 @@ const Report = function() {
 
   let [reportStatus, setReportStatus] = useState(false)
 
-  let [selectedItem, setSelectedItem] = useState('Choose a data set')
+  let selectedItem = stateSelector.selectedValue.dataSet
   let [filteredItem, setFilteredItem] = useState([])
-  let [_selectedPeriod, setSelectedPeriod] = useState('2000')
-  let [_selectedOrgUnit, setSelectedOrgUnit] = useState('Nyamata')
+  let _selectedPeriod = stateSelector.selectedValue.period
+  let _selectedOrgUnit = stateSelector.selectedValue.orgUnit
   let [relativePeriodSelected, setRelativePeriodSelected] = useState('')
   let {loading, error, data} = useDataQuery(_dataStore, {}, {}, {}, {}, {})
   
@@ -74,6 +74,10 @@ const Report = function() {
   useEffect(() => {
     console.log(selectedLevel)
   }, [selectedLevel])
+
+  let setSelectedDataSet = function(chosenElement) {
+    dispatch( { type: 'Change Dataset', payload: { el: chosenElement } })
+  }
 
   // console.log(data?.results.groups)
   // End of variable declaration
@@ -101,7 +105,7 @@ const Report = function() {
                 <ul>
                     {
                       data?.results.groups.map((element, info) => {
-                          return <li key={element.code} onClick={(e) =>{e.persist(); setSelectedItem(e.target.textContent)}}>{element.name}</li>
+                          return <li key={element.code} onClick={(e) =>{e.persist(); setSelectedDataSet(e.target.textContent)}}>{element.name}</li>
                       })
                     }
                 </ul>
