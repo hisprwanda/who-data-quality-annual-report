@@ -18,7 +18,10 @@
     "@dhis2/app-runtime": "^3.9.3",
     "@dhis2/ui": "^8.13.3",
     "@dhis2/ui-core": "^6.24.0",
+    "@reduxjs/toolkit": "^1.9.5",
+    "react-redux": "5.1.2",
     "react-router-dom": "^6.11.1",
+    "redux": "^4.2.1",
     "rxjs": "^7.8.1"
   }
 }

@@ -5,9 +5,9 @@ import classes from './App.module.css'
 
 import Report from './pages/annual_report/Report'
 import Configurations from './pages/configurations/Configurations'
-
-import { BrowserRouter, Routes, Route } from "react-router-dom";
-
+import { BrowserRouter, Routes, Route } from "react-router-dom"
+import { Provider } from 'react-redux'
+import store from './components/annual-report/store/Index'
 
 const query = {
     me: {
@@ -17,17 +17,18 @@ const query = {
 
 const MyApp = () => (
     <div className={classes.container}>
-        <BrowserRouter>
-          <Routes>
-            <Route path="/">
-              <Route index element={<Report />} />
-              <Route path="configurations">
-                <Route index element={<Configurations />} />
-              </Route>
-              
-            </Route>
-          </Routes>
-        </BrowserRouter>
+          <BrowserRouter>
+            <Provider store={store}>
+              <Routes>
+                  <Route path="/">
+                    <Route index element={<Report />} />
+                    <Route path="configurations">
+                      <Route index element={<Configurations />} />
+                    </Route>
+                  </Route>
+              </Routes>
+            </Provider>
+          </BrowserRouter>
     </div>
 )
 

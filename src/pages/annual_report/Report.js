@@ -11,27 +11,23 @@ import {useState, useEffect} from 'react'
 import React from 'react'
 import MenuBar from '../../components/menu-bar/MenuBar'
 import './style/report.css'
-import { resources } from '../../assets/str-resources/report-section'
 import { Button, IconArrowLeftMulti24, IconArrowRightMulti24, IconArrowLeft24, IconArrowRight24, IconClock16 } from '@dhis2/ui'
 import { DataSetModal } from '../../components/annual-report/modal/data-sets/DataSetModal'
 import { PeriodModal } from '../../components/annual-report/modal/period/PeriodModal'
 import { OrganizationUnitModal } from '../../components/annual-report/modal/organizationunit/OrganizationUnitModal'
 import { loadDataStore } from '../../components/annual-report/datasource/dataset/dataset.source'
 import { useDataQuery } from '@dhis2/app-runtime'
-import { groupBy } from 'rxjs'
 import { OrgUnitComponent } from '../../components/annual-report/OrgUnit.Component'
-import { PeriodComponent } from '../../components/period/period.component'
-import tb_positive from '../../assets/images/tb_positive.svg'
 import down_allow from '../../assets/images/downarrow.png'
-import { useSearchParams } from 'react-router-dom'
 import ReportPreview from '../../components/annual-report/report-preview/ReportPreview'
-
+import { useDispatch } from 'react-redux'
 
 // End of imports
 
 // Start of the functional component definition
-const Report = () => {
-
+const Report = function() {
+  // Redux state selector
+  let stateSelector = 'a'
   // Hook for managing data set modals
   let [dataSetModalStatus, setDataSetModalStatus] = useState(true)
   // End of hook for managing data set modals
@@ -92,7 +88,7 @@ const Report = () => {
             <div className='data-set-container'>
               <div className='dataset-indication'>
                  <div>
-                    Data set
+                    Data set {stateSelector}
                  </div>
                  <div>
                     {selectedItem}
@@ -330,7 +326,6 @@ const Report = () => {
         </div>
         
         <div className='report-section'>
-          {reportStatus}
           {reportStatus && <ReportPreview/>}
           
         </div>
