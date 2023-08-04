@@ -48,7 +48,7 @@ export const getNumeratorDataElement = (configurations, dataID) => {
   }
 }
 
-export const getNumeratorsInGroup = (numerators, group) => {
+export const getNumeratorsInGroup = (numerators, group, onDeleteNumerator) => {
   const numeratorsInGroup = [];
 
   for (let key in numerators) {
@@ -68,8 +68,8 @@ export const getNumeratorsInGroup = (numerators, group) => {
         </TableCell>
         <TableCell>
           <Button
-              name="Primary button" onClick={() => window.alert('It works!')} 
-              basic button value="default" icon={<IconSubtractCircle16 />}> Clear
+              name="Primary button" onClick={() => onDeleteNumerator(group.code, numerator.code)} 
+              destructive basic button value="default" icon={<IconSubtractCircle16 />}> Delete
               </Button>
         </TableCell>
       </TableRow>

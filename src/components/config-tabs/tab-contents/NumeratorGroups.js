@@ -55,8 +55,6 @@ const [mutate, { error, data }] = useDataMutation( updateConfigurationsMutation 
     } )
 
   const handleAddNumerator = async(numerator, group) => {
-    //TODO: implement delete/remove
-
     if (group.members.includes(numerator)) {
       const message = 'This numerator is already a member of this group';
       show({ message, status: 'error' })  
@@ -76,6 +74,17 @@ const [mutate, { error, data }] = useDataMutation( updateConfigurationsMutation 
 
     }
   } 
+
+  const onDeleteNumerator = async(group, numerator) => {
+    const groupUpdateInfo = {
+      groupCode: group,
+      numeratorCode: numerator
+    }
+    const updatedConfigurations = updateConfigurations(configurations, 'groups', 'delete', null, groupUpdateInfo);
+    await mutate({ configurations: updatedConfigurations })
+    const message = 'Numerator deleted successfully from the group';
+    show({ message, status: 'success' });
+  }
 
   useEffect(() => {
     setGroups(configurations.groups)
@@ -99,7 +108,7 @@ const [mutate, { error, data }] = useDataMutation( updateConfigurationsMutation 
                         </TableRowHead>
                     </TableHead>
                     <TableBody>
-                          {getNumeratorsInGroup(numerators, group)}
+                          {getNumeratorsInGroup(numerators, group, onDeleteNumerator)}
                       
     
                       <TableRow>
@@ -130,73 +139,6 @@ const [mutate, { error, data }] = useDataMutation( updateConfigurationsMutation 
             :
             ""
             }
-              
-              <div className="group">
-                <h2>HIV/Aids</h2>
-                <Table>
-                  <TableHead>
-                      <TableRowHead>
-                          <TableCellHead>Data</TableCellHead>
-                          <TableCellHead>Action</TableCellHead>
-                      </TableRowHead>
-                  </TableHead>
-                  <TableBody>
-                    <TableRow>
-                        <TableCell>OPD visits</TableCell>
-                        <TableCell>
-                          <Button
-                              name="Primary button" onClick={() => window.alert('It works!')} 
-                              basic button value="default" icon={<IconSubtractCircle16 />}> Clear
-                          </Button>
-                        </TableCell>
-                    </TableRow>
-                    
-                    <TableRow>
-                        <TableCell>PLHIV in HIV care</TableCell>
-                        <TableCell>
-                          <Button
-                              name="Primary button" onClick={() => window.alert('It works!')} 
-                              basic button value="default" icon={<IconSubtractCircle16 />}> Clear
-                          </Button>
-                        </TableCell>
-                    </TableRow>
-                    <TableRow>
-                        <TableCell>PLHIV on ART	</TableCell>
-                        <TableCell>
-                          <Button
-                              name="Primary button" onClick={() => window.alert('It works!')} 
-                              basic button value="default" icon={<IconSubtractCircle16 />}> Clear
-                          </Button>
-                        </TableCell>
-                    </TableRow>
-                    <TableRow>
-                        <TableCell>Pregnant women on ART (PMTCT)</TableCell>
-                        <TableCell>
-                          <Button
-                              name="Primary button" onClick={() => window.alert('It works!')} 
-                              basic button value="default" icon={<IconSubtractCircle16 />}> Clear
-                          </Button>
-                        </TableCell>
-                    </TableRow>
-
-
-                    <TableRow>
-                      <TableCell>
-                        <DropdownButton
-                          component={<FlyoutMenu><MenuItem label="Item 1" /><MenuItem label="Item 2" /><MenuItem label="Item 3" /></FlyoutMenu>}
-                          name="buttonName" value="buttonValue" > Select item to add to General Service Statistics group...
-                      </DropdownButton>
-                      </TableCell>
-                      <TableCell>
-                      <Button
-                          name="Primary button" onClick={() => window.alert('It works!')} 
-                          primary button value="default" icon={<IconAdd16 />}> Add
-                      </Button>
-                      </TableCell>
-                    </TableRow>
-                    </TableBody>
-                </Table>
-              </div>
               
             </div>
         </div>

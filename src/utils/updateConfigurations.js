@@ -27,7 +27,7 @@ export const clearConfigurations = (configurations, configurationType, updateTyp
         groups
     }
 
-    console.log('updated configurations: ', configurationsToSave);
+    // console.log('updated configurations: ', configurationsToSave);
 
     return configurationsToSave;
 }
@@ -116,7 +116,7 @@ export const updateConfigurations = (configurations, configurationType, updateTy
         denominatorRelations,
         externalRelations,
         numeratorRelations,
-        groups: addNumeratorToGroups(groups, groupUpdateInfo)
+        groups: updateOneGroup(groups, groupUpdateInfo, updateType)
       }
       break;
   
@@ -125,7 +125,7 @@ export const updateConfigurations = (configurations, configurationType, updateTy
   }
 
 
-console.log('updated configurations: ', configurationsToSave);
+// console.log('updated configurations: ', configurationsToSave);
 
 return configurationsToSave;
 }
@@ -178,15 +178,43 @@ const updateGroups = (groups, newNumeratorInfo) => {
   return groups;
 }
 
-const addNumeratorToGroups = (groups, groupUpdateInfo) => {
-        for (const key in groups) {
-            const currentGroup = groups[key];
-              if (currentGroup.code == groupUpdateInfo.groupCode) {
-                console.log('currentGroup', currentGroup)
-                currentGroup.members.push(groupUpdateInfo.numeratorCode);
-                console.log('current group after update: ', currentGroup);
+const updateOneGroup = (groups, groupUpdateInfo, updateType) => {
+        switch (updateType) {
+          case 'update':
+            console.log('now updating...')
+            for (const key in groups) {
+                const currentGroup = groups[key];
+                  if (currentGroup.code == groupUpdateInfo.groupCode) {
+                    currentGroup.members.push(groupUpdateInfo.numeratorCode);
+                    return groups;
+                  }
+            }
+            break;
+          case 'delete':
+            console.log('now deleting...')
+
+            const updatedGroups = groups.map(group => {
+              if (group.code == groupUpdateInfo.groupCode) {
+                group.members = group.members.filter(member => member != groupUpdateInfo.numeratorCode)
+                
               }
+              return group;
+            });
+            console.log('Updated groups ', updatedGroups);
+            return updatedGroups;
+
+          //   for (const key in groups) {
+          //     const currentGroup = groups[key];
+          //       if (currentGroup.code == groupUpdateInfo.groupCode) {
+          //         let newGroup = currentGroup.members.filter(numerator => numerator !== groupUpdateInfo.numeratorCode);
+          //         let newGroups = groups.filter(group => group.code !== newGroup.code );
+          //         newGroups.push(newGroup);
+          //         return newGroups
+          //       }
+          // }
+            break;
+          default:
+            break;
         }
 
-  return groups;
 }
