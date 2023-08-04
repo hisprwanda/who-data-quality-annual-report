@@ -1,4 +1,6 @@
 import {useEffect, useState} from 'react'
+import { useDataMutation, useDataQuery, useAlert } from '@dhis2/app-runtime'
+
 import {
     Button,
     DropdownButton,
@@ -17,11 +19,63 @@ import {
     SingleSelectOption	
   } from '@dhis2/ui'
 import { getNumeratorsInGroup } from '../../../utils/numeratorsMetadataData';
+import { updateConfigurations } from '../../../utils/updateConfigurations';
+
+
+// TODO: move different queries to their own file when they become many
+const updateConfigurationsMutation = {
+  resource: 'dataStore/who-dqa/configurations',
+  type: 'update',
+  data: ({ configurations }) => ({
+      ...configurations,
+      lastUpdated: new Date().toJSON(),
+  }),
+}
+
 
 export const NumeratorGroups = ({toggleState, configurations}) => {
 const [groups, setGroups] = useState(null)
 const [numerators, setNumerators] = useState(null);
 const [selectedNumerator, setSelectedNumerator] = useState(null)
+
+const [mutate, { error, data }] = useDataMutation( updateConfigurationsMutation )
+
+  const handleNumeratorSelection = (selected) => {
+    setSelectedNumerator(selected)
+  }
+
+  // A dynamic alert to communicate success or failure 
+  // TODO: put this one in a reusable function
+  const { show } = useAlert( 
+    ({ message }) => message,
+    ({ status }) => {
+        if (status === 'success') return { success: true }
+        else if (status === 'error') return { critical: true }
+        else return {}
+    } )
+
+  const handleAddNumerator = async(numerator, group) => {
+    //TODO: implement delete/remove
+
+    if (group.members.includes(numerator)) {
+      const message = 'This numerator is already a member of this group';
+      show({ message, status: 'error' })  
+      setSelectedNumerator(null);
+    } else{
+      const groupUpdateInfo = {
+        groupCode: group.code,
+        numeratorCode: numerator
+      }
+
+      const updatedConfigurations = updateConfigurations(configurations, 'groups', 'update', null, groupUpdateInfo);
+      await mutate({ configurations: updatedConfigurations })
+      const message = 'Numerator added successfully to the group';
+      show({ message, status: 'success' });
+      setSelectedNumerator(null);
+
+
+    }
+  } 
 
   useEffect(() => {
     setGroups(configurations.groups)
@@ -52,8 +106,8 @@ const [selectedNumerator, setSelectedNumerator] = useState(null)
                         <TableCell>
 
                         <SingleSelect className="select" 
-                                onChange={(selected)=> setSelectedNumerator(selected.selected)} 
-                                placeholder="Select Dataset"
+                                onChange={(selected)=> handleNumeratorSelection(selected.selected)} 
+                                placeholder="Select Numerator"
                                 selected={selectedNumerator}
                             >
                                 {numerators.map((numerator, key) => 
@@ -64,7 +118,7 @@ const [selectedNumerator, setSelectedNumerator] = useState(null)
                         </TableCell>
                         <TableCell>
                         <Button
-                            name="Primary button" onClick={() => console.log(selectedNumerator)} 
+                            name="Primary button" disabled={selectedNumerator? false: true} onClick={() => handleAddNumerator(selectedNumerator, group)} 
                             primary button value="default" icon={<IconAdd16 />}> Add Numerators
                         </Button>
                         </TableCell>

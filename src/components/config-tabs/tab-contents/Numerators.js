@@ -25,7 +25,7 @@ import CreateNumeratorModal from '../../Modals/CreateNumeratorModal';
 
 
 // TODO: move different queries to their own file when they become many
-const updateNumeratorsMutation = {
+const updateConfigurationsMutation = {
     resource: 'dataStore/who-dqa/configurations',
     type: 'update',
     data: ({ configurations }) => ({
@@ -49,7 +49,7 @@ export const Numerators = ({toggleState, configurations}) => {
     let numerators = configurations? configurations.numerators : []
     const [numeratorToEdit, setNumeratorToEdit] = useState(null);
 
-    const [mutate, { error, data }] = useDataMutation( updateNumeratorsMutation )
+    const [mutate, { error, data }] = useDataMutation( updateConfigurationsMutation )
 
     const onClose = () => {
         setIsHidden(true);
@@ -113,11 +113,6 @@ export const Numerators = ({toggleState, configurations}) => {
     const clearNumeratorElements = async(numerator) =>{
         // setIsHidden(false);    //TODO: uncomment after implementing warning modal
         const updatedConfigurations = clearConfigurations(configurations, 'numerators', 'delete', numerator);
-        await mutate({ configurations: updatedConfigurations })
-    }
-
-    const updateNumeratorElements = async(numerator) =>{
-        const updatedConfigurations = updateConfigurations(configurations, 'numerators', 'update', code);
         await mutate({ configurations: updatedConfigurations })
     }
 

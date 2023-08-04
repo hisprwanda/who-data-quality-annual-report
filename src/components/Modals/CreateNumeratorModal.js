@@ -70,7 +70,7 @@ const CreateNumeratorModal = ({configurations, onClose, isHidden, onCreate}) => 
     ]
 
     if (datalementGroupsData) {
-        console.log("*** lementGroups data: ", datalementGroupsData.elements.dataElementGroups);
+        // console.log("*** lementGroups data: ", datalementGroupsData.elements.dataElementGroups);
         let deGroups  = datalementGroupsData.elements.dataElementGroups;
 
         updatedDataElementGroups = deGroups.map(({ id, displayName }) => ({
@@ -78,7 +78,7 @@ const CreateNumeratorModal = ({configurations, onClose, isHidden, onCreate}) => 
             label: displayName
           }));
 
-          console.log('updatedDataElementGroups ', updatedDataElementGroups);
+        //   console.log('updatedDataElementGroups ', updatedDataElementGroups);
     
       }
     

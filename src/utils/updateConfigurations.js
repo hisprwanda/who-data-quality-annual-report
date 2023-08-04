@@ -78,7 +78,7 @@ export const createNewNumerator = (configurations, newNumeratorInfo) => {
   return configurationsToSave;
 }
 
-export const updateConfigurations = (configurations, configurationType, updateType, updatedNumerator) => {
+export const updateConfigurations = (configurations, configurationType, updateType, updatedNumerator, groupUpdateInfo) => {
    
   const metaDataVersion = configurations.metaDataVersion; 
   const numerators = configurations.numerators;
@@ -90,17 +90,40 @@ export const updateConfigurations = (configurations, configurationType, updateTy
   const numeratorRelations = configurations.numeratorRelations;
   const groups = configurations.groups;
 
-const configurationsToSave = {
-  metaDataVersion,
-  numerators: updateNumerator(numerators, updatedNumerator),
-  coreIndicators,
-  dataSets,
-  denominators,
-  denominatorRelations,
-  externalRelations,
-  numeratorRelations,
-  groups
-}
+  let configurationsToSave = {};
+
+  switch (configurationType) {
+    case 'numerators':
+      configurationsToSave = {
+        metaDataVersion,
+        numerators: updateNumerator(numerators, updatedNumerator),
+        coreIndicators,
+        dataSets,
+        denominators,
+        denominatorRelations,
+        externalRelations,
+        numeratorRelations,
+        groups
+      }
+      break;
+    case 'groups':
+      configurationsToSave = {
+        metaDataVersion,
+        numerators: numerators,
+        coreIndicators,
+        dataSets,
+        denominators,
+        denominatorRelations,
+        externalRelations,
+        numeratorRelations,
+        groups: addNumeratorToGroups(groups, groupUpdateInfo)
+      }
+      break;
+  
+    default:
+      break;
+  }
+
 
 console.log('updated configurations: ', configurationsToSave);
 
@@ -130,6 +153,8 @@ const updateNumerator = (numerators, updatedNumerator) => {
   return numerators;
 }
 
+
+
 const updateGroups = (groups, newNumeratorInfo) => {
   console.log('Groups before: ', groups);
   const chosenGroups = newNumeratorInfo.groups
@@ -149,6 +174,19 @@ const updateGroups = (groups, newNumeratorInfo) => {
         }
   }  
   console.log('Groups after: ', groups);
+
+  return groups;
+}
+
+const addNumeratorToGroups = (groups, groupUpdateInfo) => {
+        for (const key in groups) {
+            const currentGroup = groups[key];
+              if (currentGroup.code == groupUpdateInfo.groupCode) {
+                console.log('currentGroup', currentGroup)
+                currentGroup.members.push(groupUpdateInfo.numeratorCode);
+                console.log('current group after update: ', currentGroup);
+              }
+        }
 
   return groups;
 }

@@ -17,6 +17,7 @@ const Configurations = () => {
 let configurations = [];
 
   // A dynamic alert to communicate success or failure 
+  // TODO: put this one in a reusable function
   const { show } = useAlert( 
     ({ message }) => message,
     ({ status }) => {
