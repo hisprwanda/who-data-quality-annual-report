@@ -80,7 +80,7 @@ const [mutate, { error, data }] = useDataMutation( updateConfigurationsMutation 
       groupCode: group,
       numeratorCode: numerator
     }
-    const updatedConfigurations = updateConfigurations(configurations, 'groups', 'delete', null, groupUpdateInfo);
+    const updatedConfigurations = updateConfigurations(configurations, 'groups', 'delete', groupUpdateInfo);
     await mutate({ configurations: updatedConfigurations })
     const message = 'Numerator deleted successfully from the group';
     show({ message, status: 'success' });

@@ -24,6 +24,20 @@ import { Chip } from "@dhis2/ui-core";
 import CreateNumeratorModal from '../../Modals/CreateNumeratorModal';
 
 
+
+
+/* TODO: make crud possible on numerators no matter the components used
+
+*/
+
+
+
+
+
+
+
+
+
 // TODO: move different queries to their own file when they become many
 const updateConfigurationsMutation = {
     resource: 'dataStore/who-dqa/configurations',

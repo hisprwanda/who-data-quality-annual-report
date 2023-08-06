@@ -78,7 +78,7 @@ export const createNewNumerator = (configurations, newNumeratorInfo) => {
   return configurationsToSave;
 }
 
-export const updateConfigurations = (configurations, configurationType, updateType, updatedNumerator, groupUpdateInfo) => {
+export const updateConfigurations = (configurations, configurationType, updateType, configsUpdateInfo) => {
    
   const metaDataVersion = configurations.metaDataVersion; 
   const numerators = configurations.numerators;
@@ -96,7 +96,7 @@ export const updateConfigurations = (configurations, configurationType, updateTy
     case 'numerators':
       configurationsToSave = {
         metaDataVersion,
-        numerators: updateNumerator(numerators, updatedNumerator),
+        numerators: updateNumerator(numerators, configsUpdateInfo),
         coreIndicators,
         dataSets,
         denominators,
@@ -109,14 +109,27 @@ export const updateConfigurations = (configurations, configurationType, updateTy
     case 'groups':
       configurationsToSave = {
         metaDataVersion,
-        numerators: numerators,
+        numerators,
         coreIndicators,
         dataSets,
         denominators,
         denominatorRelations,
         externalRelations,
         numeratorRelations,
-        groups: updateOneGroup(groups, groupUpdateInfo, updateType)
+        groups: updateOneGroup(groups, configsUpdateInfo, updateType)
+      }
+      break;
+    case 'parameters':
+      configurationsToSave = {
+        metaDataVersion,
+        numerators:  updateNumeratorParameters(numerators, configsUpdateInfo),
+        coreIndicators,
+        dataSets,
+        denominators,
+        denominatorRelations,
+        externalRelations,
+        numeratorRelations,
+        groups
       }
       break;
   
@@ -152,6 +165,35 @@ const updateNumerator = (numerators, updatedNumerator) => {
   }
   return numerators;
 }
+
+const updateNumeratorParameters = (numerators, updatedNumerators) => {
+//   const numerator = numerators.find(numerator => numerator.code === updatedNumerator.code);
+// if (numerator) {
+//   // numerator.dataSetID = updatedNumerator.dataSetID;
+//   // numerator.dataID = updatedNumerator.dataID;
+//   numerator.name = updatedNumerator.name;
+//   numerator.definition = updatedNumerator.definition;
+// }
+// return numerators;
+
+for (let i = 0; i < numerators.length; i++) {
+  const currentNumerator = numerators[i];
+  for (let j = 0; j < updatedNumerators.length; j++) {
+    const currentUpdatedNumerator = updatedNumerators[j];
+    if (currentNumerator.code == currentUpdatedNumerator.code) {
+      //update the numerator with new values
+      currentNumerator.comparison = currentUpdatedNumerator.comparison;
+      currentNumerator.consistency = currentUpdatedNumerator.consistency;
+      currentNumerator.extremeOutlier = currentUpdatedNumerator.extremeOutlier;
+      currentNumerator.missing = currentUpdatedNumerator.missing;
+      currentNumerator.moderateOutlier = currentUpdatedNumerator.moderateOutlier;
+      currentNumerator.trend = currentUpdatedNumerator.trend;
+    }
+  }
+}
+return numerators;
+}
+
 
 
 
