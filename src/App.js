@@ -2,6 +2,7 @@ import React from 'react'
 import { DataQuery } from '@dhis2/app-runtime'
 import i18n from '@dhis2/d2-i18n'
 import classes from './App.module.css'
+import './styles/variables.css';
 
 import Report from './pages/annual_report/Report'
 import Configurations from './pages/configurations/Configurations'

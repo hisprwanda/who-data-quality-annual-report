@@ -1,20 +1,26 @@
 import React, {useState} from 'react'
 import { OrganisationUnitTree } from '@dhis2/ui';
-
+import { useSelector, useDispatch } from 'react-redux'
 
 export const OrgUnitComponent = () => {
     
-    let [selectedOU, setSelectedOU] = useState('/Hjw70Lodtf2/jUMVwrUlNqG/XxBlJkEmJGQ/hDsNksdRjyK/xHe6AHOiQWp/oQuwh1dH5sl')
+  let storeRef = useSelector(state => state.selectedValue)
+  let dispatch = useDispatch()
 
-    return (
-        <OrganisationUnitTree name="Hjw70Lodtf2" onChange={(e) => setSelectedOU(e.path)}
-          isUserDataViewFallback={true}
-          roots={
-            ['Hjw70Lodtf2']
-          }
-          selected={[
-            selectedOU
-          ]}
-        />
-    );
+  const chooseSelectedElement = function(e) {
+    dispatch({type: 'Change Org Unit', payload: {displayName: e.displayName, path: e.path}})
+  }
+  let x = storeRef
+  let selectedOU = storeRef.orgUnit.path
+  return (
+      <OrganisationUnitTree name="Hjw70Lodtf2" onChange={(e) => chooseSelectedElement(e)}
+        isUserDataViewFallback={true}
+        roots={
+          ['Hjw70Lodtf2']
+        }
+        selected={[
+          selectedOU
+        ]}
+      />
+  );
 }
