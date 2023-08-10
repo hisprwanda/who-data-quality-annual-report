@@ -108,7 +108,7 @@ const Report = function () {
         <div className="menu-parent-container">
           <div className="data-set-container">
             <div className="dataset-indication">
-              <div>Data set</div>
+              <div>Group</div>
               <div>{selectedItem}</div>
               <div>
                 <img src={down_allow} />

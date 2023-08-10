@@ -3,10 +3,11 @@ import down_allow from "../../../assets/images/downarrow.png";
 import { fixedPeriodSource, year } from "../utils/period/FixedPeriod.source";
 import { processFixedPeriod } from "../utils/period/fixedPeriod.util";
 import { useDispatch, useSelector } from "react-redux";
-
+import moment from "moment";
 
 const FixedPeriodComponent = function () {
 
+  let currentYear = moment().year()
   let fixedPeriods = fixedPeriodSource
   const periods = [{names: 'Year', id: 'Year'}, {names: 'Month', id: 'Month'}, {names: 'Weekly', id: 'Weekly'}, {names: 'Daily', id: 'Daily'}]
   let [relativePeriodSelected, setRelativePeriodSelected] = useState(fixedPeriodSource[0])
@@ -17,6 +18,8 @@ const FixedPeriodComponent = function () {
   let choosePeriod = function(e) {
     cssVariables.style.setProperty('--visibility', 'none')
   }
+
+  let [countingYear, setCountingYear] = useState(currentYear)
 
   useEffect(() => {
     cssVariables.style.setProperty('--visibility', 'none')
@@ -29,7 +32,7 @@ const FixedPeriodComponent = function () {
 
   let selectedElementStore = useSelector((state) => state);
   let dispatchEvent = useDispatch()
-  
+
   return (
     <div>
       <div className="fixed-period-group">
@@ -59,7 +62,7 @@ const FixedPeriodComponent = function () {
           </div>
           <div>
             <label>Year</label>
-            <input type="number"/>
+            <input type="number" value={countingYear} onInput={(e) => {e.persist(); console.log(e); setCountingYear(countingYear += 1)}}/>
           </div>
         </div>
         <div className="select-options">

@@ -100,3 +100,20 @@ input[type='number'] {
     overflow: scroll;
 }
 
+.period-result > div:nth-child(2) ul {
+    padding: 0.1rem;
+}
+
+.period-result > div:nth-child(2) ul li {
+    list-style: none;
+    padding: 0.1rem 0.2rem;
+}
+
+.period-result > div:nth-child(2) ul li span {
+    background-color: #f3f3f3;
+    padding: 0.4rem;
+    border-radius: 3px;
+    display: block;
+    margin: 0.1rem 0rem;
+}
+

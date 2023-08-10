@@ -8,7 +8,7 @@ import {
   IconClock16,
 } from "@dhis2/ui";
 
-import './style/index.css'
+import "./style/index.css";
 
 import RelativePeriodComponent from "./RelativePeriod.component";
 import FixedPeriodComponent from "./FixedPeriodComponent";
@@ -16,18 +16,24 @@ import { useSelector, useDispatch } from "react-redux";
 import { processFixedPeriod } from "../utils/period/fixedPeriod.util";
 
 const PeriodComponent = function () {
+  let [period, setPeriod] = useState("relative");
+  let dispatch = useDispatch();
+  let selector = useSelector((state) => state);
+  let periodSelected = selector.period.fixedPeriod.period;
+  let [chosenPeriodArr, setchosenPeriodArr] = useState([]);
 
-  let [period, setPeriod] = useState('relative')
-  let dispatch = useDispatch()
-  let selector = useSelector((state) => state)
-  let periodSelected = selector.period.fixedPeriod.period
-  
-  let [info, setInfo] = useState([])
+  let [info, setInfo] = useState([]);
   useEffect(() => {
-    const x = processFixedPeriod(periodSelected)
-    setInfo(x)
-  }, [periodSelected])
-  console.log(info)
+    const x = processFixedPeriod(periodSelected);
+    setInfo(x);
+  }, [periodSelected]);
+
+  let [chosenPeriod, setChosenPeriod] = useState();
+  useEffect(() => {
+    chosenPeriodArr = [...chosenPeriodArr, chosenPeriod];
+    setchosenPeriodArr(chosenPeriodArr);
+    console.log(chosenPeriodArr);
+  }, [chosenPeriod]);
   return (
     <div className="period-showable-container">
       <div className="period-selection">
@@ -63,20 +69,19 @@ const PeriodComponent = function () {
           <div className="period-suboptions">
             <div className="period-suboptions-container">
               <div className="period-suboptions-control">
-                {period === 'relative' && <RelativePeriodComponent/>}
-                {period === 'fixed' && <FixedPeriodComponent/>}
+                {period === "relative" && <RelativePeriodComponent />}
+                {period === "fixed" && <FixedPeriodComponent />}
               </div>
             </div>
           </div>
           <div className="select-period-result">
             <ul>
-               {
-                 info.length > 0 && info.map(dt => (
-                  <li key={dt}>
+              {info.length > 0 &&
+                info.map((dt) => (
+                  <li key={dt} onClick={() => setChosenPeriod(dt)}>
                     {dt}
                   </li>
-                ))
-               }
+                ))}
             </ul>
           </div>
         </div>
@@ -127,7 +132,13 @@ const PeriodComponent = function () {
       </div>
       <div className="period-result">
         <div>Selected Period</div>
-        <div></div>
+        <div>
+          <ul>
+            {chosenPeriodArr.map(
+              (info) => !!info && <li key={info}><span>{info}</span></li>
+            )}
+          </ul>
+        </div>
       </div>
     </div>
   );
