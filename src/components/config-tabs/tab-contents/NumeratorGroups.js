@@ -65,7 +65,7 @@ const [mutate, { error, data }] = useDataMutation( updateConfigurationsMutation 
         numeratorCode: numerator
       }
 
-      const updatedConfigurations = updateConfigurations(configurations, 'groups', 'update', null, groupUpdateInfo);
+      const updatedConfigurations = updateConfigurations(configurations, 'groups', 'update', groupUpdateInfo);
       await mutate({ configurations: updatedConfigurations })
       const message = 'Numerator added successfully to the group';
       show({ message, status: 'success' });

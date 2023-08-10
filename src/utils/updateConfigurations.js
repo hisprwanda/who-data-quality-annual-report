@@ -223,7 +223,6 @@ const updateGroups = (groups, newNumeratorInfo) => {
 const updateOneGroup = (groups, groupUpdateInfo, updateType) => {
         switch (updateType) {
           case 'update':
-            console.log('now updating...')
             for (const key in groups) {
                 const currentGroup = groups[key];
                   if (currentGroup.code == groupUpdateInfo.groupCode) {
