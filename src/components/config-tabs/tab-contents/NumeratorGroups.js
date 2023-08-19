@@ -36,7 +36,7 @@ const updateConfigurationsMutation = {
 export const NumeratorGroups = ({toggleState, configurations}) => {
 const [groups, setGroups] = useState(null)
 const [numerators, setNumerators] = useState(null);
-const [selectedNumerator, setSelectedNumerator] = useState(null)
+const [selectedNumerator, setSelectedNumerator] = useState('NA')
 
 const [mutate, { error, data }] = useDataMutation( updateConfigurationsMutation )
 
@@ -116,9 +116,10 @@ const [mutate, { error, data }] = useDataMutation( updateConfigurationsMutation 
 
                         <SingleSelect className="select" 
                                 onChange={(selected)=> handleNumeratorSelection(selected.selected)} 
-                                placeholder="Select Numerator"
+                                // placeholder="Select Numerator"
                                 selected={selectedNumerator}
                             >
+                                <SingleSelectOption label='Select Numerator' value="NA" />
                                 {numerators.map((numerator, key) => 
                                     <SingleSelectOption label={numerator.name} value={numerator.code} key={key} />
                                 )}
@@ -127,7 +128,7 @@ const [mutate, { error, data }] = useDataMutation( updateConfigurationsMutation 
                         </TableCell>
                         <TableCell>
                         <Button
-                            name="Primary button" disabled={selectedNumerator? false: true} onClick={() => handleAddNumerator(selectedNumerator, group)} 
+                            name="Primary button" disabled={selectedNumerator!='NA'? false: true} onClick={() => handleAddNumerator(selectedNumerator, group)} 
                             primary button value="default" icon={<IconAdd16 />}> Add Numerators
                         </Button>
                         </TableCell>
