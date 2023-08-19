@@ -151,7 +151,7 @@ const EditModal = ({configurations, onClose, isHidden, onSave, numeratorToEdit})
                             <Input label="Definition" name="definition" value={numerator.definition} onChange={(e) => setNumerator({...numerator, definition:e.value})} required className='input' />
                             
                             {/* Use the multiselect ui */}
-                            <div className='input groups'>
+                            <div className='input grouping'>
                                 <div 
                                     style={{
                                         maxWidth: 400,

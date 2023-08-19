@@ -21,7 +21,7 @@ import {
 
 
   import '../Modals/edit_modal_styles.css'
-import { getNumeratorMemberGroups } from '../../utils/numeratorsMetadataData';
+import { formatSelectedElementGroups, getNumeratorMemberGroups } from '../../utils/numeratorsMetadataData';
 import { generateNumeratorCode } from '../../utils/generateNumeratorCode';
 
 
@@ -43,6 +43,7 @@ const CreateNumeratorModal = ({configurations, onClose, isHidden, onCreate}) => 
     const [isHiddenElements, setIsHiddenElements] = useState(true);
     const [selectedElements, setSelectedElements] = useState([]);
     const [selectedDataSets, setSelectedDataSets] = useState('');
+    const [formattedSelectedElementGroups, setFormattedSelectedElementGroups] = useState([]);
     let updatedDataElementGroups = [];
 
     // run the querry
@@ -84,18 +85,7 @@ const CreateNumeratorModal = ({configurations, onClose, isHidden, onCreate}) => 
     
       
 
-    const dataElementGroups = [
-        {
-            label: '009-ANC',
-            value: '009-ANC'
-        }, {
-            label: '001-OPD and IMCI',
-            value: '001-OPD and IMCI'
-        }, {
-            label: '03 - Vaccinations',
-            value: '03 - Vaccinations'
-        },
-    ] 
+  
     
     const dataSets = [
         {
@@ -149,6 +139,13 @@ const CreateNumeratorModal = ({configurations, onClose, isHidden, onCreate}) => 
       setToggleStateModal(index);
     };
 
+    const handleSelectedElementGroups = () => {
+
+        setFormattedSelectedElementGroups(formatSelectedElementGroups(updatedDataElementGroups, selectedElementGroups));
+        // setSelectedElementGroups(formattedSelectedElementGroups);
+        
+    }
+
     useEffect(() => { 
         // resetting state values
         setNumerator({
@@ -159,6 +156,9 @@ const CreateNumeratorModal = ({configurations, onClose, isHidden, onCreate}) => 
         setSelectedGroup([])
     }, [isHidden]);
 
+    useEffect(() => {
+        handleSelectedElementGroups()
+    }, [selectedElementGroups]);
 
   return (
     <div>
@@ -181,10 +181,10 @@ const CreateNumeratorModal = ({configurations, onClose, isHidden, onCreate}) => 
                             <Input label="Definition" name="definition" value={numerator.definition} onChange={(e) => setNumerator({...numerator, definition:e.value})} required className='input' />
                             
                             {/* Use the multiselect ui */}
-                            <div className='input groups'>
+                            <div className='input grouping'>
                                 <div 
                                     style={{
-                                        maxWidth: 400,
+                                        maxWidth: 300,
                                         minWidth: 300
                                     }}
                                     className='group_item'
@@ -222,8 +222,8 @@ const CreateNumeratorModal = ({configurations, onClose, isHidden, onCreate}) => 
                             <div className="dataElementsSelector">                            
                                 <div className="medataDataSelectionBox" style={boxStyles} onClick={() => setIsHiddenElementsGroups(false)} >
                                     <Box >
-                                        {selectedElementGroups.length != 0? selectedElementGroups.map((group, key) => 
-                                            <Chip key={key}>{group}</Chip>
+                                        {formattedSelectedElementGroups.length != 0? formattedSelectedElementGroups.map((group, key) => 
+                                            <Chip key={key}>{group.label}</Chip>
                                         )
                                         :
                                         "Select data element groups"
