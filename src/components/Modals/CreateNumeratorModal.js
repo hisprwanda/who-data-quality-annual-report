@@ -52,6 +52,15 @@ const dataElementGroupsQuery = {
         fields: 'dataSets[displayName,id,periodType],dataSetElements[dataSet[displayName,id,periodType]'
       },
     },
+
+    dataElementOperands: {
+        resource: 'dataElementOperands',
+        params: ({elementID}) =>({
+        fields: 'displayName,id',
+        paging: false,
+        filter: `dataElement.id:eq:${elementID}`
+      }),
+      },
   };
 
 
@@ -63,11 +72,15 @@ const CreateNumeratorModal = ({configurations, onClose, isHidden, onCreate}) => 
     const [isHiddenElements, setIsHiddenElements] = useState(true);
     const [selectedElements, setSelectedElements] = useState([]);
     const [selectedDataSets, setSelectedDataSets] = useState('');
+    const [selectedOperands, setSelectedOperands] = useState([]);
     const [filteredSelectedElementGroups, setFilteredSelectedElementGroups] = useState([]);
     const [filteredSelectedElements, setFilteredSelectedElements] = useState([]);
+
     const [mappedDataElementGroups, setMappedDataElementGroups]  = useState([]);
     const [mappedDataElements, setMappedDataElements] = useState([]);
     const [mappedDataSets, setMappedDataSets] = useState([]);
+    const [mappedDataElementOperands, setMappedDataElementOperands] = useState([]);
+
 
     // run the data element groups querry
     const { loading: lementGroupsLoading, error:elementGroupsError, data:datalementGroupsData, refetch:lementGroupsRefetch } = useDataQuery(dataElementGroupsQuery, {
@@ -112,7 +125,14 @@ const CreateNumeratorModal = ({configurations, onClose, isHidden, onCreate}) => 
         setMappedDataSets(dataSets.map(({ dataSet }) => ({
             value: dataSet.id,
             label: dataSet.displayName
-        })));    
+        })));   
+        
+        // set the data element operands
+        let operands  = dataSetsData.dataElementOperands.dataElementOperands;
+        setMappedDataElementOperands(operands.map(({ id, displayName }) => ({
+            value: id,
+            label: displayName
+        })));   
         }
     }, [dataSetsData]);
 
@@ -165,11 +185,15 @@ const CreateNumeratorModal = ({configurations, onClose, isHidden, onCreate}) => 
     }, [isHidden]);
 
     useEffect(() => {
-        setFilteredSelectedElementGroups(filterSelectedMetadata(mappedDataElementGroups, selectedElementGroups));
+        setFilteredSelectedElementGroups(
+            filterSelectedMetadata(mappedDataElementGroups, selectedElementGroups)
+        );
     }, [selectedElementGroups]);
 
     useEffect(() => {
-        setFilteredSelectedElements(filterSelectedMetadata(mappedDataElements, selectedElements));
+        setFilteredSelectedElements(
+            filterSelectedMetadata(mappedDataElements, selectedElements)
+        );
     }, [selectedElements]);
 
 
@@ -270,10 +294,15 @@ const CreateNumeratorModal = ({configurations, onClose, isHidden, onCreate}) => 
                             </SingleSelect>
 
                             <h3>Variable for completeness</h3>
-                            <SingleSelect className="select" onChange={()=> console.log('selected')} placeholder="Select Variable">
-                                <SingleSelectOption label="Group one" value="1" />
-                                <SingleSelectOption label="Group two" value="2" />
-                                <SingleSelectOption label="Group three" value="3" />
+                            <SingleSelect 
+                                className="select" 
+                                onChange={(selected)=> setSelectedOperands(selected.selected)} 
+                                placeholder="Select Variable"
+                                selected={selectedOperands}
+                            >
+                                {mappedDataElementOperands.map((operand, key) => 
+                                    <SingleSelectOption label={operand.label} value={operand.value} key={key} />
+                                )}                            
                             </SingleSelect>
                             <p>"DPT 1" will be mapped to "Penta 1 doses given"</p>
                         </div>
@@ -367,6 +396,7 @@ const CreateNumeratorModal = ({configurations, onClose, isHidden, onCreate}) => 
                     onChange={ (selected) =>   {
                         setSelectedElements(selected.selected);
                         setMappedDataSets([]);
+                        setMappedDataElementOperands([]);
                         dataSetsRefetch({elementID: selected.selected[0]})  // fetch datasets only after a data element has been selected
 
                     }}
