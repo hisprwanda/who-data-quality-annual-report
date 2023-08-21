@@ -25,13 +25,23 @@ import { formatSelectedElementGroups, getNumeratorMemberGroups } from '../../uti
 import { generateNumeratorCode } from '../../utils/generateNumeratorCode';
 
 
-const dataElementsQuery = {
+const dataElementGroupsQuery = {
     elements: {
       resource: 'dataElementGroups',
       params: {
         paging: false,
       }
     }
+  };
+
+  const dataElementsQuery = {
+    elements: {
+      resource: 'dataElements',
+      params: ({groupID}) =>({
+        paging: false,
+        filter: `dataElementGroups.id:eq:${groupID}`
+      }),
+    },
   };
 
 
@@ -44,11 +54,19 @@ const CreateNumeratorModal = ({configurations, onClose, isHidden, onCreate}) => 
     const [selectedElements, setSelectedElements] = useState([]);
     const [selectedDataSets, setSelectedDataSets] = useState('');
     const [formattedSelectedElementGroups, setFormattedSelectedElementGroups] = useState([]);
+    const [currentDeGroupSelected, setCurrentDeGroupSelected] = useState('none');
+
     let updatedDataElementGroups = [];
 
-    // run the querry
-    const { loading: lementGroupsLoading, error:elementGroupsError, data:datalementGroupsData, refetch:lementGroupsRefetch } = useDataQuery(dataElementsQuery, {
+    // run the data element groups querry
+    const { loading: lementGroupsLoading, error:elementGroupsError, data:datalementGroupsData, refetch:lementGroupsRefetch } = useDataQuery(dataElementGroupsQuery, {
         lazy: false,
+    });
+
+    // run the data elements querry
+    const { loading: elementsLoading, error:elementsError, data:dataElementsData, refetch:elementsRefetch } = useDataQuery(dataElementsQuery, {
+        variables: {groupID: currentDeGroupSelected},
+        lazy: true,
     });
 
 
@@ -71,21 +89,12 @@ const CreateNumeratorModal = ({configurations, onClose, isHidden, onCreate}) => 
     ]
 
     if (datalementGroupsData) {
-        // console.log("*** lementGroups data: ", datalementGroupsData.elements.dataElementGroups);
         let deGroups  = datalementGroupsData.elements.dataElementGroups;
-
         updatedDataElementGroups = deGroups.map(({ id, displayName }) => ({
             value: id,
             label: displayName
-          }));
-
-        //   console.log('updatedDataElementGroups ', updatedDataElementGroups);
-    
+          }));    
       }
-    
-      
-
-  
     
     const dataSets = [
         {
@@ -139,11 +148,8 @@ const CreateNumeratorModal = ({configurations, onClose, isHidden, onCreate}) => 
       setToggleStateModal(index);
     };
 
-    const handleSelectedElementGroups = () => {
-
+    const handleSelectedElementGroups = () => {        
         setFormattedSelectedElementGroups(formatSelectedElementGroups(updatedDataElementGroups, selectedElementGroups));
-        // setSelectedElementGroups(formattedSelectedElementGroups);
-        
     }
 
     useEffect(() => { 
@@ -157,8 +163,10 @@ const CreateNumeratorModal = ({configurations, onClose, isHidden, onCreate}) => 
     }, [isHidden]);
 
     useEffect(() => {
-        handleSelectedElementGroups()
+        handleSelectedElementGroups();
+        setCurrentDeGroupSelected(selectedElementGroups[0]);
     }, [selectedElementGroups]);
+
 
   return (
     <div>
@@ -319,8 +327,11 @@ const CreateNumeratorModal = ({configurations, onClose, isHidden, onCreate}) => 
                     filterLabel="Select or search below"
                     filterPlaceholder="Search"
                     filterable
-                    onChange={(selected) => 
-                        setSelectedElementGroups(selected.selected)}
+                    maxSelections={1}
+                    onChange={(selected) => {
+                        setSelectedElementGroups(selected.selected);
+                        elementsRefetch({ groupID: selected.selected});
+                    }}
                     options={updatedDataElementGroups}
                     selected={selectedElementGroups}
                 />
@@ -340,8 +351,16 @@ const CreateNumeratorModal = ({configurations, onClose, isHidden, onCreate}) => 
         {/* Data elements selection modal */}
         <Modal hide={isHiddenElements} position='middle'>
             <ModalContent>
-                <Transfer filterLabel="Select or search below" filterPlaceholder="Search" filterable options={dataElements} selected={selectedElements}
-                    onChange={(selected) =>   setSelectedElements(selected.selected)}
+                <Transfer 
+                    filterLabel="Select or search below" 
+                    filterPlaceholder="Search" 
+                    filterable 
+                    maxSelections={1}
+                    options={dataElements} 
+                    selected={selectedElements}
+                    onChange={
+                        (selected) =>   setSelectedElements(selected.selected)
+                    }
                 />
             </ModalContent>
             <ModalActions>
