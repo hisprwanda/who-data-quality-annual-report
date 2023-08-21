@@ -111,8 +111,8 @@ export const makeOutlierOptions= () =>{
   return opts;
 }
 
-export const formatSelectedElementGroups = (allDataElementGroups, selectedElementGroups) => {
-  const formattedSelectedElementGroups = allDataElementGroups.filter(
-        (group) => selectedElementGroups.indexOf(group.value) !== -1);
-  return formattedSelectedElementGroups;
+export const filterSelectedMetadata = (allMetadataObjects, selectedMetadataObjects) => {
+  const filteredMetadataObjects = allMetadataObjects.filter(
+        (object) => selectedMetadataObjects.indexOf(object.value) !== -1);
+  return filteredMetadataObjects;
 }
