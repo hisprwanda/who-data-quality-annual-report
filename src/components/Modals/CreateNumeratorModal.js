@@ -80,7 +80,7 @@ const CreateNumeratorModal = ({configurations, onClose, isHidden, onCreate}) => 
     const [mappedDataElements, setMappedDataElements] = useState([]);
     const [mappedDataSets, setMappedDataSets] = useState([]);
     const [mappedDataElementOperands, setMappedDataElementOperands] = useState([]);
-
+    const [footerMessage, setFooterMessage] = useState(null);
 
     // run the data element groups querry
     const { loading: lementGroupsLoading, error:elementGroupsError, data:datalementGroupsData, refetch:lementGroupsRefetch } = useDataQuery(dataElementGroupsQuery, {
@@ -196,6 +196,12 @@ const CreateNumeratorModal = ({configurations, onClose, isHidden, onCreate}) => 
         );
     }, [selectedElements]);
 
+    useEffect(() => {
+        if (filteredSelectedElements[0] && numerator.name) {
+            setFooterMessage(`"${numerator.name}" will be mapped to ${filteredSelectedElements[0].label}`)
+        }
+    }, [filteredSelectedElements])
+
 
   return (
     <div>
@@ -284,7 +290,11 @@ const CreateNumeratorModal = ({configurations, onClose, isHidden, onCreate}) => 
 
                             <h3>Data set for completeness</h3>
                             <SingleSelect className="select" 
-                                onChange={(selected)=> setSelectedDataSets(selected.selected)} 
+                                onChange={(selected)=> {
+                                    setNumerator({...numerator, dataSetID:selected.selected})
+                                    setSelectedDataSets(selected.selected)
+                                }}
+
                                 placeholder="Select Dataset"
                                 selected={selectedDataSets}
                             >
@@ -296,7 +306,11 @@ const CreateNumeratorModal = ({configurations, onClose, isHidden, onCreate}) => 
                             <h3>Variable for completeness</h3>
                             <SingleSelect 
                                 className="select" 
-                                onChange={(selected)=> setSelectedOperands(selected.selected)} 
+                                onChange={(selected)=> {
+                                    setSelectedOperands(selected.selected);
+                                    setNumerator({...numerator, operand:selected.selected})
+
+                                }} 
                                 placeholder="Select Variable"
                                 selected={selectedOperands}
                             >
@@ -304,7 +318,7 @@ const CreateNumeratorModal = ({configurations, onClose, isHidden, onCreate}) => 
                                     <SingleSelectOption label={operand.label} value={operand.value} key={key} />
                                 )}                            
                             </SingleSelect>
-                            <p>"DPT 1" will be mapped to "Penta 1 doses given"</p>
+                            <p>{footerMessage}</p>
                         </div>
 
                         <div className={toggleStateModal === 2 ? "content-modal  active-content-modal" : "content-modal"}>
@@ -366,6 +380,7 @@ const CreateNumeratorModal = ({configurations, onClose, isHidden, onCreate}) => 
                         setSelectedElementGroups(selected.selected);
                         setFilteredSelectedElements([]);
                         elementsRefetch({ groupID: selected.selected});     // fetch data elements only after a data element group has been selected
+                        setNumerator({...numerator, dElementGroup:selected.selected[0]})
                     }}
                     options={mappedDataElementGroups}
                     selected={selectedElementGroups}
@@ -393,11 +408,13 @@ const CreateNumeratorModal = ({configurations, onClose, isHidden, onCreate}) => 
                     maxSelections={1}
                     options={mappedDataElements} 
                     selected={selectedElements}
+                    disabled
                     onChange={ (selected) =>   {
                         setSelectedElements(selected.selected);
                         setMappedDataSets([]);
                         setMappedDataElementOperands([]);
                         dataSetsRefetch({elementID: selected.selected[0]})  // fetch datasets only after a data element has been selected
+                        setNumerator({...numerator, dateElement:selected.selected[0]})
 
                     }}
                 />

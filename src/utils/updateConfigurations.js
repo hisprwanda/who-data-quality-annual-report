@@ -198,24 +198,18 @@ return numerators;
 
 
 const updateGroups = (groups, newNumeratorInfo) => {
-  console.log('Groups before: ', groups);
   const chosenGroups = newNumeratorInfo.groups
-  console.log('Chosen groups ', chosenGroups);
   for (const key in chosenGroups) {
       const chosenGroup = chosenGroups[key];
-        console.log('chosen group: ', chosenGroup);
 
         for (const key in groups) {
             const currentGroup = groups[key];
               if (currentGroup.code == chosenGroup) {
                 currentGroup.members.push(newNumeratorInfo.code);
-                console.log('current group after update: ', currentGroup);
               }else {
-                console.log('Not equal');
               }
         }
   }  
-  console.log('Groups after: ', groups);
 
   return groups;
 }
@@ -232,7 +226,6 @@ const updateOneGroup = (groups, groupUpdateInfo, updateType) => {
             }
             break;
           case 'delete':
-            console.log('now deleting...')
 
             const updatedGroups = groups.map(group => {
               if (group.code == groupUpdateInfo.groupCode) {
@@ -241,7 +234,6 @@ const updateOneGroup = (groups, groupUpdateInfo, updateType) => {
               }
               return group;
             });
-            console.log('Updated groups ', updatedGroups);
             return updatedGroups;
 
           //   for (const key in groups) {
