@@ -21,7 +21,7 @@ import {
 
 
   import '../Modals/edit_modal_styles.css'
-import { formatSelectedElementGroups, getNumeratorMemberGroups } from '../../utils/numeratorsMetadataData';
+import { filterSelectedMetadata, getNumeratorMemberGroups } from '../../utils/numeratorsMetadataData';
 import { generateNumeratorCode } from '../../utils/generateNumeratorCode';
 
 
@@ -53,10 +53,12 @@ const CreateNumeratorModal = ({configurations, onClose, isHidden, onCreate}) => 
     const [isHiddenElements, setIsHiddenElements] = useState(true);
     const [selectedElements, setSelectedElements] = useState([]);
     const [selectedDataSets, setSelectedDataSets] = useState('');
-    const [formattedSelectedElementGroups, setFormattedSelectedElementGroups] = useState([]);
+    const [filteredSelectedElementGroups, setFilteredSelectedElementGroups] = useState([]);
+    const [filteredSelectedElements, setFilteredSelectedElements] = useState([]);
     const [currentDeGroupSelected, setCurrentDeGroupSelected] = useState('none');
 
-    let updatedDataElementGroups = [];
+    let mappedDataElementGroups = [];
+    let mappedDataElements = [];
 
     // run the data element groups querry
     const { loading: lementGroupsLoading, error:elementGroupsError, data:datalementGroupsData, refetch:lementGroupsRefetch } = useDataQuery(dataElementGroupsQuery, {
@@ -69,28 +71,17 @@ const CreateNumeratorModal = ({configurations, onClose, isHidden, onCreate}) => 
         lazy: true,
     });
 
-
-    const dataElements = [
-            {
-                label: 'ANC 1st visit',
-                value: 'ANC 1st visit',
-                id: 'DsmvMflRNm1'
-            },
-            {
-                label: 'ANC 2nd visit',
-                value: 'ANC 2st visit',
-                id: 'DsmvMflRNm2'
-            },
-            {
-                label: 'ART No clients who stopped TRT due to TRT failure',
-                value: 'ART No clients who stopped TRT due to TRT failure',
-                id: 'DsmvMflRNm3'
-            }
-    ]
-
     if (datalementGroupsData) {
         let deGroups  = datalementGroupsData.elements.dataElementGroups;
-        updatedDataElementGroups = deGroups.map(({ id, displayName }) => ({
+        mappedDataElementGroups = deGroups.map(({ id, displayName }) => ({
+            value: id,
+            label: displayName
+          }));    
+      }
+
+      if (dataElementsData) {
+        let dataElements  = dataElementsData.elements.dataElements;
+        mappedDataElements = dataElements.map(({ id, displayName }) => ({
             value: id,
             label: displayName
           }));    
@@ -149,7 +140,11 @@ const CreateNumeratorModal = ({configurations, onClose, isHidden, onCreate}) => 
     };
 
     const handleSelectedElementGroups = () => {        
-        setFormattedSelectedElementGroups(formatSelectedElementGroups(updatedDataElementGroups, selectedElementGroups));
+        setFilteredSelectedElementGroups(filterSelectedMetadata(mappedDataElementGroups, selectedElementGroups));
+    }
+
+    const handleSelectedElements = () => {        
+        setFilteredSelectedElements(filterSelectedMetadata(mappedDataElements, selectedElements));
     }
 
     useEffect(() => { 
@@ -166,6 +161,10 @@ const CreateNumeratorModal = ({configurations, onClose, isHidden, onCreate}) => 
         handleSelectedElementGroups();
         setCurrentDeGroupSelected(selectedElementGroups[0]);
     }, [selectedElementGroups]);
+
+    useEffect(() => {
+        handleSelectedElements();
+    }, [selectedElements]);
 
 
   return (
@@ -230,7 +229,7 @@ const CreateNumeratorModal = ({configurations, onClose, isHidden, onCreate}) => 
                             <div className="dataElementsSelector">                            
                                 <div className="medataDataSelectionBox" style={boxStyles} onClick={() => setIsHiddenElementsGroups(false)} >
                                     <Box >
-                                        {formattedSelectedElementGroups.length != 0? formattedSelectedElementGroups.map((group, key) => 
+                                        {filteredSelectedElementGroups.length != 0? filteredSelectedElementGroups.map((group, key) => 
                                             <Chip key={key}>{group.label}</Chip>
                                         )
                                         :
@@ -241,8 +240,8 @@ const CreateNumeratorModal = ({configurations, onClose, isHidden, onCreate}) => 
 
                                 <div className="medataDataSelectionBox" style={boxStyles} onClick={() => setIsHiddenElements(false)} >
                                     <Box >
-                                        {selectedElements.length != 0? selectedElements.map((group, key) => 
-                                            <Chip key={key}>{group}</Chip>
+                                        {filteredSelectedElements.length != 0? filteredSelectedElements.map((group, key) => 
+                                            <Chip key={key}>{group.label}</Chip>
                                         )
                                         :
                                         "Select data elements"
@@ -330,9 +329,10 @@ const CreateNumeratorModal = ({configurations, onClose, isHidden, onCreate}) => 
                     maxSelections={1}
                     onChange={(selected) => {
                         setSelectedElementGroups(selected.selected);
+                        setFilteredSelectedElements([]);
                         elementsRefetch({ groupID: selected.selected});
                     }}
-                    options={updatedDataElementGroups}
+                    options={mappedDataElementGroups}
                     selected={selectedElementGroups}
                 />
             </ModalContent>
@@ -356,7 +356,7 @@ const CreateNumeratorModal = ({configurations, onClose, isHidden, onCreate}) => 
                     filterPlaceholder="Search" 
                     filterable 
                     maxSelections={1}
-                    options={dataElements} 
+                    options={mappedDataElements} 
                     selected={selectedElements}
                     onChange={
                         (selected) =>   setSelectedElements(selected.selected)
