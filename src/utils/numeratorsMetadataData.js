@@ -111,6 +111,8 @@ export const makeOutlierOptions= () =>{
   return opts;
 }
 
+ // since the Transfer UI only brings only the id of the selected metadata i.e: ['eUVXvuBvfpd'] for a selected group
+// this function is used to get the original objects with more details to be used in components that require labels and values
 export const filterSelectedMetadata = (allMetadataObjects, selectedMetadataObjects) => {
   const filteredMetadataObjects = allMetadataObjects.filter(
         (object) => selectedMetadataObjects.indexOf(object.value) !== -1);

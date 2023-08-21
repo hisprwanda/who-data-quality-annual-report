@@ -44,6 +44,16 @@ const dataElementGroupsQuery = {
     },
   };
 
+  const dataSetsQuery = {
+    dataSets: {
+      resource: 'dataElements',
+      id: ({elementID}) => elementID,
+      params: {
+        fields: 'dataSets[displayName,id,periodType],dataSetElements[dataSet[displayName,id,periodType]'
+      },
+    },
+  };
+
 
 const CreateNumeratorModal = ({configurations, onClose, isHidden, onCreate}) => {
     const [toggleStateModal, setToggleStateModal] = useState(1);
@@ -55,10 +65,9 @@ const CreateNumeratorModal = ({configurations, onClose, isHidden, onCreate}) => 
     const [selectedDataSets, setSelectedDataSets] = useState('');
     const [filteredSelectedElementGroups, setFilteredSelectedElementGroups] = useState([]);
     const [filteredSelectedElements, setFilteredSelectedElements] = useState([]);
-    const [currentDeGroupSelected, setCurrentDeGroupSelected] = useState('none');
-
-    let mappedDataElementGroups = [];
-    let mappedDataElements = [];
+    const [mappedDataElementGroups, setMappedDataElementGroups]  = useState([]);
+    const [mappedDataElements, setMappedDataElements] = useState([]);
+    const [mappedDataSets, setMappedDataSets] = useState([]);
 
     // run the data element groups querry
     const { loading: lementGroupsLoading, error:elementGroupsError, data:datalementGroupsData, refetch:lementGroupsRefetch } = useDataQuery(dataElementGroupsQuery, {
@@ -67,42 +76,48 @@ const CreateNumeratorModal = ({configurations, onClose, isHidden, onCreate}) => 
 
     // run the data elements querry
     const { loading: elementsLoading, error:elementsError, data:dataElementsData, refetch:elementsRefetch } = useDataQuery(dataElementsQuery, {
-        variables: {groupID: currentDeGroupSelected},
         lazy: true,
     });
 
+    // run the datasets querry
+    const { loading: dataSetsLoading, error:dataSetsError, data:dataSetsData, refetch:dataSetsRefetch } = useDataQuery(dataSetsQuery, {
+        lazy: true,
+    });
+
+    // TODO with TOM: is there a neat way to map value & label of metadata below
+    useEffect(() => { 
     if (datalementGroupsData) {
         let deGroups  = datalementGroupsData.elements.dataElementGroups;
-        mappedDataElementGroups = deGroups.map(({ id, displayName }) => ({
+        setMappedDataElementGroups(deGroups.map(({ id, displayName }) => ({
             value: id,
             label: displayName
-          }));    
+          })));    
       }
+    }, [datalementGroupsData]);
 
-      if (dataElementsData) {
-        let dataElements  = dataElementsData.elements.dataElements;
-        mappedDataElements = dataElements.map(({ id, displayName }) => ({
-            value: id,
-            label: displayName
-          }));    
-      }
-    
-    const dataSets = [
-        {
-            label: '001 Outpatient Consultation (OPD)',
-            value: '001 Outpatient Consultation (OPD)',
-            id: 'SsmvMflRNm1'
-        }, {
-            label: '002 Malaria Dataset',
-            value: '002_Malaria_Dataset',
-            id: 'SsmvMflRNm2'
-        }, {
-            label: '003 Hospitalization',
-            value: '003 Hospitalization',
-            id: 'SsmvMflRNm3'
+      useEffect(() => { 
+          if (dataElementsData) {
+            let dataElements  = dataElementsData.elements.dataElements;
+            setMappedDataElements(dataElements.map(({ id, displayName }) => ({
+                value: id,
+                label: displayName
+              })));    
+          }
+    }, [dataElementsData]);
+
+
+    useEffect(() => {
+      if (dataSetsData) {
+        let dataSets  = dataSetsData.dataSets.dataSetElements;
+        setMappedDataSets(dataSets.map(({ dataSet }) => ({
+            value: dataSet.id,
+            label: dataSet.displayName
+        })));    
         }
-    ]
-    
+    }, [dataSetsData]);
+
+
+
     // TODO: remove these styles from here
     const boxStyles = {
         border: '1px solid rgb(160, 173, 186)',
@@ -139,14 +154,6 @@ const CreateNumeratorModal = ({configurations, onClose, isHidden, onCreate}) => 
       setToggleStateModal(index);
     };
 
-    const handleSelectedElementGroups = () => {        
-        setFilteredSelectedElementGroups(filterSelectedMetadata(mappedDataElementGroups, selectedElementGroups));
-    }
-
-    const handleSelectedElements = () => {        
-        setFilteredSelectedElements(filterSelectedMetadata(mappedDataElements, selectedElements));
-    }
-
     useEffect(() => { 
         // resetting state values
         setNumerator({
@@ -158,12 +165,11 @@ const CreateNumeratorModal = ({configurations, onClose, isHidden, onCreate}) => 
     }, [isHidden]);
 
     useEffect(() => {
-        handleSelectedElementGroups();
-        setCurrentDeGroupSelected(selectedElementGroups[0]);
+        setFilteredSelectedElementGroups(filterSelectedMetadata(mappedDataElementGroups, selectedElementGroups));
     }, [selectedElementGroups]);
 
     useEffect(() => {
-        handleSelectedElements();
+        setFilteredSelectedElements(filterSelectedMetadata(mappedDataElements, selectedElements));
     }, [selectedElements]);
 
 
@@ -258,7 +264,7 @@ const CreateNumeratorModal = ({configurations, onClose, isHidden, onCreate}) => 
                                 placeholder="Select Dataset"
                                 selected={selectedDataSets}
                             >
-                                {dataSets.map((dataset, key) => 
+                                {mappedDataSets.map((dataset, key) => 
                                     <SingleSelectOption label={dataset.label} value={dataset.value} key={key} />
                                 )}
                             </SingleSelect>
@@ -330,7 +336,7 @@ const CreateNumeratorModal = ({configurations, onClose, isHidden, onCreate}) => 
                     onChange={(selected) => {
                         setSelectedElementGroups(selected.selected);
                         setFilteredSelectedElements([]);
-                        elementsRefetch({ groupID: selected.selected});
+                        elementsRefetch({ groupID: selected.selected});     // fetch data elements only after a data element group has been selected
                     }}
                     options={mappedDataElementGroups}
                     selected={selectedElementGroups}
@@ -358,9 +364,12 @@ const CreateNumeratorModal = ({configurations, onClose, isHidden, onCreate}) => 
                     maxSelections={1}
                     options={mappedDataElements} 
                     selected={selectedElements}
-                    onChange={
-                        (selected) =>   setSelectedElements(selected.selected)
-                    }
+                    onChange={ (selected) =>   {
+                        setSelectedElements(selected.selected);
+                        setMappedDataSets([]);
+                        dataSetsRefetch({elementID: selected.selected[0]})  // fetch datasets only after a data element has been selected
+
+                    }}
                 />
             </ModalContent>
             <ModalActions>
