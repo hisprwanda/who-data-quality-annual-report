@@ -308,7 +308,7 @@ const CreateNumeratorModal = ({configurations, onClose, isHidden, onCreate}) => 
                                 className="select" 
                                 onChange={(selected)=> {
                                     setSelectedOperands(selected.selected);
-                                    setNumerator({...numerator, operand:selected.selected})
+                                    setNumerator({...numerator, dataElementOperandID:selected.selected})
 
                                 }} 
                                 placeholder="Select Variable"
@@ -414,7 +414,7 @@ const CreateNumeratorModal = ({configurations, onClose, isHidden, onCreate}) => 
                         setMappedDataSets([]);
                         setMappedDataElementOperands([]);
                         dataSetsRefetch({elementID: selected.selected[0]})  // fetch datasets only after a data element has been selected
-                        setNumerator({...numerator, dateElement:selected.selected[0]})
+                        setNumerator({...numerator, dataID:selected.selected[0]})
 
                     }}
                 />

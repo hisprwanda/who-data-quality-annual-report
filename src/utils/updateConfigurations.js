@@ -52,14 +52,14 @@ export const createNewNumerator = (configurations, newNumeratorInfo) => {
     consistency: 33,
     core: true,
     custom: true,
-    dataElementOperandID: 'newNumeratorInfo.dataElementOperandID',
-    dataID: 'newNumeratorInfo.dataID',
-    dataSetID: 'newNumeratorInfo.dataSetID',
-    definition: 'newNumeratorInfo.definition',
+    dataElementOperandID: newNumeratorInfo.dataElementOperandID,
+    dataID: newNumeratorInfo.dataID,
+    dataSetID: newNumeratorInfo.dataSetID,
+    definition: newNumeratorInfo.definition,
     extremeOutlier: 3,
     missing: 90,
     moderateOutlier: 2,
-    name: 'newNumeratorInfo.name',
+    name: newNumeratorInfo.name,
     trend: "constant"
   }
 

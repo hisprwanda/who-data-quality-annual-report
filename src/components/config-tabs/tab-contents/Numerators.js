@@ -90,12 +90,6 @@ export const Numerators = ({toggleState, configurations}) => {
     }
 
     const onCreateNumerator = async(newNumeratorInfo) => {
-        // Find how the data elemnt operand id is generated
-        // find how data id is found
-        // find how dataset id is found
-        // leave others as default
-
-        console.log('Created numerator ', newNumeratorInfo);
         setIsHiddenCreate(true)
         const updatedConfigurations =  createNewNumerator(configurations, newNumeratorInfo);       
         await mutate({ configurations: updatedConfigurations })
