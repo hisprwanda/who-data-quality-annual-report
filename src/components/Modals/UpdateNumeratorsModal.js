@@ -64,7 +64,7 @@ const dataElementGroupsQuery = {
   };
 
 
-const CreateNumeratorModal = ({configurations, onClose, isHidden, onCreate}) => {
+const UpdateNumeratorsModal = ({configurations, onClose, isHidden, onSave, numeratorToEdit, updateType}) => {
     const [toggleStateModal, setToggleStateModal] = useState(1);
     const [selectedGroups, setSelectedGroup] = useState([]);
     const [isHiddenElementsGroups, setIsHiddenElementsGroups] = useState(true);
@@ -175,13 +175,39 @@ const CreateNumeratorModal = ({configurations, onClose, isHidden, onCreate}) => 
     };
 
     useEffect(() => { 
-        // resetting state values
-        setNumerator({
-            name: '',
-            definition: '',
-            core:false,
-        })
-        setSelectedGroup([])
+        if (updateType == 'create') {
+            // resetting state values
+            setNumerator({
+                name: '',
+                definition: '',
+                core:false,
+            })
+            setSelectedGroup([])
+            
+        } else if (updateType == 'update') {
+            // set numerator with existin data
+            if (numeratorToEdit.length != 0) {
+                setNumerator({
+                    ...numerator, 
+                    code:numeratorToEdit.code,
+                    name:numeratorToEdit.name, 
+                    definition:numeratorToEdit.definition,
+                    core:numeratorToEdit.core
+                })
+            }else{
+                setNumerator({
+                    name: '',
+                    definition: '',
+                    core:false,
+                })
+            }
+            
+            // set groups with existin data
+            setSelectedGroup(
+                getNumeratorMemberGroups(configurations, numeratorToEdit.code)
+                .map((group) => group.code)
+            )
+        }
     }, [isHidden]);
 
     useEffect(() => {
@@ -205,7 +231,7 @@ const CreateNumeratorModal = ({configurations, onClose, isHidden, onCreate}) => 
 
   return (
     <div>
-        {/* Main edit modal */}
+        {/* Main update modal */}
         <Modal onClose={onClose} hide={isHidden} position="middle" large>
             <ModalTitle>
                 Numerators Mapping to Data Elements
@@ -289,7 +315,10 @@ const CreateNumeratorModal = ({configurations, onClose, isHidden, onCreate}) => 
                     
 
                             <h3>Data set for completeness</h3>
-                            <SingleSelect className="select" 
+                            <SingleSelect 
+                                className="select" 
+                                disabled={mappedDataSets.length > 0? false:true}
+
                                 onChange={(selected)=> {
                                     setNumerator({...numerator, dataSetID:selected.selected})
                                     setSelectedDataSets(selected.selected)
@@ -306,6 +335,7 @@ const CreateNumeratorModal = ({configurations, onClose, isHidden, onCreate}) => 
                             <h3>Variable for completeness</h3>
                             <SingleSelect 
                                 className="select" 
+                                disabled={mappedDataElementOperands.length > 0? false:true}
                                 onChange={(selected)=> {
                                     setSelectedOperands(selected.selected);
                                     setNumerator({...numerator, dataElementOperandID:selected.selected})
@@ -360,7 +390,7 @@ const CreateNumeratorModal = ({configurations, onClose, isHidden, onCreate}) => 
                     <Button  secondary onClick={onClose}>
                         Cancel
                     </Button>
-                    <Button  primary onClick={() => onCreate(numerator)}> 
+                    <Button  primary onClick={() => onSave(numerator)}> 
                         Create
                     </Button>
                 </ButtonStrip>
@@ -435,4 +465,4 @@ const CreateNumeratorModal = ({configurations, onClose, isHidden, onCreate}) => 
   )
 }
 
-export default CreateNumeratorModal
+export default UpdateNumeratorsModal
