@@ -97,7 +97,7 @@ const UpdateNumeratorsModal = ({configurations, onClose, isHidden, onSave, numer
         lazy: true,
     });
 
-    // TODO with TOM: is there a neat way to map value & label of metadata below
+    // TODO this action is duplicated in other components, do it once and save it globaly
     useEffect(() => { 
     if (datalementGroupsData) {
         let deGroups  = datalementGroupsData.elements.dataElementGroups;
@@ -402,13 +402,14 @@ const UpdateNumeratorsModal = ({configurations, onClose, isHidden, onSave, numer
         <Modal hide={isHiddenElementsGroups} position='middle'>
             <ModalContent>
                 <Transfer
-                    filterLabel="Select or search below"
+                    filterLabel="Select data elements group or search below"
                     filterPlaceholder="Search"
                     filterable
                     maxSelections={1}
                     onChange={(selected) => {
                         setSelectedElementGroups(selected.selected);
                         setFilteredSelectedElements([]);
+                        setSelectedDataSets('');    //resets the previous value for new data elements to be refetched
                         elementsRefetch({ groupID: selected.selected});     // fetch data elements only after a data element group has been selected
                         setNumerator({...numerator, dElementGroup:selected.selected[0]})
                     }}
@@ -432,7 +433,7 @@ const UpdateNumeratorsModal = ({configurations, onClose, isHidden, onSave, numer
         <Modal hide={isHiddenElements} position='middle'>
             <ModalContent>
                 <Transfer 
-                    filterLabel="Select or search below" 
+                    filterLabel="Select data elements or search below" 
                     filterPlaceholder="Search" 
                     filterable 
                     maxSelections={1}
@@ -441,7 +442,7 @@ const UpdateNumeratorsModal = ({configurations, onClose, isHidden, onSave, numer
                     disabled
                     onChange={ (selected) =>   {
                         setSelectedElements(selected.selected);
-                        setMappedDataSets([]);
+                        setSelectedDataSets('');    //resets the previous value for new data elements to be refetched
                         setMappedDataElementOperands([]);
                         dataSetsRefetch({elementID: selected.selected[0]})  // fetch datasets only after a data element has been selected
                         setNumerator({...numerator, dataID:selected.selected[0]})
