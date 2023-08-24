@@ -18,7 +18,7 @@ export const getNumeratorMemberGroups = (configurations, code) => {
     const currentGroup = groups[key]
     for (let key in currentGroup.members) {
       const currentMember = currentGroup.members[key]
-      if (currentMember === code) { memberGroups.push(currentGroup.displayName ) }
+      if (currentMember === code) { memberGroups.push(currentGroup ) }
     }
   }
 
@@ -48,7 +48,7 @@ export const getNumeratorDataElement = (configurations, dataID) => {
   }
 }
 
-export const getNumeratorsInGroup = (numerators, group) => {
+export const getNumeratorsInGroup = (numerators, group, onDeleteNumerator) => {
   const numeratorsInGroup = [];
 
   for (let key in numerators) {
@@ -68,8 +68,8 @@ export const getNumeratorsInGroup = (numerators, group) => {
         </TableCell>
         <TableCell>
           <Button
-              name="Primary button" onClick={() => window.alert('It works!')} 
-              basic button value="default" icon={<IconSubtractCircle16 />}> Clear
+              name="Primary button" onClick={() => onDeleteNumerator(group.code, numerator.code)} 
+              destructive basic button value="default" icon={<IconSubtractCircle16 />}> Delete
               </Button>
         </TableCell>
       </TableRow>
@@ -109,4 +109,12 @@ export const makeOutlierOptions= () =>{
     opts.push({"val": (Math.round(10*i)/10).toString(), "label": (Math.round(10*i)/10).toString()});
   }
   return opts;
+}
+
+ // since the Transfer UI only brings only the id of the selected metadata i.e: ['eUVXvuBvfpd'] for a selected group
+// this function is used to get the original objects with more details to be used in components that require labels and values
+export const filterSelectedMetadata = (allMetadataObjects, selectedMetadataObjects) => {
+  const filteredMetadataObjects = allMetadataObjects.filter(
+        (object) => selectedMetadataObjects.indexOf(object.value) !== -1);
+  return filteredMetadataObjects;
 }

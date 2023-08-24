@@ -1,0 +1,20 @@
+.report-preview-container {
+    box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
+    border-radius: 5px;
+    border: 1px solid #5b92e5;
+}
+
+
+.report-preview {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+
+.section-sub-header, .section-header{
+    background-color: #5b92e5;
+    color: #FFF;
+    padding: 5px;
+    font-size: 16px;
+}

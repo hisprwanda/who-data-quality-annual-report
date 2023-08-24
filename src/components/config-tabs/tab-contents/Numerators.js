@@ -15,15 +15,30 @@ import {
   
   } from '@dhis2/ui'
 import WarningModal from "../../Modals/WarningModal";
-import EditModal from '../../Modals/EditModal';
 import PeriodsModal from '../../Modals/PeriodsModal';
 import { DataSelectorModal } from '../../Modals/DataSelectorModal';
 import { getNumeratorDataElement, getNumeratorDataset, getNumeratorMemberGroups } from '../../../utils/numeratorsMetadataData';
-import { clearConfigurations, updateConfigurations } from '../../../utils/updateConfigurations';
+import { clearConfigurations, createNewNumerator, updateConfigurations } from '../../../utils/updateConfigurations';
 import { Chip } from "@dhis2/ui-core";
+import UpdateNumeratorsModal from '../../Modals/UpdateNumeratorsModal';
+
+
+
+
+/* TODO: make crud possible on numerators no matter the components used
+
+*/
+
+
+
+
+
+
+
+
 
 // TODO: move different queries to their own file when they become many
-const updateNumeratorsMutation = {
+const updateConfigurationsMutation = {
     resource: 'dataStore/who-dqa/configurations',
     type: 'update',
     data: ({ configurations }) => ({
@@ -38,6 +53,7 @@ export const Numerators = ({toggleState, configurations}) => {
     const [isHiddenEdit, setIsHiddenEdit] = useState(true);
     const [isHiddenPeriod, setIsHiddenPeriod] = useState(true);
     const [isHiddenDataModal, setIsHiddenDataModal] = useState(true);
+    const [isHiddenUpdateModal, setIsHiddenUpdateModal] = useState(true);
 
     const togglePeriodModal = () => setIsHiddenPeriod(state => !state)
     const toggleDataModal = () => setIsHiddenDataModal(state => !state)
@@ -46,7 +62,8 @@ export const Numerators = ({toggleState, configurations}) => {
     let numerators = configurations? configurations.numerators : []
     const [numeratorToEdit, setNumeratorToEdit] = useState(null);
 
-    const [mutate, { error, data }] = useDataMutation( updateNumeratorsMutation )
+    const [mutate, { error, data }] = useDataMutation( updateConfigurationsMutation )
+    const [updateType, setUpdateType] = useState(null);
 
     const onClose = () => {
         setIsHidden(true);
@@ -55,6 +72,10 @@ export const Numerators = ({toggleState, configurations}) => {
     const onCloseEdit = () => {
         setIsHiddenEdit(true);
     }
+
+    const onCloseCreate = () => {
+        setIsHiddenUpdateModal(true);
+    }
     
     const onDelete = () => {
         setIsHidden(true);
@@ -62,20 +83,21 @@ export const Numerators = ({toggleState, configurations}) => {
     }
 
     const onSave = async(numerator) => {
-        // setDataElements(data)
         console.log("numerator data: ", numerator);
         setIsHiddenEdit(true);
         const updatedConfigurations = updateConfigurations(configurations, 'numerators', 'update', numerator);
         await mutate({ configurations: updatedConfigurations })
+    }
 
-        console.log('Saved the following data to the data store: ', data);
+    const onSaveNumeratorUpdates = async(newNumeratorInfo) => {
+        setIsHiddenUpdateModal(true)
+        const updatedConfigurations =  createNewNumerator(configurations, newNumeratorInfo);       
+        await mutate({ configurations: updatedConfigurations })
     }
 
     const onSavePeriod = (selected) => { 
         togglePeriodModal;
-        // console.log('Saved period: ', selected);
         const dataFromUtils = getNumeratorMemberGroups()
-        // console.log('From utils: ', dataFromUtils);
     }
 
     const onSaveData = (selected) => { 
@@ -102,15 +124,16 @@ export const Numerators = ({toggleState, configurations}) => {
         await mutate({ configurations: updatedConfigurations })
     }
 
-    const updateNumeratorElements = async(numerator) =>{
-        const updatedConfigurations = updateConfigurations(configurations, 'numerators', 'update', code);
-        await mutate({ configurations: updatedConfigurations })
-    }
-
 
     const onEditting = (numerator) => {
-        console.log('editing initialted');
-        setIsHiddenEdit(false);
+        setUpdateType('update')
+        setIsHiddenUpdateModal(false)
+        setNumeratorToEdit(numerator);
+    }
+
+    const onCreating = (numerator) => {
+        setUpdateType('create')
+        setIsHiddenUpdateModal(false)
         setNumeratorToEdit(numerator);
     }
 
@@ -137,7 +160,7 @@ export const Numerators = ({toggleState, configurations}) => {
                 {numerators? numerators.map((numerator, key ) => (
                     <TableRow key={key}>
                         <TableCell>{getNumeratorMemberGroups(configurations, numerator.code).map((group, key) =>(
-                            <Chip key={key} dense> {group} </Chip>
+                            <Chip key={key} dense> {group.displayName} </Chip>
                         ))}</TableCell>
                         <TableCell>{numerator.name}</TableCell>
                         <TableCell>{numerator.core ? "✔️": ""}</TableCell>
@@ -159,43 +182,6 @@ export const Numerators = ({toggleState, configurations}) => {
                 :
                 ""
                 }
-{/*                 
-                <TableRow>
-                    <TableCell>General Service Statistics</TableCell>
-                    <TableCell>OPD visits</TableCell>
-                    <TableCell>✔️</TableCell>
-                    <TableCell>New cases_OPD</TableCell>
-                    <TableCell>{dataElements? dataElements.name : "OutPatient Consultations (OPD)"}</TableCell>
-                    <TableCell>
-                    <Button
-                        name="Primary button" onClick={togglePeriodModal} 
-                        basic button value="default" icon={<IconEdit16 />}> Edit period
-                    </Button>
-
-                    <Button
-                        name="Primary button" onClick={() => setIsHidden(false)} 
-                        basic button value="default" icon={<IconSubtractCircle16 />}> Clear
-                    </Button>
-                    </TableCell>
-                </TableRow>*/}
-                <TableRow>
-                    <TableCell>General Service Statistics</TableCell>
-                    <TableCell>OPD visits</TableCell>
-                    <TableCell>✔️</TableCell>
-                    <TableCell>New cases_OPD</TableCell>
-                    <TableCell>{dataElements? dataElements.name : "OutPatient Consultations (OPD)"}</TableCell>
-                    <TableCell>
-                    <Button
-                        name="Primary button" onClick={toggleDataModal} 
-                        basic button value="default" icon={<IconEdit16 />}> Edit period
-                    </Button>
-
-                    <Button
-                        name="Primary button" onClick={() => setIsHidden(false)} 
-                        basic button value="default" icon={<IconSubtractCircle16 />}> Clear
-                    </Button>
-                    </TableCell>
-                </TableRow> 
                 <TableRow>
                     <TableCell></TableCell>
                     <TableCell></TableCell>
@@ -203,7 +189,7 @@ export const Numerators = ({toggleState, configurations}) => {
                     <TableCell></TableCell>
                     <TableCell></TableCell>
                     <TableCell>
-                        <Button name="Primary button" onClick={() => onEditting([])} button value="default" icon={<IconEdit16 />} primary> Add new numerator </Button>    
+                        <Button name="Primary button" onClick={onCreating} button value="default" icon={<IconEdit16 />} primary> Add new numerator </Button>    
                     </TableCell>
                 </TableRow>
             </TableBody>
@@ -211,24 +197,20 @@ export const Numerators = ({toggleState, configurations}) => {
         </div>
 
         {/* <WarningModal onClose={onClose} isHidden={isHidden} onDelete={onDelete}/> */}
-        {numeratorToEdit? 
-            <EditModal configurations={configurations} onClose={onCloseEdit} isHidden={isHiddenEdit} onSave={onSave} numeratorToEdit={numeratorToEdit}/>
-        :
-        ''
-        }
+        
+        <UpdateNumeratorsModal
+            configurations={configurations}
+            onClose={onCloseCreate}
+            isHidden={isHiddenUpdateModal}
+            onSave={onSaveNumeratorUpdates}
+            updateType={updateType}
+            numeratorToEdit={numeratorToEdit}
+        />
         <PeriodsModal 
             isHiddenPeriod={isHiddenPeriod}
             currentlySelected={[]}
             toggleModal={togglePeriodModal}
             onSave={onSavePeriod}
-        />
-
-        
-        <DataSelectorModal
-            isHiddenDataModal={isHiddenDataModal}
-            currentlySelected={[]}
-            toggleModal={toggleDataModal}
-            onSave={onSaveData}
         />
 
         

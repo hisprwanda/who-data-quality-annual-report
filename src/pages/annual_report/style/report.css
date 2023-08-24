@@ -2,9 +2,13 @@ label {
     margin: 0.0rem 0rem;
 }
 .reportContainer{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
     width: 100%;
     background-color: #F3F5F7;
-    height: 100vh;
+    height: 100%;
 }
 
 .topParagraph{
@@ -190,7 +194,6 @@ label {
     list-style: none;
 }
 
-
 .report-container {
     width: 80%;
     margin: auto;
@@ -202,10 +205,11 @@ label {
 .data-container, .period-container, .orgunit-container {
     display: flex;
     flex-direction: column;
-    gap: 1.2rem;
+    gap: 0.2rem;
     margin: 0.0rem 0rem;
     border: 1px solid #f3f3f3;
-    height: auto;
+    position: relative;
+    cursor: pointer;
 }
 
 .report-container a {
@@ -233,6 +237,434 @@ label {
     align-items: center;
     padding: 0.4rem;
 }
+
+.data-section-child {
+    display: flex;
+    flex-direction: column;
+    gap: 0.8rem;
+    align-items: start;
+}
+
+.action-container {
+    display: flex;
+    padding: 1.2rem;
+    justify-content: end;
+}
+
+.action-container ul {
+    padding: 0rem;
+    margin: 0rem;
+    display: flex;
+    align-items: flex-end;
+}
+
+.action-container ul li {
+    list-style: none;
+}
+
+.menu-parent {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+}
+
+.menu-parent > div {
+    margin: 0rem;
+    padding: 0rem;
+    display: flex;
+    flex-direction: row;
+    width: 100%;
+}
+
+.menu-parent > div > div > div:nth-child(1) {
+    padding: 0.7rem;
+    border-bottom: 1px solid #e0dfdf;
+    border-right: 1px solid #e0dfdf;
+}
+
+.menu-parent > div > div:nth-child(1), .menu-parent > div > div:nth-child(2), .menu-parent > div > div:nth-child(3) {
+    flex: 1 1 auto;
+}
+
+.menu-parent > div > div:nth-child(4) {
+    flex: 5 1 auto;
+    color: #fff;
+}
+
+.menu-parent > div > div:nth-child(4) > div:nth-child(1){
+    display: flex;
+    flex-direction: row;
+    margin: 0rem;
+    padding: 0rem;
+    padding: 0.2rem;
+    gap: 0.6rem;
+    align-items: end;
+    justify-content: flex-end;
+}
+
+.data-showable {
+    position: absolute;
+}
+
+.ou-showable, .data-showable, .period-showable {
+    display: none;
+    background-color: #fff;
+}
+
+.data-showable ul {
+    padding: 0rem;
+    margin: 0rem;
+    margin-left: 0.5rem;
+}
+
+.data-showable ul li {
+    list-style: none;
+    margin: 0.4rem;
+    padding: 0.3rem;
+    cursor: pointer;
+}
+
+.menu-parent > div > div:nth-child(1):hover .data-showable {
+    display: block;
+    box-shadow: rgba(0, 0, 0, 0.12) 0px 1px 3px, rgba(0, 0, 0, 0.24) 0px 1px 2px;
+}
+
+.ou-showable {
+    width: 40rem;
+    margin: 0rem;
+}
+
+.menu-parent > div > div:nth-child(3):hover .period-showable {
+    display: block;
+    box-shadow: rgba(0, 0, 0, 0.12) 0px 1px 3px, rgba(0, 0, 0, 0.24) 0px 1px 2px;
+    margin-top: 0.1rem;
+}
+
+.dataset-indication {
+    display: flex;
+}
+
+.dataset-indication > div:nth-child(1) {
+    color: #434343;
+    width: 30%;
+}
+
+.dataset-indication > div:nth-child(2) {
+    /* flex: 1 1 auto; */
+    width: 60%;
+}
+
+.dataset-indication > div:nth-child(3) {
+    /* flex: 0.2 0.2 auto; */
+    width: 10%;
+    display: flex;
+    justify-content: flex-end;
+}
+
+.dataset-indication > div:nth-child(3) img {
+    height: 16px;
+    width: 16px;
+}
+
+.ou-indication {
+    display: flex;
+}
+
+.ou-indication > div:nth-child(1) {
+    color: #434343;
+    width: 50%;
+}
+
+.ou-indication > div:nth-child(2) {
+    /* flex: 1 1 auto; */
+    width: 40%;
+    text-align: center;
+}
+
+.ou-indication > div:nth-child(3) {
+    /* flex: 0.2 0.2 auto; */
+    width: 10%;
+    display: flex;
+    justify-content: flex-end;
+}
+
+.ou-indication > div:nth-child(3) img {
+    height: 16px;
+    width: 16px;
+}
+
+.period-indication {
+    display: flex;
+}
+
+.period-indication > div:nth-child(1) {
+    color: #434343;
+    width: 30%;
+}
+
+.period-indication > div:nth-child(2) {
+    /* flex: 1 1 auto; */
+    width: 60%;
+    text-align: center;
+}
+
+.period-indication > div:nth-child(3) {
+    /* flex: 0.2 0.2 auto; */
+    width: 10%;
+    display: flex;
+    justify-content: flex-end;
+}
+
+.period-indication > div:nth-child(3) img {
+    height: 16px;
+    width: 16px;
+}
+
+.data-showable ul li:hover {
+    background-color: #0a1646;
+    color: #fff;
+}
+
+.data-set-container:hover .data-showable {
+    display: block;
+    box-shadow: rgba(0, 0, 0, 0.12) 0px 1px 3px, rgba(0, 0, 0, 0.24) 0px 1px 2px;
+}
+
+.orgunit-container:hover .ou-showable {
+    box-shadow: rgba(0, 0, 0, 0.12) 0px 1px 3px, rgba(0, 0, 0, 0.24) 0px 1px 2px;
+    position: absolute;
+    top: 2.5rem;
+    display: flex;
+    flex-direction: column;
+    gap: 1.2rem;
+}
+
+.period-container:hover .period-showable {
+    display: block;
+    box-shadow: rgba(0, 0, 0, 0.12) 0px 1px 3px, rgba(0, 0, 0, 0.24) 0px 1px 2px;
+    position: absolute;
+    top: 2.5rem;
+}
+
+.lever-and-groups {
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+    width: 100%;
+}
+
+.dividing {
+    height: 0.3rem;
+    border-bottom: 1px solid #dcdbdb;
+    width: 100%;
+    display: block;
+    padding: 0.8rem;
+}
+
+.groups {
+    position: absolute;
+}
+
+.select-options {
+    display: none;
+    border: 1px solid #F3F5F7;
+    padding: 0.3rem;
+    box-shadow: rgba(0, 0, 0, 0.12) 0px 1px 3px, rgba(0, 0, 0, 0.24) 0px 1px 2px;
+}
+
+.level:hover .select-options, .group:hover .select-options {
+    display: block;
+}
+
+.level, .group {
+    padding: 0.4rem;
+    padding: 0.2rem;
+    flex: 1 1 auto;
+}
+
+.select-title {
+    display: flex;
+    justify-content:space-around;
+    gap: 0.3rem;
+    border: 1px solid #e0dfdf;
+    padding: 0.3rem;
+}
+
+.select-title-icon {
+    flex: 1 1 auto;
+    border-left: 1px solid #dcdbdb;
+}
+
+.select-title-data {
+    flex: 6 6 auto;
+}
+
+.select-title-icon {
+    display: flex;
+    justify-content: flex-end;
+}
+
+.select-title-icon img {
+    width: 25px;
+    height: 25px;
+}
+
+.select-options ul {
+    margin: 0rem;
+    padding: 0rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.3rem;
+}
+
+.select-options ul li {
+    list-style: none;
+    margin: 0rem;
+    padding: 0rem;
+    cursor: pointer;
+}
+
+.select-options ul li:hover {
+    background-color: #0a1646;
+    color: #fff;
+    padding: 0.2rem;
+}
+
+.level-and-groups {
+    display: flex;
+    flex-direction: row;
+    gap: 1.4rem;
+}
+
+.visible {
+    display: block;
+}
+
+.invisible {
+    display: none;
+}
+
+.period-showable-container {
+    display: flex;
+    flex-direction: row;
+    width: 45rem;
+    gap: 0.0rem;
+}
+
+.period-selection {
+    flex: 6 6 auto;
+    border: 1px solid #dcdbdb;
+}
+
+.period-result {
+    flex: 3 3 auto;
+    border: 1px solid #dcdbdb;
+}
+
+.period-middle-section {
+    flex: 0.5 0.5 auto;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-top: 1px solid #dcdbdb;
+    border-bottom: 1px solid #dcdbdb;
+}
+
+.period-result {
+    display: flex;
+    flex-direction: column;
+}
+
+.period-result div:nth-child(1) {
+    padding: 0.5rem;
+    border-bottom: 1px solid #dcdbdb;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.select-period-type ul {
+    padding: 0rem;
+    margin: 0rem;
+    display: flex;
+    gap: 1rem;
+}
+
+.select-period-type {
+    padding: 0.5rem;
+    border-bottom: 1px solid #dcdbdb;
+}
+
+.select-period-type ul li {
+    list-style: none;
+}
+
+.period-middle-section ul {
+    padding: 0rem;
+    margin: 0rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.4rem;
+}
+
+.period-middle-section ul li {
+    list-style: none;
+}
+
+.select-period-type a {
+    color: #000;
+    text-transform: none;
+    text-decoration: none;
+    font-size: 1.0rem;
+}
+
+.select-period-result {
+    padding: 0.9rem;
+}
+
+.select-period-result ul {
+    padding: 0rem;
+    margin: 0rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.3rem;
+}
+
+.select-period-result ul li {
+    list-style: none;
+    margin: 0.0rem 0.7rem;
+}
+
+.select-period-result ul li:hover {
+    background-color: #0a1646;
+    color: #fff;
+}
+
+.report-section {
+    padding: 1.2rem;
+}
+
+#relative:focus, #fixed:focus {
+    border-bottom: 0.4rem solid #0326b3;
+}
+
+.period-suboptions {
+    border-bottom: 1px solid #dcdbdb;
+    padding: 0.2rem;
+}
+
+.period-suboptions-container {
+    display: flex;
+    flex-direction: column;
+    gap: 0.2rem;
+    padding: 0.4rem;
+}
+
+
+
+
+
+
 
 
 

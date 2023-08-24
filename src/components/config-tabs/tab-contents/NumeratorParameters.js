@@ -15,9 +15,23 @@ import {
     TableHead,
     TableRow,
     TableRowHead,
-    IconAdd16
+    IconAdd16,
+    Chip
   } from '@dhis2/ui'
 import { getNumeratorMemberGroups, getNumeratorDataElement, makeOutlierOptions } from '../../../utils/numeratorsMetadataData'
+import { useDataMutation, useDataQuery, useAlert } from '@dhis2/app-runtime'
+import { updateConfigurations } from '../../../utils/updateConfigurations'
+
+// TODO: move different queries to their own file when they become many
+const updateConfigurationsMutation = {
+  resource: 'dataStore/who-dqa/configurations',
+  type: 'update',
+  data: ({ configurations }) => ({
+      ...configurations,
+      lastUpdated: new Date().toJSON(),
+  }),
+}
+
 
 
 export const NumeratorParameters = ({toggleState, configurations}) => {
@@ -25,9 +39,57 @@ export const NumeratorParameters = ({toggleState, configurations}) => {
   const [outlierOptions, setOutlierOptions] = useState(null);
   const [datasets, setDatasets] = useState(null);
 
+  const [mutate, { error, data }] = useDataMutation( updateConfigurationsMutation );
+
+  const [updatedConfigurations, setUpdatedConfigurations] = useState(null);
+
+  const handleParametersChange = (currentNumeratorCode, newValue, valueType) => {
+    const updatedNumerators = numerators.map(numerator => {
+      if (numerator.code == currentNumeratorCode) {
+        switch (valueType) {
+          case 'moderateOutlier':
+            numerator.moderateOutlier = parseFloat(newValue);
+            break;
+          case 'extremeOutlier':
+            numerator.extremeOutlier = parseFloat(newValue);
+            break;
+          case 'consistency':
+            numerator.consistency = parseFloat(newValue);
+            break;
+          case 'comparison':
+            numerator.comparison = newValue;
+            break;
+          case 'trend':
+            numerator.trend = newValue;
+            break;
+          case 'missing':
+            numerator.missing = parseFloat(newValue);
+            break;
+          default:
+            break;
+        }
+        
+      }
+      return numerator
+      
+    });
+    
+    setNumerators(updatedNumerators);
+
+    setUpdatedConfigurations(updateConfigurations(configurations, 'parameters', 'update', numerators));
+  }
+
+  const onSaveChanges = async() => {
+      if (updatedConfigurations != null) {
+        await mutate({ configurations: updatedConfigurations });
+        
+      }else {
+        alert('Cannot upload null configurations!')
+      }
+  }
 
   useEffect(() => {
-    setNumerators(configurations.numerators)
+    setNumerators(configurations.numerators.filter(numerator => numerator.dataID != null))
     setOutlierOptions(makeOutlierOptions());
     setDatasets(configurations.dataSets)
   }, [])
@@ -66,21 +128,24 @@ export const NumeratorParameters = ({toggleState, configurations}) => {
           <TableBody>
             {numerators? numerators.map((numerator, key) =>(
               <TableRow key={key}>
-                  <TableCell>{getNumeratorMemberGroups(configurations, numerator.code)}	</TableCell>
+                  <TableCell>{getNumeratorMemberGroups(configurations, numerator.code).map((group, key) =>(
+                          <Chip key={key} dense> {group.displayName} </Chip>
+                      ))}
+                  </TableCell>
                   <TableCell>{numerator.name}</TableCell>
                   <TableCell>{getNumeratorDataElement(configurations, numerator.dataID)}	</TableCell>
                   <TableCell>
-                    <SingleSelectField inputWidth='20px' selected='2' onChange={()=> console.log('changed option')}  >
+                    <SingleSelect inputWidth='20px' selected={numerator.moderateOutlier.toString()} onChange={(selected)=> handleParametersChange(numerator.code, selected.selected, 'moderateOutlier' )}  >
                         {outlierOptions? outlierOptions.map((opt, key) => (
                           <SingleSelectOption key={key} label={opt.label} value={opt.val} />
                         ))
                         :
                         <SingleSelectOption label="option one" value="1" />
                       }
-                    </SingleSelectField>
+                    </SingleSelect>
                   </TableCell>
                   <TableCell>
-                    <SingleSelectField inputWidth='2px' selected='2' onChange={()=> console.log('changed option')}  >
+                    <SingleSelectField inputWidth='2px' selected={numerator.extremeOutlier.toString()} onChange={(selected)=> handleParametersChange(numerator.code, selected.selected, 'extremeOutlier' )}  >
                           {outlierOptions? outlierOptions.map((opt, key) => (
                             <SingleSelectOption key={key} label={opt.label} value={opt.val} />
                           ))
@@ -90,24 +155,24 @@ export const NumeratorParameters = ({toggleState, configurations}) => {
                       </SingleSelectField>                  
                   </TableCell>
                   <TableCell>
-                    <Input max="100" min="0" name="defaultName" onChange={()=> console.log('changed option')} step="1" type="number" />                                          
+                    <Input value={numerator.consistency.toString()}  max="100" min="0" name="defaultName" onChange={(newValue)=> handleParametersChange(numerator.code, newValue.value, 'consistency' )} step="1" type="number" />                                          
                   </TableCell>
                   <TableCell>
-                    <SingleSelectField onChange={()=> console.log('changed option')}  >
-                      <SingleSelectOption  label='Constant' value='Constant' />
-                      <SingleSelectOption  label='Increasing' value='Increasing' />
-                      <SingleSelectOption  label='Decreasing' value='Decreasing' />
+                    <SingleSelectField selected={numerator.trend} onChange={(newValue)=> handleParametersChange(numerator.code, newValue.selected, 'trend' )}  >
+                      <SingleSelectOption  label='Constant' value='constant' />
+                      <SingleSelectOption  label='Increasing' value='increasing' />
+                      <SingleSelectOption  label='Decreasing' value='decreasing' />
                     </SingleSelectField>          
 
                   </TableCell>
                   <TableCell>
-                    <SingleSelectField onChange={()=> console.log('changed option')}  >
-                      <SingleSelectOption  label='Overall result' value='Overall result' />
-                      <SingleSelectOption  label='Expected result' value='Expected result' />
+                    <SingleSelectField selected={numerator.comparison} onChange={(newValue)=> handleParametersChange(numerator.code, newValue.selected, 'comparison' )}  >
+                      <SingleSelectOption  label='Overall result' value='ou' />
+                      <SingleSelectOption  label='Expected result' value='th' />
                     </SingleSelectField>          
                   </TableCell>
                   <TableCell>
-                      <Input max="100" min="0" name="defaultName" onChange={()=> console.log('changed option')} step="1" type="number" />                                          
+                      <Input value={numerator.missing.toString()} max="100" min="0" name="defaultName" onChange={(newValue)=> handleParametersChange(numerator.code, newValue.value, 'missing' )} step="1" type="number" />                                          
                   </TableCell>
               </TableRow>
             ))
@@ -189,7 +254,7 @@ export const NumeratorParameters = ({toggleState, configurations}) => {
                   <TableCell></TableCell>
                   <TableCell> 
                     <Button
-                        name="Primary button" onClick={() => window.alert('It works!')} 
+                        name="Primary button" onClick={() => onSaveChanges()} 
                         primary button value="default" icon={<IconAdd16 />}> Save Changes
                     </Button>
                   </TableCell>

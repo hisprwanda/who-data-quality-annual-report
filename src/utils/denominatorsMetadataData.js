@@ -4,8 +4,11 @@ import denominatorTypes from "../data/denominatorTypes.json";
 
 // TODO: in the future, pass the data from a global state or context api 
 
+export const getAllDenominatorType = () => {
+  return denominatorTypes;
+};
 export const getDenominatorType = (type) => {
-  const denominatorType = denominatorTypes.find((denominator) => denominator.code == type);
+  const denominatorType = denominatorTypes.find((denominator) => denominator.value == type);
   return denominatorType ;
 };
 
