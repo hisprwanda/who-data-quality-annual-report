@@ -24,19 +24,6 @@ import UpdateNumeratorsModal from '../../Modals/UpdateNumeratorsModal';
 
 
 
-
-/* TODO: make crud possible on numerators no matter the components used
-
-*/
-
-
-
-
-
-
-
-
-
 // TODO: move different queries to their own file when they become many
 const updateConfigurationsMutation = {
     resource: 'dataStore/who-dqa/configurations',
@@ -58,8 +45,7 @@ export const Numerators = ({toggleState, configurations}) => {
     const togglePeriodModal = () => setIsHiddenPeriod(state => !state)
     const toggleDataModal = () => setIsHiddenDataModal(state => !state)
     const [dataElements, setDataElements] = useState(null);
-
-    let numerators = configurations? configurations.numerators : []
+    const [numerators, setNumerators] = useState([]);
     const [numeratorToEdit, setNumeratorToEdit] = useState(null);
 
     const [mutate, { error, data }] = useDataMutation( updateConfigurationsMutation )
@@ -90,9 +76,11 @@ export const Numerators = ({toggleState, configurations}) => {
     }
 
     const onSaveNumeratorUpdates = async(newNumeratorInfo) => {
-        setIsHiddenUpdateModal(true)
         const updatedConfigurations =  createNewNumerator(configurations, newNumeratorInfo);       
         await mutate({ configurations: updatedConfigurations })
+
+        setNumerators(numerators => [...numerators, newNumeratorInfo]);
+        setIsHiddenUpdateModal(true)
     }
 
     const onSavePeriod = (selected) => { 
@@ -137,6 +125,9 @@ export const Numerators = ({toggleState, configurations}) => {
         setNumeratorToEdit(numerator);
     }
 
+    useEffect(() => {
+        setNumerators(configurations.numerators)    
+      }, [])
 
   return (
     <div className={toggleState === 1 ? "content  active-content" : "content"} >
