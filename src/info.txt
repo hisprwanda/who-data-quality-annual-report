@@ -1,0 +1,136 @@
+Aug 14 17:55:08 hmis tomcat9[307]: * INFO  2023-08-14T17:55:08,264 Scheduler initiated execution of job: JobConfiguration{uid='NaAuJDhbEe8', name='inMemoryAnalyticsJob', jobType=ANALYTICS_TABLE, cronExpression='', delay='null', jobParameters=org.hisp.dhis.scheduling.parameters.AnalyticsJobParameters@40e49784, enabled=true, inMemoryJob=true, lastRuntimeExecution='null', userUid='ADwYCc86h47', leaderOnlyJob=false, jobStatus=SCHEDULED, nextExecutionTime=null, lastExecutedStatus=NOT_STARTED, lastExecuted=null} (DefaultSchedulingManager.java [tomcat-http-93]) IDAahB6opTao5yKyViSKLm+iS0ayhXtfWTUSmeoYT6R1s=
+Aug 14 17:55:08 hmis tomcat9[307]: * INFO  2023-08-14T17:55:08,265 Found 7 analytics table types: [EVENT, VALIDATION_RESULT, COMPLETENESS, ORG_UNIT_TARGET, ENROLLMENT, DATA_VALUE, COMPLETENESS_TARGET] (DefaultAnalyticsTableGenerator.java [taskScheduler-16]) UID:NaAuJDhbEe8
+Aug 14 17:55:08 hmis tomcat9[307]: * INFO  2023-08-14T17:55:08,266 Analytics table update: AnalyticsTableUpdateParams{last years=null, skip resource tables=false, skip table types=[], skip programs=[], start time=2023-08-14T17:55:08} (DefaultAnalyticsTableGenerator.java [taskScheduler-16]) UID:NaAuJDhbEe8
+Aug 14 17:55:08 hmis tomcat9[307]: * INFO  2023-08-14T17:55:08,266 Last successful analytics table update: '2023-08-13T01:00:00' (DefaultAnalyticsTableGenerator.java [taskScheduler-16]) UID:NaAuJDhbEe8
+Aug 14 17:55:08 hmis tomcat9[307]: * INFO  2023-08-14T17:55:08,266 Analytics table update process started (NotificationLoggerUtil.java [taskScheduler-16]) UID:NaAuJDhbEe8
+Aug 14 17:55:08 hmis tomcat9[307]: * INFO  2023-08-14T17:55:08,266 Updating resource tables (NotificationLoggerUtil.java [taskScheduler-16]) UID:NaAuJDhbEe8
+Aug 14 17:55:08 hmis tomcat9[307]: * INFO  2023-08-14T17:55:08,285 Generating resource table: '_orgunitstructure' (JdbcResourceTableStore.java [taskScheduler-16]) UID:NaAuJDhbEe8
+Aug 14 17:55:08 hmis tomcat9[307]: * ERROR 2023-08-14T17:55:08,408 Analytics table process failed: java.lang.NullPointerException
+Aug 14 17:55:08 hmis tomcat9[307]:         at org.hisp.dhis.resourcetable.table.OrganisationUnitStructureResourceTable.getPopulateTempTableContent(OrganisationUnitStructureResourceTable.java:119)
+Aug 14 17:55:08 hmis tomcat9[307]:         at org.hisp.dhis.resourcetable.jdbc.JdbcResourceTableStore.generateResourceTable(JdbcResourceTableStore.java:94)
+Aug 14 17:55:08 hmis tomcat9[307]:         at org.hisp.dhis.resourcetable.DefaultResourceTableService.generateOrganisationUnitStructures(DefaultResourceTableService.java:122)
+Aug 14 17:55:08 hmis tomcat9[307]:         at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+Aug 14 17:55:08 hmis tomcat9[307]:         at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:62)
+Aug 14 17:55:08 hmis tomcat9[307]:         at java.base/jdk.internal.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+Aug 14 17:55:08 hmis tomcat9[307]:         at java.base/java.lang.reflect.Method.invoke(Method.java:566)
+Aug 14 17:55:08 hmis tomcat9[307]:         at org.springframework.aop.support.AopUtils.invokeJoinpointUsingReflection(AopUtils.java:344)
+Aug 14 17:55:08 hmis tomcat9[307]:         at org.springframework.aop.framework.ReflectiveMethodInvocation.invokeJoinpoint(ReflectiveMethodInvocation.java:198)
+Aug 14 17:55:08 hmis tomcat9[307]:         at org.springframework.aop.framework.ReflectiveMethodInvocation.proceed(ReflectiveMethodInvocation.java:163)
+Aug 14 17:55:08 hmis tomcat9[307]:         at org.springframework.transaction.interceptor.TransactionInterceptor$1.proceedWithInvocation(TransactionInterceptor.java:123)
+Aug 14 17:55:08 hmis tomcat9[307]:         at org.springframework.transaction.interceptor.TransactionAspectSupport.invokeWithinTransaction(TransactionAspectSupport.java:388)
+Aug 14 17:55:08 hmis tomcat9[307]:         at org.springframework.transaction.interceptor.TransactionInterceptor.invoke(TransactionInterceptor.java:119)
+Aug 14 17:55:08 hmis tomcat9[307]:         at org.springframework.aop.framework.ReflectiveMethodInvocation.proceed(ReflectiveMethodInvocation.java:186)
+Aug 14 17:55:08 hmis tomcat9[307]:         at org.springframework.aop.framework.JdkDynamicAopProxy.invoke(JdkDynamicAopProxy.java:215)
+Aug 14 17:55:08 hmis tomcat9[307]:         at com.sun.proxy.$Proxy242.generateOrganisationUnitStructures(Unknown Source)
+Aug 14 17:55:08 hmis tomcat9[307]:         at org.hisp.dhis.analytics.table.DefaultAnalyticsTableGenerator.generateResourceTables(DefaultAnalyticsTableGenerator.java:213)
+Aug 14 17:55:08 hmis tomcat9[307]:         at org.hisp.dhis.analytics.table.DefaultAnalyticsTableGenerator.generateTables(DefaultAnalyticsTableGenerator.java:126)
+Aug 14 17:55:08 hmis tomcat9[307]:         at org.hisp.dhis.analytics.table.scheduling.AnalyticsTableJob.execute(AnalyticsTableJob.java:82)
+Aug 14 17:55:08 hmis tomcat9[307]:         at org.hisp.dhis.scheduling.AbstractSchedulingManager.execute(AbstractSchedulingManager.java:278)
+Aug 14 17:55:08 hmis tomcat9[307]:         at org.hisp.dhis.scheduling.DefaultSchedulingManager.lambda$executeNow$4(DefaultSchedulingManager.java:184)
+Aug 14 17:55:08 hmis tomcat9[307]:         at org.hisp.dhis.scheduling.DefaultSchedulingManager.lambda$runIfPossible$5(DefaultSchedulingManager.java:212)
+Aug 14 17:55:08 hmis tomcat9[307]:         at org.glowroot.agent.plugin.executor.RunnableWrapper.run(RunnableWrapper.java:35)
+Aug 14 17:55:08 hmis tomcat9[307]:         at java.base/java.util.concurrent.Executors$RunnableAdapter.call(Executors.java:515)
+Aug 14 17:55:08 hmis tomcat9[307]:         at java.base/java.lang.Thread.run(Thread.java:829)
+Aug 14 17:55:08 hmis tomcat9[307]:  (DefaultAnalyticsTableGenerator.java [taskScheduler-16]) UID:NaAuJDhbEe8
+Aug 14 17:55:08 hmis tomcat9[307]: java.lang.NullPointerException: null
+Aug 14 17:55:08 hmis tomcat9[307]:         at org.hisp.dhis.resourcetable.table.OrganisationUnitStructureResourceTable.getPopulateTempTableContent(OrganisationUnitStructureResourceTable.java:119) ~[dhis-service-administration-2.37.9.1.jar:?]
+Aug 14 17:55:08 hmis tomcat9[307]:         at org.hisp.dhis.resourcetable.jdbc.JdbcResourceTableStore.generateResourceTable(JdbcResourceTableStore.java:94) ~[dhis-service-administration-2.37.9.1.jar:?]
+Aug 14 17:55:08 hmis tomcat9[307]:         at org.hisp.dhis.resourcetable.DefaultResourceTableService.generateOrganisationUnitStructures(DefaultResourceTableService.java:122) ~[dhis-service-administration-2.37.9.1.jar:?]
+Aug 14 17:55:08 hmis tomcat9[307]:         at jdk.internal.reflect.NativeMethodAccessorImpl.invoke0(Native Method) ~[?:?]
+Aug 14 17:55:08 hmis tomcat9[307]:         at jdk.internal.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:62) ~[?:?]
+Aug 14 17:55:08 hmis tomcat9[307]:         at jdk.internal.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43) ~[?:?]
+Aug 14 17:55:08 hmis tomcat9[307]:         at java.lang.reflect.Method.invoke(Method.java:566) ~[?:?]
+Aug 14 17:55:08 hmis tomcat9[307]:         at org.springframework.aop.support.AopUtils.invokeJoinpointUsingReflection(AopUtils.java:344) ~[spring-aop-5.3.24.jar:5.3.24]
+Aug 14 17:55:08 hmis tomcat9[307]:         at org.springframework.aop.framework.ReflectiveMethodInvocation.invokeJoinpoint(ReflectiveMethodInvocation.java:198) ~[spring-aop-5.3.24.jar:5.3.24]
+Aug 14 17:55:08 hmis tomcat9[307]:         at org.springframework.aop.framework.ReflectiveMethodInvocation.proceed(ReflectiveMethodInvocation.java:163) ~[spring-aop-5.3.24.jar:5.3.24]
+Aug 14 17:55:08 hmis tomcat9[307]:         at org.springframework.transaction.interceptor.TransactionInterceptor$1.proceedWithInvocation(TransactionInterceptor.java:123) ~[spring-tx-5.3.24.jar:5.3.24]
+Aug 14 17:55:08 hmis tomcat9[307]:         at org.springframework.transaction.interceptor.TransactionAspectSupport.invokeWithinTransaction(TransactionAspectSupport.java:388) ~[spring-tx-5.3.24.jar:5.3.24]
+Aug 14 17:55:08 hmis tomcat9[307]:         at org.springframework.transaction.interceptor.TransactionInterceptor.invoke(TransactionInterceptor.java:119) ~[spring-tx-5.3.24.jar:5.3.24]
+Aug 14 17:55:08 hmis tomcat9[307]:         at org.springframework.aop.framework.ReflectiveMethodInvocation.proceed(ReflectiveMethodInvocation.java:186) ~[spring-aop-5.3.24.jar:5.3.24]
+Aug 14 17:55:08 hmis tomcat9[307]:         at org.springframework.aop.framework.JdkDynamicAopProxy.invoke(JdkDynamicAopProxy.java:215) ~[spring-aop-5.3.24.jar:5.3.24]
+Aug 14 17:55:08 hmis tomcat9[307]:         at com.sun.proxy.$Proxy242.generateOrganisationUnitStructures(Unknown Source) ~[?:?]
+Aug 14 17:55:08 hmis tomcat9[307]:         at org.hisp.dhis.analytics.table.DefaultAnalyticsTableGenerator.generateResourceTables(DefaultAnalyticsTableGenerator.java:213) ~[dhis-service-analytics-2.37.9.1.jar:?]
+Aug 14 17:55:08 hmis tomcat9[307]:         at org.hisp.dhis.analytics.table.DefaultAnalyticsTableGenerator.generateTables(DefaultAnalyticsTableGenerator.java:126) ~[dhis-service-analytics-2.37.9.1.jar:?]
+Aug 14 17:55:08 hmis tomcat9[307]:         at org.hisp.dhis.analytics.table.scheduling.AnalyticsTableJob.execute(AnalyticsTableJob.java:82) ~[dhis-service-analytics-2.37.9.1.jar:?]
+Aug 14 17:55:08 hmis tomcat9[307]:         at org.hisp.dhis.scheduling.AbstractSchedulingManager.execute(AbstractSchedulingManager.java:278) ~[dhis-service-core-2.37.9.1.jar:?]
+Aug 14 17:55:08 hmis tomcat9[307]:         at org.hisp.dhis.scheduling.DefaultSchedulingManager.lambda$executeNow$4(DefaultSchedulingManager.java:184) ~[dhis-service-core-2.37.9.1.jar:?]
+Aug 14 17:55:08 hmis tomcat9[307]:         at org.hisp.dhis.scheduling.DefaultSchedulingManager.lambda$runIfPossible$5(DefaultSchedulingManager.java:212) ~[dhis-service-core-2.37.9.1.jar:?]
+Aug 14 17:55:08 hmis tomcat9[307]:         at org.glowroot.agent.plugin.executor.RunnableWrapper.run(RunnableWrapper.java:35) ~[?:0.13.6]
+Aug 14 17:55:08 hmis tomcat9[307]:         at java.util.concurrent.Executors$RunnableAdapter.call(Executors.java:515) ~[?:?]
+Aug 14 17:55:08 hmis tomcat9[307]:         at java.util.concurrent.FutureTask.run(FutureTask.java:264) ~[?:?]
+Aug 14 17:55:08 hmis tomcat9[307]:         at org.springframework.scheduling.support.DelegatingErrorHandlingRunnable.run(DelegatingErrorHandlingRunnable.java:54) ~[spring-context-5.3.24.jar:5.3.24]
+Aug 14 17:55:08 hmis tomcat9[307]:         at java.util.concurrent.Executors$RunnableAdapter.call(Executors.java:515) ~[?:?]
+Aug 14 17:55:08 hmis tomcat9[307]:         at java.util.concurrent.FutureTask.run(FutureTask.java:264) ~[?:?]
+Aug 14 17:55:08 hmis tomcat9[307]:         at java.util.concurrent.ScheduledThreadPoolExecutor$ScheduledFutureTask.run(ScheduledThreadPoolExecutor.java:304) ~[?:?]
+Aug 14 17:55:08 hmis tomcat9[307]:         at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1128) ~[?:?]
+Aug 14 17:55:08 hmis tomcat9[307]:         at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:628) ~[?:?]
+Aug 14 17:55:08 hmis tomcat9[307]:         at java.lang.Thread.run(Thread.java:829) ~[?:?]
+Aug 14 17:55:08 hmis tomcat9[307]: * ERROR 2023-08-14T17:55:08,409 Process failed: null (NotificationLoggerUtil.java [taskScheduler-16]) UID:NaAuJDhbEe8
+Aug 14 17:55:08 hmis tomcat9[307]: * ERROR 2023-08-14T17:55:08,419 Process failed: java.lang.NullPointerException (NotificationLoggerUtil.java [taskScheduler-16]) UID:NaAuJDhbEe8
+Aug 14 17:55:08 hmis tomcat9[307]: * ERROR 2023-08-14T17:55:08,420 Job failed: 'inMemoryAnalyticsJob' (AbstractSchedulingManager.java [taskScheduler-16]) UID:NaAuJDhbEe8
+Aug 14 17:55:08 hmis tomcat9[307]: java.lang.NullPointerException: null
+Aug 14 17:55:08 hmis tomcat9[307]:         at org.hisp.dhis.resourcetable.table.OrganisationUnitStructureResourceTable.getPopulateTempTableContent(OrganisationUnitStructureResourceTable.java:119) ~[dhis-service-administration-2.37.9.1.jar:?]
+Aug 14 17:55:08 hmis tomcat9[307]:         at org.hisp.dhis.resourcetable.jdbc.JdbcResourceTableStore.generateResourceTable(JdbcResourceTableStore.java:94) ~[dhis-service-administration-2.37.9.1.jar:?]
+Aug 14 17:55:08 hmis tomcat9[307]:         at org.hisp.dhis.resourcetable.DefaultResourceTableService.generateOrganisationUnitStructures(DefaultResourceTableService.java:122) ~[dhis-service-administration-2.37.9.1.jar:?]
+Aug 14 17:55:08 hmis tomcat9[307]:         at jdk.internal.reflect.NativeMethodAccessorImpl.invoke0(Native Method) ~[?:?]
+Aug 14 17:55:08 hmis tomcat9[307]:         at jdk.internal.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:62) ~[?:?]
+Aug 14 17:55:08 hmis tomcat9[307]:         at jdk.internal.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43) ~[?:?]
+Aug 14 17:55:08 hmis tomcat9[307]:         at java.lang.reflect.Method.invoke(Method.java:566) ~[?:?]
+Aug 14 17:55:08 hmis tomcat9[307]:         at org.springframework.aop.support.AopUtils.invokeJoinpointUsingReflection(AopUtils.java:344) ~[spring-aop-5.3.24.jar:5.3.24]
+Aug 14 17:55:08 hmis tomcat9[307]:         at org.springframework.aop.framework.ReflectiveMethodInvocation.invokeJoinpoint(ReflectiveMethodInvocation.java:198) ~[spring-aop-5.3.24.jar:5.3.24]
+Aug 14 17:55:08 hmis tomcat9[307]:         at org.springframework.aop.framework.ReflectiveMethodInvocation.proceed(ReflectiveMethodInvocation.java:163) ~[spring-aop-5.3.24.jar:5.3.24]
+Aug 14 17:55:08 hmis tomcat9[307]:         at org.springframework.transaction.interceptor.TransactionInterceptor$1.proceedWithInvocation(TransactionInterceptor.java:123) ~[spring-tx-5.3.24.jar:5.3.24]
+Aug 14 17:55:08 hmis tomcat9[307]:         at org.springframework.transaction.interceptor.TransactionAspectSupport.invokeWithinTransaction(TransactionAspectSupport.java:388) ~[spring-tx-5.3.24.jar:5.3.24]
+Aug 14 17:55:08 hmis tomcat9[307]:         at org.springframework.transaction.interceptor.TransactionInterceptor.invoke(TransactionInterceptor.java:119) ~[spring-tx-5.3.24.jar:5.3.24]
+Aug 14 17:55:08 hmis tomcat9[307]:         at org.springframework.aop.framework.ReflectiveMethodInvocation.proceed(ReflectiveMethodInvocation.java:186) ~[spring-aop-5.3.24.jar:5.3.24]
+Aug 14 17:55:08 hmis tomcat9[307]:         at org.springframework.aop.framework.JdkDynamicAopProxy.invoke(JdkDynamicAopProxy.java:215) ~[spring-aop-5.3.24.jar:5.3.24]
+Aug 14 17:55:08 hmis tomcat9[307]:         at com.sun.proxy.$Proxy242.generateOrganisationUnitStructures(Unknown Source) ~[?:?]
+Aug 14 17:55:08 hmis tomcat9[307]:         at org.hisp.dhis.analytics.table.DefaultAnalyticsTableGenerator.generateResourceTables(DefaultAnalyticsTableGenerator.java:213) ~[dhis-service-analytics-2.37.9.1.jar:?]
+Aug 14 17:55:08 hmis tomcat9[307]:         at org.hisp.dhis.analytics.table.DefaultAnalyticsTableGenerator.generateTables(DefaultAnalyticsTableGenerator.java:126) ~[dhis-service-analytics-2.37.9.1.jar:?]
+Aug 14 17:55:08 hmis tomcat9[307]:         at org.hisp.dhis.analytics.table.scheduling.AnalyticsTableJob.execute(AnalyticsTableJob.java:82) ~[dhis-service-analytics-2.37.9.1.jar:?]
+Aug 14 17:55:08 hmis tomcat9[307]:         at org.hisp.dhis.scheduling.AbstractSchedulingManager.execute(AbstractSchedulingManager.java:278) ~[dhis-service-core-2.37.9.1.jar:?]
+Aug 14 17:55:08 hmis tomcat9[307]:         at org.hisp.dhis.scheduling.DefaultSchedulingManager.lambda$executeNow$4(DefaultSchedulingManager.java:184) ~[dhis-service-core-2.37.9.1.jar:?]
+Aug 14 17:55:08 hmis tomcat9[307]:         at org.hisp.dhis.scheduling.DefaultSchedulingManager.lambda$runIfPossible$5(DefaultSchedulingManager.java:212) ~[dhis-service-core-2.37.9.1.jar:?]
+Aug 14 17:55:08 hmis tomcat9[307]:         at org.glowroot.agent.plugin.executor.RunnableWrapper.run(RunnableWrapper.java:35) ~[?:0.13.6]
+Aug 14 17:55:08 hmis tomcat9[307]:         at java.util.concurrent.Executors$RunnableAdapter.call(Executors.java:515) ~[?:?]
+Aug 14 17:55:08 hmis tomcat9[307]:         at java.util.concurrent.FutureTask.run(FutureTask.java:264) ~[?:?]
+Aug 14 17:55:08 hmis tomcat9[307]:         at org.springframework.scheduling.support.DelegatingErrorHandlingRunnable.run(DelegatingErrorHandlingRunnable.java:54) ~[spring-context-5.3.24.jar:5.3.24]
+Aug 14 17:55:08 hmis tomcat9[307]:         at java.util.concurrent.Executors$RunnableAdapter.call(Executors.java:515) ~[?:?]
+Aug 14 17:55:08 hmis tomcat9[307]:         at java.util.concurrent.FutureTask.run(FutureTask.java:264) ~[?:?]
+Aug 14 17:55:08 hmis tomcat9[307]:         at java.util.concurrent.ScheduledThreadPoolExecutor$ScheduledFutureTask.run(ScheduledThreadPoolExecutor.java:304) ~[?:?]
+Aug 14 17:55:08 hmis tomcat9[307]:         at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1128) ~[?:?]
+Aug 14 17:55:08 hmis tomcat9[307]:         at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:628) ~[?:?]
+Aug 14 17:55:08 hmis tomcat9[307]:         at java.lang.Thread.run(Thread.java:829) ~[?:?]
+Aug 14 17:55:08 hmis tomcat9[307]: * ERROR 2023-08-14T17:55:08,420 java.lang.NullPointerException
+Aug 14 17:55:08 hmis tomcat9[307]:         at org.hisp.dhis.resourcetable.table.OrganisationUnitStructureResourceTable.getPopulateTempTableContent(OrganisationUnitStructureResourceTable.java:119)
+Aug 14 17:55:08 hmis tomcat9[307]:         at org.hisp.dhis.resourcetable.jdbc.JdbcResourceTableStore.generateResourceTable(JdbcResourceTableStore.java:94)
+Aug 14 17:55:08 hmis tomcat9[307]:         at org.hisp.dhis.resourcetable.DefaultResourceTableService.generateOrganisationUnitStructures(DefaultResourceTableService.java:122)
+Aug 14 17:55:08 hmis tomcat9[307]:         at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+Aug 14 17:55:08 hmis tomcat9[307]:         at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:62)
+Aug 14 17:55:08 hmis tomcat9[307]:         at java.base/jdk.internal.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+Aug 14 17:55:08 hmis tomcat9[307]:         at java.base/java.lang.reflect.Method.invoke(Method.java:566)
+Aug 14 17:55:08 hmis tomcat9[307]:         at org.springframework.aop.support.AopUtils.invokeJoinpointUsingReflection(AopUtils.java:344)
+Aug 14 17:55:08 hmis tomcat9[307]:         at org.springframework.aop.framework.ReflectiveMethodInvocation.invokeJoinpoint(ReflectiveMethodInvocation.java:198)
+Aug 14 17:55:08 hmis tomcat9[307]:         at org.springframework.aop.framework.ReflectiveMethodInvocation.proceed(ReflectiveMethodInvocation.java:163)
+Aug 14 17:55:08 hmis tomcat9[307]:         at org.springframework.transaction.interceptor.TransactionInterceptor$1.proceedWithInvocation(TransactionInterceptor.java:123)
+Aug 14 17:55:08 hmis tomcat9[307]:         at org.springframework.transaction.interceptor.TransactionAspectSupport.invokeWithinTransaction(TransactionAspectSupport.java:388)
+Aug 14 17:55:08 hmis tomcat9[307]:         at org.springframework.transaction.interceptor.TransactionInterceptor.invoke(TransactionInterceptor.java:119)
+Aug 14 17:55:08 hmis tomcat9[307]:         at org.springframework.aop.framework.ReflectiveMethodInvocation.proceed(ReflectiveMethodInvocation.java:186)
+Aug 14 17:55:08 hmis tomcat9[307]:         at org.springframework.aop.framework.JdkDynamicAopProxy.invoke(JdkDynamicAopProxy.java:215)
+Aug 14 17:55:08 hmis tomcat9[307]:         at com.sun.proxy.$Proxy242.generateOrganisationUnitStructures(Unknown Source)
+Aug 14 17:55:08 hmis tomcat9[307]:         at org.hisp.dhis.analytics.table.DefaultAnalyticsTableGenerator.generateResourceTables(DefaultAnalyticsTableGenerator.java:213)
+Aug 14 17:55:08 hmis tomcat9[307]:         at org.hisp.dhis.analytics.table.DefaultAnalyticsTableGenerator.generateTables(DefaultAnalyticsTableGenerator.java:126)
+Aug 14 17:55:08 hmis tomcat9[307]:         at org.hisp.dhis.analytics.table.scheduling.AnalyticsTableJob.execute(AnalyticsTableJob.java:82)
+Aug 14 17:55:08 hmis tomcat9[307]:         at org.hisp.dhis.scheduling.AbstractSchedulingManager.execute(AbstractSchedulingManager.java:278)
+Aug 14 17:55:08 hmis tomcat9[307]:         at org.hisp.dhis.scheduling.DefaultSchedulingManager.lambda$executeNow$4(DefaultSchedulingManager.java:184)
+Aug 14 17:55:08 hmis tomcat9[307]:         at org.hisp.dhis.scheduling.DefaultSchedulingManager.lambda$runIfPossible$5(DefaultSchedulingManager.java:212)
+Aug 14 17:55:08 hmis tomcat9[307]:         at org.glowroot.agent.plugin.executor.RunnableWrapper.run(RunnableWrapper.java:35)
+Aug 14 17:55:08 hmis tomcat9[307]:         at java.base/java.util.concurrent.Executors$RunnableAdapter.call(Executors.java:515)
+Aug 14 17:55:08 hmis tomcat9[307]:         at java.base/java.util.concurrent.FutureTask.run(FutureTask.java:264)
+Aug 14 17:55:08 hmis tomcat9[307]:         at org.springframework.scheduling.support.DelegatingErrorHandlingRunnable.run(DelegatingErrorHandlingRunnable.java:54)
+Aug 14 17:55:08 hmis tomcat9[307]:         at java.base/java.util.concurrent.Executors$RunnableAdapter.call(Executors.java:515)
+Aug 14 17:55:08 hmis tomcat9[307]:         at java.base/java.util.concurrent.FutureTask.run(FutureTask.java:264)
+Aug 14 17:55:08 hmis tomcat9[307]:         at java.base/java.util.concurrent.ScheduledThreadPoolExecutor$ScheduledFutureTask.run(ScheduledThreadPoolExecutor.java:304)
+Aug 14 17:55:08 hmis tomcat9[307]:         at java.base/java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1128)
+Aug 14 17:55:08 hmis tomcat9[307]:         at java.base/java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:628)
+Aug 14 17:55:08 hmis tomcat9[307]:         at java.base/java.lang.Thread.run(Thread.java:829)

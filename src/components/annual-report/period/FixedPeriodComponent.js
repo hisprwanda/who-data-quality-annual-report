@@ -57,7 +57,6 @@ const FixedPeriodComponent = function () {
                   ))
                 }
               </ul>
-               
             </div>
           </div>
           <div>
