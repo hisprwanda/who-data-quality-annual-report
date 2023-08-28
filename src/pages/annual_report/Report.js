@@ -22,13 +22,15 @@ import {
 import { DataSetModal } from "../../components/annual-report/modal/data-sets/DataSetModal";
 import { PeriodModal } from "../../components/annual-report/modal/period/PeriodModal";
 import { OrganizationUnitModal } from "../../components/annual-report/modal/organizationunit/OrganizationUnitModal";
-import { loadDataStore } from "../../components/annual-report/datasource/dataset/dataset.source";
+import { loadDataStore, loadAnalytics } from "../../components/annual-report/datasource/dataset/dataset.source";
 import { useDataQuery } from "@dhis2/app-runtime";
 import { OrgUnitComponent } from "../../components/annual-report/OrgUnit.Component";
 import down_allow from "../../assets/images/downarrow.png";
 import ReportPreview from "../../components/annual-report/report-preview/ReportPreview";
 import { useDispatch, useSelector } from "react-redux";
 import PeriodComponent from "../../components/annual-report/period/Period.component";
+import { getAnalytics } from "../../components/annual-report/utils/enum/HttpRequest.util";
+import { SettingsProcessor } from "../../utils/SettingsProcessor";
 
 // End of imports
 
@@ -36,6 +38,7 @@ import PeriodComponent from "../../components/annual-report/period/Period.compon
 const Report = function () {
   // Redux state selector hook
   let selectedElementStore = useSelector((state) => state.selectedValue);
+  let storeStateSelector = useSelector(state => state)
   // Redux state dispatch hook
   let dispatch = useDispatch();
   // Hook for managing data set modals
@@ -51,6 +54,10 @@ const Report = function () {
   // End of hook for managing org unit modal
   let [_dataStore, setDataStore] = useState(loadDataStore);
 
+  // State hook for settings
+  let [_settings, setSettings] = useState([])
+  // End of the hook for managing settings 
+
   // Hook for managing levels
   let [selectedLevel, setSelectedLevel] = useState("Select Levels");
   // Hook for managing groups
@@ -63,12 +70,24 @@ const Report = function () {
   let _selectedPeriod = selectedElementStore.period;
   let _selectedOrgUnit = selectedElementStore.orgUnit.displayName;
   let [relativePeriodSelected, setRelativePeriodSelected] = useState("");
-  let { loading, error, data } = useDataQuery(_dataStore, {}, {}, {}, {}, {});
 
+  let reportLoader = (orgUnit, period, group) => {
+    dispatch({type: 'Change Report View Status', payload: {status: true}})
+    console.log(orgUnit, period, group)
+  }
+  let { loading, error, data } = useDataQuery(_dataStore, {}, {}, {}, {}, {})
+  
+  useEffect(() => { 
+    let settings = data !== undefined ? SettingsProcessor(data) : []
+    setSettings(settings)
+  }, [data])
+  
   // Definition of use effect hooks
   useEffect(() => {
     let groups = data?.results.groups.filter((i) => i.code === selectedItem);
     setFilteredItem(groups);
+    dispatch({type: 'Change Group', payload: selectedItem})
+    console.log(storeStateSelector)
   }, [selectedItem]);
 
   useEffect(() => {
@@ -87,8 +106,6 @@ const Report = function () {
     dispatch({ type: "Change Dataset", payload: { el: chosenElement } });
   };
 
-  // console.log(data?.results.groups)
-  // End of variable declaration
   return (
     <div className="reportContainer">
       <MenuBar />
@@ -116,7 +133,7 @@ const Report = function () {
             </div>
             <div className="data-showable">
               <ul>
-                {data?.results.groups.map((element, info) => {
+                {_settings?.map((element, info) => {
                   return (
                     <li
                       key={element.code}
@@ -222,7 +239,7 @@ const Report = function () {
               <div>
                 <Button
                   name="Basic button"
-                  onClick={() => setReportStatus(true)}
+                  onClick={() => reportLoader(_selectedOrgUnit, storeStateSelector.period.selectedPeriod, selectedItem)}
                   default
                   value="default"
                 >
@@ -232,7 +249,6 @@ const Report = function () {
               <div>
                 <Button
                   name="Primary button"
-                  onClick={console.log("done")}
                   primary
                   value="Print"
                 >
@@ -244,7 +260,7 @@ const Report = function () {
         </div>
       </div>
 
-      <div className="report-section">{reportStatus && <ReportPreview />}</div>
+      <div className="report-section">{storeStateSelector.reportViewStatus && <ReportPreview />}</div>
     </div>
   );
 };

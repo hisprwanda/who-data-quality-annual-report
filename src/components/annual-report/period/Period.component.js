@@ -21,7 +21,6 @@ const PeriodComponent = function () {
   let selector = useSelector((state) => state);
   let periodSelected = selector.period.fixedPeriod.period;
   let [chosenPeriodArr, setchosenPeriodArr] = useState([]);
-
   let [info, setInfo] = useState([]);
   useEffect(() => {
     const x = processFixedPeriod(periodSelected);
@@ -29,11 +28,13 @@ const PeriodComponent = function () {
   }, [periodSelected]);
 
   let [chosenPeriod, setChosenPeriod] = useState();
-  useEffect(() => {
-    chosenPeriodArr = [...chosenPeriodArr, chosenPeriod];
+
+  const _setChosenPeriod = (period) => {
+    chosenPeriodArr = [...chosenPeriodArr, period];
     setchosenPeriodArr(chosenPeriodArr);
-    console.log(chosenPeriodArr);
-  }, [chosenPeriod]);
+    dispatch({type: 'Period Selection', payload: {period: chosenPeriodArr}})
+  }
+
   return (
     <div className="period-showable-container">
       <div className="period-selection">
@@ -78,7 +79,7 @@ const PeriodComponent = function () {
             <ul>
               {info.length > 0 &&
                 info.map((dt) => (
-                  <li key={dt} onClick={() => setChosenPeriod(dt)}>
+                  <li key={dt} onClick={() => _setChosenPeriod(dt)}>
                     {dt}
                   </li>
                 ))}

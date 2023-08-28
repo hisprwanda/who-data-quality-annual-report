@@ -61,5 +61,21 @@ export const loadDataStore = {
     }
 }
 
+export const loadAnalytics = {
+    results: {
+        resource: 'analytics.json?dimension=pe:2000W01&filter=ou:Hjw70Lodtf2;LEVEL-2&displayProperty=NAME&skipData=true',
+        paging: true,
+    }
+}
+
+export const loadAnalyticsInformation = () => {
+    return {
+        results: {
+            resource: 'analytics.json?dimension=dx:xcHDkwzQPI3.REPORTING_RATE&dimension=ou:Hjw70Lodtf2;LEVEL-2&dimension=pe:2022;2019;2020;2021',
+            paging: true,
+        }
+    }
+}
+
 export let allDataState = {count: 0}
 export let dataInitialState = {count: 0}

@@ -16,7 +16,9 @@ const currentState = {
             period: 'Daily',
             year: year
         },
-        relativePeriod: 'Day'
-    }    
+        relativePeriod: 'Day',
+        selectedPeriod: []
+    },
+    reportViewStatus: false 
 }
 export default currentState

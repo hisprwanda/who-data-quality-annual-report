@@ -1,167 +1,59 @@
-import {useState, useEffect} from 'react'
+import { useState, useEffect } from "react"
+import { useSelector, useDispatch } from "react-redux";
 import {
-    Button,
-    ButtonStrip,
-    DataTable,
-    TableBody,
-    TableHead,
-    DataTableRow,
-    DataTableColumnHeader,
-    DataTableCell
-  } from '@dhis2/ui'
-import './report-preview-styles.css'
-import logo from '../../../assets/images/WHO_logo.png'
+  Button,
+  ButtonStrip,
+  DataTable,
+  TableBody,
+  TableHead,
+  DataTableRow,
+  DataTableColumnHeader,
+  DataTableCell,
+} from "@dhis2/ui";
+import "./styles/reportpreview.css";
+import logo from "../../../assets/images/WHO_logo.png";
+import {
+  loadAnalytics,
+  loadAnalyticsInformation,
+} from "../datasource/dataset/dataset.source";
+import { useDataQuery } from "@dhis2/app-runtime";
+import {
+  completenessLabel,
+  mainHeaderLabel,
+} from "../utils/report/ReportLabel.util";
+import { HeaderSection } from "./HeaderSection";
+import { ParentHeader } from "./ParentHeader";
+import { DataSection } from "./DataSection";
 
+const ReportPreview = () => {
 
+  let storeSelector = useSelector(store => store)
+  let storeDispatch = useDispatch()
+  
+  let { loading, error, data } = useDataQuery(
+    loadAnalytics,
+    {},
+    {},
+    {},
+    {},
+    {}
+  );
+  let response = useDataQuery(loadAnalyticsInformation(), {}, {}, {}, {}, {});
 
-const ReportPreview = ({isHidden, onClose, onPrintReport}) => {
-
+  console.log(storeSelector)
 
   return (
-    <div className='report-preview report-preview-container'>
-        <div className='report-preview report-preview-content'>
-
-            <div class="section-sub-header">
-                <p>Domain 1 - Completeness</p>
-            </div>
-
-            <h4>1a: Completeness of facility reporting</h4>
-            <p>The percentage of expected reports that have been entered and completed.</p>
-            <DataTable>
-                <TableHead>
-                    <DataTableRow>
-                        <DataTableColumnHeader>Data set</DataTableColumnHeader>
-                        <DataTableColumnHeader>Overrall score</DataTableColumnHeader>
-                        <DataTableColumnHeader>
-                            Province with divergent score
-                            
-                        </DataTableColumnHeader>
-                    </DataTableRow>
-                </TableHead>
-                <TableBody>
-                    <DataTableRow>
-                        <DataTableCell bordered> A - Hospital Daily Flash Report [ Previous Day ] - Reporting rate </DataTableCell>
-                        <DataTableCell bordered>0%</DataTableCell>
-                        <DataTableCell bordered>
-                            <DataTable>
-                                <DataTableRow>
-                                    <DataTableCell bordered>5</DataTableCell>
-                                    <DataTableCell bordered>100%</DataTableCell>
-                                </DataTableRow>
-                            </DataTable>
-                        </DataTableCell>
-                        
-                    </DataTableRow>
-                </TableBody>
-            </DataTable>
-            
-            <h4>1b: Timeliness of facility reporting</h4>
-            <p>The percentage of expected reports that have been entered and completed on time.</p>
-            <DataTable>
-                <TableHead>
-                    <DataTableRow>
-                        <DataTableColumnHeader>Data set</DataTableColumnHeader>
-                        <DataTableColumnHeader>Overrall score</DataTableColumnHeader>
-                        <DataTableColumnHeader>
-                            Province with divergent score
-                            
-                        </DataTableColumnHeader>
-                    </DataTableRow>
-                </TableHead>
-                <TableBody>
-                    <DataTableRow>
-                        <DataTableCell bordered> A - Hospital Daily Flash Report [ Previous Day ] - Reporting rate </DataTableCell>
-                        <DataTableCell bordered>0%</DataTableCell>
-                        <DataTableCell bordered>
-                            <DataTable>
-                                <DataTableRow>
-                                    <DataTableCell bordered>5</DataTableCell>
-                                    <DataTableCell bordered>100%</DataTableCell>
-                                </DataTableRow>
-                            </DataTable>
-                        </DataTableCell>
-                    </DataTableRow>
-                    <DataTableRow>
-                        <DataTableCell bordered> A - Hospital Daily Flash Report [ Previous Day ] - Reporting rate </DataTableCell>
-                        <DataTableCell bordered>0%</DataTableCell>
-                        <DataTableCell bordered>
-                            <DataTable>
-                                <DataTableRow>
-                                    <DataTableCell bordered>5</DataTableCell>
-                                    <DataTableCell bordered>100%</DataTableCell>
-                                </DataTableRow>
-                            </DataTable>
-                        </DataTableCell>
-                    </DataTableRow>
-                </TableBody>
-            </DataTable>
-            
-            <h4>1c: Completeness of indicator data</h4>
-            <p>Reports where values are not missing. If zeros are not stored, zeros are counted as missing.</p>
-            <DataTable>
-                <TableHead>
-                    <DataTableRow>
-                        <DataTableColumnHeader>Data set</DataTableColumnHeader>
-                        <DataTableColumnHeader>Overrall score</DataTableColumnHeader>
-                        <DataTableColumnHeader>
-                            Province with divergent score
-                            
-                        </DataTableColumnHeader>
-                    </DataTableRow>
-                </TableHead>
-                <TableBody>
-                    <DataTableRow>
-                        <DataTableCell bordered> A - Hospital Daily Flash Report [ Previous Day ] - Reporting rate </DataTableCell>
-                        <DataTableCell bordered>0%</DataTableCell>
-                        <DataTableCell bordered>
-                            <DataTable>
-                                <DataTableRow>
-                                    <DataTableCell bordered>5</DataTableCell>
-                                    <DataTableCell bordered>100%</DataTableCell>
-                                </DataTableRow>
-                            </DataTable>
-                        </DataTableCell>
-                        
-                    </DataTableRow>
-                </TableBody>
-            </DataTable>
-
-            <div class="section-sub-header">
-                <p>Domain 2 - Internal consistency</p>
-            </div>
-            <h4>2a: Extreme outliers.</h4>
-            <p>Extreme outliers, using the standard method. Province are counted as divergent if they have one or more extreme outliers for an indicator.</p>
-            <DataTable>
-                <TableHead>
-                    <DataTableRow>
-                        <DataTableColumnHeader>Indicator</DataTableColumnHeader>
-                        <DataTableColumnHeader>Overrall score</DataTableColumnHeader>
-                        <DataTableColumnHeader>
-                            Province with divergent score
-                            
-                        </DataTableColumnHeader>
-                    </DataTableRow>
-                </TableHead>
-                <TableBody>
-                    <DataTableRow>
-                        <DataTableCell bordered> A - Hospital Daily Flash Report [ Previous Day ] - Reporting rate </DataTableCell>
-                        <DataTableCell bordered>0%</DataTableCell>
-                        <DataTableCell bordered>
-                            <DataTable>
-                                <DataTableRow>
-                                    <DataTableCell bordered>5</DataTableCell>
-                                    <DataTableCell bordered>100%</DataTableCell>
-                                </DataTableRow>
-                            </DataTable>
-                        </DataTableCell>
-                        
-                    </DataTableRow>
-                </TableBody>
-            </DataTable>
-
-        </div>
+    <div className="report-preview report-preview-container">
+      <ParentHeader
+        main_title={mainHeaderLabel.summary}
+        sub_title={completenessLabel.completeness}
+      />
+      <DataSection
+        main_title={completenessLabel.completenessOfFacilityReporting}
+        sub_title={completenessLabel.percentageOfExpectedAndCompleted}
+      />
     </div>
-  )
-}
+  );
+};
 
-export default ReportPreview
+export default ReportPreview;
