@@ -1,6 +1,7 @@
 .header-section-parent {
     display: flex;
     flex-direction: column;
+    border: 1px solid #dedddd;
 }
 
 .header-section-parent-main-title, .header-section-parent-sub-title {

@@ -1,5 +1,7 @@
 // This file contains codes for reactive streams 
 
+import axios from "axios"
+
 export const dataSetQueryStructure = {
     results: {
         resource: 'dataItems',
@@ -87,7 +89,58 @@ export const loadDataElements = (elements, paging) => {
     }
 }
 
+export const loadOrganizationUnit = (orgUnit) => { 
+
+    return axios.get(`https://online.hisprwanda.org/eir/api/organisationUnits/${orgUnit}.json?fields=children[displayName,id,level,children::isNotEmpty]`, {
+        auth: {
+            username: 'bmafende',
+            password: 'Admin@123',
+          }
+    })
+}
+
+export const loadReportingRate = (dx, ou, level, pe) => {
+    return axios.get(`https://online.hisprwanda.org/eir/api/analytics.json?dimension=dx:${dx[0]}.REPORTING_RATE&dimension=ou:${ou};LEVEL-${level}&dimension=pe:2022&displayProperty=NAME`, {
+        auth: {
+            username: 'bmafende',
+            password: 'Admin@123',
+          }
+    })
+}
+
+export const loadDatasetInformation = (dataset) => {
+    return axios.get(`https://online.hisprwanda.org/eir/api/dataSets.json?filter=id:in:[${dataset}]&fields=displayName,id,periodType&paging=false`, {
+        auth: {
+            username: 'bmafende',
+            password: 'Admin@123',
+          }
+    })
+}
+
+export const loadReportingRateOnTime = (dx, ou, level) => {
+    return axios.get(`https://online.hisprwanda.org/eir/api/29/analytics.json?dimension=dx:${dx}.REPORTING_RATE_ON_TIME&dimension=ou:${ou};LEVEL-${level}&dimension=pe:2022&displayProperty=NAME`, {
+        auth: {
+            username: 'bmafende',
+            password: 'Admin@123',
+          }
+    })
+}
+
+export const getHttpRequest = () => {
+    axios.get('https://online.hisprwanda.org/eir/api/identifiableObjects/ncVHO9PKoOh', {
+        auth: {
+            username: 'bmafende',
+            password: 'Admin@123',
+          }
+    })
+    .then(data => {console.log(data)})
+    .catch(err => console.log(err))
+    .finally(console.log('Finally run'))
+}
+
+
+
 export let allDataState = {count: 0}
 export let dataInitialState = {count: 0}
 
-//dataElements.json?filter=id:in:[B97VsJr27J6,GDaveYNVsl9,GDaveYNVsl9,TFMq8A8iZMx,b2WxuOLQ451,eHz3LgFY3UU,xcHDkwzQPI3]&=&paging=false
+//https://online.hisprwanda.org/eir/api/29/analytics.json?dimension=dx:xcHDkwzQPI3.REPORTING_RATE_ON_TIME&dimension=ou:fSyvbMUZWqJ;LEVEL-4&dimension=pe:2022&displayProperty=NAME

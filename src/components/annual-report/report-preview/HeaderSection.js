@@ -1,10 +1,10 @@
 import React from "react";
 import "./styles/headersection.css";
 import { completenessLabel } from "../utils/report/ReportLabel.util";
-import { ReportDataSection } from "../report-data/ReportData";
+import { ReportDataSection } from "../report-data/ReportDataSection";
 import { useSelector, useDispatch } from "react-redux";
 
-export const HeaderSection = ({ main_title, sub_title }) => {
+export const HeaderSection = ({ main_title, sub_title, moreinfo, dataheader }) => {
 
   const storeSelector = useSelector(store => store)
   const actionDispatch = useDispatch()
@@ -14,13 +14,13 @@ export const HeaderSection = ({ main_title, sub_title }) => {
   const orgUnitID = storeSelector.selectedValue.orgUnit.id
   const orgUnitChildren = storeSelector.selectedValue.orgUnit.children
   const period = storeSelector.period.selectedPeriod
-  
+
   return (
     <div className="header-section-parent">
       <div className="header-section-parent-main-title">{main_title}</div>
       <div className="header-section-parent-sub-title">{sub_title}</div>
       <div className="header-section-sub-sub-title">
-        <div>{completenessLabel.dataset}</div>
+        <div>{dataheader}</div>
         <div>{completenessLabel.overallScore}</div>
         <div className="header-section-sub-sub-province">
           <div>{completenessLabel.divergentProvince}</div>
@@ -30,8 +30,11 @@ export const HeaderSection = ({ main_title, sub_title }) => {
           </div>
         </div>
       </div>
-      <ReportDataSection/>
-      
+      {
+        availableDataset.map((ds) => (
+          <ReportDataSection group={group} element={allElements} orgUnit={orgUnitID} children={orgUnitChildren} period={period} dataset={availableDataset} moreinfo={moreinfo}/>
+        ))
+      }
     </div>
   );
 };

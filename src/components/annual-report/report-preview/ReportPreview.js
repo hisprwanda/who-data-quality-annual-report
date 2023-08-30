@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react"
+import { useState, useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import {
   Button,
@@ -15,7 +15,7 @@ import logo from "../../../assets/images/WHO_logo.png";
 import {
   loadAnalytics,
   loadAnalyticsInformation,
-  loadDataElements
+  loadDataElements,
 } from "../datasource/dataset/dataset.source";
 import { useDataQuery } from "@dhis2/app-runtime";
 import {
@@ -27,9 +27,8 @@ import { ParentHeader } from "./ParentHeader";
 import { DataSection } from "./DataSection";
 
 const ReportPreview = () => {
-
-  let storeSelector = useSelector(store => store)
-  let storeDispatch = useDispatch()
+  let storeSelector = useSelector((store) => store);
+  let storeDispatch = useDispatch();
   let { loading, error, data } = useDataQuery(
     loadAnalytics,
     {},
@@ -38,16 +37,16 @@ const ReportPreview = () => {
     {},
     {}
   );
-  
-  const availableDataset = storeSelector.selectedValue.configuredDataset
-  const group = storeSelector.selectedValue.dataSet
-  const allElements = storeSelector.selectedValue.element
-  const orgUnitID = storeSelector.selectedValue.orgUnit.id
-  const orgUnitChildren = storeSelector.selectedValue.orgUnit.children
-  const period = storeSelector.period.selectedPeriod
+
+  const availableDataset = storeSelector.selectedValue.configuredDataset;
+  const group = storeSelector.selectedValue.dataSet;
+  const allElements = storeSelector.selectedValue.element;
+  const orgUnitID = storeSelector.selectedValue.orgUnit.id;
+  const orgUnitChildren = storeSelector.selectedValue.orgUnit.children;
+  const period = storeSelector.period.selectedPeriod;
   //let response = useDataQuery(loadAnalyticsInformation(), {}, {}, {}, {}, {});
-  let dataElementRequest = useDataQuery(loadDataElements(allElements, false))
-  
+  let dataElementRequest = useDataQuery(loadDataElements(allElements, false));
+
   return (
     <div className="report-preview report-preview-container">
       <ParentHeader
@@ -57,7 +56,24 @@ const ReportPreview = () => {
       <DataSection
         main_title={completenessLabel.completenessOfFacilityReporting}
         sub_title={completenessLabel.percentageOfExpectedAndCompleted}
+        more_info={completenessLabel.reportingRate}
+        dataheader={completenessLabel.dataset}
+      /> 
+      <p></p>
+
+      <DataSection
+        main_title={completenessLabel.timelinessOfFacility}
+        sub_title={completenessLabel.percentageOfExpectedEntered}
+        more_info={completenessLabel.reportingRateOnTime}
+        dataheader={completenessLabel.dataset}
       />
+      <p></p>
+      <DataSection
+        main_title={completenessLabel.completenessOfIndicator}
+        sub_title={completenessLabel.reportWhereValuesNotMissing}
+        more_info={completenessLabel.reportingRateOnTime}
+        dataheader={completenessLabel.indicator}
+      />      
     </div>
   );
 };
