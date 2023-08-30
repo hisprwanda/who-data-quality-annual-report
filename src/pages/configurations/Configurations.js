@@ -1,4 +1,4 @@
-import {useState} from 'react'
+import {useState, useEffect} from 'react'
 import MenuBar from '../../components/menu-bar/MenuBar'
 import ConfigTabs from '../../components/config-tabs/ConfigTabs'
 import './configurations.css'
@@ -13,8 +13,20 @@ const readDataStoreQuery = {
 };
 
 
+const mappedDataElementsQuery = {
+  elements: {
+    resource: 'dataElements',
+    params:({mappedElements}) =>({
+      filter:`id:in:${mappedElements}`,
+      paging: false,
+    })
+  }
+};
+
 const Configurations = () => {
-let configurations = [];
+const [configurations, setConfigurations] = useState();
+const [mappedNumerators, setMappedNumerators] = useState(null);
+
 
   // A dynamic alert to communicate success or failure 
   // TODO: put this one in a reusable function
@@ -29,15 +41,41 @@ let configurations = [];
   // running the query
   const { loading, error, data } = useDataQuery(readDataStoreQuery);
 
+  // run the mapped data element querry
+  const { loading: mappedElementsLoading, error:mappedElementsError, data:mappedElementsData, refetch:mappedElementsRefetch } = useDataQuery(mappedDataElementsQuery, {
+   lazy: true,
+  });
+  
   if (error) { return <span>ERROR: {error.message}</span> }
 
-if (data) {  
-  
-    configurations = data.dataStore;
-    const message = 'Successfully retrieved configurations'
 
-    // show({ message, status: 'success' })  //TODO: find the error in the console caused by AlertsProvider
-}
+useEffect(() => {
+  if (data) {  
+    const configs = data.dataStore;
+      setConfigurations(configs);
+
+      // mappedElementsRefetch({
+      //   mappedElements: 
+      // })
+      const numeratorsWithDataIds = configs.numerators.filter(numerator => numerator.dataID != null);
+      const elementsUids = numeratorsWithDataIds.map(item => item.dataID).join(',');
+      mappedElementsRefetch({
+        mappedElements: `[${elementsUids}]`
+      })
+      // setMappedNumerators()
+
+      const message = 'Successfully retrieved configurations'
+      // show({ message, status: 'success' })  //TODO: find the error in the console caused by AlertsProvider
+  }
+}, [data]);
+
+useEffect(() => {
+  if (mappedElementsData) {
+    console.log('de returned:', mappedElementsData.elements.dataElements)
+    setMappedNumerators(mappedElementsData.elements.dataElements)
+  }
+}, [mappedElementsData]);
+
 
   return (
     <div className='configurationsContainer'>
@@ -53,7 +91,11 @@ if (data) {
           </div>
 
           <div className='config-tabs-container' >
-              <ConfigTabs loading={loading} configurations={configurations}/>
+              {configurations? 
+                <ConfigTabs loading={loading} configurations={configurations} mappedNumerators={mappedNumerators}/>
+              :
+              ""
+              }
           </div>
 
         </div>

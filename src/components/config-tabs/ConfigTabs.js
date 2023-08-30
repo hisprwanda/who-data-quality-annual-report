@@ -11,7 +11,7 @@ import {ExternalDataComparison} from "./tab-contents/ExternalDataComparison";
 import { CircularLoader } from "@dhis2/ui";
 
 
-function Tabs({loading, configurations}) {
+function Tabs({loading, configurations, mappedNumerators}) {
   const [toggleState, setToggleState] = useState(1);
 
   const toggleTab = (index) => {
@@ -62,8 +62,8 @@ function Tabs({loading, configurations}) {
           {/* TODO: find a way to pass the state globally or use the context api to share these data */}
           <Numerators toggleState={toggleState} configurations={configurations}/>   
           <NumeratorGroups toggleState={toggleState} configurations={configurations}/>
-          <NumeratorRelations toggleState={toggleState} configurations={configurations}/>
-          <NumeratorParameters toggleState={toggleState}  configurations={configurations}/>
+          <NumeratorRelations toggleState={toggleState} configurations={configurations} mappedNumerators={mappedNumerators}/>
+          <NumeratorParameters toggleState={toggleState}  configurations={configurations} mappedNumerators={mappedNumerators}/>
           <Denominators toggleState={toggleState}  configurations={configurations}/>
           <DenominatorRelations toggleState={toggleState}  configurations={configurations}/>
           <ExternalDataComparison toggleState={toggleState}  configurations={configurations}/>
