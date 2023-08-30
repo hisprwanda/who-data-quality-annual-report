@@ -42,7 +42,9 @@ const reducer = function (state = currentState, action) {
           orgUnit: {
             ...state.selectedValue.orgUnit,
             displayName: action.payload.displayName,
-            path: action.payload.path
+            path: action.payload.path,
+            id: action.payload.id,
+            children: action.payload.children
           }
         }
       }
@@ -60,6 +62,24 @@ const reducer = function (state = currentState, action) {
       return {
         ...state,
         reportViewStatus: action.payload.status
+      }
+
+    case Actions.changeElement:
+      return {
+        ...state,
+        selectedValue: {
+          ...state.selectedValue,
+          element: action.payload.elements
+        }
+      }
+
+    case Actions.changeConfiguredDataset:
+      return {
+        ...state,
+        selectedValue: {
+          ...state.selectedValue,
+          configuredDataset: action.payload.dataset
+        }
       }
 
     default:

@@ -15,6 +15,7 @@ import logo from "../../../assets/images/WHO_logo.png";
 import {
   loadAnalytics,
   loadAnalyticsInformation,
+  loadDataElements
 } from "../datasource/dataset/dataset.source";
 import { useDataQuery } from "@dhis2/app-runtime";
 import {
@@ -29,7 +30,6 @@ const ReportPreview = () => {
 
   let storeSelector = useSelector(store => store)
   let storeDispatch = useDispatch()
-  
   let { loading, error, data } = useDataQuery(
     loadAnalytics,
     {},
@@ -38,10 +38,16 @@ const ReportPreview = () => {
     {},
     {}
   );
-  let response = useDataQuery(loadAnalyticsInformation(), {}, {}, {}, {}, {});
-
-  console.log(storeSelector)
-
+  
+  const availableDataset = storeSelector.selectedValue.configuredDataset
+  const group = storeSelector.selectedValue.dataSet
+  const allElements = storeSelector.selectedValue.element
+  const orgUnitID = storeSelector.selectedValue.orgUnit.id
+  const orgUnitChildren = storeSelector.selectedValue.orgUnit.children
+  const period = storeSelector.period.selectedPeriod
+  //let response = useDataQuery(loadAnalyticsInformation(), {}, {}, {}, {}, {});
+  let dataElementRequest = useDataQuery(loadDataElements(allElements, false))
+  
   return (
     <div className="report-preview report-preview-container">
       <ParentHeader

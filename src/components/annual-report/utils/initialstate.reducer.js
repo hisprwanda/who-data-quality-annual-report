@@ -6,10 +6,14 @@ const currentState = {
     selectedValue: {
         orgUnit: {
             displayName: 'Rwanda',
-            path: 'Hjw70Lodtf2'
+            path: 'Hjw70Lodtf2',
+            id: '',
+            children: 0
         },
         period: '',
-        dataSet: ''
+        dataSet: '',
+        element: [],
+        configuredDataset: []
     },
     period: {
         fixedPeriod: {

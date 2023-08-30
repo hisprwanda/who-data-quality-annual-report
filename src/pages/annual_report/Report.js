@@ -70,24 +70,34 @@ const Report = function () {
   let _selectedPeriod = selectedElementStore.period;
   let _selectedOrgUnit = selectedElementStore.orgUnit.displayName;
   let [relativePeriodSelected, setRelativePeriodSelected] = useState("");
+  let [elements, setElements] = useState()
+  let [configuredDataSet, setConfiguredDataSet] = useState()
 
   let reportLoader = (orgUnit, period, group) => {
     dispatch({type: 'Change Report View Status', payload: {status: true}})
-    console.log(orgUnit, period, group)
   }
   let { loading, error, data } = useDataQuery(_dataStore, {}, {}, {}, {}, {})
   
   useEffect(() => { 
     let settings = data !== undefined ? SettingsProcessor(data) : []
-    setSettings(settings)
+    setSettings(settings.setting)
+    setElements(Array.from(new Set(settings.elements)))
+    setConfiguredDataSet(Array.from(new Set(settings.dataset)))
   }, [data])
+
+  useEffect(() => {
+    dispatch({type: 'Change Configured Dataset', payload: {dataset: configuredDataSet}})
+  }, [configuredDataSet])
+
+  useEffect(() => {
+    dispatch({type: 'Change Element', payload: {elements}})
+  }, [elements])
   
   // Definition of use effect hooks
   useEffect(() => {
     let groups = data?.results.groups.filter((i) => i.code === selectedItem);
     setFilteredItem(groups);
     dispatch({type: 'Change Group', payload: selectedItem})
-    console.log(storeStateSelector)
   }, [selectedItem]);
 
   useEffect(() => {
@@ -95,11 +105,9 @@ const Report = function () {
   }, reportStatus);
 
   useEffect(() => {
-    console.log(selectedGroup);
   }, [selectedGroup]);
 
   useEffect(() => {
-    console.log(selectedLevel);
   }, [selectedLevel]);
 
   let setSelectedDataSet = function (chosenElement) {

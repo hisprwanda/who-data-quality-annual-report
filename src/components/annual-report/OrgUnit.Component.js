@@ -11,8 +11,7 @@ export const OrgUnitComponent = () => {
   let selectedOU = storeRef.selectedValue.orgUnit.path
 
   useEffect(() => {
-    console.log(orgUnitState, 'changes')
-    dispatch({type: 'Change Org Unit', payload: {displayName: orgUnitState.displayName, path: orgUnitState.path}})
+    dispatch({type: 'Change Org Unit', payload: {displayName: orgUnitState.displayName, path: orgUnitState.path, id: orgUnitState.id, children: orgUnitState.children}})
   }, [orgUnitState])
 
   const chooseSelectedElement = function(e) {

@@ -68,10 +68,20 @@ export const loadAnalytics = {
     }
 }
 
-export const loadAnalyticsInformation = () => {
+export const loadAnalyticsInformation = (dx, ou, pe) => {
     return {
         results: {
-            resource: 'analytics.json?dimension=dx:xcHDkwzQPI3.REPORTING_RATE&dimension=ou:Hjw70Lodtf2;LEVEL-2&dimension=pe:2022;2019;2020;2021',
+            resource: `analytics.json?dimension=dx:${dx}&dimension=ou:${ou}&dimension=pe:${pe}`,
+            paging: true,
+        }
+    }
+}
+
+export const loadDataElements = (elements, paging) => {
+
+    return {
+        results: {
+            resource: `dataElements.json?filter=id:in:[${elements}]&=&paging=false`,
             paging: true,
         }
     }
@@ -79,3 +89,5 @@ export const loadAnalyticsInformation = () => {
 
 export let allDataState = {count: 0}
 export let dataInitialState = {count: 0}
+
+//dataElements.json?filter=id:in:[B97VsJr27J6,GDaveYNVsl9,GDaveYNVsl9,TFMq8A8iZMx,b2WxuOLQ451,eHz3LgFY3UU,xcHDkwzQPI3]&=&paging=false
