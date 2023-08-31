@@ -9,25 +9,48 @@ import {
     TableRow,
     TableRowHead,
     IconDelete16,
-    IconEdit16	
+    IconEdit16,
+    IconAdd16,
+    Modal,
+    ModalActions,
+    ModalContent,
+    ModalTitle,
+    SingleSelect,
+    SingleSelectOption,
+    ButtonStrip, 
+    Input
   } from '@dhis2/ui'
 import { getNumeratorRelations, getRelationType } from '../../../utils/numeratorsMetadataData';
+import relationTypes from '../../../data/relationTypes.json';
 
 
-export const NumeratorRelations = ({toggleState, configurations}) => {
+export const NumeratorRelations = ({toggleState, configurations, mappedNumerators}) => {
     const [relations, setRelations] = useState(null);
+    const [isModalHidden, setIsModalHidden] = useState(true);
+    const [newNumeratorRelationInfo, setNewNumeratorRelationInfo] = useState({
+        A: "",
+        B: "",
+        code: "",
+        criteria: 12,
+        name: "",
+        type: ""
+      });
 
 
     useEffect(() => {
+        console.log('mapped nums in relations:', mappedNumerators)
         setRelations(configurations.numeratorRelations)
       }, [])
       
 
+    const onModalClose = () => {
+    setIsModalHidden(true)
+    }
+
   return (
     <div className={toggleState === 3 ? "content  active-content" : "content"} >
         <p>Numerator Relations</p>
-        <hr />
-
+        <hr /> 
         <div className="relationsContainer">
             <Table>
                 <TableHead>
@@ -55,7 +78,7 @@ export const NumeratorRelations = ({toggleState, configurations}) => {
                             <TableCell>{getRelationType(relation.type).description}</TableCell>
                             <TableCell>
                                 <Button
-                                    name="Primary button" onClick={() => console.log('It works!')} 
+                                    name="Primary button" onClick={() => setIsModalHidden(false)} 
                                     basic button value="default" icon={<IconEdit16 />}> Edit
                                 </Button>
                                 <Button
@@ -72,10 +95,110 @@ export const NumeratorRelations = ({toggleState, configurations}) => {
                         </TableCell>
                     </TableRow>
                     }
+                    <TableRow>
+                        <TableCell></TableCell>
+                        <TableCell></TableCell>
+                        <TableCell></TableCell>
+                        <TableCell></TableCell>
+                        <TableCell></TableCell>
+                        <TableCell></TableCell>
+                        <TableCell></TableCell>
+                        <TableCell> 
+                            <Button
+                                name="Primary button" onClick={()=>setIsModalHidden(false)} 
+                                primary button value="default" icon={<IconAdd16 />}> Add Numerator Relation
+                            </Button>
+                        </TableCell>
+                    </TableRow>
                 </TableBody>
             </Table>
         </div>
 
+{/* TODO: will move this modal in it's own component */}
+<Modal onClose={()=>setIsModalHidden(true)} hide={isModalHidden}  position="middle" >
+            <ModalTitle>
+                Edit numerator relation
+            </ModalTitle>
+            <ModalContent>
+              <Table>
+                <TableBody>
+                    <TableRow>
+                        <TableCell>
+                          <p>Name</p> 
+                        </TableCell>
+                        <TableCell>
+                            <Input label="Name" name="name"value={newNumeratorRelationInfo.name} onChange={(e) => setNewNumeratorRelationInfo({...newNumeratorRelationInfo, name:e.value})} requiredrequired className='input'
+                                />
+                        </TableCell>                      
+                    </TableRow>
+                    <TableRow>
+                        <TableCell>
+                          <p>Type</p> 
+                        </TableCell>
+                        <TableCell>
+                            <SingleSelect className="select" 
+                              onChange={(e) => setNewNumeratorRelationInfo({...newNumeratorRelationInfo, type:e.selected})}
+                              placeholder="Select relation type"
+                              selected={newNumeratorRelationInfo.type}
+                            >
+                                {relationTypes? relationTypes.map((type, key) =>
+                                    <SingleSelectOption label={type.displayName} value={type.code} key={key} />
+
+                                ) : '' }
+                            </SingleSelect>
+                        </TableCell>                      
+                    </TableRow>
+                    <TableRow>
+                        <TableCell>
+                          <p>Numerator A</p> 
+                        </TableCell>
+                        <TableCell>
+                            <SingleSelect className="select" 
+                              onChange={(e)=> setNewNumeratorRelationInfo({...newNumeratorRelationInfo, A:e.selected})}
+                              placeholder="Select numerator A"
+                              selected={newNumeratorRelationInfo.A}
+                            > {mappedNumerators? mappedNumerators.map((numerator, key) =>
+                                    <SingleSelectOption label={numerator.displayName} value={numerator.code} key={key} />
+
+                                ) : '' }
+                            </SingleSelect>
+                        </TableCell>                      
+                    </TableRow>
+                    <TableRow>
+                        <TableCell>
+                          <p>Numerator B</p> 
+                        </TableCell>
+                        <TableCell>
+                            <SingleSelect className="select" 
+                              onChange={(value)=> console.log(value.selected)}
+                              placeholder="Select numerator B"
+                              selected=''
+                            >
+                                  <SingleSelectOption label='{type.label}' value='{type.value}' key='{key}' />
+                                  <SingleSelectOption label='{type.label}' value='{type.value}' key='{key}' />
+                                  <SingleSelectOption label='{type.label}' value='{type.value}' key='{key}' />
+                            </SingleSelect>
+                        </TableCell>                      
+                    </TableRow>
+                    <TableRow>
+                        <TableCell>
+                          <p>Threshold (+/-)</p> 
+                        </TableCell>
+                        <TableCell>
+                            <Input label="Name" name="name" required className='input' value={'10%'}/>
+                        </TableCell>                      
+                    </TableRow>            
+                </TableBody>
+              </Table>
+              <p>Threshold denotes the % difference from national figure that is accepted for a sub-national unit.</p>
+            </ModalContent>
+            <ModalActions>
+                <ButtonStrip end>
+                    <Button  secondary onClick={() => setIsModalHidden(true)}> Cancel </Button>
+                    <Button  primary onClick={()=>console.log('creating numerator relations')}>   Create </Button>
+                </ButtonStrip>
+            </ModalActions>
+        </Modal>
 
   </div>
   )

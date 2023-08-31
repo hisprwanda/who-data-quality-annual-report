@@ -22,11 +22,13 @@ const mappedDataElementsQuery = {
     })
   }
 };
-
+ 
 const Configurations = () => {
-const [configurations, setConfigurations] = useState();
+const [configurations, setConfigurations] = useState(null);
 const [mappedNumerators, setMappedNumerators] = useState(null);
+const [elementsUids, setElementsUids] = useState(null);
 
+let numeratorsWithDataIds = null;
 
   // A dynamic alert to communicate success or failure 
   // TODO: put this one in a reusable function
@@ -53,26 +55,38 @@ useEffect(() => {
   if (data) {  
     const configs = data.dataStore;
       setConfigurations(configs);
-
-      // mappedElementsRefetch({
-      //   mappedElements: 
-      // })
-      const numeratorsWithDataIds = configs.numerators.filter(numerator => numerator.dataID != null);
-      const elementsUids = numeratorsWithDataIds.map(item => item.dataID).join(',');
-      mappedElementsRefetch({
-        mappedElements: `[${elementsUids}]`
-      })
-      // setMappedNumerators()
+      numeratorsWithDataIds = configs.numerators.filter(numerator => numerator.dataID != null);
+        setElementsUids(numeratorsWithDataIds.map(item => item.dataID).join(','));
 
       const message = 'Successfully retrieved configurations'
       // show({ message, status: 'success' })  //TODO: find the error in the console caused by AlertsProvider
   }
 }, [data]);
 
+
 useEffect(() => {
-  if (mappedElementsData) {
-    console.log('de returned:', mappedElementsData.elements.dataElements)
-    setMappedNumerators(mappedElementsData.elements.dataElements)
+  if (elementsUids) {
+    mappedElementsRefetch({
+      mappedElements: `[${elementsUids}]`
+    })
+  }
+}, [elementsUids]);
+
+
+
+useEffect(() => {
+  if (mappedElementsData && numeratorsWithDataIds) {
+    const returnedElements = mappedElementsData.elements.dataElements;
+    
+    for (let i = 0; i < returnedElements.length; i++) {
+      const dataID = returnedElements[i].id;
+      const matchingObj = numeratorsWithDataIds.find(item => item.dataID === dataID);
+
+      if (matchingObj) {
+        returnedElements[i].code = matchingObj.code;
+        setMappedNumerators(...returnedElements, returnedElements)
+      }
+    }
   }
 }, [mappedElementsData]);
 
