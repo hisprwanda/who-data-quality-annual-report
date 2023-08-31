@@ -1,6 +1,8 @@
 // This file contains codes for reactive streams 
 
 import axios from "axios"
+import { baseURL, userAuth } from "../../utils/configuration"
+import { subURL } from "../../utils/configuration"
 
 export const dataSetQueryStructure = {
     results: {
@@ -91,57 +93,34 @@ export const loadDataElements = (elements, paging) => {
 
 export const loadOrganizationUnit = (orgUnit) => { 
 
-    return axios.get(`https://online.hisprwanda.org/eir/api/organisationUnits/${orgUnit}.json?fields=children[displayName,id,level,children::isNotEmpty]`, {
-        auth: {
-            username: 'bmafende',
-            password: 'Admin@123',
-          }
+    return axios.get(`${baseURL}/${subURL}/api/organisationUnits/${orgUnit}.json?fields=children[displayName,id,level,children::isNotEmpty]`, {
+        auth: userAuth
     })
 }
 
 export const loadReportingRate = (dx, ou, level, pe) => {
-    return axios.get(`https://online.hisprwanda.org/eir/api/analytics.json?dimension=dx:${dx[0]}.REPORTING_RATE&dimension=ou:${ou}&dimension=pe:2022&displayProperty=NAME`, {
-        auth: {
-            username: 'bmafende',
-            password: 'Admin@123',
-          }
+    return axios.get(`${baseURL}/${subURL}/api/analytics.json?dimension=dx:${dx[0]}.REPORTING_RATE&dimension=ou:${ou}&dimension=pe:2022&displayProperty=NAME`, {
+        auth: userAuth
     })
 }
 
 export const loadDatasetInformation = (dataset) => {
-    return axios.get(`https://online.hisprwanda.org/eir/api/dataSets.json?filter=id:in:[${dataset}]&fields=displayName,id,periodType&paging=false`, {
-        auth: {
-            username: 'bmafende',
-            password: 'Admin@123',
-          }
+    return axios.get(`${baseURL}/${subURL}/api/dataSets.json?filter=id:in:[${dataset}]&fields=displayName,id,periodType&paging=false`, {
+        auth: userAuth
     })
 }
 
 export const loadReportingRateOnTime = (dx, ou, level) => {
-                      https://online.hisprwanda.org/eir/api/29/analytics.json?dimension=dx:xcHDkwzQPI3.REPORTING_RATE_ON_TIME&dimension=ou:nBLRIqKNNOu&dimension=pe:2022&displayProperty=NAME
-    return axios.get(`https://online.hisprwanda.org/eir/api/29/analytics.json?dimension=dx:${dx}.REPORTING_RATE_ON_TIME&dimension=ou:${ou}&dimension=pe:2022&displayProperty=NAME`, {
-        auth: {
-            username: 'bmafende',
-            password: 'Admin@123',
-          }
+    return axios.get(`${baseURL}/${subURL}/api/29/analytics.json?dimension=dx:${dx}.REPORTING_RATE_ON_TIME&dimension=ou:${ou}&dimension=pe:2022&displayProperty=NAME`, {
+        auth: userAuth
     })
 }
 
-export const getHttpRequest = () => {
-    axios.get('https://online.hisprwanda.org/eir/api/identifiableObjects/ncVHO9PKoOh', {
-        auth: {
-            username: 'bmafende',
-            password: 'Admin@123',
-          }
+// Function used to load organization unit groups
+export const loadOrganizationUnitGroups = () => {
+    return axios.get(`${baseURL}/${subURL}/api/29/organisationUnitGroups.json?=&paging=false`, {
+        auth: userAuth
     })
-    .then(data => {console.log(data)})
-    .catch(err => console.log(err))
-    .finally(console.log('Finally run'))
 }
-
-
-
 export let allDataState = {count: 0}
 export let dataInitialState = {count: 0}
-
-//https://online.hisprwanda.org/eir/api/29/analytics.json?dimension=dx:xcHDkwzQPI3.REPORTING_RATE&dimension=ou:nBLRIqKNNOu&dimension=pe:2022&displayProperty=NAME
