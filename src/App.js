@@ -6,7 +6,7 @@ import classes from './App.module.css'
 import Report from './pages/annual_report/Report'
 import Configurations from './pages/configurations/Configurations'
 
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { HashRouter, BrowserRouter, Routes, Route } from "react-router-dom";
 
 
 const query = {
@@ -17,7 +17,7 @@ const query = {
 
 const MyApp = () => (
     <div className={classes.container}>
-        <BrowserRouter>
+        <HashRouter>
           <Routes>
             <Route path="/">
               <Route index element={<Report />} />
@@ -27,7 +27,7 @@ const MyApp = () => (
               
             </Route>
           </Routes>
-        </BrowserRouter>
+        </HashRouter>
     </div>
 )
 
