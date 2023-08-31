@@ -1,6 +1,7 @@
 .header-section-parent {
     display: flex;
     flex-direction: column;
+    border: 1px solid #dedddd;
 }
 
 .header-section-parent-main-title, .header-section-parent-sub-title {
@@ -57,6 +58,9 @@
 }
 
 .header-section-data-section {
+    border-left: 1px solid #d1cfcf;
+    border-right: 1px solid #d1cfcf;
+    border-bottom: 1px solid #d1cfcf;
     display: flex;
 }
 

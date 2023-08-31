@@ -25,6 +25,8 @@ import {
 import { HeaderSection } from "./HeaderSection";
 import { ParentHeader } from "./ParentHeader";
 import { DataSection } from "./DataSection";
+import { CompletenessReport } from "./completness/CompletenessReport";
+import { InternalConsistencyReport } from "./internalconsistency/InternalConsistencyReport";
 
 const ReportPreview = () => {
   let storeSelector = useSelector((store) => store);
@@ -49,7 +51,17 @@ const ReportPreview = () => {
 
   return (
     <div className="report-preview report-preview-container">
-      <ParentHeader
+      <CompletenessReport
+        main_title={mainHeaderLabel.summary}
+        sub_title={completenessLabel.completeness}
+      />
+      <p></p>
+      <InternalConsistencyReport
+        main_title={mainHeaderLabel.internalConsistency}
+        sub_title=""
+      />
+
+      {/* <ParentHeader
         main_title={mainHeaderLabel.summary}
         sub_title={completenessLabel.completeness}
       />
@@ -58,6 +70,7 @@ const ReportPreview = () => {
         sub_title={completenessLabel.percentageOfExpectedAndCompleted}
         more_info={completenessLabel.reportingRate}
         dataheader={completenessLabel.dataset}
+        reporttype='indicator completeness'
       /> 
       <p></p>
 
@@ -66,6 +79,7 @@ const ReportPreview = () => {
         sub_title={completenessLabel.percentageOfExpectedEntered}
         more_info={completenessLabel.reportingRateOnTime}
         dataheader={completenessLabel.dataset}
+        reporttype='timeliness'
       />
       <p></p>
       <DataSection
@@ -73,7 +87,29 @@ const ReportPreview = () => {
         sub_title={completenessLabel.reportWhereValuesNotMissing}
         more_info={completenessLabel.reportingRateOnTime}
         dataheader={completenessLabel.indicator}
-      />      
+        reporttype='indicator completeness'
+      />  
+      <p></p> 
+      <DataSection
+        main_title={completenessLabel.consistencyOfDataSet}
+        sub_title={completenessLabel.reportWhereValuesNotMissing}
+        more_info={completenessLabel.reportingRateOnTime}
+        dataheader={completenessLabel.indicator}
+        reporttype='consistency'
+      />  
+      <p></p>
+      <p></p>
+      <ParentHeader
+        main_title={mainHeaderLabel.internalConsistency}
+        sub_title=''
+      />  
+      <DataSection
+        main_title={completenessLabel.extremeOutlier}
+        sub_title={completenessLabel.reportWhereValuesNotMissing}
+        more_info={completenessLabel.reportingRateOnTime}
+        dataheader={completenessLabel.indicator}
+        reporttype='extremeoutlier'
+      />     */}
     </div>
   );
 };

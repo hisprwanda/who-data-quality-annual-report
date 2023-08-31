@@ -13,10 +13,14 @@ export const completenessLabel = {
     reportingRate: 'Reporting rate',
     reportingRateOnTime: 'Reporting rate on time',
     completenessOfIndicator: '1c: Completeness of indicator data ',
-    reportWhereValuesNotMissing: ' Reports where values are not missing. If zeros are not stored, zeros are counted as missing. '
+    reportWhereValuesNotMissing: ' Reports where values are not missing. If zeros are not stored, zeros are counted as missing. ',
+    consistencyOfDataSet: '1d: Consistency of dataset completeness over time ',
+    extremeOutlier: ' 2a: Extreme outliers. ',
+    percentageNum: '100%'
 }
 
 export const mainHeaderLabel = {
     summary: 'SUMMARY',
-    domain_one: 'DOMAIN 1 - COMPLETENESS OF REPORTING'
+    domain_one: 'DOMAIN 1 - COMPLETENESS OF REPORTING',
+    internalConsistency: ' Domain 2 - Internal consistency '
 }

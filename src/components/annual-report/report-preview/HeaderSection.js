@@ -4,7 +4,7 @@ import { completenessLabel } from "../utils/report/ReportLabel.util";
 import { ReportDataSection } from "../report-data/ReportDataSection";
 import { useSelector, useDispatch } from "react-redux";
 
-export const HeaderSection = ({ main_title, sub_title, moreinfo, dataheader }) => {
+export const HeaderSection = ({ main_title, sub_title, moreinfo, dataheader, reporttype }) => {
 
   const storeSelector = useSelector(store => store)
   const actionDispatch = useDispatch()
@@ -30,11 +30,12 @@ export const HeaderSection = ({ main_title, sub_title, moreinfo, dataheader }) =
           </div>
         </div>
       </div>
-      {
+      {/* {
+
         availableDataset.map((ds) => (
-          <ReportDataSection group={group} element={allElements} orgUnit={orgUnitID} children={orgUnitChildren} period={period} dataset={availableDataset} moreinfo={moreinfo}/>
+          <ReportDataSection group={group} element={allElements} orgUnit={orgUnitID} children={orgUnitChildren} period={period} dataset={availableDataset} moreinfo={moreinfo} reporttype={reporttype}/>
         ))
-      }
+      } */}
     </div>
   );
 };
