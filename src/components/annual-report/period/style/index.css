@@ -101,7 +101,7 @@ input[type='number'] {
 }
 
 .select-period-result {
-    height: 300px;
+    height: auto;
     overflow: scroll;
 }
 
@@ -174,4 +174,9 @@ input[type='number'] {
 }
 .increase {
     transform: rotate(180deg);
+}
+
+.period-selection-container {
+    background-color: rgb(255, 255, 255);
+    padding: 1.5rem;
 }

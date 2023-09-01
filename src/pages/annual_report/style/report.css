@@ -303,7 +303,7 @@ label {
 
 .ou-showable, .data-showable, .period-showable {
     display: none;
-    background-color: #fff;
+    background-color: #eeeeee;
 }
 
 .data-showable ul {
@@ -542,7 +542,7 @@ label {
 .period-showable-container {
     display: flex;
     flex-direction: row;
-    width: 45rem;
+    width: 25rem;
     gap: 0.0rem;
 }
 

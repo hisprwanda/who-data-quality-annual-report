@@ -1,0 +1,47 @@
+.select-header-icon img {
+    width: 1.5rem;
+    height: 1.5rem;
+    border: 1px solid #ebeaea;
+    border-radius: 50%;
+    padding: 0.3rem;
+}
+
+.select-header-section {
+    display: flex;
+    justify-content: space-between;
+    border: 1px solid #d5d2d2;
+}
+
+.select-item-selected, .select-header-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0.4rem;
+}
+
+.select-item-options {
+    display: none;
+    border: 1px solid #f3f3f3;
+}
+
+.select-parent-container:hover .select-item-options {
+    display: flex;
+}
+
+.select-item-options ul {
+    padding: 0rem;
+    margin: 0rem;
+    list-style-type: none;
+    width: 100%;
+}
+
+.select-item-options ul li {
+    padding: 0.5rem;
+    display: block;
+    width: 100%;
+}
+
+.select-item-options ul li:hover {
+    background-color: black;
+    color: #fff;
+}

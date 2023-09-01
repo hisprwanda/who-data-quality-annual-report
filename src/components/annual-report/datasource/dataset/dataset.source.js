@@ -1,8 +1,7 @@
 // This file contains codes for reactive streams 
 
 import axios from "axios"
-import { baseURL, userAuth } from "../../utils/configuration"
-import { subURL } from "../../utils/configuration"
+import { baseURL, userAuth, subURL } from "../../utils/configuration"
 
 export const dataSetQueryStructure = {
     results: {

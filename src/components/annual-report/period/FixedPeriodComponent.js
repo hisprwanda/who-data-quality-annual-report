@@ -1,24 +1,34 @@
 import React, { useState, useEffect } from "react";
-import down_allow from "../../../assets/images/downarrow.png";
-import { fixedPeriodSource, year } from "../utils/period/FixedPeriod.source";
-import { SingleSelect, SingleSelectOption } from "@dhis2/ui";
+import { SelectComponent } from "../select/SelectComponent";
+import { Card, Divider, Input } from "@dhis2/ui";
 
 const FixedPeriodComponent = function ({ processSelectedPeriod }) {
   const processNumber = (e) => {
     e.persist();
   };
-  let data = 20;
+  let options = [
+    { displayName: "First", id: 1 },
+    { displayName: "Second", id: 2 },
+    { displayName: "Second", id: 3 },
+  ];
   return (
     <div>
-      <div className="fixed-period-group">
-        <div className="fixed-period-select-title">
-          <SingleSelect className="select" onChange={() => console.log()}>
-            <SingleSelectOption label="option one" value="1" />
-            <SingleSelectOption label="option two" value="2" />
-            <SingleSelectOption label="option three" value="3" />
-          </SingleSelect>
-        </div>
-        <div className="select-options"></div>
+      <div className="period-selection-container">
+        <SelectComponent options={options} />
+      </div>
+      <Divider />
+      <div className="period-selection-container">
+        <Card>
+          <SelectComponent options={options} />
+        </Card>
+      </div>
+      <Divider />
+      <div className="period-selection-container">
+        <Input
+          name="defaultName"
+          onChange={() => {}}
+          placeholder="Hold the place"
+        />
       </div>
     </div>
   );

@@ -6,7 +6,6 @@ import { IndicatorGroupList } from './IndicatorGroupList';
 import { DataElementGroupList } from './DataElementGroupList';
 import { DataSetGroupList } from './DataSetGroupList';
 import { allDataTypesQuery, dataElementQuery, dataSetQuery, indicatorQuery, loadDataStore } from '../datasource/dataset/dataset.source';
-import { TestQuery } from '../utils/test.query';
 
 
 export const SearchDataComponent = (props) => {
@@ -79,15 +78,7 @@ export const SearchDataComponent = (props) => {
                     
                 </div>
             </div>
-            <div>
-                {selectedItem === 'Data Set' && <TestQuery query={_dataSetQuery} obj='dataSets' clicke clickedElement={setClickedElement}dElement={setClickedElement}/>}
-                {selectedItem === '0' && <TestQuery query={_allDataTypesQuery} obj='dataItems' clickedElement={setClickedElement}/>}
-                {selectedItem === 'Indicators' && <TestQuery query={_indicatorQuery} obj='indicators' clickedElement={setClickedElement}/>}
-                {selectedItem === 'Data Element' && <TestQuery query={_dataElementQuery} obj='dataElements' clickedElement={setClickedElement}/>}
-                <div id='scroll-element' ref={myRef}>
-                    Below it
-                </div>
-            </div>
+            
         </div>
     );
 }

@@ -12,12 +12,7 @@ import React from "react";
 import MenuBar from "../../components/menu-bar/MenuBar";
 import "./style/report.css";
 import {
-  Button,
-  IconArrowLeftMulti24,
-  IconArrowRightMulti24,
-  IconArrowLeft24,
-  IconArrowRight24,
-  IconClock16,
+  Button
 } from "@dhis2/ui";
 import { DataSetModal } from "../../components/annual-report/modal/data-sets/DataSetModal";
 import { PeriodModal } from "../../components/annual-report/modal/period/PeriodModal";
@@ -29,7 +24,6 @@ import down_allow from "../../assets/images/downarrow.png";
 import ReportPreview from "../../components/annual-report/report-preview/ReportPreview";
 import { useDispatch, useSelector } from "react-redux";
 import PeriodComponent from "../../components/annual-report/period/Period.component";
-import { getAnalytics } from "../../components/annual-report/utils/enum/HttpRequest.util";
 import { SettingsProcessor } from "../../utils/SettingsProcessor";
 import { OrganizationUnitGroupComponent } from "../../components/annual-report/OrganizationUnitGroup";
 import { OrganizationUnitLevelComponent } from "../../components/annual-report/OrganizationUnitLevel";

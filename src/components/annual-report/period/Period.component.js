@@ -16,12 +16,11 @@ import { useSelector, useDispatch } from "react-redux";
 import { processFixedPeriod } from "../utils/period/fixedPeriod.util";
 
 const PeriodComponent = function () {
-  
-  let [chosenPeriodArr, setChosenPeriodArr] = useState([])
-  let [info, setInfo] = useState([])
+  let [chosenPeriodArr, setChosenPeriodArr] = useState([]);
+  let [info, setInfo] = useState([]);
   const processSelectedPeriod = (e) => {
-    e.persist()
-  }
+    e.persist();
+  };
 
   return (
     <div className="period-showable-container">
@@ -30,18 +29,15 @@ const PeriodComponent = function () {
           <div className="period-suboptions">
             <div className="period-suboptions-container">
               <div className="period-suboptions-control">
-               <FixedPeriodComponent processSelectedPeriod={processSelectedPeriod}/>
+                <FixedPeriodComponent
+                  processSelectedPeriod={processSelectedPeriod}
+                />
               </div>
             </div>
           </div>
           <div className="select-period-result">
             <ul>
-              {info.length > 0 &&
-                info.map((dt) => (
-                  <li key={dt}>
-                    {dt}
-                  </li>
-                ))}
+              {info.length > 0 && info.map((dt) => <li key={dt}>{dt}</li>)}
             </ul>
           </div>
         </div>
