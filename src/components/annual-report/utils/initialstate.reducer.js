@@ -23,6 +23,7 @@ const currentState = {
         relativePeriod: 'Day',
         selectedPeriod: []
     },
-    reportViewStatus: false 
+    reportViewStatus: false,
+    
 }
 export default currentState

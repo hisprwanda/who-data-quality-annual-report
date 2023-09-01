@@ -22,7 +22,7 @@ import {
 import { DataSetModal } from "../../components/annual-report/modal/data-sets/DataSetModal";
 import { PeriodModal } from "../../components/annual-report/modal/period/PeriodModal";
 import { OrganizationUnitModal } from "../../components/annual-report/modal/organizationunit/OrganizationUnitModal";
-import { loadDataStore, loadAnalytics } from "../../components/annual-report/datasource/dataset/dataset.source";
+import { loadDataStore, loadAnalytics, loadOrganizationUnitGroups, loadOrganizationUnitLevels } from "../../components/annual-report/datasource/dataset/dataset.source";
 import { useDataQuery } from "@dhis2/app-runtime";
 import { OrgUnitComponent } from "../../components/annual-report/OrgUnit.Component";
 import down_allow from "../../assets/images/downarrow.png";
@@ -31,7 +31,8 @@ import { useDispatch, useSelector } from "react-redux";
 import PeriodComponent from "../../components/annual-report/period/Period.component";
 import { getAnalytics } from "../../components/annual-report/utils/enum/HttpRequest.util";
 import { SettingsProcessor } from "../../utils/SettingsProcessor";
-
+import { OrganizationUnitGroupComponent } from "../../components/annual-report/OrganizationUnitGroup";
+import { OrganizationUnitLevelComponent } from "../../components/annual-report/OrganizationUnitLevel";
 // End of imports
 
 // Start of the functional component definition
@@ -57,6 +58,10 @@ const Report = function () {
   // State hook for settings
   let [_settings, setSettings] = useState([])
   // End of the hook for managing settings 
+
+  // State for organization groups
+  let [organizationUnitGroup, setOrganizationUnitGroup] = useState([])
+  let [organizationUnitLevel, setOrganizationUnitLevel] = useState([])
 
   // Hook for managing levels
   let [selectedLevel, setSelectedLevel] = useState("Select Levels");
@@ -102,17 +107,39 @@ const Report = function () {
 
   useEffect(() => {
     reportStatus != reportStatus;
-  }, reportStatus);
-
-  useEffect(() => {
-  }, [selectedGroup]);
-
-  useEffect(() => {
-  }, [selectedLevel]);
+  }, [reportStatus]);
 
   let setSelectedDataSet = function (chosenElement) {
     dispatch({ type: "Change Dataset", payload: { el: chosenElement } });
   };
+
+  //Loading organization unit group
+  useEffect(() => {
+    // Load organization unit groups
+    loadOrganizationUnitGroups()
+      .then(org => {
+        dispatch({type: 'Add Organization Unit Group', payload: {group: org.data.organisationUnitGroups}})
+        setOrganizationUnitGroup(org.data.organisationUnitGroups)
+      })
+      .catch(err => console.log(err))
+
+    // Load organization unit levels
+    loadOrganizationUnitLevels()
+      .then((ou) => {
+        console.log(ou.data.organisationUnitLevels)
+        setOrganizationUnitLevel(ou.data.organisationUnitLevels)
+      })
+  }, [])
+
+  let selectedGroupInfo = (e) => {
+    e.persist()
+    setSelectedGroup(e.target.textContent)
+  }
+
+  let selectedLevelInfo = (e) => {
+    e.persist()
+    setSelectedLevel(e.target.textContent)
+  }
 
   return (
     <div className="reportContainer">
@@ -180,22 +207,7 @@ const Report = function () {
                   </div>
                   <div className="select-options">
                     <ul>
-                      <li
-                        onClick={(e) => {
-                          e.persist();
-                          setSelectedLevel(e.target.textContent);
-                        }}
-                      >
-                        Province
-                      </li>
-                      <li
-                        onClick={(e) => {
-                          e.persist();
-                          setSelectedLevel(e.target.textContent);
-                        }}
-                      >
-                        District
-                      </li>
+                      <OrganizationUnitLevelComponent level={organizationUnitLevel} selectedLevelInfo={selectedLevelInfo}/>
                     </ul>
                   </div>
                 </div>
@@ -208,22 +220,7 @@ const Report = function () {
                   </div>
                   <div className="select-options">
                     <ul>
-                      <li
-                        onClick={(e) => {
-                          e.persist();
-                          setSelectedGroup(e.target.textContent);
-                        }}
-                      >
-                        Military Hospital
-                      </li>
-                      <li
-                        onClick={(e) => {
-                          e.persist();
-                          setSelectedGroup(e.target.textContent);
-                        }}
-                      >
-                        District Province
-                      </li>
+                       <OrganizationUnitGroupComponent group={organizationUnitGroup} selectedGroupInfo={selectedGroupInfo}/>
                     </ul>
                   </div>
                 </div>

@@ -1,49 +1,17 @@
-import React, {useState, useEffect} from "react";
+import React, { useState, useEffect } from "react";
 import down_allow from "../../../assets/images/downarrow.png";
 import { fixedPeriodSource, year } from "../utils/period/FixedPeriod.source";
-import { processFixedPeriod } from "../utils/period/fixedPeriod.util";
-import { useDispatch, useSelector } from "react-redux";
-import moment from "moment";
 
-const FixedPeriodComponent = function () {
-
-  let currentYear = moment().year()
-  let fixedPeriods = fixedPeriodSource
-  const periods = [{names: 'Year', id: 'Year'}, {names: 'Month', id: 'Month'}, {names: 'Weekly', id: 'Weekly'}, {names: 'Daily', id: 'Daily'}]
-  let [relativePeriodSelected, setRelativePeriodSelected] = useState(fixedPeriodSource[0])
-  let cssVariables = document.querySelector(':root')
-  let computedStyles = getComputedStyle(cssVariables)
-  const fixed = processFixedPeriod(relativePeriodSelected)
-  const [chosenPeriod, setChosenPeriod] = useState('')
-  let choosePeriod = function(e) {
-    cssVariables.style.setProperty('--visibility', 'none')
-  }
-
-  let [countingYear, setCountingYear] = useState(currentYear)
-
-  useEffect(() => {
-    cssVariables.style.setProperty('--visibility', 'none')
-    dispatchEvent({type: 'Change Fixed Period', payload: {period: chosenPeriod, year: 3500}})
-  }, [chosenPeriod])
-
-  let displayShowable = function(e) {
-    cssVariables.style.setProperty('--visibility', 'block')
-  }
-
-  let selectedElementStore = useSelector((state) => state);
-  let dispatchEvent = useDispatch()
-
+const FixedPeriodComponent = function ({ processSelectedPeriod }) {
+  
   return (
     <div>
       <div className="fixed-period-group">
         <div className="fixed-period-select-title">
           <div className="fixed-period-title-parent">
-            <label>Period type {
-                selectedElementStore.period.fixedPeriod.period
-              }</label>
-            <div className="fixed-period-title" onClick={(e) => {e.persist(); displayShowable(e)}}>
+            <div className="fixed-period-title">
               <div className="fixed-period-select-title-data">
-                {chosenPeriod}
+                Choose period
               </div>
               <div className="fixed-period-select-title-icon">
                 <img src={down_allow} />
@@ -51,22 +19,20 @@ const FixedPeriodComponent = function () {
             </div>
             <div className="fixed-period-title-showable">
               <ul>
-                {
-                  fixedPeriods.map(info => (
-                    <li onClick={(e) => {e.persist(); setChosenPeriod(e.target.textContent)}} key={info}>{info}</li>
-                  ))
-                }
+                {fixedPeriodSource.map((pe) => (
+                  <li key={pe.id} onClick={processSelectedPeriod}>
+                    {pe.name}
+                  </li>
+                ))}
               </ul>
             </div>
           </div>
-          <div>
-            <label>Year</label>
-            <input type="number" value={countingYear} onInput={(e) => {e.persist(); console.log(e); setCountingYear(countingYear += 1)}}/>
+          <div className="fixed-period-year-selector">
+            <div className="year-section-display">Year</div>
+            <div className="year-section-display-showable">Showable</div>
           </div>
         </div>
-        <div className="select-options">
-        
-        </div>
+        <div className="select-options"></div>
       </div>
     </div>
   );

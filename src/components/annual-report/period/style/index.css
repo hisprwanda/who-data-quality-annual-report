@@ -1,3 +1,6 @@
+:root {
+    --year-height: 30px;
+}
 .fixed-period-title-showable li {
     list-style: none;
     padding: 0.8rem;
@@ -88,7 +91,7 @@ input[type='number'] {
     left: 0rem;
     background-color: #fff;
     width: 100%;
-    top: 3.7rem;
+    top: 2.2rem;
 }
 
 .fixed-period-title-parent:hover .fixed-period-title-showable {
@@ -117,3 +120,15 @@ input[type='number'] {
     margin: 0.1rem 0rem;
 }
 
+.fixed-period-year-selector {
+    position: relative;
+}
+.fixed-period-year-selector:hover .year-section-display-showable{
+    display: flex;
+}
+
+.year-section-display-showable {
+    display: none;
+    position: absolute;
+    top: var(--year-height);
+}

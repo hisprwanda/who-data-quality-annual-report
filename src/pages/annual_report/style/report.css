@@ -655,6 +655,11 @@ label {
     padding: 0.4rem;
 }
 
+.organization-unit-group-parent {
+    height: 250px;
+    overflow: scroll;
+}
+
 
 
 

@@ -122,5 +122,11 @@ export const loadOrganizationUnitGroups = () => {
         auth: userAuth
     })
 }
+
+export const loadOrganizationUnitLevels = () => {
+    return axios.get(`${baseURL}/${subURL}/api/29/organisationUnitLevels.json?=&paging=false`, {
+        auth: userAuth
+    })
+}
 export let allDataState = {count: 0}
 export let dataInitialState = {count: 0}
