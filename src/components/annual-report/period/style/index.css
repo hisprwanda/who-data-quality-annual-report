@@ -20,6 +20,7 @@
 
 .fixed-period-select-title {
     display: flex;
+    position: relative;
 }
 
 .fixed-period-select-title > div:nth-child(1) {
@@ -84,6 +85,7 @@ input[type='number'] {
 
 .fixed-period-title-parent {
     position: relative;
+    width: 70%;
 }
 
 .fixed-period-title-showable {
@@ -122,6 +124,7 @@ input[type='number'] {
 
 .fixed-period-year-selector {
     position: relative;
+    width: 30%;
 }
 .fixed-period-year-selector:hover .year-section-display-showable{
     display: flex;
@@ -131,4 +134,44 @@ input[type='number'] {
     display: none;
     position: absolute;
     top: var(--year-height);
+}
+
+.year-section-display-container {
+    display: flex;
+    border: 1px solid #bebdbd;
+}
+
+.year-section-info ul {
+    padding: 0rem;
+    margin: 0rem;
+    list-style: none;
+}
+
+.year-section-info ul li {
+    padding: 0rem;
+}
+
+.year-section-action {
+    display: flex;
+    flex-direction: column;
+}
+
+.year-section-action > div {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.year-section-display {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.decrease, .increase {
+    width: 12px;
+    height: 12px;
+}
+.increase {
+    transform: rotate(180deg);
 }

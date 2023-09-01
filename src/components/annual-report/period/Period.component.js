@@ -30,7 +30,7 @@ const PeriodComponent = function () {
           <div className="period-suboptions">
             <div className="period-suboptions-container">
               <div className="period-suboptions-control">
-                { true && <FixedPeriodComponent processSelectedPeriod={processSelectedPeriod}/>} 
+               <FixedPeriodComponent processSelectedPeriod={processSelectedPeriod}/>
               </div>
             </div>
           </div>
