@@ -66,7 +66,6 @@ const dataElementGroupsQuery = {
 
 const UpdateNumeratorsModal = ({configurations, onClose, isHidden, onSave, numeratorToEdit, updateType}) => {
     const [toggleStateModal, setToggleStateModal] = useState(1);
-    const [selectedGroup, setSelectedGroup] = useState('');
     const [selectedElementGroup, setSelectedElementGroup] = useState('');
     const [selectedElement, setSelectedElement] = useState('');
     const [selectedElements, setSelectedElements] = useState([]);
@@ -77,8 +76,13 @@ const UpdateNumeratorsModal = ({configurations, onClose, isHidden, onSave, numer
     const [mappedDataSets, setMappedDataSets] = useState([]);
     const [mappedDataElementOperands, setMappedDataElementOperands] = useState([]);
     const [footerMessage, setFooterMessage] = useState(null);
-    const [selectedDataSets, setSelectedDataSets] = useState([]);
+    const [numerator, setNumerator] = useState({
+        name: '',
+        definition: '',
+        core:false,
+    });
 
+    
     // run the data element groups querry
     const { loading: lementGroupsLoading, error:elementGroupsError, data:datalementGroupsData, refetch:lementGroupsRefetch } = useDataQuery(dataElementGroupsQuery, {
         lazy: false,
@@ -152,27 +156,22 @@ const UpdateNumeratorsModal = ({configurations, onClose, isHidden, onSave, numer
 
     const newCode = generateNumeratorCode(configurations.numerators);
 
-    const [numerator, setNumerator] = useState({
-        name: '',
-        definition: '',
-        core:false,
-    });
 
     const handleGroupSelection = (selectedG) => {
-        setSelectedGroup(selectedG.selected)
         setNumerator({
             ...numerator,
             code: newCode,
-            groups: selectedGroup
+            groups: selectedG.selected
         })
     }
 
+    
+
     const handleDataSetsSelection = (selectedD) => {
-        setSelectedDataSets(selectedD.selected)
         setNumerator({
             ...numerator,
             code: newCode,
-            dataSetID: selectedDataSets
+            dataSetID: selectedD.selected
         })
 
     }
@@ -188,8 +187,8 @@ const UpdateNumeratorsModal = ({configurations, onClose, isHidden, onSave, numer
                 name: '',
                 definition: '',
                 core:false,
+                groups: []
             })
-            setSelectedGroup([])
             
         } else if (updateType == 'update') {
             // set numerator with existin data
@@ -199,21 +198,18 @@ const UpdateNumeratorsModal = ({configurations, onClose, isHidden, onSave, numer
                     code:numeratorToEdit.code,
                     name:numeratorToEdit.name, 
                     definition:numeratorToEdit.definition,
-                    core:numeratorToEdit.core
+                    core:numeratorToEdit.core,
+                    groups: getNumeratorMemberGroups(configurations, numeratorToEdit.code).map((group) => group.code)
+
                 })
             }else{
                 setNumerator({
                     name: '',
                     definition: '',
                     core:false,
+                    groups: []
                 })
             }
-            
-            // set groups with existin data
-            setSelectedGroup(
-                getNumeratorMemberGroups(configurations, numeratorToEdit.code)
-                .map((group) => group.code)
-            )
         }
     }, [isHidden]);
 
@@ -261,7 +257,7 @@ const UpdateNumeratorsModal = ({configurations, onClose, isHidden, onSave, numer
                                 >
                                 <MultiSelectField
                                     onChange={handleGroupSelection}
-                                    selected={selectedGroup}
+                                    selected={numerator.groups}
                                     placeholder="Select groups"
                                 >
                                     {configurations.groups.map((group, key) =>(
@@ -299,10 +295,10 @@ const UpdateNumeratorsModal = ({configurations, onClose, isHidden, onSave, numer
                                     onChange={(selected)=> {
                                         setSelectedElementGroup(selected.selected)
                                         setSelectedElement('');
-                                        setSelectedDataSets([]);    //resets the previous value for new data elements to be refetched
-                                        setSelectedOperands('')
+                                        setSelectedOperands('');
                                         elementsRefetch({ groupID: selected.selected});     // fetch data elements only after a data element group has been selected
                                         setNumerator({...numerator, dElementGroup:selected.selected})
+                                        setNumerator({...numerator, dataSetID:[]})
                                     }}
 
                                     placeholder="Select data element group"
@@ -319,11 +315,12 @@ const UpdateNumeratorsModal = ({configurations, onClose, isHidden, onSave, numer
 
                                     onChange={(selected)=> {
                                         setSelectedElement(selected.selected)
-                                        setSelectedDataSets([]);    //resets the previous value for new data elements to be refetched
                                         setSelectedOperands('')
                                         setMappedDataElementOperands([]);
                                         dataSetsRefetch({elementID: selected.selected})  // fetch datasets only after a data element has been selected
                                         setNumerator({...numerator, dataID:selected.selected})
+                                        setNumerator({...numerator, dataSetID:[]})
+
                                     }}
 
                                     placeholder="Select data element"
@@ -347,7 +344,7 @@ const UpdateNumeratorsModal = ({configurations, onClose, isHidden, onSave, numer
                                     onChange={(selected) => {
                                         handleDataSetsSelection(selected)
                                     }}
-                                    selected={selectedDataSets}
+                                    selected={numerator.dataSetID}
                                     placeholder="Select datasets"
                                 >
                                     {mappedDataSets.map((dataset, key) =>(
