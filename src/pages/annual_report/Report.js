@@ -74,6 +74,10 @@ const Report = function () {
   let [relativePeriodSelected, setRelativePeriodSelected] = useState("");
   let [elements, setElements] = useState();
   let [configuredDataSet, setConfiguredDataSet] = useState();
+  let [groupVisibility, setGroupVisibility] = useState("none");
+  let [orgUnitVisibility, setOrgUnitVisibility] = useState("none");
+  let [orgUnitLevelVisibility, setOrgUnitLevelVisibility] = useState("none");
+  let [orgUnitGroupVisibility, setOrgUnitGroupVisibility] = useState("none");
 
   let reportLoader = (orgUnit, period, group) => {
     dispatch({ type: "Change Report View Status", payload: { status: true } });
@@ -135,24 +139,19 @@ const Report = function () {
   let selectedGroupInfo = (e) => {
     e.persist();
     setSelectedGroup(e.target.textContent);
+    setOrgUnitGroupVisibility("none");
   };
 
   let selectedLevelInfo = (e) => {
     e.persist();
     setSelectedLevel(e.target.textContent);
+    setOrgUnitLevelVisibility("some information");
   };
+  let [x, setX] = useState("x")
 
   return (
     <div className="reportContainer">
       <MenuBar />
-      <DataSetModal
-        status={dataSetModalStatus}
-        changeDataModalStatus={setDataSetModalStatus}
-      />
-      <PeriodModal
-        status={periodModalStatus}
-        changePeriodModalStatus={setPeriodModalStatus}
-      />
       <OrganizationUnitModal
         status={orgUnitModalStatus}
         changeOrganisationUnitStatus={setOrgUnitModalStatus}
@@ -160,14 +159,17 @@ const Report = function () {
       <div className="menu-parent">
         <div className="menu-parent-container">
           <div className="data-set-container">
-            <div className="dataset-indication">
+            <div
+              className="dataset-indication"
+              onClick={() => setGroupVisibility("flex")}
+            >
               <div>Group</div>
               <div>{selectedItem}</div>
               <div>
                 <img src={down_allow} />
               </div>
             </div>
-            <div className="data-showable">
+            <div className="data-showable" style={{ display: groupVisibility }}>
               <ul>
                 {_settings?.map((element, info) => {
                   return (
@@ -176,6 +178,7 @@ const Report = function () {
                       onClick={(e) => {
                         e.persist();
                         setSelectedDataSet(e.target.textContent);
+                        setGroupVisibility("none");
                       }}
                     >
                       {element.name}
@@ -186,26 +189,35 @@ const Report = function () {
             </div>
           </div>
           <div className="orgunit-container">
-            <div className="ou-indication">
+            <div
+              className="ou-indication"
+              onClick={() => setOrgUnitVisibility("flex")}
+            >
               <div>Organisation Unit</div>
               <div></div>
               <div>
                 <img src={down_allow} />
               </div>
             </div>
-            <div className="ou-showable">
+            <div className="ou-showable" style={{ display: orgUnitVisibility }}>
               <div>
                 <OrgUnitComponent />
               </div>
               <div className="level-and-groups">
-                <div className="level">
+                <div
+                  className="level"
+                  onClick={() => setOrgUnitLevelVisibility("flex")}
+                >
                   <div className="select-title">
                     <div className="select-title-data">{selectedLevel}</div>
                     <div className="select-title-icon">
-                      <img src={down_allow} />
+                      <img src={down_allow} onClick={() => setOrgUnitLevelVisibility('none')}/>
                     </div>
                   </div>
-                  <div className="select-options">
+                  <div
+                    className="select-options"
+                    style={{ display: orgUnitLevelVisibility }}
+                  >
                     <ul>
                       <OrganizationUnitLevelComponent
                         level={organizationUnitLevel}
@@ -215,13 +227,19 @@ const Report = function () {
                   </div>
                 </div>
                 <div className="group">
-                  <div className="select-title">
+                  <div
+                    className="select-title"
+                    onClick={() => setOrgUnitGroupVisibility("flex")}
+                  >
                     <div className="select-title-data">{selectedGroup}</div>
                     <div className="select-title-icon">
                       <img src={down_allow} />
                     </div>
                   </div>
-                  <div className="select-options">
+                  <div
+                    className="select-options"
+                    style={{ display: orgUnitGroupVisibility }}
+                  >
                     <ul>
                       <OrganizationUnitGroupComponent
                         group={organizationUnitGroup}
@@ -231,7 +249,20 @@ const Report = function () {
                   </div>
                 </div>
               </div>
-              <div className="selected-org-unit"><span>Selected: </span>{selectedElementStore.orgUnitSet.length - 1} org units <span><Button small onClick={() => console.log('Deselect all')}> Deselect All</Button></span></div>
+              <div className="update-or-close">
+                <div>
+                  <span>Selected: </span>
+                  {selectedElementStore.orgUnitSet.length - 1} org units{" "}
+                  <span>
+                    <Button small onClick={() => console.log("Deselect all")}>
+                      Deselect All
+                    </Button>
+                  </span>
+                </div>
+                <div>
+                  <Button primary small onClick={() => setOrgUnitVisibility("none")}>Hide</Button>
+                </div>
+              </div>
             </div>
           </div>
           <div className="period-container">

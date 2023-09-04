@@ -9,7 +9,7 @@ export const SelectComponent = ({ options, onSelect, label, selectedOption, opti
   let [selectedOpt, setSelectedOpt] = useState(`Select ${label}`)
   let setVisibility = (e) => {
     setDisplay('none')
-    onSelect(e)
+    onSelect(e, label)
     setSelectedOpt(e.target.textContent)
   }
 
