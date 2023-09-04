@@ -1,31 +1,40 @@
-import React, {useState, useEffect} from 'react'
-import { OrganisationUnitTree } from '@dhis2/ui';
-import { useSelector, useDispatch } from 'react-redux'
-import { useDataQuery } from '@dhis2/app-runtime';
-import { loadOrganizationUnit } from './datasource/dataset/dataset.source';
+import React, { useState, useEffect, useMemo, useCallback } from "react";
+import { OrganisationUnitTree } from "@dhis2/ui";
+import { useSelector, useDispatch } from "react-redux";
+import Actions from "./utils/enum/Index"; 
 
 export const OrgUnitComponent = () => {
-    
-  let storeRef = useSelector(state => state)
-  let dispatch = useDispatch()
+  let storeRef = useSelector((state) => state);
+  let dispatch = useDispatch();
+  let [orgUnitSelectionSet, setOrgUnitSelectionSet] = useState(['Hjw70Lodtf2']);
+  let [orgUnitState, setOrgUnitState] = useState([]);
+  let [orgUnitCurrentSelection, setOrgUnitCurrentSelection] = useState('')
 
-  let [orgUnitState, setOrgUnitState] = useState(storeRef.selectedValue.orgUnit)
-  let selectedOU = storeRef.selectedValue.orgUnit.path
-  let [id, setID] = useState(0)
-  
+  let changeOrgUnitSelectionSet = useCallback((e) => {
+    setOrgUnitSelectionSet(prev => [...prev, e.path])
+    setOrgUnitCurrentSelection(e.path)
+  }, [orgUnitSelectionSet]);
+
   useEffect(() => {
-    dispatch({type: 'Change Org Unit', payload: {displayName: orgUnitState.displayName, path: orgUnitState.path, id: orgUnitState.id, children: orgUnitState.children}})
-  }, [orgUnitState])
+    dispatch({type: Actions.changeOrgUnitSet, payload: {ou: orgUnitSelectionSet}})    
+  }, [orgUnitSelectionSet])
+
+  useEffect(() => {
+    let isSelectedValueExisting = orgUnitSelectionSet.filter(ou => ou === orgUnitCurrentSelection)
+    let processedOrgUnit = isSelectedValueExisting.length > 1 ? orgUnitSelectionSet.filter(ou => ou !== orgUnitCurrentSelection) : orgUnitSelectionSet
+    dispatch({type: Actions.changeOrgUnitSet, payload: {ou: processedOrgUnit}})
+    setOrgUnitSelectionSet(processedOrgUnit)
+  }, [orgUnitCurrentSelection])
 
   return (
-      <OrganisationUnitTree name="Hjw70Lodtf2" onChange={(e) => setOrgUnitState(e)}
+    <div className="orgunit-parent-container">
+      <OrganisationUnitTree
+        name="country org unit"
+        onChange={(e) => changeOrgUnitSelectionSet(e)}
         isUserDataViewFallback={true}
-        roots={
-          ['Hjw70Lodtf2']
-        }
-        selected={[
-          orgUnitState.path
-        ]}
+        roots={["Hjw70Lodtf2"]}
+        selected={orgUnitSelectionSet}
       />
+    </div>
   );
-}
+};

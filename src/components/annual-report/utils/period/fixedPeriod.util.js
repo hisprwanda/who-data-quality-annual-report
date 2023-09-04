@@ -1,36 +1,19 @@
 import moment from 'moment';
 
-export const processFixedPeriod = function(data) {
+export const processFixedPeriod = function(calendar, periodType, year, locale) {
 
-    // const currentDate = moment().format('YYYY-MM-DD')
-    // const currentYear = moment(currentDate).year()
-    // const startDate = moment(`${currentYear}-01-01`)
-    // const endDate = moment(`${currentYear}-12-31`)
-
-    // let between = 0
-    // let dateBetween = '';
-    // if(data === 'Daily') {
-    //     between = 1
-    // }
-    // if(data === 'Weekly') {
-    //     between = 7
-    // }
-    // if(data === 'Monthly') {
-    //     between = 30
-    // }
-    // if(data.length > 2) {
-    //     dateBetween = getDaysBetweenDates(startDate, endDate, between)
-    // }
-    // return dateBetween
-
+    const generateFixedPeriodsPayload = {
+        calendar,
+        periodType,
+        year,
+        locale,
+    
+        // only used when generating yearly periods, so save to use
+        // here, regardless of the period type.
+        // + 1 so we include 1970 as well
+        yearsCount: year - 1970 + 1,
+      };
+    
+      let yearProcessed = generateFixedPeriods(generateFixedPeriodsPayload)
     
 }
-
-var getDaysBetweenDates = function(startDate, endDate, between) {
-    var now = startDate.clone(), dates = [];
-    while (now.isSameOrBefore(endDate)) {
-        dates.push(now.format('YYYY-MM-DD'));
-        now.add(between, 'days');
-    }
-    return dates;
-};

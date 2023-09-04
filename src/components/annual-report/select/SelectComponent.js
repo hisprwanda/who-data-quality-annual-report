@@ -1,21 +1,32 @@
-import React from "react";
+import React, {useState} from "react";
 import "./style/select.css";
+
 import down_allow from "../../../assets/images/downarrow.png";
 
-export const SelectComponent = ({ options }) => {
+export const SelectComponent = ({ options, onSelect, label, selectedOption, optionVisibility}) => {
+
+  let [display, setDisplay] = useState('none')
+  let [selectedOpt, setSelectedOpt] = useState(`Select ${label}`)
+  let setVisibility = (e) => {
+    setDisplay('none')
+    onSelect(e)
+    setSelectedOpt(e.target.textContent)
+  }
+
   return (
     <div className="select-parent-container">
-      <div className="select-header-section">
-        <div className="select-item-selected">Choose period</div>
+      <label>{label}</label>
+      <div className="select-header-section" onClick={(e) => setDisplay('flex')}>
+        <div className="select-item-selected">{selectedOption}</div>
         <div className="select-header-icon">
           <img src={down_allow} />
         </div>
       </div>
-      <div className="select-item-options">
+      <div className="select-item-options" style={{display}}>
         <ul>
           {options.map((opt) => (
-            <li key={opt.id}>
-              {opt.displayName}
+            <li key={opt.id} onClick={setVisibility} data-key={opt.id}>
+              {opt.name}
             </li>
           ))}
         </ul>

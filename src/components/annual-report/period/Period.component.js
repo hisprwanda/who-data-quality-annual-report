@@ -20,6 +20,9 @@ const PeriodComponent = function () {
   let [info, setInfo] = useState([]);
   const processSelectedPeriod = (e) => {
     e.persist();
+
+
+    
   };
 
   return (

@@ -7,6 +7,8 @@ const Actions = {
     changeGroup: 'Change Group',
     changeReportViewStatus: 'Change Report View Status',
     changeElement: 'Change Element',
-    changeConfiguredDataset: 'Change Configured Dataset'
+    changeConfiguredDataset: 'Change Configured Dataset',
+    changeOrgUnitSet: 'Change Organisation Unit Set',
+    changePeriod: 'Change Period'
 }
 export default Actions

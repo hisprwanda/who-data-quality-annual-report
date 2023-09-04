@@ -301,7 +301,12 @@ label {
     position: absolute;
 }
 
-.ou-showable, .data-showable, .period-showable {
+.ou-showable, .data-showable {
+    background-color: #fff;
+    display: none;
+}
+
+.period-showable {
     display: none;
     background-color: #eeeeee;
 }
@@ -325,7 +330,7 @@ label {
 }
 
 .ou-showable {
-    width: 40rem;
+    width: 30rem;
     margin: 0rem;
 }
 
@@ -474,7 +479,9 @@ label {
 .level, .group {
     padding: 0.4rem;
     padding: 0.2rem;
-    flex: 1 1 auto;
+    flex: 1 1 0;
+    background-color: #fff;
+    padding: 0.3rem;
 }
 
 .select-title {
@@ -656,12 +663,23 @@ label {
 }
 
 .organization-unit-group-parent {
-    height: 250px;
+    height: 7rem;
     overflow: scroll;
 }
 
+.orgunit-parent-container {
+    background-color: #fff;
+    margin: 0.6rem;
+}
 
+.selected-org-unit {
+    padding: 0.5rem;
+    background-color: #fff;
+}
 
+.selected-org-unit span:nth-child(1) {
+    font-weight: 450;
+}
 
 
 

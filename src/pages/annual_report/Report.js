@@ -11,13 +11,16 @@ import { useState, useEffect } from "react";
 import React from "react";
 import MenuBar from "../../components/menu-bar/MenuBar";
 import "./style/report.css";
-import {
-  Button
-} from "@dhis2/ui";
+import { Button } from "@dhis2/ui";
 import { DataSetModal } from "../../components/annual-report/modal/data-sets/DataSetModal";
 import { PeriodModal } from "../../components/annual-report/modal/period/PeriodModal";
 import { OrganizationUnitModal } from "../../components/annual-report/modal/organizationunit/OrganizationUnitModal";
-import { loadDataStore, loadAnalytics, loadOrganizationUnitGroups, loadOrganizationUnitLevels } from "../../components/annual-report/datasource/dataset/dataset.source";
+import {
+  loadDataStore,
+  loadAnalytics,
+  loadOrganizationUnitGroups,
+  loadOrganizationUnitLevels,
+} from "../../components/annual-report/datasource/dataset/dataset.source";
 import { useDataQuery } from "@dhis2/app-runtime";
 import { OrgUnitComponent } from "../../components/annual-report/OrgUnit.Component";
 import down_allow from "../../assets/images/downarrow.png";
@@ -33,7 +36,7 @@ import { OrganizationUnitLevelComponent } from "../../components/annual-report/O
 const Report = function () {
   // Redux state selector hook
   let selectedElementStore = useSelector((state) => state.selectedValue);
-  let storeStateSelector = useSelector(state => state)
+  let storeStateSelector = useSelector((state) => state);
   // Redux state dispatch hook
   let dispatch = useDispatch();
   // Hook for managing data set modals
@@ -50,12 +53,12 @@ const Report = function () {
   let [_dataStore, setDataStore] = useState(loadDataStore);
 
   // State hook for settings
-  let [_settings, setSettings] = useState([])
-  // End of the hook for managing settings 
+  let [_settings, setSettings] = useState([]);
+  // End of the hook for managing settings
 
   // State for organization groups
-  let [organizationUnitGroup, setOrganizationUnitGroup] = useState([])
-  let [organizationUnitLevel, setOrganizationUnitLevel] = useState([])
+  let [organizationUnitGroup, setOrganizationUnitGroup] = useState([]);
+  let [organizationUnitLevel, setOrganizationUnitLevel] = useState([]);
 
   // Hook for managing levels
   let [selectedLevel, setSelectedLevel] = useState("Select Levels");
@@ -69,34 +72,37 @@ const Report = function () {
   let _selectedPeriod = selectedElementStore.period;
   let _selectedOrgUnit = selectedElementStore.orgUnit.displayName;
   let [relativePeriodSelected, setRelativePeriodSelected] = useState("");
-  let [elements, setElements] = useState()
-  let [configuredDataSet, setConfiguredDataSet] = useState()
+  let [elements, setElements] = useState();
+  let [configuredDataSet, setConfiguredDataSet] = useState();
 
   let reportLoader = (orgUnit, period, group) => {
-    dispatch({type: 'Change Report View Status', payload: {status: true}})
-  }
-  let { loading, error, data } = useDataQuery(_dataStore, {}, {}, {}, {}, {})
-  
-  useEffect(() => { 
-    let settings = data !== undefined ? SettingsProcessor(data) : []
-    setSettings(settings.setting)
-    setElements(Array.from(new Set(settings.elements)))
-    setConfiguredDataSet(Array.from(new Set(settings.dataset)))
-  }, [data])
+    dispatch({ type: "Change Report View Status", payload: { status: true } });
+  };
+  let { loading, error, data } = useDataQuery(_dataStore, {}, {}, {}, {}, {});
 
   useEffect(() => {
-    dispatch({type: 'Change Configured Dataset', payload: {dataset: configuredDataSet}})
-  }, [configuredDataSet])
+    let settings = data !== undefined ? SettingsProcessor(data) : [];
+    setSettings(settings.setting);
+    setElements(Array.from(new Set(settings.elements)));
+    setConfiguredDataSet(Array.from(new Set(settings.dataset)));
+  }, [data]);
 
   useEffect(() => {
-    dispatch({type: 'Change Element', payload: {elements}})
-  }, [elements])
-  
+    dispatch({
+      type: "Change Configured Dataset",
+      payload: { dataset: configuredDataSet },
+    });
+  }, [configuredDataSet]);
+
+  useEffect(() => {
+    dispatch({ type: "Change Element", payload: { elements } });
+  }, [elements]);
+
   // Definition of use effect hooks
   useEffect(() => {
     let groups = data?.results.groups.filter((i) => i.code === selectedItem);
     setFilteredItem(groups);
-    dispatch({type: 'Change Group', payload: selectedItem})
+    dispatch({ type: "Change Group", payload: selectedItem });
   }, [selectedItem]);
 
   useEffect(() => {
@@ -111,29 +117,30 @@ const Report = function () {
   useEffect(() => {
     // Load organization unit groups
     loadOrganizationUnitGroups()
-      .then(org => {
-        dispatch({type: 'Add Organization Unit Group', payload: {group: org.data.organisationUnitGroups}})
-        setOrganizationUnitGroup(org.data.organisationUnitGroups)
+      .then((org) => {
+        dispatch({
+          type: "Add Organization Unit Group",
+          payload: { group: org.data.organisationUnitGroups },
+        });
+        setOrganizationUnitGroup(org.data.organisationUnitGroups);
       })
-      .catch(err => console.log(err))
+      .catch((err) => console.log(err));
 
     // Load organization unit levels
-    loadOrganizationUnitLevels()
-      .then((ou) => {
-        console.log(ou.data.organisationUnitLevels)
-        setOrganizationUnitLevel(ou.data.organisationUnitLevels)
-      })
-  }, [])
+    loadOrganizationUnitLevels().then((ou) => {
+      setOrganizationUnitLevel(ou.data.organisationUnitLevels);
+    });
+  }, []);
 
   let selectedGroupInfo = (e) => {
-    e.persist()
-    setSelectedGroup(e.target.textContent)
-  }
+    e.persist();
+    setSelectedGroup(e.target.textContent);
+  };
 
   let selectedLevelInfo = (e) => {
-    e.persist()
-    setSelectedLevel(e.target.textContent)
-  }
+    e.persist();
+    setSelectedLevel(e.target.textContent);
+  };
 
   return (
     <div className="reportContainer">
@@ -181,7 +188,7 @@ const Report = function () {
           <div className="orgunit-container">
             <div className="ou-indication">
               <div>Organisation Unit</div>
-              <div>{_selectedOrgUnit}</div>
+              <div></div>
               <div>
                 <img src={down_allow} />
               </div>
@@ -190,7 +197,6 @@ const Report = function () {
               <div>
                 <OrgUnitComponent />
               </div>
-              <div className="dividing"></div>
               <div className="level-and-groups">
                 <div className="level">
                   <div className="select-title">
@@ -201,7 +207,10 @@ const Report = function () {
                   </div>
                   <div className="select-options">
                     <ul>
-                      <OrganizationUnitLevelComponent level={organizationUnitLevel} selectedLevelInfo={selectedLevelInfo}/>
+                      <OrganizationUnitLevelComponent
+                        level={organizationUnitLevel}
+                        selectedLevelInfo={selectedLevelInfo}
+                      />
                     </ul>
                   </div>
                 </div>
@@ -214,17 +223,21 @@ const Report = function () {
                   </div>
                   <div className="select-options">
                     <ul>
-                       <OrganizationUnitGroupComponent group={organizationUnitGroup} selectedGroupInfo={selectedGroupInfo}/>
+                      <OrganizationUnitGroupComponent
+                        group={organizationUnitGroup}
+                        selectedGroupInfo={selectedGroupInfo}
+                      />
                     </ul>
                   </div>
                 </div>
               </div>
+              <div className="selected-org-unit"><span>Selected: </span>{selectedElementStore.orgUnitSet.length - 1} org units <span><Button small onClick={() => console.log('Deselect all')}> Deselect All</Button></span></div>
             </div>
           </div>
           <div className="period-container">
             <div className="period-indication">
               <div>Period</div>
-              <div>{_selectedPeriod}</div>
+              <div>{storeStateSelector.period.selectedPeriod}</div>
               <div>
                 <img src={down_allow} />
               </div>
@@ -238,7 +251,13 @@ const Report = function () {
               <div>
                 <Button
                   name="Basic button"
-                  onClick={() => reportLoader(_selectedOrgUnit, storeStateSelector.period.selectedPeriod, selectedItem)}
+                  onClick={() =>
+                    reportLoader(
+                      _selectedOrgUnit,
+                      storeStateSelector.period.selectedPeriod,
+                      selectedItem
+                    )
+                  }
                   default
                   value="default"
                 >
@@ -246,11 +265,7 @@ const Report = function () {
                 </Button>
               </div>
               <div>
-                <Button
-                  name="Primary button"
-                  primary
-                  value="Print"
-                >
+                <Button name="Primary button" primary value="Print">
                   Print
                 </Button>
               </div>
@@ -259,7 +274,9 @@ const Report = function () {
         </div>
       </div>
 
-      <div className="report-section">{storeStateSelector.reportViewStatus && <ReportPreview />}</div>
+      <div className="report-section">
+        {storeStateSelector.reportViewStatus && <ReportPreview />}
+      </div>
     </div>
   );
 };

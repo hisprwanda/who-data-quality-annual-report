@@ -13,7 +13,8 @@ const currentState = {
         period: '',
         dataSet: '',
         element: [],
-        configuredDataset: []
+        configuredDataset: [],
+        orgUnitSet: ''
     },
     period: {
         fixedPeriod: {

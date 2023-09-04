@@ -39,9 +39,22 @@
     padding: 0.5rem;
     display: block;
     width: 100%;
+    cursor: pointer;
 }
 
 .select-item-options ul li:hover {
     background-color: black;
     color: #fff;
+}
+
+.select-parent-container label {
+    padding: 0.4rem 0rem;
+    font-weight: 500;
+    display: block;
+}
+
+.period-selection-container label {
+    font-weight: 500;
+    padding: 0.4rem 0rem;
+    display: block;
 }
