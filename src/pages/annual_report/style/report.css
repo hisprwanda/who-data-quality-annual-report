@@ -309,6 +309,7 @@ label {
 .period-showable {
     display: none;
     background-color: #eeeeee;
+    flex-direction: column;
 }
 
 .data-showable ul {
@@ -334,11 +335,11 @@ label {
     margin: 0rem;
 }
 
-.menu-parent > div > div:nth-child(3):hover .period-showable {
+/* .menu-parent > div > div:nth-child(3):hover .period-showable {
     display: block;
     box-shadow: rgba(0, 0, 0, 0.12) 0px 1px 3px, rgba(0, 0, 0, 0.24) 0px 1px 2px;
     margin-top: 0.1rem;
-}
+} */
 
 
 .dataset-indication {
@@ -440,8 +441,7 @@ label {
     gap: 1.2rem;
 }
 
-.period-container:hover .period-showable {
-    display: block;
+.period-showable {
     box-shadow: rgba(0, 0, 0, 0.12) 0px 1px 3px, rgba(0, 0, 0, 0.24) 0px 1px 2px;
     position: absolute;
     top: 2.5rem;
@@ -692,6 +692,12 @@ label {
     display: flex;
     justify-content: space-between;
     padding: 0.4rem;
+}
+
+.open-or-close {
+    display: flex;
+    padding: 0.4rem;
+    justify-content: flex-end;
 }
 
 

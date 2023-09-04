@@ -20,30 +20,12 @@ const PeriodComponent = function () {
   let [info, setInfo] = useState([]);
   const processSelectedPeriod = (e) => {
     e.persist();
-
-
-    
   };
 
   return (
     <div className="period-showable-container">
       <div className="period-selection">
-        <div className="period-section-container">
-          <div className="period-suboptions">
-            <div className="period-suboptions-container">
-              <div className="period-suboptions-control">
-                <FixedPeriodComponent
-                  processSelectedPeriod={processSelectedPeriod}
-                />
-              </div>
-            </div>
-          </div>
-          <div className="select-period-result">
-            <ul>
-              {info.length > 0 && info.map((dt) => <li key={dt}>{dt}</li>)}
-            </ul>
-          </div>
-        </div>
+        <FixedPeriodComponent processSelectedPeriod={processSelectedPeriod} />
       </div>
     </div>
   );

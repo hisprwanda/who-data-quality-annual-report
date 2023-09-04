@@ -148,6 +148,7 @@ const Report = function () {
     setOrgUnitLevelVisibility("some information");
   };
   let [x, setX] = useState("x")
+  let [periodVisibility, setPeriodVisibility] = useState("none")
 
   return (
     <div className="reportContainer">
@@ -266,15 +267,18 @@ const Report = function () {
             </div>
           </div>
           <div className="period-container">
-            <div className="period-indication">
+            <div className="period-indication" onClick={() => setPeriodVisibility("flex")}>
               <div>Period</div>
               <div>{storeStateSelector.period.selectedPeriod}</div>
               <div>
                 <img src={down_allow} />
               </div>
             </div>
-            <div className="period-showable">
+            <div className="period-showable" style={{display: periodVisibility}}>
               <PeriodComponent />
+              <div className="open-or-close">
+                <Button small primary onClick={() => setPeriodVisibility('none')}>Hide</Button>  
+              </div> 
             </div>
           </div>
           <div>
