@@ -1,167 +1,117 @@
-import {useState, useEffect} from 'react'
+import { useState, useEffect } from "react";
+import { useSelector, useDispatch } from "react-redux";
 import {
-    Button,
-    ButtonStrip,
-    DataTable,
-    TableBody,
-    TableHead,
-    DataTableRow,
-    DataTableColumnHeader,
-    DataTableCell
-  } from '@dhis2/ui'
-import './report-preview-styles.css'
-import logo from '../../../assets/images/WHO_logo.png'
+  Button,
+  ButtonStrip,
+  DataTable,
+  TableBody,
+  TableHead,
+  DataTableRow,
+  DataTableColumnHeader,
+  DataTableCell,
+} from "@dhis2/ui";
+import "./styles/reportpreview.css";
+import logo from "../../../assets/images/WHO_logo.png";
+import {
+  loadAnalytics,
+  loadAnalyticsInformation,
+  loadDataElements,
+} from "../datasource/dataset/dataset.source";
+import { useDataQuery } from "@dhis2/app-runtime";
+import {
+  completenessLabel,
+  mainHeaderLabel,
+} from "../utils/report/ReportLabel.util";
+import { HeaderSection } from "./HeaderSection";
+import { ParentHeader } from "./ParentHeader";
+import { DataSection } from "./DataSection";
+import { CompletenessReport } from "./completness/CompletenessReport";
+import { InternalConsistencyReport } from "./internalconsistency/InternalConsistencyReport";
 
+const ReportPreview = () => {
+  let storeSelector = useSelector((store) => store);
+  let storeDispatch = useDispatch();
+  let { loading, error, data } = useDataQuery(
+    loadAnalytics,
+    {},
+    {},
+    {},
+    {},
+    {}
+  );
 
-
-const ReportPreview = ({isHidden, onClose, onPrintReport}) => {
-
+  const availableDataset = storeSelector.selectedValue.configuredDataset;
+  const group = storeSelector.selectedValue.dataSet;
+  const allElements = storeSelector.selectedValue.element;
+  const orgUnitID = storeSelector.selectedValue.orgUnit.id;
+  const orgUnitChildren = storeSelector.selectedValue.orgUnit.children;
+  const period = storeSelector.period.selectedPeriod;
+  //let response = useDataQuery(loadAnalyticsInformation(), {}, {}, {}, {}, {});
+  let dataElementRequest = useDataQuery(loadDataElements(allElements, false));
 
   return (
-    <div className='report-preview report-preview-container'>
-        <div className='report-preview report-preview-content'>
+    <div className="report-preview report-preview-container">
+      <CompletenessReport
+        main_title={mainHeaderLabel.summary}
+        sub_title={completenessLabel.completeness}
+      />
+      <p></p>
+      <InternalConsistencyReport
+        main_title={mainHeaderLabel.internalConsistency}
+        sub_title=""
+      />
 
-            <div class="section-sub-header">
-                <p>Domain 1 - Completeness</p>
-            </div>
+      {/* <ParentHeader
+        main_title={mainHeaderLabel.summary}
+        sub_title={completenessLabel.completeness}
+      />
+      <DataSection
+        main_title={completenessLabel.completenessOfFacilityReporting}
+        sub_title={completenessLabel.percentageOfExpectedAndCompleted}
+        more_info={completenessLabel.reportingRate}
+        dataheader={completenessLabel.dataset}
+        reporttype='indicator completeness'
+      /> 
+      <p></p>
 
-            <h4>1a: Completeness of facility reporting</h4>
-            <p>The percentage of expected reports that have been entered and completed.</p>
-            <DataTable>
-                <TableHead>
-                    <DataTableRow>
-                        <DataTableColumnHeader>Data set</DataTableColumnHeader>
-                        <DataTableColumnHeader>Overrall score</DataTableColumnHeader>
-                        <DataTableColumnHeader>
-                            Province with divergent score
-                            
-                        </DataTableColumnHeader>
-                    </DataTableRow>
-                </TableHead>
-                <TableBody>
-                    <DataTableRow>
-                        <DataTableCell bordered> A - Hospital Daily Flash Report [ Previous Day ] - Reporting rate </DataTableCell>
-                        <DataTableCell bordered>0%</DataTableCell>
-                        <DataTableCell bordered>
-                            <DataTable>
-                                <DataTableRow>
-                                    <DataTableCell bordered>5</DataTableCell>
-                                    <DataTableCell bordered>100%</DataTableCell>
-                                </DataTableRow>
-                            </DataTable>
-                        </DataTableCell>
-                        
-                    </DataTableRow>
-                </TableBody>
-            </DataTable>
-            
-            <h4>1b: Timeliness of facility reporting</h4>
-            <p>The percentage of expected reports that have been entered and completed on time.</p>
-            <DataTable>
-                <TableHead>
-                    <DataTableRow>
-                        <DataTableColumnHeader>Data set</DataTableColumnHeader>
-                        <DataTableColumnHeader>Overrall score</DataTableColumnHeader>
-                        <DataTableColumnHeader>
-                            Province with divergent score
-                            
-                        </DataTableColumnHeader>
-                    </DataTableRow>
-                </TableHead>
-                <TableBody>
-                    <DataTableRow>
-                        <DataTableCell bordered> A - Hospital Daily Flash Report [ Previous Day ] - Reporting rate </DataTableCell>
-                        <DataTableCell bordered>0%</DataTableCell>
-                        <DataTableCell bordered>
-                            <DataTable>
-                                <DataTableRow>
-                                    <DataTableCell bordered>5</DataTableCell>
-                                    <DataTableCell bordered>100%</DataTableCell>
-                                </DataTableRow>
-                            </DataTable>
-                        </DataTableCell>
-                    </DataTableRow>
-                    <DataTableRow>
-                        <DataTableCell bordered> A - Hospital Daily Flash Report [ Previous Day ] - Reporting rate </DataTableCell>
-                        <DataTableCell bordered>0%</DataTableCell>
-                        <DataTableCell bordered>
-                            <DataTable>
-                                <DataTableRow>
-                                    <DataTableCell bordered>5</DataTableCell>
-                                    <DataTableCell bordered>100%</DataTableCell>
-                                </DataTableRow>
-                            </DataTable>
-                        </DataTableCell>
-                    </DataTableRow>
-                </TableBody>
-            </DataTable>
-            
-            <h4>1c: Completeness of indicator data</h4>
-            <p>Reports where values are not missing. If zeros are not stored, zeros are counted as missing.</p>
-            <DataTable>
-                <TableHead>
-                    <DataTableRow>
-                        <DataTableColumnHeader>Data set</DataTableColumnHeader>
-                        <DataTableColumnHeader>Overrall score</DataTableColumnHeader>
-                        <DataTableColumnHeader>
-                            Province with divergent score
-                            
-                        </DataTableColumnHeader>
-                    </DataTableRow>
-                </TableHead>
-                <TableBody>
-                    <DataTableRow>
-                        <DataTableCell bordered> A - Hospital Daily Flash Report [ Previous Day ] - Reporting rate </DataTableCell>
-                        <DataTableCell bordered>0%</DataTableCell>
-                        <DataTableCell bordered>
-                            <DataTable>
-                                <DataTableRow>
-                                    <DataTableCell bordered>5</DataTableCell>
-                                    <DataTableCell bordered>100%</DataTableCell>
-                                </DataTableRow>
-                            </DataTable>
-                        </DataTableCell>
-                        
-                    </DataTableRow>
-                </TableBody>
-            </DataTable>
-
-            <div class="section-sub-header">
-                <p>Domain 2 - Internal consistency</p>
-            </div>
-            <h4>2a: Extreme outliers.</h4>
-            <p>Extreme outliers, using the standard method. Province are counted as divergent if they have one or more extreme outliers for an indicator.</p>
-            <DataTable>
-                <TableHead>
-                    <DataTableRow>
-                        <DataTableColumnHeader>Indicator</DataTableColumnHeader>
-                        <DataTableColumnHeader>Overrall score</DataTableColumnHeader>
-                        <DataTableColumnHeader>
-                            Province with divergent score
-                            
-                        </DataTableColumnHeader>
-                    </DataTableRow>
-                </TableHead>
-                <TableBody>
-                    <DataTableRow>
-                        <DataTableCell bordered> A - Hospital Daily Flash Report [ Previous Day ] - Reporting rate </DataTableCell>
-                        <DataTableCell bordered>0%</DataTableCell>
-                        <DataTableCell bordered>
-                            <DataTable>
-                                <DataTableRow>
-                                    <DataTableCell bordered>5</DataTableCell>
-                                    <DataTableCell bordered>100%</DataTableCell>
-                                </DataTableRow>
-                            </DataTable>
-                        </DataTableCell>
-                        
-                    </DataTableRow>
-                </TableBody>
-            </DataTable>
-
-        </div>
+      <DataSection
+        main_title={completenessLabel.timelinessOfFacility}
+        sub_title={completenessLabel.percentageOfExpectedEntered}
+        more_info={completenessLabel.reportingRateOnTime}
+        dataheader={completenessLabel.dataset}
+        reporttype='timeliness'
+      />
+      <p></p>
+      <DataSection
+        main_title={completenessLabel.completenessOfIndicator}
+        sub_title={completenessLabel.reportWhereValuesNotMissing}
+        more_info={completenessLabel.reportingRateOnTime}
+        dataheader={completenessLabel.indicator}
+        reporttype='indicator completeness'
+      />  
+      <p></p> 
+      <DataSection
+        main_title={completenessLabel.consistencyOfDataSet}
+        sub_title={completenessLabel.reportWhereValuesNotMissing}
+        more_info={completenessLabel.reportingRateOnTime}
+        dataheader={completenessLabel.indicator}
+        reporttype='consistency'
+      />  
+      <p></p>
+      <p></p>
+      <ParentHeader
+        main_title={mainHeaderLabel.internalConsistency}
+        sub_title=''
+      />  
+      <DataSection
+        main_title={completenessLabel.extremeOutlier}
+        sub_title={completenessLabel.reportWhereValuesNotMissing}
+        more_info={completenessLabel.reportingRateOnTime}
+        dataheader={completenessLabel.indicator}
+        reporttype='extremeoutlier'
+      />     */}
     </div>
-  )
-}
+  );
+};
 
-export default ReportPreview
+export default ReportPreview;
