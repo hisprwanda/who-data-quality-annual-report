@@ -19,15 +19,16 @@ const query = {
 const MyApp = () => (
     <div className={classes.container}>
         <HashRouter>
-          <Routes>
-            <Route path="/">
-              <Route index element={<Report />} />
-              <Route path="configurations">
-                <Route index element={<Configurations />} />
+          <Provider store={store}>
+            <Routes>
+              <Route path="/">
+                <Route index element={<Report />} />
+                <Route path="configurations">
+                  <Route index element={<Configurations />} />
+                </Route>
               </Route>
-              
-            </Route>
-          </Routes>
+            </Routes>
+          </Provider>
         </HashRouter>
     </div>
 )
