@@ -2,14 +2,12 @@ import React, { useState, useEffect } from "react";
 import { SelectComponent } from "../select/SelectComponent";
 import { Card, Divider, Input } from "@dhis2/ui";
 import { fixedPeriodSource } from "../utils/period/FixedPeriod.source";
-import { processFixedPeriod } from "../utils/period/fixedPeriod.util";
 import { generateFixedPeriods } from "@dhis2/multi-calendar-dates";
 import moment from "moment";
-import { useSelector, useDispatch } from "react-redux";
+import { useDispatch } from "react-redux";
 
 const FixedPeriodComponent = function ({ processSelectedPeriod }) {
   
-  let [processedPeriodOptions, setProcessedPeriodOptions] = useState([]);
   let [selectedPeriodOption, setSelectedPeriodOption] = useState(fixedPeriodSource[0].name);
 
   let [processed, setProcessed] = useState([]);
@@ -27,9 +25,9 @@ const FixedPeriodComponent = function ({ processSelectedPeriod }) {
       year: previousYear,
       locale: 'en'
     }
-    const x = fixedPeriodSource.map(d => d.id)
+    const fpSource = fixedPeriodSource.map(d => d.id)
     
-    if(x.includes(selectedKey)) {
+    if(fpSource.includes(selectedKey)) {
       setSelectedPeriodOption(selectedContent)
       const generatedPeriod = generateFixedPeriods(params)
       setProcessed(generatedPeriod)
@@ -38,9 +36,7 @@ const FixedPeriodComponent = function ({ processSelectedPeriod }) {
       actionDispatch({type: 'Period Selection', payload: {period: selectedContent}})
       setPeriod(selectedContent)
     } 
-  }
-
-  
+  } 
 
   return (
     <div>
