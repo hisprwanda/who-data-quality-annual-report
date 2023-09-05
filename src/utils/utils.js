@@ -7,3 +7,8 @@ export const generateNumeratorCode = (numerators) => {
 
     return newCode;
 }
+
+export const getConfigObjectsForAnalytics = (configurations) => {
+  
+    
+}

@@ -25,9 +25,7 @@ import relationTypes from '../../../data/relationTypes.json';
 
 
 export const NumeratorRelations = ({toggleState, configurations, mappedNumerators}) => {
-    const [relations, setRelations] = useState(null);
     const [isModalHidden, setIsModalHidden] = useState(true);
-    const [numeratorsWithDataIds, setNumeratorsWithDataIds] = useState(null);
     const [newNumeratorRelationInfo, setNewNumeratorRelationInfo] = useState({
         A: "",
         B: "",
@@ -37,15 +35,9 @@ export const NumeratorRelations = ({toggleState, configurations, mappedNumerator
         type: ""
       });
 
-
-
-    useEffect(() => {
-        setRelations(configurations.numeratorRelations)
-        setNumeratorsWithDataIds(configurations.numerators.filter(numerator => numerator.dataID != null));
-
-      }, [])
-      
-
+    let  relations = configurations.numeratorRelations;
+    let numeratorsWithDataIds  = configurations.numerators.filter(numerator => numerator.dataID != null);
+    
     const onModalClose = () => {
     setIsModalHidden(true)
     }

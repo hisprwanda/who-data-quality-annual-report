@@ -59,6 +59,10 @@ const Report = () => {
     lazy: false,
 });
 
+  
+  //TODO: pick the group id selected
+  // passi to the function to filter out configurations 
+  // 
 
   // Hook for managing data set modals
   let [dataSetModalStatus, setDataSetModalStatus] = useState(true)
