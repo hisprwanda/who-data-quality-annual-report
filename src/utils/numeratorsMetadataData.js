@@ -37,13 +37,11 @@ export const getNumeratorDataset = (configurations, dataSetID) => {
   }
 }
 
-export const getNumeratorDataElement = (configurations, dataID) => {
-  const denominators = configurations.denominators;
-  
-  for (let key in denominators) {
-    const denominator = denominators[key]
-    if (denominator.dataID === dataID) { 
-      return denominator.name
+export const getNumeratorDataElement = (mappedNumerators, dataID) => {  
+  for (let key in mappedNumerators) {
+    const numerator = mappedNumerators[key]
+    if (numerator.id === dataID) { 
+      return numerator.displayName
     }
   }
 }

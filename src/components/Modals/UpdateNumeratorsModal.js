@@ -66,22 +66,23 @@ const dataElementGroupsQuery = {
 
 const UpdateNumeratorsModal = ({configurations, onClose, isHidden, onSave, numeratorToEdit, updateType}) => {
     const [toggleStateModal, setToggleStateModal] = useState(1);
-    const [selectedGroups, setSelectedGroup] = useState([]);
-    const [isHiddenElementsGroups, setIsHiddenElementsGroups] = useState(true);
-    const [selectedElementGroups, setSelectedElementGroups] = useState([]);
-    const [isHiddenElements, setIsHiddenElements] = useState(true);
+    const [selectedElementGroup, setSelectedElementGroup] = useState('');
+    const [selectedElement, setSelectedElement] = useState('');
     const [selectedElements, setSelectedElements] = useState([]);
-    const [selectedDataSets, setSelectedDataSets] = useState('');
     const [selectedOperands, setSelectedOperands] = useState([]);
-    const [filteredSelectedElementGroups, setFilteredSelectedElementGroups] = useState([]);
     const [filteredSelectedElements, setFilteredSelectedElements] = useState([]);
-
     const [mappedDataElementGroups, setMappedDataElementGroups]  = useState([]);
-    const [mappedDataElements, setMappedDataElements] = useState([]);
+    const [dataElements, setDataElements] = useState([]);
     const [mappedDataSets, setMappedDataSets] = useState([]);
     const [mappedDataElementOperands, setMappedDataElementOperands] = useState([]);
     const [footerMessage, setFooterMessage] = useState(null);
+    const [numerator, setNumerator] = useState({
+        name: '',
+        definition: '',
+        core:false,
+    });
 
+    
     // run the data element groups querry
     const { loading: lementGroupsLoading, error:elementGroupsError, data:datalementGroupsData, refetch:lementGroupsRefetch } = useDataQuery(dataElementGroupsQuery, {
         lazy: false,
@@ -111,7 +112,7 @@ const UpdateNumeratorsModal = ({configurations, onClose, isHidden, onSave, numer
       useEffect(() => { 
           if (dataElementsData) {
             let dataElements  = dataElementsData.elements.dataElements;
-            setMappedDataElements(dataElements.map(({ id, displayName }) => ({
+            setDataElements(dataElements.map(({ id, displayName }) => ({
                 value: id,
                 label: displayName
               })));    
@@ -155,19 +156,24 @@ const UpdateNumeratorsModal = ({configurations, onClose, isHidden, onSave, numer
 
     const newCode = generateNumeratorCode(configurations.numerators);
 
-    const [numerator, setNumerator] = useState({
-        name: '',
-        definition: '',
-        core:false,
-    });
 
     const handleGroupSelection = (selectedG) => {
-        setSelectedGroup(selectedG.selected)
         setNumerator({
             ...numerator,
             code: newCode,
-            groups: selectedGroups
+            groups: selectedG.selected
         })
+    }
+
+    
+
+    const handleDataSetsSelection = (selectedD) => {
+        setNumerator({
+            ...numerator,
+            code: newCode,
+            dataSetID: selectedD.selected
+        })
+
     }
 
     const toggleTabModal = (index) => {
@@ -181,8 +187,8 @@ const UpdateNumeratorsModal = ({configurations, onClose, isHidden, onSave, numer
                 name: '',
                 definition: '',
                 core:false,
+                groups: []
             })
-            setSelectedGroup([])
             
         } else if (updateType == 'update') {
             // set numerator with existin data
@@ -192,33 +198,24 @@ const UpdateNumeratorsModal = ({configurations, onClose, isHidden, onSave, numer
                     code:numeratorToEdit.code,
                     name:numeratorToEdit.name, 
                     definition:numeratorToEdit.definition,
-                    core:numeratorToEdit.core
+                    core:numeratorToEdit.core,
+                    groups: getNumeratorMemberGroups(configurations, numeratorToEdit.code).map((group) => group.code)
+
                 })
             }else{
                 setNumerator({
                     name: '',
                     definition: '',
                     core:false,
+                    groups: []
                 })
             }
-            
-            // set groups with existin data
-            setSelectedGroup(
-                getNumeratorMemberGroups(configurations, numeratorToEdit.code)
-                .map((group) => group.code)
-            )
         }
     }, [isHidden]);
 
     useEffect(() => {
-        setFilteredSelectedElementGroups(
-            filterSelectedMetadata(mappedDataElementGroups, selectedElementGroups)
-        );
-    }, [selectedElementGroups]);
-
-    useEffect(() => {
         setFilteredSelectedElements(
-            filterSelectedMetadata(mappedDataElements, selectedElements)
+            filterSelectedMetadata(dataElements, selectedElements)
         );
     }, [selectedElements]);
 
@@ -260,7 +257,8 @@ const UpdateNumeratorsModal = ({configurations, onClose, isHidden, onSave, numer
                                 >
                                 <MultiSelectField
                                     onChange={handleGroupSelection}
-                                    selected={selectedGroups}
+                                    selected={numerator.groups}
+                                    placeholder="Select groups"
                                 >
                                     {configurations.groups.map((group, key) =>(
                                         <MultiSelectOption label={group.displayName} key={key} value={group.code} />
@@ -288,49 +286,72 @@ const UpdateNumeratorsModal = ({configurations, onClose, isHidden, onSave, numer
                         </div>                
                     <div className='content-tabs-modal'>
                         <div className={toggleStateModal === 1 ? "content-modal  active-content-modal" : "content-modal"} >
-                            <div className="dataElementsSelector">                            
-                                <div className="medataDataSelectionBox" style={boxStyles} onClick={() => setIsHiddenElementsGroups(false)} >
-                                    <Box >
-                                        {filteredSelectedElementGroups.length != 0? filteredSelectedElementGroups.map((group, key) => 
-                                            <Chip key={key}>{group.label}</Chip>
-                                        )
-                                        :
-                                        "Select data element groups"
-                                    }
-                                    </Box>
-                                </div>
+                            <div className="dataElementsSelector">  
 
-                                <div className="medataDataSelectionBox" style={boxStyles} onClick={() => setIsHiddenElements(false)} >
-                                    <Box >
-                                        {filteredSelectedElements.length != 0? filteredSelectedElements.map((group, key) => 
-                                            <Chip key={key}>{group.label}</Chip>
-                                        )
-                                        :
-                                        "Select data elements"
-                                    }
-                                    </Box>
-                                </div>
+                                <SingleSelect 
+                                    className="select" 
+                                    disabled={mappedDataElementGroups.length > 0? false:true}
+
+                                    onChange={(selected)=> {
+                                        setSelectedElementGroup(selected.selected)
+                                        setSelectedElement('');
+                                        setSelectedOperands('');
+                                        elementsRefetch({ groupID: selected.selected});     // fetch data elements only after a data element group has been selected
+                                        setNumerator({...numerator, dElementGroup:selected.selected})
+                                        setNumerator({...numerator, dataSetID:[]})
+                                    }}
+
+                                    placeholder="Select data element group"
+                                    selected={selectedElementGroup}
+                                >
+                                    {mappedDataElementGroups.map((group, key) => 
+                                        <SingleSelectOption label={group.label} value={group.value} key={key} />
+                                    )}
+                                </SingleSelect>       
+
+                                <SingleSelect 
+                                    className="select" 
+                                    disabled={dataElements.length > 0? false:true}
+
+                                    onChange={(selected)=> {
+                                        setSelectedElement(selected.selected)
+                                        setSelectedOperands('')
+                                        setMappedDataElementOperands([]);
+                                        dataSetsRefetch({elementID: selected.selected})  // fetch datasets only after a data element has been selected
+                                        setNumerator({...numerator, dataID:selected.selected})
+                                        setNumerator({...numerator, dataSetID:[]})
+
+                                    }}
+
+                                    placeholder="Select data element"
+                                    selected={selectedElement}
+                                >
+                                    {dataElements.map((element, key) => 
+                                        <SingleSelectOption label={element.label} value={element.value} key={key} />
+                                    )}
+                                </SingleSelect> 
 
                             </div>
                     
 
                             <h3>Data set for completeness</h3>
-                            <SingleSelect 
-                                className="select" 
-                                disabled={mappedDataSets.length > 0? false:true}
 
-                                onChange={(selected)=> {
-                                    setNumerator({...numerator, dataSetID:selected.selected})
-                                    setSelectedDataSets(selected.selected)
-                                }}
+                             {/* 
+                                TODO: Re-investigate why the selection doesn't get the last selected item and fix it on groups also
+                             */}
 
-                                placeholder="Select Dataset"
-                                selected={selectedDataSets}
-                            >
-                                {mappedDataSets.map((dataset, key) => 
-                                    <SingleSelectOption label={dataset.label} value={dataset.value} key={key} />
-                                )}
-                            </SingleSelect>
+                                <MultiSelectField
+                                    onChange={(selected) => {
+                                        handleDataSetsSelection(selected)
+                                    }}
+                                    selected={numerator.dataSetID}
+                                    placeholder="Select datasets"
+                                >
+                                    {mappedDataSets.map((dataset, key) =>(
+                                        <MultiSelectOption label={dataset.label} key={key} value={dataset.value} />
+                                    ))}
+                                    
+                                </MultiSelectField>
 
                             <h3>Variable for completeness</h3>
                             <SingleSelect 
@@ -391,72 +412,7 @@ const UpdateNumeratorsModal = ({configurations, onClose, isHidden, onSave, numer
                         Cancel
                     </Button>
                     <Button  primary onClick={() => onSave(numerator)}> 
-                        Create
-                    </Button>
-                </ButtonStrip>
-            </ModalActions>
-        </Modal>
-    
-        {/* TODO: put the modals below (data elements, groups, data sets, etc ) in a single modal and make it dynamic depending of type of metadata */}
-        {/* Data element groups selection modal */}
-        <Modal hide={isHiddenElementsGroups} position='middle'>
-            <ModalContent>
-                <Transfer
-                    filterLabel="Select data elements group or search below"
-                    filterPlaceholder="Search"
-                    filterable
-                    maxSelections={1}
-                    onChange={(selected) => {
-                        setSelectedElementGroups(selected.selected);
-                        setFilteredSelectedElements([]);
-                        setSelectedDataSets('');    //resets the previous value for new data elements to be refetched
-                        elementsRefetch({ groupID: selected.selected});     // fetch data elements only after a data element group has been selected
-                        setNumerator({...numerator, dElementGroup:selected.selected[0]})
-                    }}
-                    options={mappedDataElementGroups}
-                    selected={selectedElementGroups}
-                />
-            </ModalContent>
-            <ModalActions>
-                <ButtonStrip end>
-                    <Button  secondary onClick={() =>setIsHiddenElementsGroups(true)}>
-                        Cancel
-                    </Button>
-                    <Button  primary onClick={() =>setIsHiddenElementsGroups(true)}> 
-                        Select
-                    </Button>
-                </ButtonStrip>
-            </ModalActions>
-        </Modal>
-
-        {/* Data elements selection modal */}
-        <Modal hide={isHiddenElements} position='middle'>
-            <ModalContent>
-                <Transfer 
-                    filterLabel="Select data elements or search below" 
-                    filterPlaceholder="Search" 
-                    filterable 
-                    maxSelections={1}
-                    options={mappedDataElements} 
-                    selected={selectedElements}
-                    disabled
-                    onChange={ (selected) =>   {
-                        setSelectedElements(selected.selected);
-                        setSelectedDataSets('');    //resets the previous value for new data elements to be refetched
-                        setMappedDataElementOperands([]);
-                        dataSetsRefetch({elementID: selected.selected[0]})  // fetch datasets only after a data element has been selected
-                        setNumerator({...numerator, dataID:selected.selected[0]})
-
-                    }}
-                />
-            </ModalContent>
-            <ModalActions>
-                <ButtonStrip end>
-                    <Button  secondary onClick={() =>setIsHiddenElements(true)}>
-                        Cancel
-                    </Button>
-                    <Button  primary onClick={() =>setIsHiddenElements(true)}> 
-                        Select
+                        Save
                     </Button>
                 </ButtonStrip>
             </ModalActions>

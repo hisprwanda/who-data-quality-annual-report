@@ -2,7 +2,7 @@ import {useState, useEffect} from 'react'
 import { generateNumeratorCode } from './generateNumeratorCode';
 
 // TODO: Implemement the global context api to share configurations accross compoments
-// TODO: Merge these clear and update configurations methods to make it dynamic 
+// TODO: Merge these create, clear and update configurations methods to make it dynamic 
 export const clearConfigurations = (configurations, configurationType, updateType, numeratorToUpdate) => {
    
         const metaDataVersion = configurations.metaDataVersion; 
@@ -43,11 +43,10 @@ export const createNewNumerator = (configurations, newNumeratorInfo) => {
   const externalRelations = configurations.externalRelations; 
   const numeratorRelations = configurations.numeratorRelations;
   const groups = configurations.groups;
-  const newCode = newNumeratorInfo.code;
 
   // construct a numerator object
   const newNumerator = {
-    code: newCode,
+    code: newNumeratorInfo.code,
     comparison: "ou",
     consistency: 33,
     core: true,
@@ -66,13 +65,50 @@ export const createNewNumerator = (configurations, newNumeratorInfo) => {
   const configurationsToSave = {
     metaDataVersion,
     numerators:[... numerators, newNumerator],
-    coreIndicators: [...coreIndicators, newCode],
+    coreIndicators: [...coreIndicators, newNumerator.code],
     dataSets,
     denominators,
     denominatorRelations,
     externalRelations,
     numeratorRelations,
     groups: updateGroups(groups, newNumeratorInfo)
+  }
+
+  return configurationsToSave;
+}
+
+export const createNewDenominator = (configurations, newDenominatorInfo) => {
+
+  const metaDataVersion = configurations.metaDataVersion; 
+  const numerators = configurations.numerators;
+  const coreIndicators = configurations.coreIndicators;
+  const dataSets = configurations.dataSets;
+  const denominatorRelations = configurations.denominatorRelations;
+  const denominators = configurations.denominators;
+  const externalRelations = configurations.externalRelations; 
+  const numeratorRelations = configurations.numeratorRelations;
+  const groups = configurations.groups;
+
+  // construct a numerator object
+  const newDenominator = {
+    code: newDenominatorInfo.code,
+    dataID: newDenominatorInfo.dataID,
+    displayName: newDenominatorInfo.displayName,
+    lowLevel: parseInt(newDenominatorInfo.lowLevel),
+    name: newDenominatorInfo.name,
+    type: newDenominatorInfo.type
+  }
+
+  const configurationsToSave = {
+    metaDataVersion,
+    numerators,
+    coreIndicators,
+    dataSets,
+    denominators:[...denominators, newDenominator],
+    denominatorRelations,
+    externalRelations,
+    numeratorRelations,
+    groups
   }
 
   return configurationsToSave;

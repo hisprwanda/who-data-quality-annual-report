@@ -1,4 +1,4 @@
-import {useState} from 'react'
+import {useState, useEffect} from 'react'
 import MenuBar from '../../components/menu-bar/MenuBar'
 import ConfigTabs from '../../components/config-tabs/ConfigTabs'
 import './configurations.css'
@@ -13,8 +13,20 @@ const readDataStoreQuery = {
 };
 
 
+const mappedDataElementsQuery = {
+  elements: {
+    resource: 'dataElements',
+    params:({mappedElements}) =>({
+      filter:`id:in:${mappedElements}`,
+      paging: false,
+    })
+  }
+};
+ 
 const Configurations = () => {
-let configurations = [];
+const [configurations, setConfigurations] = useState(null);
+const [mappedNumerators, setMappedNumerators] = useState(null);
+const [elementsUids, setElementsUids] = useState(null);
 
   // A dynamic alert to communicate success or failure 
   // TODO: put this one in a reusable function
@@ -29,15 +41,54 @@ let configurations = [];
   // running the query
   const { loading, error, data } = useDataQuery(readDataStoreQuery);
 
+  // run the mapped data element querry
+  const { loading: mappedElementsLoading, error:mappedElementsError, data:mappedElementsData, refetch:mappedElementsRefetch } = useDataQuery(mappedDataElementsQuery, {
+   lazy: true,
+  });
+  
   if (error) { return <span>ERROR: {error.message}</span> }
 
-if (data) {  
-  
-    configurations = data.dataStore;
-    const message = 'Successfully retrieved configurations'
 
-    // show({ message, status: 'success' })  //TODO: find the error in the console caused by AlertsProvider
-}
+useEffect(() => {
+  if (data) {  
+    const configs = data.dataStore;
+      setConfigurations(configs);
+
+      const message = 'Successfully retrieved configurations'
+      // show({ message, status: 'success' })  //TODO: find the error in the console caused by AlertsProvider
+  }
+}, [data]);
+
+// useEffect(() => {
+//   if (numeratorsWithDataIds) {
+//     setElementsUids(numeratorsWithDataIds.map(item => item.dataID).join(','));
+//   }
+//   if (elementsUids) {
+//     mappedElementsRefetch({
+//       mappedElements: `[${elementsUids}]`
+//     })
+//   }
+// }, [elementsUids]);
+
+
+
+// useEffect(() => {
+//   if (mappedElementsData && numeratorsWithDataIds) {
+//     console.log('elements:', numeratorsWithDataIds)
+//     const returnedElements = mappedElementsData.elements.dataElements;
+    
+//     for (let i = 0; i < returnedElements.length; i++) {
+//       const dataID = returnedElements[i].id;
+//       const matchingObj = numeratorsWithDataIds.find(item => item.dataID === dataID);
+
+//       if (matchingObj) {
+//         returnedElements[i].code = matchingObj.code;
+//         setMappedNumerators(returnedElements)
+//       }
+//     }
+//   }
+// }, [mappedElementsData]);
+
 
   return (
     <div className='configurationsContainer'>
@@ -53,7 +104,11 @@ if (data) {
           </div>
 
           <div className='config-tabs-container' >
-              <ConfigTabs loading={loading} configurations={configurations}/>
+              {configurations? 
+                <ConfigTabs loading={loading} configurations={configurations} />
+              :
+              ""
+              }
           </div>
 
         </div>

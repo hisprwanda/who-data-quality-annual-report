@@ -20,7 +20,18 @@ import {
     SingleSelectOption,
   } from '@dhis2/ui'
 import { getAllDenominatorType, getDenominatorType } from '../../../utils/denominatorsMetadataData';
-import { useDataQuery, useAlert } from "@dhis2/app-runtime";
+import { useDataQuery, useDataMutation, useAlert } from "@dhis2/app-runtime";
+import { createNewDenominator } from '../../../utils/updateConfigurations';
+
+// TODO: move different queries to their own file when they become many
+const updateConfigurationsMutation = {
+  resource: 'dataStore/who-dqa/configurations',
+  type: 'update',
+  data: ({ configurations }) => ({
+      ...configurations,
+      lastUpdated: new Date().toJSON(),
+  }),
+}
 
 
 //TODO: merge some queries below 
@@ -63,10 +74,12 @@ export const Denominators = ({toggleState, configurations}) => {
   const [mappedDataElements, setMappedDataElements] = useState(null);
   const [orgUnitsLevels, setOrgUnitsLevels] = useState(null);
   const [selectedElementsGroup, setSelectedElementsGroup] = useState(null);
-  const [newDenomintaroInfo, setNewDenomintaroInfo] = useState({
+  const [newDenominatorInfo, setNewDenominatorInfo] = useState({
     code: "",
     dataID: "",
-    lowLevel: 1,
+    displayName: "",
+    lowLevel: "",
+    name: "",
     type: ""
   });
 
@@ -87,6 +100,8 @@ export const Denominators = ({toggleState, configurations}) => {
       lazy: false,
   });
 
+  // run mutation querry
+  const [mutate, { error, data }] = useDataMutation( updateConfigurationsMutation )
 
   const toggleTabModal = (index) => {
     setToggleStateModal(index);
@@ -95,17 +110,40 @@ export const Denominators = ({toggleState, configurations}) => {
   const onModalClose = () => {
     setIsModalHidden(true)
   }
+  const onSaveDenominator = async(newDenominatorInfo) => {
+    const updatedConfigurations =  createNewDenominator(configurations, newDenominatorInfo);       
+    await mutate({ configurations: updatedConfigurations })
+  
+    //update the current list
+    setDenominators(denominators => [...denominators, newDenominatorInfo]);
+    setIsModalHidden(true)
+  }
 
-/*
-TODO: check what changes happen when a denominator is editted 
-TODO: make these changes happen
-*/ 
+  const handleDataElementSelection = (value) => {
+    //getting the details of a selected data element for name and display name
+    const selectedItem = mappedDataElements.find(element => element.value === value.selected);
+    setNewDenominatorInfo({
+      ...newDenominatorInfo, 
+      dataID:value.selected,
+      displayName: selectedItem.label,
+      name: selectedItem.label,
+    })
+  }
+
 
   useEffect(() => {
     setDenominators(configurations.denominators)
 
     // get denominator types
     setDenominatorTypes(getAllDenominatorType())
+
+     // generate and set the code before saving
+     {configurations && (
+       setNewDenominatorInfo({
+        ...newDenominatorInfo, code:"P"+ (configurations.denominators.length + 1) //TODO: further checks are needed in case some denominators have been deleted or the code is taken
+      })
+     )
+    }
 
   }, [])
       
@@ -206,10 +244,10 @@ TODO: make these changes happen
                         </TableCell>
                         <TableCell>
                             <SingleSelect className="select" 
-                              onChange={(value)=> setNewDenomintaroInfo({...newDenomintaroInfo, type:value.selected})}
+                              onChange={(value)=> setNewDenominatorInfo({...newDenominatorInfo, type:value.selected})}
 
                               placeholder="Select denominator type"
-                              selected={newDenomintaroInfo.type}
+                              selected={newDenominatorInfo.type}
                             >
                               {denominatorTypes? denominatorTypes.map((type, key) => 
                                   <SingleSelectOption label={type.label} value={type.value} key={key} />
@@ -233,7 +271,7 @@ TODO: make these changes happen
                                           <SingleSelect className="select"
                                             onChange={(value)=> {
                                               setSelectedElementsGroup(value.selected);
-                                              setNewDenomintaroInfo({...newDenomintaroInfo, dataID:""}) //resets the previous value for new data elements to be refetched
+                                              setNewDenominatorInfo({...newDenominatorInfo, dataID:""}) //resets the previous value for new data elements to be refetched
                                               elementsRefetch({ groupID: value.selected});     // fetch data elements only after a data element group has been selected
                                             }}
                                             placeholder="Data element group"
@@ -244,10 +282,10 @@ TODO: make these changes happen
                                                   ) : "" }                            
                                           </SingleSelect>
                                           <SingleSelect className="select"
-                                            onChange={(value)=> setNewDenomintaroInfo({...newDenomintaroInfo, dataID:value.selected})}
+                                            onChange={handleDataElementSelection}
                                             placeholder="Select data element" 
                                             disabled={mappedDataElements? false:true}
-                                            selected={newDenomintaroInfo.dataID}
+                                            selected={newDenominatorInfo.dataID}
                                           >
                                                   {mappedDataElements? mappedDataElements.map((element, key) => 
                                                       <SingleSelectOption label={element.label} value={element.value} key={key} />
@@ -280,9 +318,9 @@ TODO: make these changes happen
                         </TableCell>
                         <TableCell>
                             <SingleSelect className="select" 
-                              onChange={(value)=> setNewDenomintaroInfo({...newDenomintaroInfo, lowLevel:value.selected})} 
+                              onChange={(value)=> setNewDenominatorInfo({...newDenominatorInfo, lowLevel:value.selected})} 
                               placeholder="Select Level"
-                              selected={newDenomintaroInfo.lowLevel.toString()}
+                              selected={newDenominatorInfo.lowLevel.toString()}
                               >
                                   {orgUnitsLevels? orgUnitsLevels.map((ouLevel, key) => 
                                       <SingleSelectOption label={ouLevel.displayName} value={ouLevel.level.toString()} key={key} />
@@ -296,7 +334,7 @@ TODO: make these changes happen
             <ModalActions>
                 <ButtonStrip end>
                     <Button  secondary onClick={onModalClose}> Cancel </Button>
-                    <Button  primary onClick={onModalClose}>   Create </Button>
+                    <Button  primary onClick={()=>onSaveDenominator(newDenominatorInfo)}>   Create </Button>
                 </ButtonStrip>
             </ModalActions>
         </Modal>

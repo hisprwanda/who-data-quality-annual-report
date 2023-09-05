@@ -34,7 +34,7 @@ const updateConfigurationsMutation = {
 
 
 
-export const NumeratorParameters = ({toggleState, configurations}) => {
+export const NumeratorParameters = ({toggleState, configurations, mappedNumerators}) => {
   const [numerators, setNumerators] = useState(null);
   const [outlierOptions, setOutlierOptions] = useState(null);
   const [datasets, setDatasets] = useState(null);
@@ -73,7 +73,7 @@ export const NumeratorParameters = ({toggleState, configurations}) => {
       return numerator
       
     });
-    
+
     setNumerators(updatedNumerators);
 
     setUpdatedConfigurations(updateConfigurations(configurations, 'parameters', 'update', numerators));
@@ -133,7 +133,7 @@ export const NumeratorParameters = ({toggleState, configurations}) => {
                       ))}
                   </TableCell>
                   <TableCell>{numerator.name}</TableCell>
-                  <TableCell>{getNumeratorDataElement(configurations, numerator.dataID)}	</TableCell>
+                  <TableCell>{getNumeratorDataElement(mappedNumerators, numerator.dataID)}	</TableCell>
                   <TableCell>
                     <SingleSelect inputWidth='20px' selected={numerator.moderateOutlier.toString()} onChange={(selected)=> handleParametersChange(numerator.code, selected.selected, 'moderateOutlier' )}  >
                         {outlierOptions? outlierOptions.map((opt, key) => (

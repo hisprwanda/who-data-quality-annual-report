@@ -6,7 +6,7 @@ import './styles/variables.css';
 
 import Report from './pages/annual_report/Report'
 import Configurations from './pages/configurations/Configurations'
-import { BrowserRouter, Routes, Route } from "react-router-dom"
+import { HashRouter, BrowserRouter, Routes, Route } from "react-router-dom";
 import { Provider } from 'react-redux'
 import store from './components/annual-report/store/Index'
 
@@ -18,18 +18,17 @@ const query = {
 
 const MyApp = () => (
     <div className={classes.container}>
-          <BrowserRouter>
-            <Provider store={store}>
-              <Routes>
-                  <Route path="/">
-                    <Route index element={<Report />} />
-                    <Route path="configurations">
-                      <Route index element={<Configurations />} />
-                    </Route>
-                  </Route>
-              </Routes>
-            </Provider>
-          </BrowserRouter>
+        <HashRouter>
+          <Routes>
+            <Route path="/">
+              <Route index element={<Report />} />
+              <Route path="configurations">
+                <Route index element={<Configurations />} />
+              </Route>
+              
+            </Route>
+          </Routes>
+        </HashRouter>
     </div>
 )
 

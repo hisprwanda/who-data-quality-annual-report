@@ -32,13 +32,37 @@ import { OrganizationUnitGroupComponent } from "../../components/annual-report/O
 import { OrganizationUnitLevelComponent } from "../../components/annual-report/OrganizationUnitLevel";
 // End of imports
 
+
+// report queries
+const reportQueries = {
+  reporting_rate_over_all_org_units: {
+    resource: 'analytics.json',
+    params: {
+      dimension:"dx:YmRjo8j3F3M.REPORTING_RATE,ou:lZsCb6y0KDX,pe:2019;2020;2021;2022"
+  },
+}
+  // reporting_rate_org_unit_level: {
+  //   resource: 'analytics.json',
+  //   params: {
+  //     dimension: 'dx:YmRjo8j3F3M.REPORTING_RATE',
+  //     dimension:'ou:lZsCb6y0KDX;LEVEL-2',
+  //     dimension:'pe:2019;2020;2021;2022',
+  //   }
+  // },
+  
+};
+
+
+
 // Start of the functional component definition
+
 const Report = function () {
   // Redux state selector hook
   let selectedElementStore = useSelector((state) => state.selectedValue);
   let storeStateSelector = useSelector((state) => state);
   // Redux state dispatch hook
   let dispatch = useDispatch();
+
   // Hook for managing data set modals
   let [dataSetModalStatus, setDataSetModalStatus] = useState(true);
   // End of hook for managing data set modals
