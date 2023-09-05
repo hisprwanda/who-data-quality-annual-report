@@ -1,6 +1,9 @@
+@import url('./report.smallscreen.css');
+
 label {
     margin: 0.0rem 0rem;
 }
+
 .reportContainer{
     width: 100%;
     background-color: #F3F5F7;
@@ -271,22 +274,22 @@ label {
     width: 100%;
 }
 
-.menu-parent > div > div > div:nth-child(1) {
+.dataset-indication, .ou-indication, .period-indication {
     padding: 0.7rem;
     border-bottom: 1px solid #e0dfdf;
     border-right: 1px solid #e0dfdf;
 }
 
-.menu-parent > div > div:nth-child(1), .menu-parent > div > div:nth-child(2), .menu-parent > div > div:nth-child(3) {
+.data-set-container, .orgunit-container, .period-container {
     flex: 1 1 auto;
 }
 
-.menu-parent > div > div:nth-child(4) {
+.report-action {
     flex: 5 1 auto;
     color: #fff;
 }
 
-.menu-parent > div > div:nth-child(4) > div:nth-child(1){
+.report-action-container{
     display: flex;
     flex-direction: row;
     margin: 0rem;
@@ -427,11 +430,6 @@ label {
     background-color: #0a1646;
     color: #fff;
 }
-
-/* .data-set-container:hover .data-showable {
-    display: block;
-    box-shadow: rgba(0, 0, 0, 0.12) 0px 1px 3px, rgba(0, 0, 0, 0.24) 0px 1px 2px;
-} */
 
 .ou-showable {
     box-shadow: rgba(0, 0, 0, 0.12) 0px 1px 3px, rgba(0, 0, 0, 0.24) 0px 1px 2px;
@@ -692,6 +690,7 @@ label {
     display: flex;
     justify-content: space-between;
     padding: 0.4rem;
+    background-color: #eeeeee;
 }
 
 .open-or-close {
@@ -699,6 +698,8 @@ label {
     padding: 0.4rem;
     justify-content: flex-end;
 }
+
+
 
 
 

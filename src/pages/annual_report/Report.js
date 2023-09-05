@@ -11,13 +11,10 @@ import { useState, useEffect } from "react";
 import React from "react";
 import MenuBar from "../../components/menu-bar/MenuBar";
 import "./style/report.css";
-import { Button } from "@dhis2/ui";
-import { DataSetModal } from "../../components/annual-report/modal/data-sets/DataSetModal";
-import { PeriodModal } from "../../components/annual-report/modal/period/PeriodModal";
+import { Button, SelectorBar, SelectorBarItem } from "@dhis2/ui";
 import { OrganizationUnitModal } from "../../components/annual-report/modal/organizationunit/OrganizationUnitModal";
 import {
   loadDataStore,
-  loadAnalytics,
   loadOrganizationUnitGroups,
   loadOrganizationUnitLevels,
 } from "../../components/annual-report/datasource/dataset/dataset.source";
@@ -40,11 +37,9 @@ const Report = function () {
   // Redux state dispatch hook
   let dispatch = useDispatch();
   // Hook for managing data set modals
-  let [dataSetModalStatus, setDataSetModalStatus] = useState(true);
   // End of hook for managing data set modals
 
   // Hook for managing period modal
-  let [periodModalStatus, setPeriodModalStatus] = useState(true);
   // End of hook for managing period modal
 
   // Hook for managing org unit modal
@@ -69,9 +64,7 @@ const Report = function () {
 
   let selectedItem = selectedElementStore.dataSet;
   let [filteredItem, setFilteredItem] = useState([]);
-  let _selectedPeriod = selectedElementStore.period;
   let _selectedOrgUnit = selectedElementStore.orgUnit.displayName;
-  let [relativePeriodSelected, setRelativePeriodSelected] = useState("");
   let [elements, setElements] = useState();
   let [configuredDataSet, setConfiguredDataSet] = useState();
   let [groupVisibility, setGroupVisibility] = useState("none");
@@ -142,21 +135,31 @@ const Report = function () {
     setOrgUnitGroupVisibility("none");
   };
 
+  let [periodVisibility, setPeriodVisibility] = useState("none");
+  let [orgLevelVisibility, setOrgLevelVisibility] = useState("none");
+
   let selectedLevelInfo = (e) => {
     e.persist();
     setSelectedLevel(e.target.textContent);
-    setOrgUnitLevelVisibility("some information");
+    setOrgLevelVisibility("none");
   };
-  let [x, setX] = useState("x")
-  let [periodVisibility, setPeriodVisibility] = useState("none")
+
+  const handleResize = () => {
+    // do magic for resize
+    console.log(window.innerWidth, window.innerHeight);
+  };
+
+  useEffect(() => {
+    window.addEventListener("resize", handleResize);
+
+    return () => {
+      window.removeEventListener("resize", handleResize);
+    };
+  }, []);
 
   return (
     <div className="reportContainer">
       <MenuBar />
-      <OrganizationUnitModal
-        status={orgUnitModalStatus}
-        changeOrganisationUnitStatus={setOrgUnitModalStatus}
-      />
       <div className="menu-parent">
         <div className="menu-parent-container">
           <div className="data-set-container">
@@ -205,19 +208,22 @@ const Report = function () {
                 <OrgUnitComponent />
               </div>
               <div className="level-and-groups">
-                <div
-                  className="level"
-                  onClick={() => setOrgUnitLevelVisibility("flex")}
-                >
-                  <div className="select-title">
+                <div className="level">
+                  <div
+                    className="select-title"
+                    onClick={() => setOrgLevelVisibility("flex")}
+                  >
                     <div className="select-title-data">{selectedLevel}</div>
                     <div className="select-title-icon">
-                      <img src={down_allow} onClick={() => setOrgUnitLevelVisibility('none')}/>
+                      <img
+                        src={down_allow}
+                        onClick={() => setOrgLevelVisibility("flex")}
+                      />
                     </div>
                   </div>
                   <div
                     className="select-options"
-                    style={{ display: orgUnitLevelVisibility }}
+                    style={{ display: orgLevelVisibility }}
                   >
                     <ul>
                       <OrganizationUnitLevelComponent
@@ -261,28 +267,46 @@ const Report = function () {
                   </span>
                 </div>
                 <div>
-                  <Button primary small onClick={() => setOrgUnitVisibility("none")}>Hide</Button>
+                  <Button
+                    primary
+                    small
+                    onClick={() => setOrgUnitVisibility("none")}
+                  >
+                    Hide
+                  </Button>
                 </div>
               </div>
             </div>
           </div>
           <div className="period-container">
-            <div className="period-indication" onClick={() => setPeriodVisibility("flex")}>
+            <div
+              className="period-indication"
+              onClick={() => setPeriodVisibility("flex")}
+            >
               <div>Period</div>
               <div>{storeStateSelector.period.selectedPeriod}</div>
               <div>
                 <img src={down_allow} />
               </div>
             </div>
-            <div className="period-showable" style={{display: periodVisibility}}>
+            <div
+              className="period-showable"
+              style={{ display: periodVisibility }}
+            >
               <PeriodComponent />
               <div className="open-or-close">
-                <Button small primary onClick={() => setPeriodVisibility('none')}>Hide</Button>  
-              </div> 
+                <Button
+                  small
+                  primary
+                  onClick={() => setPeriodVisibility("none")}
+                >
+                  Hide
+                </Button>
+              </div>
             </div>
           </div>
-          <div>
-            <div>
+          <div className="report-action">
+            <div className="report-action-container">
               <div>
                 <Button
                   name="Basic button"
