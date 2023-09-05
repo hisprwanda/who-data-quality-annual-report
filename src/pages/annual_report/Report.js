@@ -29,8 +29,36 @@ import ReportPreview from '../../components/annual-report/report-preview/ReportP
 
 // End of imports
 
+
+// report queries
+const reportQueries = {
+  reporting_rate_over_all_org_units: {
+    resource: 'analytics.json',
+    params: {
+      dimension:"dx:YmRjo8j3F3M.REPORTING_RATE,ou:lZsCb6y0KDX,pe:2019;2020;2021;2022"
+  },
+}
+  // reporting_rate_org_unit_level: {
+  //   resource: 'analytics.json',
+  //   params: {
+  //     dimension: 'dx:YmRjo8j3F3M.REPORTING_RATE',
+  //     dimension:'ou:lZsCb6y0KDX;LEVEL-2',
+  //     dimension:'pe:2019;2020;2021;2022',
+  //   }
+  // },
+  
+};
+
+
+
 // Start of the functional component definition
 const Report = () => {
+
+  //run the analytics query
+  const { loading:loadingReportQuery, error:errorReportQuery, data:dataReportQuery } = useDataQuery(reportQueries, {
+    lazy: false,
+});
+
 
   // Hook for managing data set modals
   let [dataSetModalStatus, setDataSetModalStatus] = useState(true)
@@ -59,6 +87,9 @@ const Report = () => {
   let [relativePeriodSelected, setRelativePeriodSelected] = useState('')
   let {loading, error, data} = useDataQuery(_dataStore, {}, {}, {}, {}, {})
   
+
+
+
   // Definition of use effect hooks
   useEffect(() => {
     let groups = data?.results.groups.filter(i => i.code === selectedItem)

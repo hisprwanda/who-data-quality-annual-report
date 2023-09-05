@@ -28,8 +28,6 @@ const [configurations, setConfigurations] = useState(null);
 const [mappedNumerators, setMappedNumerators] = useState(null);
 const [elementsUids, setElementsUids] = useState(null);
 
-let numeratorsWithDataIds = null;
-
   // A dynamic alert to communicate success or failure 
   // TODO: put this one in a reusable function
   const { show } = useAlert( 
@@ -55,40 +53,41 @@ useEffect(() => {
   if (data) {  
     const configs = data.dataStore;
       setConfigurations(configs);
-      numeratorsWithDataIds = configs.numerators.filter(numerator => numerator.dataID != null);
-        setElementsUids(numeratorsWithDataIds.map(item => item.dataID).join(','));
 
       const message = 'Successfully retrieved configurations'
       // show({ message, status: 'success' })  //TODO: find the error in the console caused by AlertsProvider
   }
 }, [data]);
 
+// useEffect(() => {
+//   if (numeratorsWithDataIds) {
+//     setElementsUids(numeratorsWithDataIds.map(item => item.dataID).join(','));
+//   }
+//   if (elementsUids) {
+//     mappedElementsRefetch({
+//       mappedElements: `[${elementsUids}]`
+//     })
+//   }
+// }, [elementsUids]);
 
-useEffect(() => {
-  if (elementsUids) {
-    mappedElementsRefetch({
-      mappedElements: `[${elementsUids}]`
-    })
-  }
-}, [elementsUids]);
 
 
-
-useEffect(() => {
-  if (mappedElementsData && numeratorsWithDataIds) {
-    const returnedElements = mappedElementsData.elements.dataElements;
+// useEffect(() => {
+//   if (mappedElementsData && numeratorsWithDataIds) {
+//     console.log('elements:', numeratorsWithDataIds)
+//     const returnedElements = mappedElementsData.elements.dataElements;
     
-    for (let i = 0; i < returnedElements.length; i++) {
-      const dataID = returnedElements[i].id;
-      const matchingObj = numeratorsWithDataIds.find(item => item.dataID === dataID);
+//     for (let i = 0; i < returnedElements.length; i++) {
+//       const dataID = returnedElements[i].id;
+//       const matchingObj = numeratorsWithDataIds.find(item => item.dataID === dataID);
 
-      if (matchingObj) {
-        returnedElements[i].code = matchingObj.code;
-        setMappedNumerators(...returnedElements, returnedElements)
-      }
-    }
-  }
-}, [mappedElementsData]);
+//       if (matchingObj) {
+//         returnedElements[i].code = matchingObj.code;
+//         setMappedNumerators(returnedElements)
+//       }
+//     }
+//   }
+// }, [mappedElementsData]);
 
 
   return (
@@ -106,7 +105,7 @@ useEffect(() => {
 
           <div className='config-tabs-container' >
               {configurations? 
-                <ConfigTabs loading={loading} configurations={configurations} mappedNumerators={mappedNumerators}/>
+                <ConfigTabs loading={loading} configurations={configurations} />
               :
               ""
               }

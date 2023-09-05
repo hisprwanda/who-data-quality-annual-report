@@ -27,6 +27,7 @@ import relationTypes from '../../../data/relationTypes.json';
 export const NumeratorRelations = ({toggleState, configurations, mappedNumerators}) => {
     const [relations, setRelations] = useState(null);
     const [isModalHidden, setIsModalHidden] = useState(true);
+    const [numeratorsWithDataIds, setNumeratorsWithDataIds] = useState(null);
     const [newNumeratorRelationInfo, setNewNumeratorRelationInfo] = useState({
         A: "",
         B: "",
@@ -37,9 +38,11 @@ export const NumeratorRelations = ({toggleState, configurations, mappedNumerator
       });
 
 
+
     useEffect(() => {
-        console.log('mapped nums in relations:', mappedNumerators)
         setRelations(configurations.numeratorRelations)
+        setNumeratorsWithDataIds(configurations.numerators.filter(numerator => numerator.dataID != null));
+
       }, [])
       
 
@@ -114,17 +117,17 @@ export const NumeratorRelations = ({toggleState, configurations, mappedNumerator
             </Table>
         </div>
 
-{/* TODO: will move this modal in it's own component */}
-<Modal onClose={()=>setIsModalHidden(true)} hide={isModalHidden}  position="middle" >
+        {/* TODO: will move this modal in it's own component */}
+        <Modal onClose={()=>setIsModalHidden(true)} hide={isModalHidden}  position="middle" >
             <ModalTitle>
-                Edit numerator relation
+                Numerator relation
             </ModalTitle>
             <ModalContent>
-              <Table>
+                <Table>
                 <TableBody>
                     <TableRow>
                         <TableCell>
-                          <p>Name</p> 
+                            <p>Name</p> 
                         </TableCell>
                         <TableCell>
                             <Input label="Name" name="name"value={newNumeratorRelationInfo.name} onChange={(e) => setNewNumeratorRelationInfo({...newNumeratorRelationInfo, name:e.value})} requiredrequired className='input'
@@ -133,13 +136,13 @@ export const NumeratorRelations = ({toggleState, configurations, mappedNumerator
                     </TableRow>
                     <TableRow>
                         <TableCell>
-                          <p>Type</p> 
+                            <p>Type</p> 
                         </TableCell>
                         <TableCell>
                             <SingleSelect className="select" 
-                              onChange={(e) => setNewNumeratorRelationInfo({...newNumeratorRelationInfo, type:e.selected})}
-                              placeholder="Select relation type"
-                              selected={newNumeratorRelationInfo.type}
+                                onChange={(e) => setNewNumeratorRelationInfo({...newNumeratorRelationInfo, type:e.selected})}
+                                placeholder="Select relation type"
+                                selected={newNumeratorRelationInfo.type}
                             >
                                 {relationTypes? relationTypes.map((type, key) =>
                                     <SingleSelectOption label={type.displayName} value={type.code} key={key} />
@@ -150,47 +153,49 @@ export const NumeratorRelations = ({toggleState, configurations, mappedNumerator
                     </TableRow>
                     <TableRow>
                         <TableCell>
-                          <p>Numerator A</p> 
+                            <p>Numerator A</p> 
                         </TableCell>
                         <TableCell>
                             <SingleSelect className="select" 
-                              onChange={(e)=> setNewNumeratorRelationInfo({...newNumeratorRelationInfo, A:e.selected})}
-                              placeholder="Select numerator A"
-                              selected={newNumeratorRelationInfo.A}
-                            > {mappedNumerators? mappedNumerators.map((numerator, key) =>
-                                    <SingleSelectOption label={numerator.displayName} value={numerator.code} key={key} />
-
+                                onChange={(e)=> setNewNumeratorRelationInfo({...newNumeratorRelationInfo, A:e.selected})}
+                                placeholder="Select numerator A"
+                                selected={newNumeratorRelationInfo.A}
+                            > 
+                            {numeratorsWithDataIds? numeratorsWithDataIds.map((numerator, key) =>
+                                <SingleSelectOption label={numerator.name} value={numerator.code} key={key} />
                                 ) : '' }
                             </SingleSelect>
                         </TableCell>                      
                     </TableRow>
                     <TableRow>
                         <TableCell>
-                          <p>Numerator B</p> 
+                            <p>Numerator B</p> 
                         </TableCell>
                         <TableCell>
                             <SingleSelect className="select" 
-                              onChange={(value)=> console.log(value.selected)}
-                              placeholder="Select numerator B"
-                              selected=''
-                            >
-                                  <SingleSelectOption label='{type.label}' value='{type.value}' key='{key}' />
-                                  <SingleSelectOption label='{type.label}' value='{type.value}' key='{key}' />
-                                  <SingleSelectOption label='{type.label}' value='{type.value}' key='{key}' />
+                                onChange={(e)=> setNewNumeratorRelationInfo({...newNumeratorRelationInfo, B:e.selected})}
+                                placeholder="Select numerator B"
+                                selected={newNumeratorRelationInfo.B}
+                            > 
+                            {numeratorsWithDataIds? numeratorsWithDataIds.map((numerator, key) =>
+                                <SingleSelectOption label={numerator.name} value={numerator.code} key={key} />
+                                ) : '' }
                             </SingleSelect>
                         </TableCell>                      
                     </TableRow>
                     <TableRow>
                         <TableCell>
-                          <p>Threshold (+/-)</p> 
+                            <p>Threshold (+/-) %</p> 
                         </TableCell>
                         <TableCell>
-                            <Input label="Name" name="name" required className='input' value={'10%'}/>
+                            <Input label="Name" name="name" required className='input' type='number' value={newNumeratorRelationInfo.criteria}
+                                onChange={(e)=> setNewNumeratorRelationInfo({...newNumeratorRelationInfo, criteria:e.value})}
+                            />
                         </TableCell>                      
                     </TableRow>            
                 </TableBody>
-              </Table>
-              <p>Threshold denotes the % difference from national figure that is accepted for a sub-national unit.</p>
+                </Table>
+                <p>Threshold denotes the % difference from national figure that is accepted for a sub-national unit.</p>
             </ModalContent>
             <ModalActions>
                 <ButtonStrip end>

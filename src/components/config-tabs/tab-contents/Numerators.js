@@ -76,6 +76,12 @@ export const Numerators = ({toggleState, configurations}) => {
     }
 
     const onSaveNumeratorUpdates = async(newNumeratorInfo) => {
+        // TODO: check if u're editing or updating
+        // TODO: remember to add datasets as a list of strings
+        // TODO: implement chosing
+        // TODO: pull indicators as well
+
+        console.log('new numerator info', newNumeratorInfo)
         const updatedConfigurations =  createNewNumerator(configurations, newNumeratorInfo);       
         await mutate({ configurations: updatedConfigurations })
 
@@ -155,7 +161,7 @@ export const Numerators = ({toggleState, configurations}) => {
                         ))}</TableCell>
                         <TableCell>{numerator.name}</TableCell>
                         <TableCell>{numerator.core ? "✔️": ""}</TableCell>
-                        <TableCell>{getNumeratorDataElement(configurations, numerator.dataID)}</TableCell>
+                        <TableCell>{getNumeratorDataElement(numerators, numerator.dataID)}</TableCell>
                         <TableCell>{getNumeratorDataset(configurations, numerator.dataSetID)}</TableCell>
                         <TableCell>
                         <Button
