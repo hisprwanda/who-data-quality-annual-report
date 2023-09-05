@@ -287,7 +287,10 @@ label {
 .report-action {
     flex: 5 1 auto;
     color: #fff;
+    height: auto;
 }
+
+
 
 .report-action-container{
     display: flex;
