@@ -1,6 +1,7 @@
 import React from 'react'
 
 export const OrganizationUnitGroupComponent = ({group, selectedGroupInfo}) => {
+    
     return (
         <div className='organization-unit-group-parent'>
             {
