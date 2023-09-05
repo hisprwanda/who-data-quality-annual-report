@@ -1,20 +1,40 @@
-import React, {useState} from 'react'
-import { OrganisationUnitTree } from '@dhis2/ui';
-
+import React, { useState, useEffect, useMemo, useCallback } from "react";
+import { OrganisationUnitTree } from "@dhis2/ui";
+import { useSelector, useDispatch } from "react-redux";
+import Actions from "./utils/enum/Index"; 
 
 export const OrgUnitComponent = () => {
-    
-    let [selectedOU, setSelectedOU] = useState('/Hjw70Lodtf2/jUMVwrUlNqG/XxBlJkEmJGQ/hDsNksdRjyK/xHe6AHOiQWp/oQuwh1dH5sl')
+  let storeRef = useSelector((state) => state);
+  let dispatch = useDispatch();
+  let [orgUnitSelectionSet, setOrgUnitSelectionSet] = useState(['Hjw70Lodtf2']);
+  let [orgUnitState, setOrgUnitState] = useState([]);
+  let [orgUnitCurrentSelection, setOrgUnitCurrentSelection] = useState('')
 
-    return (
-        <OrganisationUnitTree name="Hjw70Lodtf2" onChange={(e) => setSelectedOU(e.path)}
-          isUserDataViewFallback={true}
-          roots={
-            ['Hjw70Lodtf2']
-          }
-          selected={[
-            selectedOU
-          ]}
-        />
-    );
-}
+  let changeOrgUnitSelectionSet = useCallback((e) => {
+    setOrgUnitSelectionSet(prev => [...prev, e.path])
+    setOrgUnitCurrentSelection(e.path)
+  }, [orgUnitSelectionSet]);
+
+  useEffect(() => {
+    dispatch({type: Actions.changeOrgUnitSet, payload: {ou: orgUnitSelectionSet}})    
+  }, [orgUnitSelectionSet])
+
+  useEffect(() => {
+    let isSelectedValueExisting = orgUnitSelectionSet.filter(ou => ou === orgUnitCurrentSelection)
+    let processedOrgUnit = isSelectedValueExisting.length > 1 ? orgUnitSelectionSet.filter(ou => ou !== orgUnitCurrentSelection) : orgUnitSelectionSet
+    dispatch({type: Actions.changeOrgUnitSet, payload: {ou: processedOrgUnit}})
+    setOrgUnitSelectionSet(processedOrgUnit)
+  }, [orgUnitCurrentSelection])
+
+  return (
+    <div className="orgunit-parent-container">
+      <OrganisationUnitTree
+        name="country org unit"
+        onChange={(e) => changeOrgUnitSelectionSet(e)}
+        isUserDataViewFallback={true}
+        roots={["Hjw70Lodtf2"]}
+        selected={orgUnitSelectionSet}
+      />
+    </div>
+  );
+};
