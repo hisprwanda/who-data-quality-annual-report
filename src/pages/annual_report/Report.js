@@ -11,13 +11,10 @@ import { useState, useEffect } from "react";
 import React from "react";
 import MenuBar from "../../components/menu-bar/MenuBar";
 import "./style/report.css";
-import { Button } from "@dhis2/ui";
-import { DataSetModal } from "../../components/annual-report/modal/data-sets/DataSetModal";
-import { PeriodModal } from "../../components/annual-report/modal/period/PeriodModal";
+import { Button, SelectorBar, SelectorBarItem } from "@dhis2/ui";
 import { OrganizationUnitModal } from "../../components/annual-report/modal/organizationunit/OrganizationUnitModal";
 import {
   loadDataStore,
-  loadAnalytics,
   loadOrganizationUnitGroups,
   loadOrganizationUnitLevels,
 } from "../../components/annual-report/datasource/dataset/dataset.source";
@@ -31,16 +28,16 @@ import { SettingsProcessor } from "../../utils/SettingsProcessor";
 import { OrganizationUnitGroupComponent } from "../../components/annual-report/OrganizationUnitGroup";
 import { OrganizationUnitLevelComponent } from "../../components/annual-report/OrganizationUnitLevel";
 // End of imports
-
-
+import { OrganisationUnitTree } from "@dhis2/ui";
 // report queries
 const reportQueries = {
   reporting_rate_over_all_org_units: {
-    resource: 'analytics.json',
+    resource: "analytics.json",
     params: {
-      dimension:"dx:YmRjo8j3F3M.REPORTING_RATE,ou:lZsCb6y0KDX,pe:2019;2020;2021;2022"
+      dimension:
+        "dx:YmRjo8j3F3M.REPORTING_RATE,ou:lZsCb6y0KDX,pe:2019;2020;2021;2022",
+    },
   },
-}
   // reporting_rate_org_unit_level: {
   //   resource: 'analytics.json',
   //   params: {
@@ -49,10 +46,7 @@ const reportQueries = {
   //     dimension:'pe:2019;2020;2021;2022',
   //   }
   // },
-  
 };
-
-
 
 // Start of the functional component definition
   
@@ -175,16 +169,71 @@ const Report = function () {
     setSelectedLevel(e.target.textContent);
     setOrgUnitLevelVisibility("some information");
   };
-  let [x, setX] = useState("x")
-  let [periodVisibility, setPeriodVisibility] = useState("none")
+  let [x, setX] = useState("x");
+  let [periodVisibility, setPeriodVisibility] = useState("none");
+  let [_dataGroupVisibility, _setDataGroupVisibility] = useState(false);
+  let [_orgUnitVisibility, _setOrgUnitVisibility] = useState(false);
+  let [_periodVisibility, _setPeriodVisibility] = useState(false);
 
   return (
     <div className="reportContainer">
       <MenuBar />
-      <OrganizationUnitModal
-        status={orgUnitModalStatus}
-        changeOrganisationUnitStatus={setOrgUnitModalStatus}
-      />
+      <SelectorBar additionalContent={<div style={{display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent:'center'}}>Kigali rwanda</div>}>
+        <div>
+          <SelectorBarItem
+            label="welcome"
+            value="Here we are"
+            open={_dataGroupVisibility}
+            setOpen={() => _setDataGroupVisibility((prev) => !prev)}
+          >
+            <div className="data-set-info" onClick={(e) => e.stopPropagation()}>
+              <ul style={{ width: "100%" }}>
+                <li
+                  style={{ width: "100%" }}
+                >
+                  Butare now
+                </li>
+              </ul>
+              {_dataGroupVisibility.toString()} .
+            </div>
+          </SelectorBarItem>
+        </div>
+        <div>
+          <SelectorBarItem
+            label="What is good"
+            value="What is now"
+            open={_orgUnitVisibility}
+            setOpen={() => _setOrgUnitVisibility((prev) => !prev)}
+          >
+            <div onClick={(e) => e.stopPropagation()} style={{width: '500px'}}>
+              <OrganisationUnitTree
+              
+                name="country org unit"
+                onChange={({ id }, e) => {console.log(id)}}
+                isUserDataViewFallback={true}
+                roots={["Hjw70Lodtf2"]}
+                selected={['/Hjw70Lodtf2/qICVQ5VD0Y7/n95lDV3pgL5']}
+              />
+            </div>
+          </SelectorBarItem>
+        </div>
+        <div>
+          <SelectorBarItem
+            label="It is better"
+            value="So good"
+            open={_periodVisibility}
+            setOpen={() => _setPeriodVisibility((prev) => !prev)}
+          >
+            <div onClick={(e) => e.stopPropagation()}>
+              <ul>
+                <li>Kigali</li>
+                <li>Butare</li>
+                <li>Gitarama</li>
+              </ul>
+            </div>
+          </SelectorBarItem>
+        </div>
+      </SelectorBar>
       <div className="menu-parent">
         <div className="menu-parent-container">
           <div className="data-set-container">
@@ -240,7 +289,10 @@ const Report = function () {
                   <div className="select-title">
                     <div className="select-title-data">{selectedLevel}</div>
                     <div className="select-title-icon">
-                      <img src={down_allow} onClick={() => setOrgUnitLevelVisibility('none')}/>
+                      <img
+                        src={down_allow}
+                        onClick={() => setOrgUnitLevelVisibility("none")}
+                      />
                     </div>
                   </div>
                   <div
@@ -289,24 +341,42 @@ const Report = function () {
                   </span>
                 </div>
                 <div>
-                  <Button primary small onClick={() => setOrgUnitVisibility("none")}>Hide</Button>
+                  <Button
+                    primary
+                    small
+                    onClick={() => setOrgUnitVisibility("none")}
+                  >
+                    Hide
+                  </Button>
                 </div>
               </div>
             </div>
           </div>
           <div className="period-container">
-            <div className="period-indication" onClick={() => setPeriodVisibility("flex")}>
+            <div
+              className="period-indication"
+              onClick={() => setPeriodVisibility("flex")}
+            >
               <div>Period</div>
               <div>{storeStateSelector.period.selectedPeriod}</div>
               <div>
                 <img src={down_allow} />
               </div>
             </div>
-            <div className="period-showable" style={{display: periodVisibility}}>
+            <div
+              className="period-showable"
+              style={{ display: periodVisibility }}
+            >
               <PeriodComponent />
               <div className="open-or-close">
-                <Button small primary onClick={() => setPeriodVisibility('none')}>Hide</Button>  
-              </div> 
+                <Button
+                  small
+                  primary
+                  onClick={() => setPeriodVisibility("none")}
+                >
+                  Hide
+                </Button>
+              </div>
             </div>
           </div>
           <div>

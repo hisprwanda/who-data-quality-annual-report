@@ -1,3 +1,12 @@
+.data-set-info ul {
+    padding: 0rem;
+    margin: 0rem;
+    list-style: none;
+}
+.data-set-info ul li {
+    cursor: pointer;
+}
+
 label {
     margin: 0.0rem 0rem;
 }
