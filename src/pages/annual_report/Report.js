@@ -315,7 +315,6 @@ const Report = function () {
           </div>
         </SelectorBar>
       </div>
-      {JSON.stringify(storeStateSelector)}
     </div>
   );
 };
