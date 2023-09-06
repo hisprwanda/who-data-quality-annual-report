@@ -160,14 +160,16 @@ const Report = function () {
 
   let selectedGroupInfo = (e) => {
     e.persist();
+    e.stopPropagation();
     setSelectedGroup(e.target.textContent);
     setOrgUnitGroupVisibility("none");
   };
 
   let selectedLevelInfo = (e) => {
     e.persist();
+    e.stopPropagation();
     setSelectedLevel(e.target.textContent);
-    setOrgUnitLevelVisibility("some information");
+    setOrgUnitLevelVisibility("none");
   };
   let [x, setX] = useState("x");
   let [periodVisibility, setPeriodVisibility] = useState("none");
@@ -175,6 +177,21 @@ const Report = function () {
   let [_orgUnitVisibility, _setOrgUnitVisibility] = useState(false);
   let [_periodVisibility, _setPeriodVisibility] = useState(false);
 
+  const toggleSelectedLevel = (e) => {
+    e.persist();
+    setOrgUnitLevelVisibility((prev) => (prev === "none" ? "flex" : "none"));
+    setOrgUnitGroupVisibility("none");
+  };
+
+  const toggleSelectedGroup = (e) => {
+    e.persist();
+    setOrgUnitGroupVisibility((prev) => (prev === "none" ? "flex" : "none"));
+    setOrgUnitLevelVisibility("none");
+  };
+
+  const deselectOrgUnitSelection = (e) => {
+    console.log("Deselection");
+  };
   return (
     <div className="reportContainer">
       <MenuBar />
@@ -410,7 +427,7 @@ const Report = function () {
                 onClick={(e) => e.stopPropagation()}
                 style={{ width: "500px" }}
               >
-                <OrganisationUnitTree
+                {/* <OrganisationUnitTree
                   name="country org unit"
                   onChange={({ id }, e) => {
                     console.log(id);
@@ -418,38 +435,67 @@ const Report = function () {
                   isUserDataViewFallback={true}
                   roots={["Hjw70Lodtf2"]}
                   selected={["/Hjw70Lodtf2/qICVQ5VD0Y7/n95lDV3pgL5"]}
-                />
+                /> */}
+                <OrgUnitComponent/>
               </div>
 
               <div className="level-and-group">
                 <div className="level">
-                  <div className="selected-level">Some Level</div>
-                  <div className="showable-level">Some Showable</div>
+                  <div
+                    className="selected-level"
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      toggleSelectedGroup(e);
+                    }}
+                  >
+                    <div className="select-title-data">{selectedGroup}</div>
+                    <div className="select-title-icon">
+                      <img src={down_allow} />
+                    </div>
+                  </div>
+                  <div
+                    className="showable-group"
+                    style={{ display: orgUnitGroupVisibility }}
+                  >
+                    <ul>
+                      <OrganizationUnitGroupComponent
+                        group={organizationUnitGroup}
+                        selectedGroupInfo={selectedGroupInfo}
+                      />
+                    </ul>
+                  </div>
                 </div>
                 <div className="group">
-                  <div className="selected-group">Some Group</div>
-                  <div className="showable-group">Some Showable</div>
+                  <div
+                    className="selected-group"
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      toggleSelectedLevel(e);
+                    }}
+                  >
+                    <div className="select-title-data">{selectedLevel}</div>
+                    <div className="select-title-icon">
+                      <img src={down_allow} />
+                    </div>
+                  </div>
+                  <div
+                    className="showable-level"
+                    style={{ display: orgUnitLevelVisibility }}
+                  >
+                    <ul>
+                      <OrganizationUnitLevelComponent
+                        level={organizationUnitLevel}
+                        selectedLevelInfo={selectedLevelInfo}
+                      />
+                    </ul>
+                  </div>
                 </div>
               </div>
 
               <div className="update-or-close">
                 <div>
                   <span>Selected: </span>
-                  {selectedElementStore.orgUnitSet.length - 1} org units{" "}
-                  <span>
-                    <Button small onClick={() => console.log("Deselect all")}>
-                      Deselect All
-                    </Button>
-                  </span>
-                </div>
-                <div>
-                  <Button
-                    primary
-                    small
-                    onClick={() => setOrgUnitVisibility("none")}
-                  >
-                    Hide
-                  </Button>
+                  {selectedElementStore.orgUnitSet.length - 1} org units
                 </div>
               </div>
             </SelectorBarItem>
