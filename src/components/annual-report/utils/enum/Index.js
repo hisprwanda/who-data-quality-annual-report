@@ -1,6 +1,7 @@
 const Actions = {
     changeDataset: 'Change Dataset',
     changeOrgUnit: 'Change Org Unit',
+    changeOrgUnitID: 'Change Org Unit ID',
     changeRelativePeriod: 'Change Relative Period',
     changeFixedPeriod: 'Change Fixed Period',
     periodSelection: 'Period Selection',
@@ -9,6 +10,7 @@ const Actions = {
     changeElement: 'Change Element',
     changeConfiguredDataset: 'Change Configured Dataset',
     changeOrgUnitSet: 'Change Organisation Unit Set',
-    changePeriod: 'Change Period'
+    changePeriod: 'Change Period',
+    precedingYearForReference: 'Preceding year for reference'
 }
 export default Actions

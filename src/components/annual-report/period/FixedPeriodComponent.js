@@ -40,7 +40,9 @@ const FixedPeriodComponent = function ({ processSelectedPeriod }) {
     } 
   }
 
-  
+  const setPrecedingYearForReference = (year) => {
+    actionDispatch({type: 'Preceding year for reference', payload: {year: year}})
+  }
 
   return (
     <div>
@@ -68,7 +70,7 @@ const FixedPeriodComponent = function ({ processSelectedPeriod }) {
       <Divider />
       <div className="period-selection-container">
         <label>Preceding years for reference</label>
-        <Input name="defaultName" onChange={() => {}} placeholder="0" />
+        <Input name="defaultName" onChange = {(name, value) => {setPrecedingYearForReference(name.value)}}  placeholder="0" />
       </div>
     </div>
   );
