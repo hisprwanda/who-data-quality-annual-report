@@ -1,6 +1,6 @@
 export const generateNumeratorCode = (numerators) => {
-    if (numerators) {
-        return ''
+    if (numerators.length == 0) {
+        return 'C' + '1'
     }
     const lastCode = numerators[numerators.length - 1].code
     const lastNumber = parseInt(lastCode.slice(1))
