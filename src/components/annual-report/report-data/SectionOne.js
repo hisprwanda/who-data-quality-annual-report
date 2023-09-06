@@ -62,8 +62,10 @@ export const SectionOne = () => {
     const generateReport = () => {
         const periods = ['2022','2021','2020','2020']
         const currentPeriod = periods[0]
-        const dataSets = ['YmRjo8j3F3M']
-        const dataElements = ['bcDTj5odXAg']
+        // const dataSets = ['YmRjo8j3F3M']
+        const dataSets = ["dONyxVsQyGS","rGDF7yDdhnj","YmRjo8j3F3M","GhdP8W2GorO"]
+        // const dataElements = ['bcDTj5odXAg']
+        const dataElements = ["ieThL7l107F","RvArfQFKdXe","XeRBhx8avQY","YRJjIr5tuD6","YAAmrY2RPbZ","DvUwQScvSpc"]
         const orgUnits = ['lZsCb6y0KDX']
         const orgUnitLevel = 'LEVEL-2'
 

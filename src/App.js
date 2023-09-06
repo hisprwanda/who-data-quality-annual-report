@@ -9,7 +9,6 @@ import Configurations from './pages/configurations/Configurations'
 import { HashRouter, BrowserRouter, Routes, Route } from "react-router-dom";
 import { Provider } from 'react-redux'
 import store from './components/annual-report/store/Index'
-import {SectionOne} from './components/annual-report/report-data/SectionOne'
 
 const query = {
     me: {
@@ -23,7 +22,7 @@ const MyApp = () => (
           <Provider store={store}>
             <Routes>
               <Route path="/">
-                <Route index element={<SectionOne />} />
+                <Route index element={<Report />} />
                 <Route path="configurations">
                   <Route index element={<Configurations />} />
                 </Route>
