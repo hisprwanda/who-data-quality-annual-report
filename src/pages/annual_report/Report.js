@@ -57,16 +57,6 @@ const Report = function () {
   // Redux state dispatch hook
   let dispatch = useDispatch();
 
-  // Hook for managing data set modals
-  let [dataSetModalStatus, setDataSetModalStatus] = useState(true);
-  // End of hook for managing data set modals
-
-  // Hook for managing period modal
-  let [periodModalStatus, setPeriodModalStatus] = useState(true);
-  // End of hook for managing period modal
-
-  // Hook for managing org unit modal
-  let [orgUnitModalStatus, setOrgUnitModalStatus] = useState(true);
   // End of hook for managing org unit modal
   let [_dataStore, setDataStore] = useState(loadDataStore);
 
@@ -89,11 +79,8 @@ const Report = function () {
   let [filteredItem, setFilteredItem] = useState([]);
   let _selectedPeriod = selectedElementStore.period;
   let _selectedOrgUnit = selectedElementStore.orgUnit.displayName;
-  let [relativePeriodSelected, setRelativePeriodSelected] = useState("");
   let [elements, setElements] = useState();
   let [configuredDataSet, setConfiguredDataSet] = useState();
-  let [groupVisibility, setGroupVisibility] = useState("none");
-  let [orgUnitVisibility, setOrgUnitVisibility] = useState("none");
   let [orgUnitLevelVisibility, setOrgUnitLevelVisibility] = useState("none");
   let [orgUnitGroupVisibility, setOrgUnitGroupVisibility] = useState("none");
 
@@ -306,7 +293,7 @@ const Report = function () {
               <div className="update-or-close">
                 <div>
                   <span>Selected: </span>
-                  {selectedElementStore.orgUnitSet.length - 1} org units
+                  {selectedElementStore.orgUnitSet.length} org units
                 </div>
               </div>
             </SelectorBarItem>
@@ -328,6 +315,7 @@ const Report = function () {
           </div>
         </SelectorBar>
       </div>
+      {JSON.stringify(storeStateSelector)}
     </div>
   );
 };

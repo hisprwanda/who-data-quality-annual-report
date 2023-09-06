@@ -91,6 +91,24 @@ const reducer = function (state = currentState, action) {
         },
       };
 
+    case Actions.precedingYearForReference:
+      return {
+        ...state,
+        selectedValue: {
+          ...state.selectedValue,
+          precedingYearForReference: action.payload.year
+        }
+      }
+
+    case Actions.changeOrgUnitID:
+      return {
+        ...state,
+        selectedValue: {
+          ...state.selectedValue,
+          orgUnitIDSet: action.payload.id 
+        }
+      }
+
     default:
       return state;
   }

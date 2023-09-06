@@ -14,7 +14,9 @@ const currentState = {
         dataSet: '',
         element: [],
         configuredDataset: [],
-        orgUnitSet: ''
+        orgUnitSet: [],
+        orgUnitIDSet: [],
+        precedingYearForReference: 0
     },
     period: {
         fixedPeriod: {
