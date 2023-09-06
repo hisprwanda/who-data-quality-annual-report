@@ -11,7 +11,6 @@ export const OrgUnitComponent = () => {
   let [orgUnitCurrentSelection, setOrgUnitCurrentSelection] = useState('')
 
   let changeOrgUnitSelectionSet = useCallback((e) => {
-    e.stopPropagation()
     setOrgUnitSelectionSet(prev => [...prev, e.path])
     setOrgUnitCurrentSelection(e.path)
   }, [orgUnitSelectionSet]);

@@ -174,63 +174,7 @@ const Report = function () {
   return (
     <div className="reportContainer">
       <MenuBar />
-      <SelectorBar additionalContent={<div style={{display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent:'center'}}>Kigali rwanda</div>}>
-        <div>
-          <SelectorBarItem
-            label="welcome"
-            value="Here we are"
-            open={_dataGroupVisibility}
-            setOpen={() => _setDataGroupVisibility((prev) => !prev)}
-          >
-            <div className="data-set-info" onClick={(e) => e.stopPropagation()}>
-              <ul style={{ width: "100%" }}>
-                <li
-                  style={{ width: "100%" }}
-                >
-                  Butare now
-                </li>
-              </ul>
-              {_dataGroupVisibility.toString()} .
-            </div>
-          </SelectorBarItem>
-        </div>
-        <div>
-          <SelectorBarItem
-            label="What is good"
-            value="What is now"
-            open={_orgUnitVisibility}
-            setOpen={() => _setOrgUnitVisibility((prev) => !prev)}
-          >
-            <div onClick={(e) => e.stopPropagation()} style={{width: '500px'}}>
-              <OrganisationUnitTree
-              
-                name="country org unit"
-                onChange={({ id }, e) => {console.log(id)}}
-                isUserDataViewFallback={true}
-                roots={["Hjw70Lodtf2"]}
-                selected={['/Hjw70Lodtf2/qICVQ5VD0Y7/n95lDV3pgL5']}
-              />
-            </div>
-          </SelectorBarItem>
-        </div>
-        <div>
-          <SelectorBarItem
-            label="It is better"
-            value="So good"
-            open={_periodVisibility}
-            setOpen={() => _setPeriodVisibility((prev) => !prev)}
-          >
-            <div onClick={(e) => e.stopPropagation()}>
-              <ul>
-                <li>Kigali</li>
-                <li>Butare</li>
-                <li>Gitarama</li>
-              </ul>
-            </div>
-          </SelectorBarItem>
-        </div>
-      </SelectorBar>
-      <div className="menu-parent">
+      {/* <div className="menu-parent">
         <div className="menu-parent-container">
           <div className="data-set-container">
             <div
@@ -405,6 +349,123 @@ const Report = function () {
 
       <div className="report-section">
         {storeStateSelector.reportViewStatus && <ReportPreview />}
+      </div> */}
+      <div className="for-selector-bar">
+        <SelectorBar
+          additionalContent={
+            <div className="additional-content">
+              <span>
+                <Button small primary>
+                  Generate report
+                </Button>
+              </span>
+              <span>
+                <Button small>Print</Button>
+              </span>
+            </div>
+          }
+          style={{ width: "800px" }}
+        >
+          <div>
+            <SelectorBarItem
+              label="Group"
+              value={selectedItem}
+              open={_dataGroupVisibility}
+              setOpen={() => _setDataGroupVisibility((prev) => !prev)}
+            >
+              <div
+                className="data-set-info"
+                style={{ width: "100%", display: "block" }}
+              >
+                <ul>
+                  {_settings?.map((element, info) => {
+                    return (
+                      <li
+                        key={element.code}
+                        onClick={(e) => {
+                          e.persist();
+                          setSelectedDataSet(e.target.textContent);
+                        }}
+                      >
+                        {element.name}
+                      </li>
+                    );
+                  })}
+                </ul>
+              </div>
+            </SelectorBarItem>
+          </div>
+          <div>
+            <SelectorBarItem
+              label="Organisation Unit"
+              value="Organisation Unit"
+              open={_orgUnitVisibility}
+              setOpen={() => _setOrgUnitVisibility((prev) => !prev)}
+            >
+              <div
+                onClick={(e) => e.stopPropagation()}
+                style={{ width: "500px" }}
+              >
+                <OrganisationUnitTree
+                  name="country org unit"
+                  onChange={({ id }, e) => {
+                    console.log(id);
+                  }}
+                  isUserDataViewFallback={true}
+                  roots={["Hjw70Lodtf2"]}
+                  selected={["/Hjw70Lodtf2/qICVQ5VD0Y7/n95lDV3pgL5"]}
+                />
+              </div>
+
+              <div className="level-and-group">
+                <div className="level">
+                  <div className="selected-level">Some Level</div>
+                  <div className="showable-level">Some Showable</div>
+                </div>
+                <div className="group">
+                  <div className="selected-group">Some Group</div>
+                  <div className="showable-group">Some Showable</div>
+                </div>
+              </div>
+
+              <div className="update-or-close">
+                <div>
+                  <span>Selected: </span>
+                  {selectedElementStore.orgUnitSet.length - 1} org units{" "}
+                  <span>
+                    <Button small onClick={() => console.log("Deselect all")}>
+                      Deselect All
+                    </Button>
+                  </span>
+                </div>
+                <div>
+                  <Button
+                    primary
+                    small
+                    onClick={() => setOrgUnitVisibility("none")}
+                  >
+                    Hide
+                  </Button>
+                </div>
+              </div>
+            </SelectorBarItem>
+          </div>
+          <div>
+            <SelectorBarItem
+              label="Period"
+              value={storeStateSelector.period.selectedPeriod}
+              open={_periodVisibility}
+              setOpen={() => _setPeriodVisibility((prev) => !prev)}
+            >
+              <div
+                onClick={(e) => e.stopPropagation()}
+                style={{ width: "400px" }}
+              >
+                <PeriodComponent />
+              </div>
+            </SelectorBarItem>
+          </div>
+        </SelectorBar>
       </div>
     </div>
   );
