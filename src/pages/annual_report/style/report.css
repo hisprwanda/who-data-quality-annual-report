@@ -42,14 +42,32 @@
 .showable-group, .showable-level {
     display: none;
     position: absolute;
+    background-color: #fff;
+    height: 200px;
+    overflow: scroll;
+    z-index: 4;
+    width: 100%;
 }
 
-.group:hover .showable-group {
+.showable-group ul, .showable-level ul {
+    padding: 0rem;
+    margin: 0rem;
+    list-style: none;
     display: flex;
+    flex-direction: column;
+    gap: 0.3rem;
+    width: 100%;
 }
 
-.level:hover .showable-level {
-    display: flex;
+.showable-group ul li, .showable-level ul li {
+    width: 100%;
+    cursor: pointer;
+    padding: 0.3rem;
+}
+
+.showable-group ul li:hover, .showable-level ul li:hover {
+    background-color: #03223d;
+    color: #fff;
 }
 
 .update-or-close {
@@ -57,3 +75,23 @@
     justify-content: space-between;
     padding: 0.5rem;
 }
+
+.selected-level, .selected-group {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0.3rem;
+    cursor: pointer;
+}
+
+.select-title-icon img {
+    width: 21px;
+    height: 21px;
+}
+
+.select-title-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
