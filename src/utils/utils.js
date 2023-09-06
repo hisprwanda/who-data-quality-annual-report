@@ -1,60 +1,81 @@
 export const generateNumeratorCode = (numerators) => {
-    const lastCode = numerators[numerators.length - 1].code;
-    const lastNumber = parseInt(lastCode.slice(1));
+    if (numerators) {
+        return ''
+    }
+    const lastCode = numerators[numerators.length - 1].code
+    const lastNumber = parseInt(lastCode.slice(1))
 
-    const newCodeNumber = lastNumber + 1;
-    const newCode = "C" + newCodeNumber;
+    const newCodeNumber = lastNumber + 1
+    const newCode = 'C' + newCodeNumber
 
-    return newCode;
+    return newCode
 }
 
 // TODO: setup the global context to get the stored configurations
 export const getConfigObjectsForAnalytics = (configurations, groupCode) => {
-    
-     // Find the group with the given code
-     const group = configurations.groups.find((g) => g.code === groupCode);
-     if (!group) {
+    // return an empty array if the groupcode is not provided
+    if (!groupCode) {
+        return {}
+    }
+
+    // Find the group with the given code
+    const group = configurations.groups?.find((g) => g.code === groupCode)
+    if (!group) {
         // Return an empty array if the group is not found
-        return [];
+        return {}
     }
 
     // Get members of the group
-    const members = group.members;
+    const members = group.members
 
     // Initialize a Set to store unique dataset IDs
-    const uniqueDatasetIDs = new Set();
-  
+    const uniqueDatasetIDs = new Set()
+
     // Filter numerators with dataID not null and in the group's members
     const numeratorsInGroup = configurations.numerators.filter((numerator) => {
-        return members.includes(numerator.code) && numerator.dataID !== null;
-    });
+        return (
+            members.includes(numerator.code) &&
+            numerator.dataID !== null &&
+            numerator.dataSetID !== null
+        )
+    })
 
     // Map each numerator's datasetID, which may be an array
     numeratorsInGroup.forEach((numerator) => {
         if (Array.isArray(numerator.dataSetID)) {
-        numerator.dataSetID.forEach((id) => {
-            if (id !== null) {
-            uniqueDatasetIDs.add(id);
-            }
-        });
-        } else if (numerator.dataSetID !== null) {
-        uniqueDatasetIDs.add(numerator.dataSetID);
+            numerator.dataSetID.forEach((id) => {
+                uniqueDatasetIDs.add(id)
+            })
+        } else {
+            uniqueDatasetIDs.add(numerator.dataSetID)
         }
+    })
+
+     // Create an object to index datasets by their IDs
+     const indexedNumerators = {};
+     numeratorsInGroup.forEach((numerator) => {
+        indexedNumerators[numerator.dataID] = numerator;
     });
-    
+
+
     // Convert the Set to an array to match dataset IDs
-    const allDatasetIDs = [...uniqueDatasetIDs];
+    const allDatasetIDs = [...uniqueDatasetIDs]
 
     // Filter datasets whose "id" matches the dataset IDs
     const datasets = configurations.dataSets.filter((dataset) => {
-        return allDatasetIDs.includes(dataset.id);
+        return allDatasetIDs.includes(dataset.id)
+    })
+
+    // Create an object to index datasets by their IDs
+    const indexedDatasets = {};
+
+    datasets.forEach((dataset) => {
+        indexedDatasets[dataset.id] = dataset;
     });
-    
+
     const configsObj = {
-        dataElementsAndIndicators: numeratorsInGroup,
-        dataSets: datasets
+        dataElementsAndIndicators: indexedNumerators,
+        dataSets: indexedDatasets,
     }
-    return configsObj;
+    return configsObj
 }
-
-
