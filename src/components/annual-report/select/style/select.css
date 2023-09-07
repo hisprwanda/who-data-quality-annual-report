@@ -10,6 +10,7 @@
     display: flex;
     justify-content: space-between;
     border: 1px solid #d5d2d2;
+    
 }
 
 .select-item-selected, .select-header-icon {
