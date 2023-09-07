@@ -95,24 +95,18 @@ export const getReportSectionsData = (
             section1A: [
                 getCompletenessOfFacilityReporting(
                     reportQueryResponse.reporting_rate_over_all_org_units,
-                    reportQueryResponse.reporting_rate_by_org_unit_level
+                    reportQueryResponse.reporting_rate_by_org_unit_level,
+                    mappedConfigurations
                 ), // list of objects for every dataset selected (regarding completeness)
             ],
-        },
-        section2: {
-            section2A: [
-                getTimelinessOfFacilityReporting(
-                    reportQueryResponse.reporting_timeliness_over_all_org_units,
-                    reportQueryResponse.reporting_timeliness_by_org_unit_level
-                ), // list of objects for every dataset selected (regarding timeliness)
-            ],
-        },
+        }
     }
 }
 
 const getCompletenessOfFacilityReporting = (
     reporting_rate_over_all_org_units,
-    reporting_rate_by_org_unit_level
+    reporting_rate_by_org_unit_level,
+    mappedConfigurations
 ) => {
     // perform data manupulation
     const completenessOfFacilityReporting = {
@@ -126,15 +120,36 @@ const getCompletenessOfFacilityReporting = (
                     divergentRegionsPercent: '25%',
                     Name: 'Region A',
                 },
+                {
+                    name: 'ANC - Reporting rate',
+                    threshold: '90%',
+                    score: '92.1%',
+                    divergentRegionsCount: 1,
+                    divergentRegionsPercent: '25%',
+                    Name: 'Region A',
+                },
             ],
         },
     }
 
     // Extract key data from the analytics response
-    const headers = reporting_rate_over_all_org_units.headers
-    const rows = reporting_rate_over_all_org_units.rows
-    const metaData = reporting_rate_over_all_org_units.metaData
+    const headers_overall = reporting_rate_over_all_org_units.headers
+    const rows_overall = reporting_rate_over_all_org_units.rows
+    const metaData_overall = reporting_rate_over_all_org_units.metaData
 
+    const headers_level = reporting_rate_by_org_unit_level.headers
+    const rows_level = reporting_rate_by_org_unit_level.rows
+    const metaData_level = reporting_rate_by_org_unit_level.metaData
+
+    const reporting_rate_over_all_org_units_formatted = getJsonObjectsFormatFromTableFormat(headers_overall, rows_overall, metaData_overall, mappedConfigurations )
+    const reporting_rate_by_org_unit_level_formatted = getJsonObjectsFormatFromTableFormat(headers_level, rows_level, metaData_level, mappedConfigurations )
+
+    console.log('restructured data over all:',reporting_rate_over_all_org_units_formatted )
+    console.log('restructured data - levels:',reporting_rate_by_org_unit_level_formatted )
+    
+}
+
+const getJsonObjectsFormatFromTableFormat = (headers, rows, metaData, mappedConfigurations ) => {
     // object to store the  data transformed from tabular form to a regural json objects
     const transformedData = {}
     for (const row of rows) {
@@ -153,6 +168,8 @@ const getCompletenessOfFacilityReporting = (
             // i.e: row[1] = lZsCb6y0KDX which is a uid of the ou, hence use .name to retrieve its name in the metadata object
             rowData['region'] = metaData.items[row[1]].name
             rowData['dataset_name'] = metaData.items[row[0]].name
+            const currentDataSetId = row[0].split('.')[0]
+            rowData['threshold'] = mappedConfigurations.dataSets[currentDataSetId].threshold  // get the dataset id from the row which is split from a value like this 'rGDF7yDdhnj.REPORTING_RATE'
         }
 
         // Use a unique identifier as the key in the transformed data object
@@ -160,14 +177,12 @@ const getCompletenessOfFacilityReporting = (
         transformedData[uniqueIdentifier] = rowData
     }
 
-    // The resulting transformed data object will have keys based on header names
-    //   console.log('transformed reporting rates:', transformedData);
-
+    // structuring the transformed that by datasets and periods
     const restructuredData = {}
 
     for (const key in transformedData) {
         const entry = transformedData[key]
-        const dx = entry.dx
+        const dx = entry.dx.split('.')[0]
         const pe = entry.pe
 
         if (!restructuredData[dx]) {
@@ -183,30 +198,10 @@ const getCompletenessOfFacilityReporting = (
             region: entry.region,
             ou: entry.ou,
             score: entry.value,
-            threshold: '90%',
+            threshold: entry.threshold,
         })
+        
     }
 
-    console.log('restructured data:', restructuredData)
-}
-
-const getTimelinessOfFacilityReporting = (
-    reporting_timeliness_over_all_org_units,
-    reporting_timeliness_by_org_unit_level
-) => {
-    // perform data manupulation
-    const completenessOfFacilityReporting = {
-        Section1: {
-            SubsectionA: [
-                {
-                    name: 'HMIS - Reporting rate',
-                    threshold: '90%',
-                    score: '96.1%',
-                    divergentRegionsCount: 1,
-                    divergentRegionsPercent: '25%',
-                    Name: 'Region A',
-                },
-            ],
-        },
-    }
+    return restructuredData
 }
