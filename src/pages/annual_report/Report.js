@@ -166,13 +166,18 @@ const Report = function () {
     setOrgUnitLevelVisibility("none");
   };
 
+  // Method used to generate the object used to generate the report
   const generateReport = () => {
 
+    // Variable used to store the preveious years for reference
     const yearsForReference = storeStateSelector.selectedValue.precedingYearForReference
+    // Variable used to store the selected organization unit array
     const selectedOrgUnitLevel = storeStateSelector.selectedValue.orgUnitLevel
+    // Variable used to store the selected period
     const userSelectedPeriod = storeStateSelector.period.selectedPeriod
+    // Variable used to store the periods calculated through the loop
     let periods = []
-    const currentPeriod = userSelectedPeriod
+    // Variable used to store the dataset extracted from the configuration
     const dataSets = storeStateSelector.selectedValue.configuredDataset
     const dataElements = storeStateSelector.selectedValue.element
     const orgUnits = storeStateSelector.selectedValue.orgUnitIDSet
@@ -180,19 +185,20 @@ const Report = function () {
     let userSelectedPeriodCopy = userSelectedPeriod
     let minYear = userSelectedPeriod - yearsForReference
     
+    // Loop used to generate the period, the minYear is the minimum year
     while(userSelectedPeriodCopy >= minYear) {
       periods = [...periods, userSelectedPeriodCopy]
       userSelectedPeriodCopy -= 1
     }
+    // The object used for the generating the report
     let requestObj = {
       periods,
-      currentPeriod,
+      currentPeriod: userSelectedPeriod,
       dataSets,
       dataElements,
       orgUnits,
       orgUnitLevel
     }
-    console.log(requestObj)
 
   }
   return (
