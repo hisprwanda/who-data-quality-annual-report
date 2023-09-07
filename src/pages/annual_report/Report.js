@@ -12,9 +12,9 @@ import React from "react";
 import MenuBar from "../../components/menu-bar/MenuBar";
 import "./style/report.css";
 import { Button, SelectorBar, SelectorBarItem } from "@dhis2/ui";
-import { OrganizationUnitModal } from "../../components/annual-report/modal/organizationunit/OrganizationUnitModal";
 import {
   loadDataStore,
+  loadOrgUnitLevels,
   loadOrganizationUnitGroups,
   loadOrganizationUnitLevels,
 } from "../../components/annual-report/datasource/dataset/dataset.source";
@@ -27,26 +27,8 @@ import PeriodComponent from "../../components/annual-report/period/Period.compon
 import { SettingsProcessor } from "../../utils/SettingsProcessor";
 import { OrganizationUnitGroupComponent } from "../../components/annual-report/OrganizationUnitGroup";
 import { OrganizationUnitLevelComponent } from "../../components/annual-report/OrganizationUnitLevel";
+import Actions from "../../components/annual-report/utils/enum/Index";
 // End of imports
-import { OrganisationUnitTree } from "@dhis2/ui";
-// report queries
-const reportQueries = {
-  reporting_rate_over_all_org_units: {
-    resource: "analytics.json",
-    params: {
-      dimension:
-        "dx:YmRjo8j3F3M.REPORTING_RATE,ou:lZsCb6y0KDX,pe:2019;2020;2021;2022",
-    },
-  },
-  // reporting_rate_org_unit_level: {
-  //   resource: 'analytics.json',
-  //   params: {
-  //     dimension: 'dx:YmRjo8j3F3M.REPORTING_RATE',
-  //     dimension:'ou:lZsCb6y0KDX;LEVEL-2',
-  //     dimension:'pe:2019;2020;2021;2022',
-  //   }
-  // },
-};
 
 // Start of the functional component definition
 
@@ -73,12 +55,12 @@ const Report = function () {
   // Hook for managing groups
   let [selectedGroup, setSelectedGroup] = useState("Select Groups");
 
+  let [orgUnitLevelNum, setOrgUnitLevelNum] = useState(0)
+
   let [reportStatus, setReportStatus] = useState(false);
 
   let selectedItem = selectedElementStore.dataSet;
   let [filteredItem, setFilteredItem] = useState([]);
-  let _selectedPeriod = selectedElementStore.period;
-  let _selectedOrgUnit = selectedElementStore.orgUnit.displayName;
   let [elements, setElements] = useState();
   let [configuredDataSet, setConfiguredDataSet] = useState();
   let [orgUnitLevelVisibility, setOrgUnitLevelVisibility] = useState("none");
@@ -88,7 +70,14 @@ const Report = function () {
     dispatch({ type: "Change Report View Status", payload: { status: true } });
   };
   let { loading, error, data } = useDataQuery(_dataStore, {}, {}, {}, {}, {});
+  let orgUnitLevelResponse = useDataQuery(loadOrgUnitLevels);
 
+
+
+  let settings = [];
+  if (data) {
+    settings = SettingsProcessor(data);
+  }
   useEffect(() => {
     let settings = data !== undefined ? SettingsProcessor(data) : [];
     setSettings(settings.setting);
@@ -106,6 +95,10 @@ const Report = function () {
   useEffect(() => {
     dispatch({ type: "Change Element", payload: { elements } });
   }, [elements]);
+
+  useEffect(() => {
+    dispatch({type: Actions.changeOrgUnitLevel, payload: {level: orgUnitLevelNum}})
+  }, [orgUnitLevelNum])
 
   // Definition of use effect hooks
   useEffect(() => {
@@ -137,7 +130,7 @@ const Report = function () {
 
     // Load organization unit levels
     loadOrganizationUnitLevels().then((ou) => {
-      setOrganizationUnitLevel(ou.data.organisationUnitLevels);
+      setOrganizationUnitLevel(ou.data);
     });
   }, []);
 
@@ -152,9 +145,10 @@ const Report = function () {
     e.persist();
     e.stopPropagation();
     setSelectedLevel(e.target.textContent);
+    setOrgUnitLevelNum(e.target.getAttribute('level'))
     setOrgUnitLevelVisibility("none");
   };
-  let [x, setX] = useState("x");
+
   let [periodVisibility, setPeriodVisibility] = useState("none");
   let [_dataGroupVisibility, _setDataGroupVisibility] = useState(false);
   let [_orgUnitVisibility, _setOrgUnitVisibility] = useState(false);
@@ -172,9 +166,35 @@ const Report = function () {
     setOrgUnitLevelVisibility("none");
   };
 
-  const deselectOrgUnitSelection = (e) => {
-    console.log("Deselection");
-  };
+  const generateReport = () => {
+
+    const yearsForReference = storeStateSelector.selectedValue.precedingYearForReference
+    const selectedOrgUnitLevel = storeStateSelector.selectedValue.orgUnitLevel
+    const userSelectedPeriod = storeStateSelector.period.selectedPeriod
+    let periods = []
+    const currentPeriod = userSelectedPeriod
+    const dataSets = storeStateSelector.selectedValue.configuredDataset
+    const dataElements = storeStateSelector.selectedValue.element
+    const orgUnits = storeStateSelector.selectedValue.orgUnitIDSet
+    const orgUnitLevel = `LEVEL-${selectedOrgUnitLevel}`
+    let userSelectedPeriodCopy = userSelectedPeriod
+    let minYear = userSelectedPeriod - yearsForReference
+    
+    while(userSelectedPeriodCopy >= minYear) {
+      periods = [...periods, userSelectedPeriodCopy]
+      userSelectedPeriodCopy -= 1
+    }
+    let requestObj = {
+      periods,
+      currentPeriod,
+      dataSets,
+      dataElements,
+      orgUnits,
+      orgUnitLevel
+    }
+    console.log(requestObj)
+
+  }
   return (
     <div className="reportContainer">
       <MenuBar />
@@ -183,7 +203,7 @@ const Report = function () {
           additionalContent={
             <div className="additional-content">
               <span>
-                <Button small primary>
+                <Button small primary onClick={generateReport}>
                   Generate report
                 </Button>
               </span>
@@ -226,7 +246,7 @@ const Report = function () {
           <div>
             <SelectorBarItem
               label="Organisation Unit"
-              value="Organisation Unit"
+              value=""
               open={_orgUnitVisibility}
               setOpen={() => _setOrgUnitVisibility((prev) => !prev)}
             >
@@ -234,7 +254,7 @@ const Report = function () {
                 onClick={(e) => e.stopPropagation()}
                 style={{ width: "500px" }}
               >
-                <OrgUnitComponent/>
+                <OrgUnitComponent />
               </div>
 
               <div className="level-and-group">

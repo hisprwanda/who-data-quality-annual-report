@@ -109,6 +109,15 @@ const reducer = function (state = currentState, action) {
         }
       }
 
+    case Actions.changeOrgUnitLevel:
+      return {
+        ...state,
+        selectedValue: {
+          ...state.selectedValue,
+          orgUnitLevel: action.payload.level
+        }
+      }
+
     default:
       return state;
   }

@@ -11,6 +11,7 @@ const Actions = {
     changeConfiguredDataset: 'Change Configured Dataset',
     changeOrgUnitSet: 'Change Organisation Unit Set',
     changePeriod: 'Change Period',
-    precedingYearForReference: 'Preceding year for reference'
+    precedingYearForReference: 'Preceding year for reference',
+    changeOrgUnitLevel: 0
 }
 export default Actions

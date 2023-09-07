@@ -11,6 +11,7 @@ export const SelectComponent = ({ options, onSelect, label, selectedOption, opti
     setDisplay('none')
     onSelect(e, label)
     setSelectedOpt(e.target.textContent)
+    console.log(label,e.target.textContent)
   }
 
   return (
