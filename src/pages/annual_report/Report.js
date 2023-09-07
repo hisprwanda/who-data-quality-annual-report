@@ -199,7 +199,7 @@ const Report = function () {
       orgUnits,
       orgUnitLevel
     }
-
+    console.log(requestObj)
   }
   return (
     <div className="reportContainer">
