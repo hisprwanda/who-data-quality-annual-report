@@ -22,7 +22,7 @@ import {
 
   import '../Modals/edit_modal_styles.css'
 import { filterSelectedMetadata, getNumeratorMemberGroups } from '../../utils/numeratorsMetadataData';
-import { generateNumeratorCode } from '../../utils/generateNumeratorCode';
+import { generateNumeratorCode } from '../../utils/utils';
 
 
 const dataElementGroupsQuery = {

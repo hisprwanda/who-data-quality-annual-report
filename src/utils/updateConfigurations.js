@@ -1,5 +1,5 @@
 import {useState, useEffect} from 'react'
-import { generateNumeratorCode } from './generateNumeratorCode';
+import { generateNumeratorCode } from './utils';
 
 // TODO: Implemement the global context api to share configurations accross compoments
 // TODO: Merge these create, clear and update configurations methods to make it dynamic 
