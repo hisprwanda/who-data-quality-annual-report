@@ -55,6 +55,10 @@ const reportQueries = {
 
 
 // Start of the functional component definition
+  
+  //TODO: pick the group id selected
+  // passi to the function to filter out configurations 
+  // 
 
 const Report = function () {
   // Redux state selector hook
