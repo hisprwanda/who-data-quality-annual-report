@@ -1,0 +1,1042 @@
+{
+    "reporting_rate_over_all_org_units":
+    {
+        "headers":
+        [
+            {
+                "name": "dx",
+                "column": "Data",
+                "valueType": "TEXT",
+                "type": "java.lang.String",
+                "hidden": false,
+                "meta": true
+            },
+            {
+                "name": "ou",
+                "column": "Organisation unit",
+                "valueType": "TEXT",
+                "type": "java.lang.String",
+                "hidden": false,
+                "meta": true
+            },
+            {
+                "name": "pe",
+                "column": "Period",
+                "valueType": "TEXT",
+                "type": "java.lang.String",
+                "hidden": false,
+                "meta": true
+            },
+            {
+                "name": "value",
+                "column": "Value",
+                "valueType": "NUMBER",
+                "type": "java.lang.Double",
+                "hidden": false,
+                "meta": false
+            }
+        ],
+        "metaData":
+        {
+            "items":
+            {
+                "2020":
+                {
+                    "name": "2020"
+                },
+                "2021":
+                {
+                    "name": "2021"
+                },
+                "2022":
+                {
+                    "name": "2022"
+                },
+                "dx":
+                {
+                    "name": "Data"
+                },
+                "lZsCb6y0KDX":
+                {
+                    "name": "National"
+                },
+                "pe":
+                {
+                    "name": "Period"
+                },
+                "ou":
+                {
+                    "name": "Organisation unit"
+                },
+                "YmRjo8j3F3M.REPORTING_RATE":
+                {
+                    "name": "HMIS - Reporting rate"
+                }
+            },
+            "dimensions":
+            {
+                "dx":
+                [
+                    "YmRjo8j3F3M.REPORTING_RATE"
+                ],
+                "pe":
+                [
+                    "2022",
+                    "2021",
+                    "2020"
+                ],
+                "ou":
+                [
+                    "lZsCb6y0KDX"
+                ],
+                "co":
+                []
+            }
+        },
+        "rows":
+        [
+            [
+                "YmRjo8j3F3M.REPORTING_RATE",
+                "lZsCb6y0KDX",
+                "2021",
+                "72.7"
+            ],
+            [
+                "YmRjo8j3F3M.REPORTING_RATE",
+                "lZsCb6y0KDX",
+                "2020",
+                "30.6"
+            ],
+            [
+                "YmRjo8j3F3M.REPORTING_RATE",
+                "lZsCb6y0KDX",
+                "2022",
+                "96.1"
+            ]
+        ],
+        "height": 3,
+        "width": 4,
+        "headerWidth": 4
+    },
+    "reporting_rate_by_org_unit_level":
+    {
+        "headers":
+        [
+            {
+                "name": "dx",
+                "column": "Data",
+                "valueType": "TEXT",
+                "type": "java.lang.String",
+                "hidden": false,
+                "meta": true
+            },
+            {
+                "name": "ou",
+                "column": "Organisation unit",
+                "valueType": "TEXT",
+                "type": "java.lang.String",
+                "hidden": false,
+                "meta": true
+            },
+            {
+                "name": "pe",
+                "column": "Period",
+                "valueType": "TEXT",
+                "type": "java.lang.String",
+                "hidden": false,
+                "meta": true
+            },
+            {
+                "name": "value",
+                "column": "Value",
+                "valueType": "NUMBER",
+                "type": "java.lang.Double",
+                "hidden": false,
+                "meta": false
+            }
+        ],
+        "metaData":
+        {
+            "items":
+            {
+                "2020":
+                {
+                    "name": "2020"
+                },
+                "2021":
+                {
+                    "name": "2021"
+                },
+                "2022":
+                {
+                    "name": "2022"
+                },
+                "iQx6Edf0Xib":
+                {
+                    "name": "Region B"
+                },
+                "ou":
+                {
+                    "name": "Organisation unit"
+                },
+                "bzWRxaDGI3B":
+                {
+                    "uid": "bzWRxaDGI3B",
+                    "name": "Region"
+                },
+                "mPpiH4dNz9C":
+                {
+                    "name": "Region A"
+                },
+                "dx":
+                {
+                    "name": "Data"
+                },
+                "lZsCb6y0KDX":
+                {
+                    "uid": "lZsCb6y0KDX",
+                    "name": "National"
+                },
+                "pe":
+                {
+                    "name": "Period"
+                },
+                "tmIma8xiccz":
+                {
+                    "name": "Region D"
+                },
+                "YmRjo8j3F3M.REPORTING_RATE":
+                {
+                    "name": "HMIS - Reporting rate"
+                },
+                "yeGIr7J6nX7":
+                {
+                    "name": "Region C"
+                }
+            },
+            "dimensions":
+            {
+                "dx":
+                [
+                    "YmRjo8j3F3M.REPORTING_RATE"
+                ],
+                "pe":
+                [
+                    "2022",
+                    "2021",
+                    "2020"
+                ],
+                "ou":
+                [
+                    "mPpiH4dNz9C",
+                    "iQx6Edf0Xib",
+                    "yeGIr7J6nX7",
+                    "tmIma8xiccz"
+                ],
+                "co":
+                []
+            }
+        },
+        "rows":
+        [
+            [
+                "YmRjo8j3F3M.REPORTING_RATE",
+                "yeGIr7J6nX7",
+                "2020",
+                "32.0"
+            ],
+            [
+                "YmRjo8j3F3M.REPORTING_RATE",
+                "yeGIr7J6nX7",
+                "2021",
+                "74.6"
+            ],
+            [
+                "YmRjo8j3F3M.REPORTING_RATE",
+                "iQx6Edf0Xib",
+                "2022",
+                "99.4"
+            ],
+            [
+                "YmRjo8j3F3M.REPORTING_RATE",
+                "iQx6Edf0Xib",
+                "2020",
+                "31.3"
+            ],
+            [
+                "YmRjo8j3F3M.REPORTING_RATE",
+                "iQx6Edf0Xib",
+                "2021",
+                "72.9"
+            ],
+            [
+                "YmRjo8j3F3M.REPORTING_RATE",
+                "tmIma8xiccz",
+                "2020",
+                "28.1"
+            ],
+            [
+                "YmRjo8j3F3M.REPORTING_RATE",
+                "mPpiH4dNz9C",
+                "2020",
+                "31.2"
+            ],
+            [
+                "YmRjo8j3F3M.REPORTING_RATE",
+                "mPpiH4dNz9C",
+                "2021",
+                "72.2"
+            ],
+            [
+                "YmRjo8j3F3M.REPORTING_RATE",
+                "tmIma8xiccz",
+                "2021",
+                "71.1"
+            ],
+            [
+                "YmRjo8j3F3M.REPORTING_RATE",
+                "tmIma8xiccz",
+                "2022",
+                "93.2"
+            ],
+            [
+                "YmRjo8j3F3M.REPORTING_RATE",
+                "mPpiH4dNz9C",
+                "2022",
+                "93.4"
+            ],
+            [
+                "YmRjo8j3F3M.REPORTING_RATE",
+                "yeGIr7J6nX7",
+                "2022",
+                "98.7"
+            ]
+        ],
+        "height": 12,
+        "width": 4,
+        "headerWidth": 4
+    },
+    "reporting_timeliness_over_all_org_units":
+    {
+        "headers":
+        [
+            {
+                "name": "dx",
+                "column": "Data",
+                "valueType": "TEXT",
+                "type": "java.lang.String",
+                "hidden": false,
+                "meta": true
+            },
+            {
+                "name": "ou",
+                "column": "Organisation unit",
+                "valueType": "TEXT",
+                "type": "java.lang.String",
+                "hidden": false,
+                "meta": true
+            },
+            {
+                "name": "pe",
+                "column": "Period",
+                "valueType": "TEXT",
+                "type": "java.lang.String",
+                "hidden": false,
+                "meta": true
+            },
+            {
+                "name": "value",
+                "column": "Value",
+                "valueType": "NUMBER",
+                "type": "java.lang.Double",
+                "hidden": false,
+                "meta": false
+            }
+        ],
+        "metaData":
+        {
+            "items":
+            {
+                "2022":
+                {
+                    "name": "2022"
+                },
+                "dx":
+                {
+                    "name": "Data"
+                },
+                "lZsCb6y0KDX":
+                {
+                    "name": "National"
+                },
+                "pe":
+                {
+                    "name": "Period"
+                },
+                "ou":
+                {
+                    "name": "Organisation unit"
+                },
+                "YmRjo8j3F3M.REPORTING_RATE_ON_TIME":
+                {
+                    "name": "HMIS - Reporting rate on time"
+                }
+            },
+            "dimensions":
+            {
+                "dx":
+                [
+                    "YmRjo8j3F3M.REPORTING_RATE_ON_TIME"
+                ],
+                "pe":
+                [
+                    "2022"
+                ],
+                "ou":
+                [
+                    "lZsCb6y0KDX"
+                ],
+                "co":
+                []
+            }
+        },
+        "rows":
+        [
+            [
+                "YmRjo8j3F3M.REPORTING_RATE_ON_TIME",
+                "lZsCb6y0KDX",
+                "2022",
+                "96.1"
+            ]
+        ],
+        "height": 1,
+        "width": 4,
+        "headerWidth": 4
+    },
+    "reporting_timeliness_by_org_unit_level":
+    {
+        "headers":
+        [
+            {
+                "name": "dx",
+                "column": "Data",
+                "valueType": "TEXT",
+                "type": "java.lang.String",
+                "hidden": false,
+                "meta": true
+            },
+            {
+                "name": "ou",
+                "column": "Organisation unit",
+                "valueType": "TEXT",
+                "type": "java.lang.String",
+                "hidden": false,
+                "meta": true
+            },
+            {
+                "name": "pe",
+                "column": "Period",
+                "valueType": "TEXT",
+                "type": "java.lang.String",
+                "hidden": false,
+                "meta": true
+            },
+            {
+                "name": "value",
+                "column": "Value",
+                "valueType": "NUMBER",
+                "type": "java.lang.Double",
+                "hidden": false,
+                "meta": false
+            }
+        ],
+        "metaData":
+        {
+            "items":
+            {
+                "2022":
+                {
+                    "name": "2022"
+                },
+                "mPpiH4dNz9C":
+                {
+                    "name": "Region A"
+                },
+                "dx":
+                {
+                    "name": "Data"
+                },
+                "lZsCb6y0KDX":
+                {
+                    "uid": "lZsCb6y0KDX",
+                    "name": "National"
+                },
+                "pe":
+                {
+                    "name": "Period"
+                },
+                "iQx6Edf0Xib":
+                {
+                    "name": "Region B"
+                },
+                "ou":
+                {
+                    "name": "Organisation unit"
+                },
+                "bzWRxaDGI3B":
+                {
+                    "uid": "bzWRxaDGI3B",
+                    "name": "Region"
+                },
+                "tmIma8xiccz":
+                {
+                    "name": "Region D"
+                },
+                "YmRjo8j3F3M.REPORTING_RATE_ON_TIME":
+                {
+                    "name": "HMIS - Reporting rate on time"
+                },
+                "yeGIr7J6nX7":
+                {
+                    "name": "Region C"
+                }
+            },
+            "dimensions":
+            {
+                "dx":
+                [
+                    "YmRjo8j3F3M.REPORTING_RATE_ON_TIME"
+                ],
+                "pe":
+                [
+                    "2022"
+                ],
+                "ou":
+                [
+                    "mPpiH4dNz9C",
+                    "iQx6Edf0Xib",
+                    "yeGIr7J6nX7",
+                    "tmIma8xiccz"
+                ],
+                "co":
+                []
+            }
+        },
+        "rows":
+        [
+            [
+                "YmRjo8j3F3M.REPORTING_RATE_ON_TIME",
+                "iQx6Edf0Xib",
+                "2022",
+                "99.4"
+            ],
+            [
+                "YmRjo8j3F3M.REPORTING_RATE_ON_TIME",
+                "tmIma8xiccz",
+                "2022",
+                "93.2"
+            ],
+            [
+                "YmRjo8j3F3M.REPORTING_RATE_ON_TIME",
+                "mPpiH4dNz9C",
+                "2022",
+                "93.4"
+            ],
+            [
+                "YmRjo8j3F3M.REPORTING_RATE_ON_TIME",
+                "yeGIr7J6nX7",
+                "2022",
+                "98.7"
+            ]
+        ],
+        "height": 4,
+        "width": 4,
+        "headerWidth": 4
+    },
+    "expected_reports_over_all_org_units":
+    {
+        "headers":
+        [
+            {
+                "name": "dx",
+                "column": "Data",
+                "valueType": "TEXT",
+                "type": "java.lang.String",
+                "hidden": false,
+                "meta": true
+            },
+            {
+                "name": "ou",
+                "column": "Organisation unit",
+                "valueType": "TEXT",
+                "type": "java.lang.String",
+                "hidden": false,
+                "meta": true
+            },
+            {
+                "name": "pe",
+                "column": "Period",
+                "valueType": "TEXT",
+                "type": "java.lang.String",
+                "hidden": false,
+                "meta": true
+            },
+            {
+                "name": "value",
+                "column": "Value",
+                "valueType": "NUMBER",
+                "type": "java.lang.Double",
+                "hidden": false,
+                "meta": false
+            }
+        ],
+        "metaData":
+        {
+            "items":
+            {
+                "2022":
+                {
+                    "name": "2022"
+                },
+                "dx":
+                {
+                    "name": "Data"
+                },
+                "lZsCb6y0KDX":
+                {
+                    "name": "National"
+                },
+                "pe":
+                {
+                    "name": "Period"
+                },
+                "ou":
+                {
+                    "name": "Organisation unit"
+                },
+                "YmRjo8j3F3M.EXPECTED_REPORTS":
+                {
+                    "name": "HMIS - Expected reports"
+                }
+            },
+            "dimensions":
+            {
+                "dx":
+                [
+                    "YmRjo8j3F3M.EXPECTED_REPORTS"
+                ],
+                "pe":
+                [
+                    "2022"
+                ],
+                "ou":
+                [
+                    "lZsCb6y0KDX"
+                ],
+                "co":
+                []
+            }
+        },
+        "rows":
+        [
+            [
+                "YmRjo8j3F3M.EXPECTED_REPORTS",
+                "lZsCb6y0KDX",
+                "2022",
+                "6132.0"
+            ]
+        ],
+        "height": 1,
+        "width": 4,
+        "headerWidth": 4
+    },
+    "expected_reports_by_org_unit_level":
+    {
+        "headers":
+        [
+            {
+                "name": "dx",
+                "column": "Data",
+                "valueType": "TEXT",
+                "type": "java.lang.String",
+                "hidden": false,
+                "meta": true
+            },
+            {
+                "name": "ou",
+                "column": "Organisation unit",
+                "valueType": "TEXT",
+                "type": "java.lang.String",
+                "hidden": false,
+                "meta": true
+            },
+            {
+                "name": "pe",
+                "column": "Period",
+                "valueType": "TEXT",
+                "type": "java.lang.String",
+                "hidden": false,
+                "meta": true
+            },
+            {
+                "name": "value",
+                "column": "Value",
+                "valueType": "NUMBER",
+                "type": "java.lang.Double",
+                "hidden": false,
+                "meta": false
+            }
+        ],
+        "metaData":
+        {
+            "items":
+            {
+                "2022":
+                {
+                    "name": "2022"
+                },
+                "mPpiH4dNz9C":
+                {
+                    "name": "Region A"
+                },
+                "dx":
+                {
+                    "name": "Data"
+                },
+                "lZsCb6y0KDX":
+                {
+                    "uid": "lZsCb6y0KDX",
+                    "name": "National"
+                },
+                "pe":
+                {
+                    "name": "Period"
+                },
+                "iQx6Edf0Xib":
+                {
+                    "name": "Region B"
+                },
+                "ou":
+                {
+                    "name": "Organisation unit"
+                },
+                "bzWRxaDGI3B":
+                {
+                    "uid": "bzWRxaDGI3B",
+                    "name": "Region"
+                },
+                "tmIma8xiccz":
+                {
+                    "name": "Region D"
+                },
+                "YmRjo8j3F3M.EXPECTED_REPORTS":
+                {
+                    "name": "HMIS - Expected reports"
+                },
+                "yeGIr7J6nX7":
+                {
+                    "name": "Region C"
+                }
+            },
+            "dimensions":
+            {
+                "dx":
+                [
+                    "YmRjo8j3F3M.EXPECTED_REPORTS"
+                ],
+                "pe":
+                [
+                    "2022"
+                ],
+                "ou":
+                [
+                    "mPpiH4dNz9C",
+                    "iQx6Edf0Xib",
+                    "yeGIr7J6nX7",
+                    "tmIma8xiccz"
+                ],
+                "co":
+                []
+            }
+        },
+        "rows":
+        [
+            [
+                "YmRjo8j3F3M.EXPECTED_REPORTS",
+                "iQx6Edf0Xib",
+                "2022",
+                "1224.0"
+            ],
+            [
+                "YmRjo8j3F3M.EXPECTED_REPORTS",
+                "tmIma8xiccz",
+                "2022",
+                "1632.0"
+            ],
+            [
+                "YmRjo8j3F3M.EXPECTED_REPORTS",
+                "mPpiH4dNz9C",
+                "2022",
+                "1476.0"
+            ],
+            [
+                "YmRjo8j3F3M.EXPECTED_REPORTS",
+                "yeGIr7J6nX7",
+                "2022",
+                "1800.0"
+            ]
+        ],
+        "height": 4,
+        "width": 4,
+        "headerWidth": 4
+    },
+    "count_of_data_values_over_all_org_units":
+    {
+        "headers":
+        [
+            {
+                "name": "dx",
+                "column": "Data",
+                "valueType": "TEXT",
+                "type": "java.lang.String",
+                "hidden": false,
+                "meta": true
+            },
+            {
+                "name": "ou",
+                "column": "Organisation unit",
+                "valueType": "TEXT",
+                "type": "java.lang.String",
+                "hidden": false,
+                "meta": true
+            },
+            {
+                "name": "pe",
+                "column": "Period",
+                "valueType": "TEXT",
+                "type": "java.lang.String",
+                "hidden": false,
+                "meta": true
+            },
+            {
+                "name": "value",
+                "column": "Value",
+                "valueType": "NUMBER",
+                "type": "java.lang.Double",
+                "hidden": false,
+                "meta": false
+            }
+        ],
+        "metaData":
+        {
+            "items":
+            {
+                "2022":
+                {
+                    "name": "2022"
+                },
+                "dx":
+                {
+                    "name": "Data"
+                },
+                "lZsCb6y0KDX":
+                {
+                    "name": "National"
+                },
+                "pe":
+                {
+                    "name": "Period"
+                },
+                "ou":
+                {
+                    "name": "Organisation unit"
+                },
+                "mQXljwnUv90":
+                {
+                    "name": "default"
+                },
+                "bcDTj5odXAg":
+                {
+                    "name": "HIV tests done"
+                }
+            },
+            "dimensions":
+            {
+                "dx":
+                [
+                    "bcDTj5odXAg"
+                ],
+                "pe":
+                [
+                    "2022"
+                ],
+                "ou":
+                [
+                    "lZsCb6y0KDX"
+                ],
+                "co":
+                [
+                    "mQXljwnUv90"
+                ]
+            }
+        },
+        "rows":
+        [
+            [
+                "bcDTj5odXAg",
+                "lZsCb6y0KDX",
+                "2022",
+                "5497.0"
+            ]
+        ],
+        "height": 1,
+        "width": 4,
+        "headerWidth": 4
+    },
+    "count_of_data_values_by_org_unit_level":
+    {
+        "headers":
+        [
+            {
+                "name": "dx",
+                "column": "Data",
+                "valueType": "TEXT",
+                "type": "java.lang.String",
+                "hidden": false,
+                "meta": true
+            },
+            {
+                "name": "ou",
+                "column": "Organisation unit",
+                "valueType": "TEXT",
+                "type": "java.lang.String",
+                "hidden": false,
+                "meta": true
+            },
+            {
+                "name": "pe",
+                "column": "Period",
+                "valueType": "TEXT",
+                "type": "java.lang.String",
+                "hidden": false,
+                "meta": true
+            },
+            {
+                "name": "value",
+                "column": "Value",
+                "valueType": "NUMBER",
+                "type": "java.lang.Double",
+                "hidden": false,
+                "meta": false
+            }
+        ],
+        "metaData":
+        {
+            "items":
+            {
+                "2022":
+                {
+                    "name": "2022"
+                },
+                "mPpiH4dNz9C":
+                {
+                    "name": "Region A"
+                },
+                "dx":
+                {
+                    "name": "Data"
+                },
+                "lZsCb6y0KDX":
+                {
+                    "uid": "lZsCb6y0KDX",
+                    "name": "National"
+                },
+                "pe":
+                {
+                    "name": "Period"
+                },
+                "iQx6Edf0Xib":
+                {
+                    "name": "Region B"
+                },
+                "ou":
+                {
+                    "name": "Organisation unit"
+                },
+                "bzWRxaDGI3B":
+                {
+                    "uid": "bzWRxaDGI3B",
+                    "name": "Region"
+                },
+                "tmIma8xiccz":
+                {
+                    "name": "Region D"
+                },
+                "mQXljwnUv90":
+                {
+                    "name": "default"
+                },
+                "bcDTj5odXAg":
+                {
+                    "name": "HIV tests done"
+                },
+                "yeGIr7J6nX7":
+                {
+                    "name": "Region C"
+                }
+            },
+            "dimensions":
+            {
+                "dx":
+                [
+                    "bcDTj5odXAg"
+                ],
+                "pe":
+                [
+                    "2022"
+                ],
+                "ou":
+                [
+                    "mPpiH4dNz9C",
+                    "iQx6Edf0Xib",
+                    "yeGIr7J6nX7",
+                    "tmIma8xiccz"
+                ],
+                "co":
+                [
+                    "mQXljwnUv90"
+                ]
+            }
+        },
+        "rows":
+        [
+            [
+                "bcDTj5odXAg",
+                "mPpiH4dNz9C",
+                "2022",
+                "1302.0"
+            ],
+            [
+                "bcDTj5odXAg",
+                "yeGIr7J6nX7",
+                "2022",
+                "1698.0"
+            ],
+            [
+                "bcDTj5odXAg",
+                "iQx6Edf0Xib",
+                "2022",
+                "1125.0"
+            ],
+            [
+                "bcDTj5odXAg",
+                "tmIma8xiccz",
+                "2022",
+                "1372.0"
+            ]
+        ],
+        "height": 4,
+        "width": 4,
+        "headerWidth": 4
+    }
+}

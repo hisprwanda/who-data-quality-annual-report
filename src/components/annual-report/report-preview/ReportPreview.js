@@ -16,6 +16,7 @@ import {
   loadAnalytics,
   loadAnalyticsInformation,
   loadDataElements,
+  loadDataStore,
 } from "../datasource/dataset/dataset.source";
 import { useDataQuery } from "@dhis2/app-runtime";
 import {
@@ -27,89 +28,27 @@ import { ParentHeader } from "./ParentHeader";
 import { DataSection } from "./DataSection";
 import { CompletenessReport } from "./completness/CompletenessReport";
 import { InternalConsistencyReport } from "./internalconsistency/InternalConsistencyReport";
+import { processReportData } from "../utils/report/GenerateReportData";
 
-const ReportPreview = () => {
-  let storeSelector = useSelector((store) => store);
-  let storeDispatch = useDispatch();
-  let { loading, error, data } = useDataQuery(
-    loadAnalytics,
-    {},
-    {},
-    {},
-    {},
-    {}
-  );
+const ReportPreview = ({status}) => {
 
-  const availableDataset = storeSelector.selectedValue.configuredDataset;
-  const group = storeSelector.selectedValue.dataSet;
-  const allElements = storeSelector.selectedValue.element;
-  const orgUnitID = storeSelector.selectedValue.orgUnit.id;
-  const orgUnitChildren = storeSelector.selectedValue.orgUnit.children;
-  const period = storeSelector.period.selectedPeriod;
-  //let response = useDataQuery(loadAnalyticsInformation(), {}, {}, {}, {}, {});
-  let dataElementRequest = useDataQuery(loadDataElements(allElements, false));
+  let { loading, error, data } = useDataQuery(loadDataStore);
+
+  if(data) {
+    const dataSetInfo = data.results.dataSets.map(dt => {
+      return {
+        dataset: dt.id,
+        threshold: dt.threshold
+      }
+    })
+
+    const reportData = processReportData(dataSetInfo)
+    console.log(reportData)
+  }
 
   return (
     <div className="report-preview report-preview-container">
-      <CompletenessReport
-        main_title={mainHeaderLabel.summary}
-        sub_title={completenessLabel.completeness}
-      />
-      <p></p>
-      <InternalConsistencyReport
-        main_title={mainHeaderLabel.internalConsistency}
-        sub_title=""
-      />
-
-      {/* <ParentHeader
-        main_title={mainHeaderLabel.summary}
-        sub_title={completenessLabel.completeness}
-      />
-      <DataSection
-        main_title={completenessLabel.completenessOfFacilityReporting}
-        sub_title={completenessLabel.percentageOfExpectedAndCompleted}
-        more_info={completenessLabel.reportingRate}
-        dataheader={completenessLabel.dataset}
-        reporttype='indicator completeness'
-      /> 
-      <p></p>
-
-      <DataSection
-        main_title={completenessLabel.timelinessOfFacility}
-        sub_title={completenessLabel.percentageOfExpectedEntered}
-        more_info={completenessLabel.reportingRateOnTime}
-        dataheader={completenessLabel.dataset}
-        reporttype='timeliness'
-      />
-      <p></p>
-      <DataSection
-        main_title={completenessLabel.completenessOfIndicator}
-        sub_title={completenessLabel.reportWhereValuesNotMissing}
-        more_info={completenessLabel.reportingRateOnTime}
-        dataheader={completenessLabel.indicator}
-        reporttype='indicator completeness'
-      />  
-      <p></p> 
-      <DataSection
-        main_title={completenessLabel.consistencyOfDataSet}
-        sub_title={completenessLabel.reportWhereValuesNotMissing}
-        more_info={completenessLabel.reportingRateOnTime}
-        dataheader={completenessLabel.indicator}
-        reporttype='consistency'
-      />  
-      <p></p>
-      <p></p>
-      <ParentHeader
-        main_title={mainHeaderLabel.internalConsistency}
-        sub_title=''
-      />  
-      <DataSection
-        main_title={completenessLabel.extremeOutlier}
-        sub_title={completenessLabel.reportWhereValuesNotMissing}
-        more_info={completenessLabel.reportingRateOnTime}
-        dataheader={completenessLabel.indicator}
-        reporttype='extremeoutlier'
-      />     */}
+      report status {status.toString()}
     </div>
   );
 };

@@ -17,8 +17,9 @@ const currentState = {
         orgUnitSet: [],
         orgUnitIDSet: [],
         precedingYearForReference: 0,
-        orgUnitLevel: 0
+        orgUnitLevel: 0,
     },
+    datasetThreshold: {},
     period: {
         fixedPeriod: {
             period: 'Daily',

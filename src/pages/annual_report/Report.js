@@ -21,13 +21,15 @@ import {
 import { useDataQuery } from "@dhis2/app-runtime";
 import { OrgUnitComponent } from "../../components/annual-report/OrgUnit.Component";
 import down_allow from "../../assets/images/downarrow.png";
-import ReportPreview from "../../components/annual-report/report-preview/ReportPreview";
 import { useDispatch, useSelector } from "react-redux";
 import PeriodComponent from "../../components/annual-report/period/Period.component";
 import { SettingsProcessor } from "../../utils/SettingsProcessor";
 import { OrganizationUnitGroupComponent } from "../../components/annual-report/OrganizationUnitGroup";
 import { OrganizationUnitLevelComponent } from "../../components/annual-report/OrganizationUnitLevel";
 import Actions from "../../components/annual-report/utils/enum/Index";
+import {processReportData} from "../../components/annual-report/utils/report/GenerateReportData";
+import { distinct } from "rxjs";
+import ReportPreview from "../../components/annual-report/report-preview/ReportPreview";
 // End of imports
 
 // Start of the functional component definition
@@ -77,7 +79,16 @@ const Report = function () {
   let settings = [];
   if (data) {
     settings = SettingsProcessor(data);
+    const dataSetInfo = data.results.dataSets.map(dt => {
+      return {
+        dataset: dt.id,
+        threshold: dt.threshold
+      }
+    })
+    // setDatasetThreshold(dataSetInfo)
+   // dispatch({type: Actions.changeDatasetThreshold, payload: {dataSetInfo}})
   }
+
   useEffect(() => {
     let settings = data !== undefined ? SettingsProcessor(data) : [];
     setSettings(settings.setting);
@@ -169,6 +180,18 @@ const Report = function () {
   // Method used to generate the object used to generate the report
   const generateReport = () => {
 
+    let { loading, error, data } = useDataQuery(_dataStore, {}, {}, {}, {}, {});
+    if (data) {
+      settings = SettingsProcessor(data);
+      const dataSetInfo = data.results.dataSets.map(dt => {
+        return {
+          dataset: dt.id,
+          threshold: dt.threshold
+        }
+      })
+      // setDatasetThreshold(dataSetInfo)
+     // dispatch({type: Actions.changeDatasetThreshold, payload: {dataSetInfo}})
+    }
     // Variable used to store the preveious years for reference
     const yearsForReference = storeStateSelector.selectedValue.precedingYearForReference
     // Variable used to store the selected organization unit array
@@ -199,7 +222,13 @@ const Report = function () {
       orgUnits,
       orgUnitLevel
     }
-    console.log(requestObj)
+  }
+
+  const generateReportData = () => {
+
+    //processReportData()
+    setReportStatus(true)
+    
   }
   return (
     <div className="reportContainer">
@@ -209,7 +238,7 @@ const Report = function () {
           additionalContent={
             <div className="additional-content">
               <span>
-                <Button small primary onClick={generateReport}>
+                <Button small primary onClick={generateReportData}>
                   Generate report
                 </Button>
               </span>
@@ -341,6 +370,7 @@ const Report = function () {
           </div>
         </SelectorBar>
       </div>
+     <ReportPreview status={reportStatus}/>
     </div>
   );
 };

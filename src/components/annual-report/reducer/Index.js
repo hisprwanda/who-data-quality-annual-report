@@ -117,6 +117,11 @@ const reducer = function (state = currentState, action) {
           orgUnitLevel: action.payload.level
         }
       }
+    case Actions.changeDatasetThreshold:
+      return {
+        ...state,
+        datasetThreshold: action.payload.dataSetInfo
+      }
 
     default:
       return state;

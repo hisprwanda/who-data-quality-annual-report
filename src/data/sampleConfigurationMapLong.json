@@ -1,0 +1,142 @@
+{
+	"dataSets": {
+		"dONyxVsQyGS": {
+			"id": "dONyxVsQyGS",
+			"name": "ANC",
+			"trend": "constant",
+			"threshold": 90,
+			"comparison": "ou",
+			"periodType": "Monthly",
+			"timelinessThreshold": 75,
+			"consistencyThreshold": 33
+		},
+		"rGDF7yDdhnj": {
+			"id": "rGDF7yDdhnj",
+			"name": "EPI",
+			"trend": "increasing",
+			"threshold": 90,
+			"comparison": "th",
+			"periodType": "Monthly",
+			"timelinessThreshold": 75,
+			"consistencyThreshold": 33
+		},
+		"YmRjo8j3F3M": {
+			"id": "YmRjo8j3F3M",
+			"name": "HMIS",
+			"trend": "constant",
+			"threshold": 90,
+			"comparison": "ou",
+			"periodType": "Monthly",
+			"timelinessThreshold": 75,
+			"consistencyThreshold": 33
+		},
+		"GhdP8W2GorO": {
+			"id": "GhdP8W2GorO",
+			"name": "Maternity",
+			"trend": "constant",
+			"threshold": 90,
+			"comparison": "ou",
+			"periodType": "Monthly",
+			"timelinessThreshold": 75,
+			"consistencyThreshold": 33
+		}
+	},
+	"dataElementsOrIndicators": {
+		"ieThL7l107F": {
+			"code": "C1",
+			"core": false,
+			"name": "Albendazole 1 dose at ANC",
+			"trend": "constant",
+			"custom": true,
+			"dataID": "ieThL7l107F",
+			"missing": 90,
+			"dataSetID": "dONyxVsQyGS",
+			"comparison": "th",
+			"definition": "ANC registrants given at least one dose of albendazole",
+			"consistency": 33,
+			"extremeOutlier": 3,
+			"moderateOutlier": 2,
+			"dataElementOperandID": "ieThL7l107F.mQXljwnUv90"
+		},
+		"RvArfQFKdXe": {
+			"code": "D1",
+			"core": true,
+			"name": "ANC 1 visits",
+			"trend": "constant",
+			"custom": false,
+			"dataID": "RvArfQFKdXe",
+			"missing": 90,
+			"dataSetID": "dONyxVsQyGS",
+			"comparison": "th",
+			"definition": "First antenatal care visit",
+			"consistency": 20,
+			"extremeOutlier": 3.5,
+			"moderateOutlier": 3.5,
+			"dataElementOperandID": "RvArfQFKdXe.mQXljwnUv90"
+		},
+		"XeRBhx8avQY": {
+			"code": "D40",
+			"core": true,
+			"name": "ANC 4 visits",
+			"trend": "constant",
+			"custom": false,
+			"dataID": "XeRBhx8avQY",
+			"missing": 90,
+			"dataSetID": "dONyxVsQyGS",
+			"comparison": "th",
+			"definition": "Fourth antenatal care visit",
+			"consistency": 15,
+			"extremeOutlier": 3,
+			"moderateOutlier": 2.5,
+			"dataElementOperandID": "XeRBhx8avQY.mQXljwnUv90"
+		},
+		"YRJjIr5tuD6": {
+			"code": "D2",
+			"core": true,
+			"name": "Institutional deliveries",
+			"trend": "constant",
+			"custom": false,
+			"dataID": "P4wZWfRpAuX",
+			"missing": 90,
+			"dataSetID": "GhdP8W2GorO",
+			"comparison": "th",
+			"definition": "Institutional deliveries",
+			"consistency": 15,
+			"extremeOutlier": 3,
+			"moderateOutlier": 2.5,
+			"dataElementOperandID": "YRJjIr5tuD6.mQXljwnUv90"
+		},
+		"YAAmrY2RPbZ": {
+			"code": "D29",
+			"core": false,
+			"name": "PNC visit within 2 weeks",
+			"trend": "constant",
+			"custom": false,
+			"dataID": "YAAmrY2RPbZ",
+			"missing": 90,
+			"dataSetID": "YmRjo8j3F3M",
+			"comparison": "th",
+			"definition": "First postnatal care visit",
+			"consistency": 33,
+			"extremeOutlier": 3,
+			"moderateOutlier": 2,
+			"dataElementOperandID": "YAAmrY2RPbZ.mQXljwnUv90"
+		},
+		"DvUwQScvSpc": {
+			"code": "D19",
+			"core": false,
+			"name": "TT 1 doses given to pregnant women",
+			"trend": "constant",
+			"custom": false,
+			"dataID": "ILceGBbPhTK",
+			"missing": 90,
+			"dataSetID": "rGDF7yDdhnj",
+			"comparison": "th",
+			"definition": "First dose of tetanus toxoid",
+			"consistency": 15,
+			"extremeOutlier": 3,
+			"moderateOutlier": 2,
+			"dataElementOperandID": "DvUwQScvSpc.mQXljwnUv90"
+		}
+	}
+}

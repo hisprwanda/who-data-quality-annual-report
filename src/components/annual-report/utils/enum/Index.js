@@ -12,6 +12,7 @@ const Actions = {
     changeOrgUnitSet: 'Change Organisation Unit Set',
     changePeriod: 'Change Period',
     precedingYearForReference: 'Preceding year for reference',
-    changeOrgUnitLevel: 0
+    changeOrgUnitLevel: 0,
+    changeDatasetThreshold: 'Change Dataset Threshold'
 }
 export default Actions

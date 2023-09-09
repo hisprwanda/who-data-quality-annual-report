@@ -1,0 +1,32 @@
+{
+	"dataElementsAndIndicators": {
+		"bcDTj5odXAg": {
+			"code": "D21",
+			"comparison": "ou",
+			"consistency": 33,
+			"core": false,
+			"custom": false,
+			"dataElementOperandID": "bcDTj5odXAg",
+			"dataID": "bcDTj5odXAg",
+			"dataSetID": "YmRjo8j3F3M",
+			"definition": "HIV tests performed",
+			"extremeOutlier": 3,
+			"missing": 90,
+			"moderateOutlier": 2,
+			"name": "HIV tests done",
+			"trend": "constant"
+		}
+	},
+	"dataSets:": {
+		"YmRjo8j3F3M": {
+			"comparison": "ou",
+			"consistencyThreshold": 33,
+			"id": "Qx2g5JtPbJP",
+			"name": "01 Outpatient Consultations (OPD)",
+			"periodType": "Monthly",
+			"threshold": 90,
+			"timelinessThreshold": 75,
+			"trend": "constant"
+		}
+	}
+}
