@@ -176,41 +176,11 @@ const Report = function () {
 
   // Method used to generate the object used to generate the report
   const generateReport = () => {
-
-    // Variable used to store the preveious years for reference
-    //const yearsForReference = storeStateSelector.selectedValue.precedingYearForReference
-    // Variable used to store the selected organization unit array
-    //const selectedOrgUnitLevel = storeStateSelector.selectedValue.orgUnitLevel
-    // Variable used to store the selected period
-    //const userSelectedPeriod = storeStateSelector.period.selectedPeriod
-    // Variable used to store the periods calculated through the loop
-    //let periods = []
-    // Variable used to store the dataset extracted from the configuration
-    //const dataSets = storeStateSelector.selectedValue.configuredDataset
-    //const dataElements = storeStateSelector.selectedValue.element
-    //const orgUnits = storeStateSelector.selectedValue.orgUnitIDSet
-    //const orgUnitLevel = `LEVEL-${selectedOrgUnitLevel}`
-    //let userSelectedPeriodCopy = userSelectedPeriod
-    //let minYear = userSelectedPeriod - yearsForReference
-    
-    // Loop used to generate the period, the minYear is the minimum year
-    // while(userSelectedPeriodCopy >= minYear) {
-    //   periods = [...periods, userSelectedPeriodCopy]
-    //   userSelectedPeriodCopy -= 1
-    // }
-    // The object used for the generating the report
-    // let requestObj = {
-    //   periods,
-    //   currentPeriod: userSelectedPeriod,
-    //   dataSets,
-    //   dataElements,
-    //   orgUnits,
-    //   orgUnitLevel
-    // }
-    // console.log(requestObj)    
-    let {groupName, groupCode} = selectedElementStore
-    const configurationAnalytics = getConfigObjectsForAnalytics(data.results, groupCode)
-    console.log(configurationAnalytics)
+    // Variables to capture the group name and group code
+    const {groupCode} = selectedElementStore
+    // Variable used to get the config
+    const configurationForAnalytics = getConfigObjectsForAnalytics(data.results, groupCode)
+  
   }
   return (
     <div className="reportContainer">
