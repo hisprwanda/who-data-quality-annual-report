@@ -212,7 +212,6 @@ const Report = function () {
                 style={{ width: "100%", display: "block" }}
               >
                 <ul>
-
                   {_settings?.map((element, info) => {
                     return (
                       <li
