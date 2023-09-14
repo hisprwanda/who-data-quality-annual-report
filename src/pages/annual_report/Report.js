@@ -180,7 +180,6 @@ const Report = function () {
     const {groupCode} = selectedElementStore
     // Variable used to get the config
     const configurationForAnalytics = getConfigObjectsForAnalytics(data.results, groupCode)
-  
   }
   return (
     <div className="reportContainer">
