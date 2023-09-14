@@ -13,6 +13,8 @@ const Actions = {
     changePeriod: 'Change Period',
     precedingYearForReference: 'Preceding year for reference',
     changeOrgUnitLevel: 0,
-    addOrganizationUnitGroup: 'Add Organization Unit Group'
+    addOrganizationUnitGroup: 'Add Organization Unit Group',
+    selectPeriodType: 'Select period type',
+    selectPeriod: 'Select period'
 }
 export default Actions

@@ -22,11 +22,7 @@ import {
 
   import '../Modals/edit_modal_styles.css'
 import { filterSelectedMetadata, getNumeratorMemberGroups } from '../../utils/numeratorsMetadataData';
-<<<<<<< HEAD
 import { generateNumeratorCode } from '../../utils/utils.js';
-=======
-import { generateNumeratorCode } from '../../utils/utils';
->>>>>>> 036d725 (getting data elemtns/indicators and datasets using a group id)
 
 
 const dataElementGroupsQuery = {
