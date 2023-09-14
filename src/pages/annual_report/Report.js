@@ -28,6 +28,7 @@ import { SettingsProcessor } from "../../utils/SettingsProcessor";
 import { OrganizationUnitGroupComponent } from "../../components/annual-report/OrganizationUnitGroup";
 import { OrganizationUnitLevelComponent } from "../../components/annual-report/OrganizationUnitLevel";
 import Actions from "../../components/annual-report/utils/enum/Index";
+import { getConfigObjectsForAnalytics } from "../../utils/utils";
 // End of imports
 
 // Start of the functional component definition
@@ -37,7 +38,7 @@ import Actions from "../../components/annual-report/utils/enum/Index";
   // 
 
 const Report = function () {
-  // Redux state selector hook
+  // Redux state selector hooks
   let selectedElementStore = useSelector((state) => state.selectedValue);
   let storeStateSelector = useSelector((state) => state);
   // Redux state dispatch hook
@@ -63,7 +64,7 @@ const Report = function () {
 
   let [reportStatus, setReportStatus] = useState(false);
 
-  let selectedItem = selectedElementStore.dataSet;
+  let selectedGroupName = selectedElementStore.groupName;
   let [filteredItem, setFilteredItem] = useState([]);
   let [elements, setElements] = useState();
   let [configuredDataSet, setConfiguredDataSet] = useState();
@@ -71,12 +72,10 @@ const Report = function () {
   let [orgUnitGroupVisibility, setOrgUnitGroupVisibility] = useState("none");
 
   let reportLoader = (orgUnit, period, group) => {
-    dispatch({ type: "Change Report View Status", payload: { status: true } });
+    dispatch({ type: Actions.changeReportViewStatus, payload: { status: true } });
   };
   let { loading, error, data } = useDataQuery(_dataStore, {}, {}, {}, {}, {});
   let orgUnitLevelResponse = useDataQuery(loadOrgUnitLevels);
-
-
 
   let settings = [];
   if (data) {
@@ -91,13 +90,13 @@ const Report = function () {
 
   useEffect(() => {
     dispatch({
-      type: "Change Configured Dataset",
+      type: Actions.changeConfiguredDataset,
       payload: { dataset: configuredDataSet },
     });
   }, [configuredDataSet]);
 
   useEffect(() => {
-    dispatch({ type: "Change Element", payload: { elements } });
+    dispatch({ type: Actions.changeElement, payload: { elements } });
   }, [elements]);
 
   useEffect(() => {
@@ -106,17 +105,18 @@ const Report = function () {
 
   // Definition of use effect hooks
   useEffect(() => {
-    let groups = data?.results.groups.filter((i) => i.code === selectedItem);
+    let groups = data?.results.groups.filter((i) => i.code === selectedGroupName);
     setFilteredItem(groups);
-    dispatch({ type: "Change Group", payload: selectedItem });
-  }, [selectedItem]);
+    dispatch({ type: Actions.changeGroup, payload: selectedGroupName });
+  }, [selectedGroupName]);
 
   useEffect(() => {
     reportStatus != reportStatus;
   }, [reportStatus]);
 
-  let setSelectedDataSet = function (chosenElement) {
-    dispatch({ type: "Change Dataset", payload: { el: chosenElement } });
+  // Function used to process the selected group, it gets the selected group names and code and dispatches action to redux
+  let setSelectedDataSet = function (selectedGroup, groupCode) {
+    dispatch({ type: Actions.changeDataset, payload: { group: selectedGroup, groupCode } });
   };
 
   //Loading organization unit group
@@ -125,7 +125,7 @@ const Report = function () {
     loadOrganizationUnitGroups()
       .then((org) => {
         dispatch({
-          type: "Add Organization Unit Group",
+          type: Actions.addOrganizationUnitGroup,
           payload: { group: org.data.organisationUnitGroups },
         });
         setOrganizationUnitGroup(org.data.organisationUnitGroups);
@@ -138,6 +138,7 @@ const Report = function () {
     });
   }, []);
 
+  // Process the selected the org unit group information
   let selectedGroupInfo = (e) => {
     e.persist();
     e.stopPropagation();
@@ -145,6 +146,7 @@ const Report = function () {
     setOrgUnitGroupVisibility("none");
   };
 
+  // Process the selected the org unit level information. 
   let selectedLevelInfo = (e) => {
     e.persist();
     e.stopPropagation();
@@ -158,12 +160,14 @@ const Report = function () {
   let [_orgUnitVisibility, _setOrgUnitVisibility] = useState(false);
   let [_periodVisibility, _setPeriodVisibility] = useState(false);
 
+  // Toggle the visibility of the selected org unit level
   const toggleSelectedLevel = (e) => {
     e.persist();
     setOrgUnitLevelVisibility((prev) => (prev === "none" ? "flex" : "none"));
     setOrgUnitGroupVisibility("none");
   };
 
+  // Toggle the visibility of the selected org unit group
   const toggleSelectedGroup = (e) => {
     e.persist();
     setOrgUnitGroupVisibility((prev) => (prev === "none" ? "flex" : "none"));
@@ -174,36 +178,39 @@ const Report = function () {
   const generateReport = () => {
 
     // Variable used to store the preveious years for reference
-    const yearsForReference = storeStateSelector.selectedValue.precedingYearForReference
+    //const yearsForReference = storeStateSelector.selectedValue.precedingYearForReference
     // Variable used to store the selected organization unit array
-    const selectedOrgUnitLevel = storeStateSelector.selectedValue.orgUnitLevel
+    //const selectedOrgUnitLevel = storeStateSelector.selectedValue.orgUnitLevel
     // Variable used to store the selected period
-    const userSelectedPeriod = storeStateSelector.period.selectedPeriod
+    //const userSelectedPeriod = storeStateSelector.period.selectedPeriod
     // Variable used to store the periods calculated through the loop
-    let periods = []
+    //let periods = []
     // Variable used to store the dataset extracted from the configuration
-    const dataSets = storeStateSelector.selectedValue.configuredDataset
-    const dataElements = storeStateSelector.selectedValue.element
-    const orgUnits = storeStateSelector.selectedValue.orgUnitIDSet
-    const orgUnitLevel = `LEVEL-${selectedOrgUnitLevel}`
-    let userSelectedPeriodCopy = userSelectedPeriod
-    let minYear = userSelectedPeriod - yearsForReference
+    //const dataSets = storeStateSelector.selectedValue.configuredDataset
+    //const dataElements = storeStateSelector.selectedValue.element
+    //const orgUnits = storeStateSelector.selectedValue.orgUnitIDSet
+    //const orgUnitLevel = `LEVEL-${selectedOrgUnitLevel}`
+    //let userSelectedPeriodCopy = userSelectedPeriod
+    //let minYear = userSelectedPeriod - yearsForReference
     
     // Loop used to generate the period, the minYear is the minimum year
-    while(userSelectedPeriodCopy >= minYear) {
-      periods = [...periods, userSelectedPeriodCopy]
-      userSelectedPeriodCopy -= 1
-    }
+    // while(userSelectedPeriodCopy >= minYear) {
+    //   periods = [...periods, userSelectedPeriodCopy]
+    //   userSelectedPeriodCopy -= 1
+    // }
     // The object used for the generating the report
-    let requestObj = {
-      periods,
-      currentPeriod: userSelectedPeriod,
-      dataSets,
-      dataElements,
-      orgUnits,
-      orgUnitLevel
-    }
-    console.log(requestObj)
+    // let requestObj = {
+    //   periods,
+    //   currentPeriod: userSelectedPeriod,
+    //   dataSets,
+    //   dataElements,
+    //   orgUnits,
+    //   orgUnitLevel
+    // }
+    // console.log(requestObj)    
+    let {groupName, groupCode} = selectedElementStore
+    const configurationAnalytics = getConfigObjectsForAnalytics(data.results, groupCode)
+    console.log(configurationAnalytics)
   }
   return (
     <div className="reportContainer">
@@ -227,7 +234,7 @@ const Report = function () {
           <div>
             <SelectorBarItem
               label="Group"
-              value={selectedItem}
+              value={selectedGroupName}
               open={_dataGroupVisibility}
               setOpen={() => _setDataGroupVisibility((prev) => !prev)}
             >
@@ -236,13 +243,15 @@ const Report = function () {
                 style={{ width: "100%", display: "block" }}
               >
                 <ul>
+
                   {_settings?.map((element, info) => {
                     return (
                       <li
                         key={element.code}
+                        g-code={element.code}
                         onClick={(e) => {
                           e.persist();
-                          setSelectedDataSet(e.target.textContent);
+                          setSelectedDataSet(e.target.textContent, e.target.getAttribute('g-code'));
                         }}
                       >
                         {element.name}

@@ -16,7 +16,6 @@ const reducer = function (state = currentState, action) {
       };
 
     case Actions.periodSelection:
-      console.log(action.payload, action.type)
       return {
         ...state,
         period: {
@@ -63,7 +62,8 @@ const reducer = function (state = currentState, action) {
         ...state,
         selectedValue: {
           ...state.selectedValue,
-          dataSet: action.payload.el,
+          groupName: action.payload.group,
+          groupCode: action.payload.groupCode
         }
       };
 

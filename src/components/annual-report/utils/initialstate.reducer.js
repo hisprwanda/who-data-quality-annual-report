@@ -11,7 +11,8 @@ const currentState = {
             children: 0
         },
         period: '',
-        dataSet: '',
+        groupName: '',
+        groupCode: '',
         element: [],
         configuredDataset: [],
         orgUnitSet: [],
