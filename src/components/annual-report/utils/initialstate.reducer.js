@@ -26,7 +26,10 @@ const currentState = {
             year: year
         },
         relativePeriod: 'Day',
-        selectedPeriod: []
+        selectedPeriod: [],
+        selectedPeriodIsoValue: '',
+        selectedPeriodType: 'Select Period Type',
+        selectedPeriodTextContent: 'Select Period'
     },
     reportViewStatus: false,
     

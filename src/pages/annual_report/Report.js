@@ -44,6 +44,8 @@ const Report = function () {
   // Redux state dispatch hook
   let dispatch = useDispatch();
 
+  console.log(storeStateSelector)
+
   // End of hook for managing org unit modal
   let [_dataStore, setDataStore] = useState(loadDataStore);
 
@@ -180,6 +182,7 @@ const Report = function () {
     const {groupCode} = selectedElementStore
     // Variable used to get the config
     const configurationForAnalytics = getConfigObjectsForAnalytics(data.results, groupCode)
+    console.log(configurationForAnalytics)
   }
   return (
     <div className="reportContainer">

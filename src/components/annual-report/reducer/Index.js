@@ -20,7 +20,8 @@ const reducer = function (state = currentState, action) {
         ...state,
         period: {
           ...state.period,
-          selectedPeriod: action.payload.period,
+          selectedPeriod: action.payload.periodTextContent,
+          selectedPeriodIsoValue: action.payload.periodIsoValue
         },
       };
 
