@@ -113,7 +113,7 @@ const Report = function () {
   const getPeriodsFromSelectedPeriodAndPrecedingYear = (date, precedingYear) => {
     let _yearSection = date?.length > 4 ? date.substring(0, 4): date
     const _monthSection = date?.length > 4 ? date.substring(4, date.length) : ''
-    let _periods = []
+    let _periods = [storeStateSelector.period.selectedPeriodIsoValue]
     // Using the number of preceding years and the selected period in order to get the array of the preceding years
     if(parseInt(precedingYear) > 0){
       for(let i = 0; i < parseInt(precedingYear); i++) {
@@ -180,15 +180,38 @@ const Report = function () {
 
   // Method used to generate the object used to generate the report
   const generateReport = () => {
+    
     // Variables to capture the group name and group code
     const {groupCode} = selectedElementStore
     // Variable used to get the config
     const configurationForAnalytics = getConfigObjectsForAnalytics(data.results, groupCode)
     // Variable for the preceding year for reference
     const _precedingYearForReference = storeStateSelector.selectedValue.precedingYearForReference
+    // Variable for selected period
     const _selectedPeriod = storeStateSelector.period.selectedPeriodIsoValue
+    // Variable for processed periods calcutalated using selected period and preceding year for reference
     const _periods = getPeriodsFromSelectedPeriodAndPrecedingYear(_selectedPeriod, _precedingYearForReference)
-
+    // Calculation of the information to be used for the generation of the report
+    
+    //******************************
+    const _currentPeriod = _periods.length > 0 ? _periods[0] : []
+    const _datasets = Object.keys(configurationForAnalytics.dataSets)
+    const _dataElements = Object.keys(configurationForAnalytics.dataElementsAndIndicators)
+    const _orgUnits = storeStateSelector.selectedValue.orgUnitIDSet
+    const _orgUnitLevel = storeStateSelector.selectedValue.orgUnitLevel
+    //******************************
+    
+    // The object that structures the reponse used to generate the report
+    const _response =  {
+      dataSets: _datasets,
+      dataElements: _dataElements,
+      orgUnits: _orgUnits,
+      orgUnitLevel: `LEVEL-${_orgUnitLevel}`,
+      periods: _periods,
+      currentPeriod: _currentPeriod
+    }
+    console.log(_response)
+  
   }
  
   return (
