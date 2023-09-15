@@ -1,127 +1,154 @@
-import { Action } from "rxjs/internal/scheduler/Action";
-import Actions from "../utils/enum/Index";
-import currentState from "../utils/initialstate.reducer";
+import { Action } from 'rxjs/internal/scheduler/Action'
+import Actions from '../utils/enum/Index'
+import currentState from '../utils/initialstate.reducer'
 
+// Reducer function used to manage the redux store
 const reducer = function (state = currentState, action) {
-  switch (action.type) {
-    case Actions.changeFixedPeriod:
-      return {
-        ...state,
-        period: {
-          fixedPeriod: {
-            ...state.period.fixedPeriod,
-            ...{ year: action.payload.year, period: action.payload.period },
-          },
-        },
-      };
+    switch (action.type) {
+        // this case runs when the user changes the fixed period
+        case Actions.changeFixedPeriod:
+            return {
+                ...state,
+                period: {
+                    fixedPeriod: {
+                        ...state.period.fixedPeriod,
+                        ...{
+                            year: action.payload.year,
+                            period: action.payload.period,
+                        },
+                    },
+                },
+            }
 
-    case Actions.periodSelection:
-      return {
-        ...state,
-        period: {
-          ...state.period,
-          selectedPeriod: action.payload.periodTextContent,
-          selectedPeriodIsoValue: action.payload.periodIsoValue
-        },
-      };
+        // This case runs when a user selects the period in the context selector
+        case Actions.periodSelection:
+            return {
+                ...state,
+                period: {
+                    ...state.period,
+                    selectedPeriod: action.payload.periodTextContent,
+                    selectedPeriodIsoValue: action.payload.periodIsoValue,
+                    selectedPeriodTextContent: action.payload.periodTextContent,
+                },
+            }
 
-    case Actions.changeGroup:
-      return {
-        ...state,
-        selectedValue: {
-          ...state.selectedValue,
-          dataSet: action.payload,
-        }
-      };
+        // This is run whenever a user changes the period type in the context selector
+        case Actions.changeSelectedPeriodTypeText:
+            return {
+                ...state,
+                period: {
+                    ...state.period,
+                    selectedPeriodTypeTextContent: action.payload.periodType,
+                },
+            }
 
-    case Actions.changeOrgUnit:
-      return {
-        ...state,
-        selectedValue: {
-          ...state.selectedValue,
-          orgUnit: {
-            ...state.selectedValue.orgUnit,
-            displayName: action.payload.displayName,
-            path: action.payload.path,
-            id: action.payload.id,
-            children: action.payload.children,
-          }
-        },
-      };
+        // This is run whenever a user changes the period in the context selector
+        case Actions.changeSelectedPeriodText:
+            return {
+                ...state,
+                period: {
+                    ...state.period,
+                    selectedPeriodTextContent: action.payload.period,
+                },
+            }
 
-    case Actions.changeOrgUnitSet:
-      return {
-        ...state,
-        selectedValue: {
-          ...state.selectedValue,
-          orgUnitSet: action.payload.ou,
-        }
-      };
+        case Actions.changeGroup:
+            return {
+                ...state,
+                selectedValue: {
+                    ...state.selectedValue,
+                    dataSet: action.payload,
+                },
+            }
 
-    case Actions.changeDataset:
-      return {
-        ...state,
-        selectedValue: {
-          ...state.selectedValue,
-          groupName: action.payload.group,
-          groupCode: action.payload.groupCode
-        }
-      };
+        case Actions.changeOrgUnit:
+            return {
+                ...state,
+                selectedValue: {
+                    ...state.selectedValue,
+                    orgUnit: {
+                        ...state.selectedValue.orgUnit,
+                        displayName: action.payload.displayName,
+                        path: action.payload.path,
+                        id: action.payload.id,
+                        children: action.payload.children,
+                    },
+                },
+            }
 
-    case Actions.changeReportViewStatus:
-      return {
-        ...state,
-        reportViewStatus: action.payload.status,
-      };
+        case Actions.changeOrgUnitSet:
+            return {
+                ...state,
+                selectedValue: {
+                    ...state.selectedValue,
+                    orgUnitSet: action.payload.ou,
+                },
+            }
 
-    case Actions.changeElement:
-      return {
-        ...state,
-        selectedValue: {
-          ...state.selectedValue,
-          element: action.payload.elements,
-        },
-      };
+        case Actions.changeDataset:
+            return {
+                ...state,
+                selectedValue: {
+                    ...state.selectedValue,
+                    groupName: action.payload.group,
+                    groupCode: action.payload.groupCode,
+                },
+            }
 
-    case Actions.changeConfiguredDataset:
-      return {
-        ...state,
-        selectedValue: {
-          ...state.selectedValue,
-          configuredDataset: action.payload.dataset,
-        },
-      };
+        case Actions.changeReportViewStatus:
+            return {
+                ...state,
+                reportViewStatus: action.payload.status,
+            }
 
-    case Actions.precedingYearForReference:
-      return {
-        ...state,
-        selectedValue: {
-          ...state.selectedValue,
-          precedingYearForReference: action.payload.year
-        }
-      }
+        case Actions.changeElement:
+            return {
+                ...state,
+                selectedValue: {
+                    ...state.selectedValue,
+                    element: action.payload.elements,
+                },
+            }
 
-    case Actions.changeOrgUnitID:
-      return {
-        ...state,
-        selectedValue: {
-          ...state.selectedValue,
-          orgUnitIDSet: action.payload.id 
-        }
-      }
+        case Actions.changeConfiguredDataset:
+            return {
+                ...state,
+                selectedValue: {
+                    ...state.selectedValue,
+                    configuredDataset: action.payload.dataset,
+                },
+            }
 
-    case Actions.changeOrgUnitLevel:
-      return {
-        ...state,
-        selectedValue: {
-          ...state.selectedValue,
-          orgUnitLevel: action.payload.level
-        }
-      }
+        case Actions.precedingYearForReference:
+            return {
+                ...state,
+                selectedValue: {
+                    ...state.selectedValue,
+                    precedingYearForReference: action.payload.year,
+                },
+            }
 
-    default:
-      return state;
-  }
-};
+        case Actions.changeOrgUnitID:
+            return {
+                ...state,
+                selectedValue: {
+                    ...state.selectedValue,
+                    orgUnitIDSet: action.payload.id,
+                },
+            }
 
-export default reducer;
+        case Actions.changeOrgUnitLevel:
+            return {
+                ...state,
+                selectedValue: {
+                    ...state.selectedValue,
+                    orgUnitLevel: action.payload.level,
+                },
+            }
+
+        default:
+            return state
+    }
+}
+
+export default reducer

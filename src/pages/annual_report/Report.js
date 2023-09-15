@@ -7,28 +7,26 @@ The component to manage the period modal
 
 // Import of key features
 
-import { useState, useEffect } from "react";
-import React from "react";
-import MenuBar from "../../components/menu-bar/MenuBar";
-import "./style/report.css";
+
+import { useDataQuery } from "@dhis2/app-runtime";
 import { Button, SelectorBar, SelectorBarItem } from "@dhis2/ui";
+import React, { useState, useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import "./style/report.css";
+import down_allow from "../../assets/images/downarrow.png";
 import {
   loadDataStore,
-  loadOrgUnitLevels,
   loadOrganizationUnitGroups,
   loadOrganizationUnitLevels,
-} from "../../components/annual-report/datasource/dataset/dataset.source";
-import { useDataQuery } from "@dhis2/app-runtime";
-import { OrgUnitComponent } from "../../components/annual-report/OrgUnit.Component";
-import down_allow from "../../assets/images/downarrow.png";
-import ReportPreview from "../../components/annual-report/report-preview/ReportPreview";
-import { useDispatch, useSelector } from "react-redux";
-import PeriodComponent from "../../components/annual-report/period/Period.component";
-import { SettingsProcessor } from "../../utils/SettingsProcessor";
-import { OrganizationUnitGroupComponent } from "../../components/annual-report/OrganizationUnitGroup";
-import { OrganizationUnitLevelComponent } from "../../components/annual-report/OrganizationUnitLevel";
-import Actions from "../../components/annual-report/utils/enum/Index";
-import { getConfigObjectsForAnalytics } from "../../utils/utils";
+} from "../../components/annual-report/datasource/dataset/dataset.source.js";
+import { OrganizationUnitGroupComponent } from "../../components/annual-report/OrganizationUnitGroup.js";
+import { OrganizationUnitLevelComponent } from "../../components/annual-report/OrganizationUnitLevel.js";
+import { OrgUnitComponent } from "../../components/annual-report/OrgUnit.Component.js";
+import PeriodComponent from "../../components/annual-report/period/Period.component.js";
+import Actions from "../../components/annual-report/utils/enum/Index.js";
+import MenuBar from "../../components/menu-bar/MenuBar.js";
+import { SettingsProcessor } from "../../utils/SettingsProcessor.js";
+import { getConfigObjectsForAnalytics } from "../../utils/utils.js";
 // End of imports
 
 // Start of the functional component definition
@@ -39,52 +37,43 @@ import { getConfigObjectsForAnalytics } from "../../utils/utils";
 
 const Report = function () {
   // Redux state selector hooks
-  let selectedElementStore = useSelector((state) => state.selectedValue);
-  let storeStateSelector = useSelector((state) => state);
+  const selectedElementStore = useSelector((state) => state.selectedValue);
+  
+  const storeStateSelector = useSelector((state) => state);
   // Redux state dispatch hook
-  let dispatch = useDispatch();
+  const dispatch = useDispatch();
 
-  console.log(storeStateSelector)
-
-  // End of hook for managing org unit modal
-  let [_dataStore, setDataStore] = useState(loadDataStore);
+  const [_dataStore] = useState(loadDataStore);
 
   // State hook for settings
-  let [_settings, setSettings] = useState([]);
+  const [_settings, setSettings] = useState([]);
   // End of the hook for managing settings
 
   // State for organization groups
-  let [organizationUnitGroup, setOrganizationUnitGroup] = useState([]);
-  let [organizationUnitLevel, setOrganizationUnitLevel] = useState([]);
+  const [organizationUnitGroup, setOrganizationUnitGroup] = useState([]);
+  const [organizationUnitLevel, setOrganizationUnitLevel] = useState([]);
 
   // Hook for managing levels
-  let [selectedLevel, setSelectedLevel] = useState("Select Levels");
+  const [selectedLevel, setSelectedLevel] = useState("Select Levels");
   // Hook for managing groups
-  let [selectedGroup, setSelectedGroup] = useState("Select Groups");
+  const [selectedGroup, setSelectedGroup] = useState("Select Groups");
 
-  let [orgUnitLevelNum, setOrgUnitLevelNum] = useState(0)
+  const [orgUnitLevelNum, setOrgUnitLevelNum] = useState(0)
 
-  let [reportStatus, setReportStatus] = useState(false);
+  const [reportStatus] = useState(false);
 
-  let selectedGroupName = selectedElementStore.groupName;
-  let [filteredItem, setFilteredItem] = useState([]);
-  let [elements, setElements] = useState();
-  let [configuredDataSet, setConfiguredDataSet] = useState();
-  let [orgUnitLevelVisibility, setOrgUnitLevelVisibility] = useState("none");
-  let [orgUnitGroupVisibility, setOrgUnitGroupVisibility] = useState("none");
+  const selectedGroupName = selectedElementStore.groupName;
+  const [elements, setElements] = useState();
+  const [configuredDataSet, setConfiguredDataSet] = useState();
+  const [orgUnitLevelVisibility, setOrgUnitLevelVisibility] = useState("none");
+  const [orgUnitGroupVisibility, setOrgUnitGroupVisibility] = useState("none");
 
-  let reportLoader = (orgUnit, period, group) => {
-    dispatch({ type: Actions.changeReportViewStatus, payload: { status: true } });
-  };
-  let { loading, error, data } = useDataQuery(_dataStore, {}, {}, {}, {}, {});
-  let orgUnitLevelResponse = useDataQuery(loadOrgUnitLevels);
+  const { loading, error, data } = useDataQuery(_dataStore, {}, {}, {}, {}, {});
+  loading && console.log(loading)
+  error && console.log(error)
 
-  let settings = [];
-  if (data) {
-    settings = SettingsProcessor(data);
-  }
   useEffect(() => {
-    let settings = data !== undefined ? SettingsProcessor(data) : [];
+    const settings = data !== undefined ? SettingsProcessor(data) : [];
     setSettings(settings.setting);
     setElements(Array.from(new Set(settings.elements)));
     setConfiguredDataSet(Array.from(new Set(settings.dataset)));
@@ -107,8 +96,7 @@ const Report = function () {
 
   // Definition of use effect hooks
   useEffect(() => {
-    let groups = data?.results.groups.filter((i) => i.code === selectedGroupName);
-    setFilteredItem(groups);
+    //setFilteredItem(groups);
     dispatch({ type: Actions.changeGroup, payload: selectedGroupName });
   }, [selectedGroupName]);
 
@@ -117,9 +105,24 @@ const Report = function () {
   }, [reportStatus]);
 
   // Function used to process the selected group, it gets the selected group names and code and dispatches action to redux
-  let setSelectedDataSet = function (selectedGroup, groupCode) {
+  const setSelectedDataSet = function (selectedGroup, groupCode) {
     dispatch({ type: Actions.changeDataset, payload: { group: selectedGroup, groupCode } });
   };
+
+  // Utils function used to process the date in iso format, this accepts the date in iso format, preceding year and returns an array of preceding years
+  const getPeriodsFromSelectedPeriodAndPrecedingYear = (date, precedingYear) => {
+    let _yearSection = date?.length > 4 ? date.substring(0, 4): date
+    const _monthSection = date?.length > 4 ? date.substring(4, date.length) : ''
+    let _periods = []
+    // Using the number of preceding years and the selected period in order to get the array of the preceding years
+    if(parseInt(precedingYear) > 0){
+      for(let i = 0; i < parseInt(precedingYear); i++) {
+        _yearSection -= 1
+        _periods = [..._periods, `${_yearSection}${_monthSection}`]
+      }
+    }
+    return _periods
+  }
 
   //Loading organization unit group
   useEffect(() => {
@@ -141,7 +144,7 @@ const Report = function () {
   }, []);
 
   // Process the selected the org unit group information
-  let selectedGroupInfo = (e) => {
+  const selectedGroupInfo = (e) => {
     e.persist();
     e.stopPropagation();
     setSelectedGroup(e.target.textContent);
@@ -149,7 +152,7 @@ const Report = function () {
   };
 
   // Process the selected the org unit level information. 
-  let selectedLevelInfo = (e) => {
+  const selectedLevelInfo = (e) => {
     e.persist();
     e.stopPropagation();
     setSelectedLevel(e.target.textContent);
@@ -157,10 +160,9 @@ const Report = function () {
     setOrgUnitLevelVisibility("none");
   };
 
-  let [periodVisibility, setPeriodVisibility] = useState("none");
-  let [_dataGroupVisibility, _setDataGroupVisibility] = useState(false);
-  let [_orgUnitVisibility, _setOrgUnitVisibility] = useState(false);
-  let [_periodVisibility, _setPeriodVisibility] = useState(false);
+  const [_dataGroupVisibility, _setDataGroupVisibility] = useState(false);
+  const [_orgUnitVisibility, _setOrgUnitVisibility] = useState(false);
+  const [_periodVisibility, _setPeriodVisibility] = useState(false);
 
   // Toggle the visibility of the selected org unit level
   const toggleSelectedLevel = (e) => {
@@ -182,8 +184,13 @@ const Report = function () {
     const {groupCode} = selectedElementStore
     // Variable used to get the config
     const configurationForAnalytics = getConfigObjectsForAnalytics(data.results, groupCode)
-    console.log(configurationForAnalytics)
+    // Variable for the preceding year for reference
+    const _precedingYearForReference = storeStateSelector.selectedValue.precedingYearForReference
+    const _selectedPeriod = storeStateSelector.period.selectedPeriodIsoValue
+    const _periods = getPeriodsFromSelectedPeriodAndPrecedingYear(_selectedPeriod, _precedingYearForReference)
+
   }
+ 
   return (
     <div className="reportContainer">
       <MenuBar />
@@ -215,7 +222,7 @@ const Report = function () {
                 style={{ width: "100%", display: "block" }}
               >
                 <ul>
-                  {_settings?.map((element, info) => {
+                  {_settings?.map((element) => {
                     return (
                       <li
                         key={element.code}

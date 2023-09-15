@@ -16,7 +16,7 @@ const Actions = {
     addOrganizationUnitGroup: 'Add Organization Unit Group',
     selectPeriodType: 'Select period type',
     selectPeriod: 'Select period',
-    changeSelectedPeriodTypeText: 'Change Selected Period Type',
+    changeSelectedPeriodTypeText: 'Change Selected Period Type Text',
     changeSelectedPeriodText: 'Change Selected Period Text'
 }
 export default Actions

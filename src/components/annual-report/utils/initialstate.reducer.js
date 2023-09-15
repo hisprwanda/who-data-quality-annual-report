@@ -28,7 +28,7 @@ const currentState = {
         relativePeriod: 'Day',
         selectedPeriod: [],
         selectedPeriodIsoValue: '',
-        selectedPeriodType: 'Select Period Type',
+        selectedPeriodTypeTextContent: 'Select Period Type',
         selectedPeriodTextContent: 'Select Period'
     },
     reportViewStatus: false,
