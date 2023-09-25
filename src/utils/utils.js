@@ -1,6 +1,4 @@
-// import mappedConfigurations from '../data/sample_configuration_map.json'
-// import reportQueryResponse from '../data/sample_response_section_1.json'
-
+// generate a new numerator code
 export const generateNumeratorCode = (numerators) => {
     if (numerators.length == 0) {
         return 'C' + '1'
@@ -82,74 +80,114 @@ export const getConfigObjectsForAnalytics = (configurations, groupCode) => {
     return configsObj
 }
 
-// function to structure analytics responses into different report sections as json objects using mapped configurations and chosen period
-export const getReportSectionsData = (
-    reportQueryResponse,
-    mappedConfigurations,
-    period
-) => {
-    if (!reportQueryResponse || !mappedConfigurations) {
-        return {}
+// gets a list of retions in which the reporting rate score was lower than the threshold
+const getRegionsWithLowScore = (filterd_datasets, key) => {
+    const dataset = filterd_datasets[key]
+    if (!dataset) {
+        return [] // Return an empty array if the key is not found
     }
 
-    const reportSectionsData = {
-        section1: {
-            section1A: [
-                getFacilityReportingData(
-                    reportQueryResponse.reporting_rate_over_all_org_units,
-                    reportQueryResponse.reporting_rate_by_org_unit_level,
-                    mappedConfigurations,
-                    period,
-                    'completeness'
-                ), // list of objects for every dataset selected (regarding completeness)
-            ],
-            section1B: [
-                getFacilityReportingData(
-                    reportQueryResponse.reporting_rate_over_all_org_units,
-                    reportQueryResponse.reporting_rate_by_org_unit_level,
-                    mappedConfigurations,
-                    period,
-                    'timeliness'
-                ), // list of objects for every dataset selected (regarding completeness)
-            ],
-        },
-    }
+    const regionsWithLowScore = dataset
+        .filter((entry) => parseFloat(entry.score) < entry.threshold)
+        .map((entry) => entry.orgUnitLevelsOrGroups)
 
-    return reportSectionsData
+    return regionsWithLowScore
 }
 
-const getFacilityReportingData = (
-    reporting_rate_over_all_org_units,
-    reporting_rate_by_org_unit_level,
+// returns a JSON formatted object from the table-like format from analytics
+const getJsonObjectsFormatFromTableFormat = ({
+    headers,
+    rows,
+    metaData,
+    mappedConfigurations,
+    calculatingFor,
+}) => {
+    const restructuredData = {}
+
+    for (const row of rows) {
+        const rowData = {}
+        const ouHeaderIndex = headers.map((header) => header.name).indexOf('ou')
+        const dsNameIndex = headers.map((header) => header.name).indexOf('dx')
+
+        for (let i = 0; i < headers.length; i++) {
+            const header = headers[i]
+            const columnName = header.name
+            const columnValue = row[i]
+            // Add the key-value pair to the row data object
+            rowData[columnName] = columnValue
+        }
+
+        //
+        rowData['orgUnitLevelsOrGroups'] =
+            metaData.items[row[ouHeaderIndex]].name
+        rowData['dataset_name'] =
+            metaData.items[row[dsNameIndex]].name +
+            (calculatingFor == 'completeness' ? '' : ' on time')
+        const currentDataSetId = row[0].split('.')[0]
+        if (calculatingFor == 'completeness') {
+            rowData['threshold'] =
+                mappedConfigurations.dataSets[currentDataSetId].threshold
+        } else if (calculatingFor == 'timeliness') {
+            rowData['threshold'] =
+                mappedConfigurations.dataSets[
+                    currentDataSetId
+                ].timelinessThreshold
+        }
+
+        const dx = rowData.dx.split('.')[0]
+        const pe = rowData.pe
+
+        if (!restructuredData[dx]) {
+            restructuredData[dx] = {}
+        }
+
+        if (!restructuredData[dx][pe]) {
+            restructuredData[dx][pe] = []
+        }
+
+        restructuredData[dx][pe].push({
+            dataset_name: rowData.dataset_name,
+            orgUnitLevelsOrGroups: rowData.orgUnitLevelsOrGroups,
+            ou: rowData.ou,
+            score: rowData.value,
+            threshold: rowData.threshold,
+        })
+    }
+    return restructuredData
+}
+
+const getFacilityReportingData = ({
+    allOrgUnitsData,
+    byOrgUnitLevelData,
     mappedConfigurations,
     period,
-    calculatingFor
-) => {
+    calculatingFor,
+}) => {
     // Extract key data from the analytics response
-    const headers_overall = reporting_rate_over_all_org_units.headers
-    const rows_overall = reporting_rate_over_all_org_units.rows
-    const metaData_overall = reporting_rate_over_all_org_units.metaData
+    const headers_overall = allOrgUnitsData.headers
+    const rows_overall = allOrgUnitsData.rows
+    const metaData_overall = allOrgUnitsData.metaData
 
-    const headers_level = reporting_rate_by_org_unit_level.headers
-    const rows_level = reporting_rate_by_org_unit_level.rows
-    const metaData_level = reporting_rate_by_org_unit_level.metaData
+    const headers_level = byOrgUnitLevelData.headers
+    const rows_level = byOrgUnitLevelData.rows
+    const metaData_level = byOrgUnitLevelData.metaData
 
     const reporting_rate_over_all_org_units_formatted =
-        getJsonObjectsFormatFromTableFormat(
-            headers_overall,
-            rows_overall,
-            metaData_overall,
-            mappedConfigurations,
-            calculatingFor
-        )
+        getJsonObjectsFormatFromTableFormat({
+            headers: headers_overall,
+            rows: rows_overall,
+            metaData: metaData_overall,
+            mappedConfigurations: mappedConfigurations,
+            calculatingFor: calculatingFor,
+        })
     const reporting_rate_by_org_unit_level_formatted =
-        getJsonObjectsFormatFromTableFormat(
-            headers_level,
-            rows_level,
-            metaData_level,
-            mappedConfigurations,
-            calculatingFor
-        )
+        getJsonObjectsFormatFromTableFormat({
+            headers: headers_level,
+            rows: rows_level,
+            metaData: metaData_level,
+            mappedConfigurations: mappedConfigurations,
+            calculatingFor: calculatingFor,
+        })
 
     // filtering data (overall) by provided period
     const filteredData_overall = {}
@@ -169,7 +207,7 @@ const getFacilityReportingData = (
         }
     }
 
-    // updating the object with regions list, divergent count & divergent percentage
+    // updating the object with orgUnitLevelsOrGroups list, divergent count & divergent percentage
     for (const key in filteredData_overall) {
         const regionsWithLowScore = getRegionsWithLowScore(
             filteredData_levels,
@@ -181,102 +219,61 @@ const getFacilityReportingData = (
         // Calculate "divergentRegionsCount" and "divergentRegionsPercent"
         const divergentRegionsCount = regionsWithLowScore.length
         const totalRegionsCount = dataset_levels.length
-        const divergentRegionsPercent =
-            (divergentRegionsCount / totalRegionsCount) * 100
+
+        // in case no region was under the threshold, the divergent % will remain zero
+        let divergentRegionsPercent = 0
+        if (totalRegionsCount > 0) {
+            divergentRegionsPercent =
+                (divergentRegionsCount / totalRegionsCount) * 100
+        }
 
         // Add the new properties to the dataset
         dataset.forEach((entry) => {
-            entry.threshold = entry.threshold + '%'
             entry.divergentRegionsCount = divergentRegionsCount
-            entry.divergentRegionsPercent = divergentRegionsPercent + '%'
-            entry.regions = regionsWithLowScore
+            entry.divergentRegionsPercent = divergentRegionsPercent
+            entry.orgUnitLevelsOrGroups = regionsWithLowScore
         })
     }
 
     return filteredData_overall
 }
 
-const getJsonObjectsFormatFromTableFormat = (
-    headers,
-    rows,
-    metaData,
+// function to structure analytics responses into different report sections as json objects using mapped configurations and chosen period
+export const getReportSectionsData = (
+    reportQueryResponse,
     mappedConfigurations,
-    calculatingFor
+    period
 ) => {
-    // object to store the  data transformed from tabular form to a regural json objects
-    const transformedData = {}
-    for (const row of rows) {
-        const rowData = {}
-
-        // loop through the "headers" array and map values to keys
-        for (let i = 0; i < headers.length; i++) {
-            const header = headers[i]
-            const columnName = header.name
-            const columnValue = row[i]
-
-            // Add the key-value pair to the row data object
-            rowData[columnName] = columnValue
-
-            // in the lines below we relly on the metadata object returned from DHIS2 analytics in which we query the definisions of some uids or values
-            // i.e: row[1] = lZsCb6y0KDX which is a uid of the ou, hence use .name to retrieve its name in the metadata object
-            rowData['regions'] = metaData.items[row[1]].name
-            rowData['dataset_name'] =
-                metaData.items[row[0]].name +
-                (calculatingFor == 'completeness' ? '' : ' on time')
-            const currentDataSetId = row[0].split('.')[0]
-            if (calculatingFor == 'completeness') {
-                rowData['threshold'] =
-                    mappedConfigurations.dataSets[currentDataSetId].threshold // get the dataset id from the row which is split from a value like this 'rGDF7yDdhnj.REPORTING_RATE'
-            } else if (calculatingFor == 'timeliness') {
-                rowData['threshold'] =
-                    mappedConfigurations.dataSets[
-                        currentDataSetId
-                    ].timelinessThreshold // get the dataset id from the row which is split from a value like this 'rGDF7yDdhnj.REPORTING_RATE'
-            }
-        }
-
-        // Use a unique identifier as the key in the transformed data object
-        const uniqueIdentifier = row.join('_') // You can choose a better identifier if available
-        transformedData[uniqueIdentifier] = rowData
+    if (!reportQueryResponse || !mappedConfigurations) {
+        return {}
     }
 
-    // structuring the transformed that by datasets and periods
-    const restructuredData = {}
-
-    for (const key in transformedData) {
-        const entry = transformedData[key]
-        const dx = entry.dx.split('.')[0]
-        const pe = entry.pe
-
-        if (!restructuredData[dx]) {
-            restructuredData[dx] = {}
-        }
-
-        if (!restructuredData[dx][pe]) {
-            restructuredData[dx][pe] = []
-        }
-
-        restructuredData[dx][pe].push({
-            dataset_name: entry.dataset_name,
-            regions: entry.regions,
-            ou: entry.ou,
-            score: entry.value,
-            threshold: entry.threshold,
-        })
+    const reportSectionsData = {
+        section1: {
+            section1A: [
+                getFacilityReportingData({
+                    allOrgUnitsData:
+                        reportQueryResponse.reporting_rate_over_all_org_units,
+                    byOrgUnitLevelData:
+                        reportQueryResponse.reporting_rate_by_org_unit_level,
+                    mappedConfigurations: mappedConfigurations,
+                    period: period,
+                    calculatingFor: 'completeness',
+                }), // list of objects for every dataset selected (regarding completeness)
+            ],
+            section1B: [
+                getFacilityReportingData({
+                    allOrgUnitsData:
+                        reportQueryResponse.reporting_rate_over_all_org_units,
+                    byOrgUnitLevelData:
+                        reportQueryResponse.reporting_rate_by_org_unit_level,
+                    mappedConfigurations: mappedConfigurations,
+                    period: period,
+                    calculatingFor: 'timeliness',
+                }), // list of objects for every dataset selected (regarding completeness)
+            ],
+        },
     }
 
-    return restructuredData
-}
-
-function getRegionsWithLowScore(filterd_datasets, key) {
-    const dataset = filterd_datasets[key]
-    if (!dataset) {
-        return [] // Return an empty array if the key is not found
-    }
-
-    const regionsWithLowScore = dataset
-        .filter((entry) => parseFloat(entry.score) < entry.threshold)
-        .map((entry) => entry.regions)
-
-    return regionsWithLowScore
+    return reportSectionsData
 }
