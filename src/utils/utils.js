@@ -122,12 +122,12 @@ const getJsonObjectsFormatFromTableFormat = ({
             metaData.items[row[ouHeaderIndex]].name
         rowData['dataset_name'] =
             metaData.items[row[dsNameIndex]].name +
-            (calculatingFor == 'completeness' ? '' : ' on time')
-        const currentDataSetId = row[0].split('.')[0]
-        if (calculatingFor == 'completeness') {
+            (calculatingFor === 'completeness' ? '' : ' on time')
+        const currentDataSetId = row[dsNameIndex].split('.')[0]
+        if (calculatingFor === 'completeness') {
             rowData['threshold'] =
                 mappedConfigurations.dataSets[currentDataSetId].threshold
-        } else if (calculatingFor == 'timeliness') {
+        } else if (calculatingFor === 'timeliness') {
             rowData['threshold'] =
                 mappedConfigurations.dataSets[
                     currentDataSetId
