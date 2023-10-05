@@ -11,10 +11,14 @@ const currentState = {
             children: 0
         },
         period: '',
-        dataSet: '',
+        groupName: '',
+        groupCode: '',
         element: [],
         configuredDataset: [],
-        orgUnitSet: ''
+        orgUnitSet: [],
+        orgUnitIDSet: [],
+        precedingYearForReference: 0,
+        orgUnitLevel: 0
     },
     period: {
         fixedPeriod: {
@@ -22,7 +26,10 @@ const currentState = {
             year: year
         },
         relativePeriod: 'Day',
-        selectedPeriod: []
+        selectedPeriod: [],
+        selectedPeriodIsoValue: '',
+        selectedPeriodTypeTextContent: 'Select Period Type',
+        selectedPeriodTextContent: 'Select Period'
     },
     reportViewStatus: false,
     
