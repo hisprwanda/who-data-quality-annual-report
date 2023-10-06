@@ -3,6 +3,7 @@ import "./style/select.css";
 
 import down_allow from "../../../assets/images/downarrow.png";
 
+// A functional component used to manage the selected periods
 export const SelectComponent = ({ options, onSelect, label, selectedOption, optionVisibility}) => {
 
   let [display, setDisplay] = useState('none')

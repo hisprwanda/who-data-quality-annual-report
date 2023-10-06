@@ -1,30 +1,31 @@
-import React, { useState, useEffect, useMemo, useCallback } from "react";
+import React from "react";
 import { OrganisationUnitTree } from "@dhis2/ui";
 import { useSelector, useDispatch } from "react-redux";
-import Actions from "./utils/enum/Index"; 
+import Actions from "./utils/enum/Index";
 
 export const OrgUnitComponent = () => {
+  
+  //A variable for referencing the redux store 
   let storeRef = useSelector((state) => state);
   let dispatch = useDispatch();
-  let [orgUnitSelectionSet, setOrgUnitSelectionSet] = useState(['Hjw70Lodtf2']);
-  let [orgUnitState, setOrgUnitState] = useState([]);
-  let [orgUnitCurrentSelection, setOrgUnitCurrentSelection] = useState('')
+  
+  const changeOrgUnitSelectionSet = (e) => {
+    const ouID = e.id;
+    const ouPath = e.path;
+    let storedOu = storeRef.selectedValue.orgUnitSet
+    let storedOuID = storeRef.selectedValue.orgUnitIDSet
+    let duplicateOrgUnitID = storedOuID.filter(o => o === ouID)
+    let duplicateOrgUnitPath = storedOu.filter(o => o === ouPath)
+    
+    // Removal of the duplicate orgunit paths and the org unit ids
+    storedOu = duplicateOrgUnitPath.length === 0 ? [...storedOu, ouPath] : storedOu.filter(o => o !== ouPath)
+    storedOuID = duplicateOrgUnitID.length === 0 ? [...storedOuID, ouID] : storedOuID.filter(o => o !== ouID)
 
-  let changeOrgUnitSelectionSet = useCallback((e) => {
-    setOrgUnitSelectionSet(prev => [...prev, e.path])
-    setOrgUnitCurrentSelection(e.path)
-  }, [orgUnitSelectionSet]);
-
-  useEffect(() => {
-    dispatch({type: Actions.changeOrgUnitSet, payload: {ou: orgUnitSelectionSet}})    
-  }, [orgUnitSelectionSet])
-
-  useEffect(() => {
-    let isSelectedValueExisting = orgUnitSelectionSet.filter(ou => ou === orgUnitCurrentSelection)
-    let processedOrgUnit = isSelectedValueExisting.length > 1 ? orgUnitSelectionSet.filter(ou => ou !== orgUnitCurrentSelection) : orgUnitSelectionSet
-    dispatch({type: Actions.changeOrgUnitSet, payload: {ou: processedOrgUnit}})
-    setOrgUnitSelectionSet(processedOrgUnit)
-  }, [orgUnitCurrentSelection])
+    // Dispatching the actions to the redux store
+    dispatch({type: Actions.changeOrgUnitID, payload: {id: storedOuID}})
+    dispatch({ type: Actions.changeOrgUnitSet, payload: { ou: storedOu } });
+  
+  };
 
   return (
     <div className="orgunit-parent-container">
@@ -33,7 +34,7 @@ export const OrgUnitComponent = () => {
         onChange={(e) => changeOrgUnitSelectionSet(e)}
         isUserDataViewFallback={true}
         roots={["Hjw70Lodtf2"]}
-        selected={orgUnitSelectionSet}
+        selected={storeRef.selectedValue.orgUnitSet}
       />
     </div>
   );

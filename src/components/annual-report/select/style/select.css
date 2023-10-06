@@ -9,7 +9,11 @@
 .select-header-section {
     display: flex;
     justify-content: space-between;
-    border: 1px solid #d5d2d2;
+    border: 1px solid #d5d2d2;  
+}
+
+.select-header-section:hover {
+    cursor: pointer;
 }
 
 .select-item-selected, .select-header-icon {
