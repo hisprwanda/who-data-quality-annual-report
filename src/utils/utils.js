@@ -94,6 +94,89 @@ const getRegionsWithLowScore = (filterd_datasets, key) => {
     return regionsWithLowScore
 }
 
+const getRegionsWithLowScoreForConsistencyOfDataset = ({
+    reporting_rate_by_org_unit_level_formatted,
+    datasetID,
+    overallDataset,
+    regions,
+    period,
+}) => {
+    // calculate the boundaries (range) with this overall score and threshold
+    const leftBoundary =
+        Math.round(
+            overallDataset.score * (1 - overallDataset.threshold / 100) * 100
+        ) / 100
+    const rightBoundary =
+        Math.round(
+            overallDataset.score * (1 + overallDataset.threshold / 100) * 100
+        ) / 100
+
+    const years = Object.keys(
+        reporting_rate_by_org_unit_level_formatted[datasetID]
+    )
+    const currentDataset = reporting_rate_by_org_unit_level_formatted[datasetID]
+
+    /* PROCEDURES  :
+        // as soon as u're here, u're deeling with one dataset in levels data, 
+        // so get it with the datasetID passed
+        // Find a way to get regions with their ids in an object like: 
+            const regions = [
+                {
+                    "id": "mPpiH4dNz9C",
+                    "name": "Region A"
+                },
+                {
+                    "id": "iQx6Edf0Xib",
+                    "name": "Region B"
+                },
+                {
+                    "id": "yeGIr7J6nX7",
+                    "name": "Region C"
+                },
+                {
+                    "id": "tmIma8xiccz",
+                    "name": "Region D"
+                }
+            ]
+
+        // Also get a list of years: USE Object.keys(dataset)
+        // Then do, for each region, loop through years objects and get the score for where the ou === to current region id and add it to a variable
+        // to calculare the  get the score for overall and pass it to this function in this loop  for (const key in filteredData_overall) 
+        // calculate the boundaries (range) with this overall score 
+        // repeat everywher then when u get this u can' do the percentages as for other sections 
+
+    */
+    const regionsWithDivergentScore = []
+    regions.forEach((region) => {
+        let regionScore = null
+        years.forEach((year) => {
+            if (year !== period) {
+                const score = parseFloat(
+                    currentDataset[year].find((item) => item.ou === region.id)
+                        .score
+                )
+                regionScore += score
+            }
+        })
+        // perform calculations to decide whether a region is between the boundaries
+        const chosenPeriodScore = parseFloat(
+            currentDataset[period].find((item) => item.ou === region.id).score
+        )
+
+        // devide by number of the previous regions which is (years - 1)
+        // TODO: remember to cater for devide by zero
+        const finalRegionScore =
+            (chosenPeriodScore / (regionScore / (years.length - 1))) * 100
+        if (
+            finalRegionScore < leftBoundary ||
+            finalRegionScore > rightBoundary
+        ) {
+            regionsWithDivergentScore.push(region.name)
+        }
+    })
+    return regionsWithDivergentScore
+}
+
 // returns a JSON formatted object from the table-like format from analytics
 const getJsonObjectsFormatFromTableFormat = ({
     headers,
@@ -120,23 +203,38 @@ const getJsonObjectsFormatFromTableFormat = ({
         //
         rowData['orgUnitLevelsOrGroups'] =
             metaData.items[row[ouHeaderIndex]].name
-        rowData['dataset_name'] =
-            metaData.items[row[dsNameIndex]].name
+        rowData['dataset_name'] = metaData.items[row[dsNameIndex]].name
         const currentDataSetId = row[0].split('.')[0]
-        if (calculatingFor == 'completeness') {
+        if (calculatingFor == 'section1A') {
             rowData['threshold'] =
                 mappedConfigurations.dataSets[currentDataSetId].threshold
-        } else if (calculatingFor == 'timeliness') {
+        } else if (calculatingFor == 'section1B') {
             rowData['threshold'] =
                 mappedConfigurations.dataSets[
                     currentDataSetId
                 ].timelinessThreshold
+        } else if (calculatingFor == 'section1C') {
+            // TODO: update this line below with correct info for threshold after getting correct data to use checking for regions with divergent score
+            // This is placeholder it because clarification is needed for which data to use checking for regions with divergent score
+            rowData['threshold'] =
+                mappedConfigurations.dataSets[currentDataSetId].threshold
+        } else if (calculatingFor == 'section1D') {
+            const comparison =
+                mappedConfigurations.dataSets[currentDataSetId].comparison
+            const trend = mappedConfigurations.dataSets[currentDataSetId].trend
+            rowData['threshold'] =
+                mappedConfigurations.dataSets[
+                    currentDataSetId
+                ].consistencyThreshold
+            rowData['trend'] = trend
 
-        // TODO: update this line below with correct info for threshold after getting correct data to use checking for regions with divergent score
-        // This is placeholder it because clarification is needed for which data to use checking for regions with divergent score
-        }else if (calculatingFor == 'completeness_of_indicator_data') {
-            rowData['threshold'] = 
-            mappedConfigurations.dataSets[currentDataSetId].threshold
+            if (comparison === 'th' && trend === 'constant') {
+                rowData['comparison'] = 'Current vs average'
+            } else if (comparison === 'th') {
+                rowData['comparison'] = 'Current vs forecast'
+            } else if (comparison == 'ou') {
+                rowData['comparison'] = metaData.items[row[ouHeaderIndex]].name // TODO: verify this a check if it is taking the upper most level of ou. i.e: National
+            }
         }
 
         const dx = rowData.dx.split('.')[0]
@@ -149,14 +247,25 @@ const getJsonObjectsFormatFromTableFormat = ({
         if (!restructuredData[dx][pe]) {
             restructuredData[dx][pe] = []
         }
-
-        restructuredData[dx][pe].push({
-            dataset_name: rowData.dataset_name,
-            orgUnitLevelsOrGroups: rowData.orgUnitLevelsOrGroups,
-            ou: rowData.ou,
-            score: rowData.value,
-            threshold: rowData.threshold,
-        })
+        if (calculatingFor == 'section1A' || calculatingFor == 'section1B') {
+            restructuredData[dx][pe].push({
+                dataset_name: rowData.dataset_name,
+                orgUnitLevelsOrGroups: rowData.orgUnitLevelsOrGroups,
+                ou: rowData.ou,
+                score: rowData.value,
+                threshold: rowData.threshold,
+            })
+        } else if (calculatingFor == 'section1D') {
+            restructuredData[dx][pe].push({
+                dataset_name: rowData.dataset_name,
+                trend: rowData.trend,
+                comparison: rowData.comparison,
+                threshold: rowData.threshold,
+                score: rowData.value,
+                orgUnitLevelsOrGroups: rowData.orgUnitLevelsOrGroups,
+                ou: rowData.ou,
+            })
+        }
     }
     return restructuredData
 }
@@ -165,27 +274,65 @@ const getJsonObjectsFormatFromTableFormat = ({
 const findNumerator = (numerators, dataElementID) => {
     // console.log('numes', numerators)
 
-    return numerators[dataElementID] || 
-        Object.values(numerators).find(item => {
-            const parts = item.dataElementOperandID.split('.');
-            return parts.length > 1 && parts[0] === dataElementID;
-        });
+    return (
+        numerators[dataElementID] ||
+        Object.values(numerators).find((item) => {
+            const parts = item.dataElementOperandID.split('.')
+            return parts.length > 1 && parts[0] === dataElementID
+        })
+    )
 }
 
 // const getExpectedValues = (dataSetID, expected_overall, period) => {
-//     return 
+//     return
 // }
-
 
 const filterDataByProvidedPeriod = (dataToFilter, period) => {
     const filteredData = {}
     for (const dx in dataToFilter) {
         if (dataToFilter[dx][period]) {
-            filteredData[dx] =
-                dataToFilter[dx][period]
+            filteredData[dx] = dataToFilter[dx][period]
         }
     }
     return filteredData
+}
+
+const filterDataByProvidedPeriodConsistency = (dataToFilter, period) => {
+    // Restructure the JSON object
+    const restructuredObject = {}
+
+    for (const datasetId in dataToFilter) {
+        const dataset = dataToFilter[datasetId]
+        const years = Object.keys(dataset)
+
+        // Initialize the total score for different periods
+        let totalScore = 0
+
+        // Loop through the years exclude the current one
+        years.forEach((year) => {
+            if (year !== period) {
+                const score = parseFloat(dataset[year][0].score)
+                totalScore += score
+            }
+        })
+
+        // the function to calculate the score using the previous chosen years
+        // TODO: remember to cater for devide by zero
+        const theScore =
+            (dataset[period][0].score / (totalScore / (years.length - 1))) * 100
+
+        // Create the currentYear object
+        const currentYear = [
+            {
+                ...dataset[period][0],
+                score: theScore.toFixed(1),
+            },
+        ]
+
+        restructuredObject[datasetId] = currentYear
+    }
+
+    return restructuredObject
 }
 
 // returns a JSON formatted object from the table-like format from analytics
@@ -195,7 +342,7 @@ const getJsonObjectsFormatFromTableFormat_DataValues = ({
     metaData,
     mappedConfigurations,
     expected_overall,
-    period
+    period,
 }) => {
     const restructuredData = {}
 
@@ -212,30 +359,37 @@ const getJsonObjectsFormatFromTableFormat_DataValues = ({
             rowData[columnName] = columnValue
         }
 
-        rowData['orgUnitLevelsOrGroups'] = metaData.items[row[ouHeaderIndex]].name
-        rowData['indicator_name'] =  metaData.items[row[dsNameIndex]].name
+        rowData['orgUnitLevelsOrGroups'] =
+            metaData.items[row[ouHeaderIndex]].name
+        rowData['indicator_name'] = metaData.items[row[dsNameIndex]].name
         const currentElementOrIndicatorUID = row[0].split('.')[0]
-        const currentNumerator = findNumerator(mappedConfigurations.dataElementsOrIndicators, currentElementOrIndicatorUID)
+        const currentNumerator = findNumerator(
+            mappedConfigurations.dataElementsOrIndicators,
+            currentElementOrIndicatorUID
+        )
 
         const dx = rowData.dx.split('.')[0]
         const pe = rowData.pe
 
         if (!restructuredData[dx]) {
             restructuredData[dx] = {}
-        } 
+        }
 
         if (!restructuredData[dx][pe]) {
             restructuredData[dx][pe] = []
         }
         // const expectedValues = getExpectedValues(currentNumerator.dataSetID, expected_overall, period )
-        const expectedValues = expected_overall[currentNumerator.dataSetID][period][0].score 
-        
-        //construct the object for each 
+        const expectedValues =
+            expected_overall[currentNumerator.dataSetID][period][0].score
+
+        //construct the object for each
         restructuredData[dx][pe].push({
-            threshold: currentNumerator.missing,   // get this from missing value calculate these above in rows
+            threshold: currentNumerator.missing, // get this from missing value calculate these above in rows
             expectedValues: parseFloat(expectedValues),
             actualValues: parseInt(rowData.value),
-            overallScore: parseFloat((( rowData.value / expectedValues ) * 100).toFixed(1)),
+            overallScore: parseFloat(
+                ((rowData.value / expectedValues) * 100).toFixed(1)
+            ),
             indicator_name: rowData.indicator_name,
             orgUnitLevelsOrGroups: rowData.orgUnitLevelsOrGroups,
             correspondingDatasetID: currentNumerator.dataSetID,
@@ -280,12 +434,17 @@ const getFacilityReportingData = ({
         })
 
     // filtering data (overall) by provided period
-    const filteredData_overall = filterDataByProvidedPeriod(reporting_rate_over_all_org_units_formatted, period)
+    const filteredData_overall = filterDataByProvidedPeriod(
+        reporting_rate_over_all_org_units_formatted,
+        period
+    )
 
     // filtering data (levels) by provided period
-    const filteredData_levels = filterDataByProvidedPeriod(reporting_rate_by_org_unit_level_formatted, period)
-    
-    // console.log('filteredData_overall', filteredData_overall)
+    const filteredData_levels = filterDataByProvidedPeriod(
+        reporting_rate_by_org_unit_level_formatted,
+        period
+    )
+
     // updating the object with orgUnitLevelsOrGroups list, divergent count & divergent percentage
     for (const key in filteredData_overall) {
         const regionsWithLowScore = getRegionsWithLowScore(
@@ -317,76 +476,84 @@ const getFacilityReportingData = ({
     return filteredData_overall
 }
 
-const getCompletenessOfIndicatorData = ({expected_reports_over_all_org_units,
-     count_of_data_values_over_all_org_units, reporting_timeliness_by_org_unit_level, mappedConfigurations, period}) => { 
-
+// get the data for section 1C
+const getCompletenessOfIndicatorData = ({
+    expected_reports_over_all_org_units,
+    count_of_data_values_over_all_org_units,
+    reporting_timeliness_by_org_unit_level,
+    mappedConfigurations,
+    period,
+}) => {
     // Extract key data from the analytics response
     const headers_expected = expected_reports_over_all_org_units.headers
     const rows_expected = expected_reports_over_all_org_units.rows
     const metaData_expected = expected_reports_over_all_org_units.metaData
-    
-    const headers_reporting_timeliness = reporting_timeliness_by_org_unit_level.headers
-    const rows_reporting_timeliness = reporting_timeliness_by_org_unit_level.rows
-    const metaData_reporting_timeliness = reporting_timeliness_by_org_unit_level.metaData
-    
+
+    const headers_reporting_timeliness =
+        reporting_timeliness_by_org_unit_level.headers
+    const rows_reporting_timeliness =
+        reporting_timeliness_by_org_unit_level.rows
+    const metaData_reporting_timeliness =
+        reporting_timeliness_by_org_unit_level.metaData
+
     const headers_data_values = count_of_data_values_over_all_org_units.headers
     const rows_data_values = count_of_data_values_over_all_org_units.rows
-    const metaData_data_values = count_of_data_values_over_all_org_units.metaData
-        
-        // exptected reports
-        const expected_reports_over_all_org_units_formatted =
-            getJsonObjectsFormatFromTableFormat({
-                headers: headers_expected,
-                rows: rows_expected,
-                metaData: metaData_expected,
-                mappedConfigurations: mappedConfigurations,
-                calculatingFor: '',
-            })
+    const metaData_data_values =
+        count_of_data_values_over_all_org_units.metaData
 
-        
-         // exptected reports
-         const reporting_timeliness_by_org_unit_level_formatted =
-         getJsonObjectsFormatFromTableFormat({
-             headers: headers_reporting_timeliness,
-             rows: rows_reporting_timeliness,
-             metaData: metaData_reporting_timeliness,
-             mappedConfigurations: mappedConfigurations,
-             calculatingFor: 'completeness_of_indicator_data',
-         })
-            
-        // data values
-        const count_of_data_values_over_all_org_units_formatted =
+    // exptected reports
+    const expected_reports_over_all_org_units_formatted =
+        getJsonObjectsFormatFromTableFormat({
+            headers: headers_expected,
+            rows: rows_expected,
+            metaData: metaData_expected,
+            mappedConfigurations: mappedConfigurations,
+            calculatingFor: '',
+        })
+
+    // exptected reports
+    const reporting_timeliness_by_org_unit_level_formatted =
+        getJsonObjectsFormatFromTableFormat({
+            headers: headers_reporting_timeliness,
+            rows: rows_reporting_timeliness,
+            metaData: metaData_reporting_timeliness,
+            mappedConfigurations: mappedConfigurations,
+            calculatingFor: 'section1C',
+        })
+
+    // data values
+    const count_of_data_values_over_all_org_units_formatted =
         getJsonObjectsFormatFromTableFormat_DataValues({
             headers: headers_data_values,
             rows: rows_data_values,
             metaData: metaData_data_values,
             mappedConfigurations: mappedConfigurations,
-            period:period,
-            expected_overall: expected_reports_over_all_org_units_formatted
+            period: period,
+            expected_overall: expected_reports_over_all_org_units_formatted,
         })
 
-      
-        // console.log('expected reports:', expected_reports_over_all_org_units_formatted)
-        // console.log('data values:', count_of_data_values_over_all_org_units_formatted)
-                
-        // filtering data (levels) by provided period
-        const filteredCountOfDataValues = filterDataByProvidedPeriod(count_of_data_values_over_all_org_units_formatted, period)
-        const filteredReportingTimeliness = filterDataByProvidedPeriod(reporting_timeliness_by_org_unit_level_formatted, period)
-        // console.log('count_of_data_values_over_all_org_units_formatted:', filteredCountOfDataValues)
-        // console.log('filteredrepotimeliness', filteredReportingTimeliness)
+    // filtering data (levels) by provided period
+    const filteredCountOfDataValues = filterDataByProvidedPeriod(
+        count_of_data_values_over_all_org_units_formatted,
+        period
+    )
+    const filteredReportingTimeliness = filterDataByProvidedPeriod(
+        reporting_timeliness_by_org_unit_level_formatted,
+        period
+    )
 
-
-        // updating the object with orgUnitLevelsOrGroups list, divergent count & divergent percentage
+    // updating the object with orgUnitLevelsOrGroups list, divergent count & divergent percentage
     for (const key in filteredCountOfDataValues) {
-        const currentDataseID = filteredCountOfDataValues[key][0].correspondingDatasetID
+        const currentDatasetID =
+            filteredCountOfDataValues[key][0].correspondingDatasetID
 
         const regionsWithLowScore = getRegionsWithLowScore(
             filteredReportingTimeliness,
-            currentDataseID
+            currentDatasetID
         )
 
         const indicator = filteredCountOfDataValues[key]
-        const indicator_levels = filteredReportingTimeliness[currentDataseID] // a corresponding indicator in the reporting rates by ou level
+        const indicator_levels = filteredReportingTimeliness[currentDatasetID] // a corresponding indicator in the reporting rates by ou level
 
         // Calculate "divergentRegionsCount" and "divergentRegionsPercent"
         const divergentRegionsCount = regionsWithLowScore.length
@@ -410,6 +577,88 @@ const getCompletenessOfIndicatorData = ({expected_reports_over_all_org_units,
     return filteredCountOfDataValues
 }
 
+// get the data for section 1D
+const getConsistencyOfDatasetCompletenessData = ({
+    allOrgUnitsData,
+    byOrgUnitLevelData,
+    mappedConfigurations,
+    period,
+    calculatingFor,
+}) => {
+    // Extract key data from the analytics response
+    const headers_overall = allOrgUnitsData.headers
+    const rows_overall = allOrgUnitsData.rows
+    const metaData_overall = allOrgUnitsData.metaData
+
+    const headers_level = byOrgUnitLevelData.headers
+    const rows_level = byOrgUnitLevelData.rows
+    const metaData_level = byOrgUnitLevelData.metaData
+
+    const reporting_rate_over_all_org_units_formatted =
+        getJsonObjectsFormatFromTableFormat({
+            headers: headers_overall,
+            rows: rows_overall,
+            metaData: metaData_overall,
+            mappedConfigurations: mappedConfigurations,
+            calculatingFor: calculatingFor,
+        })
+
+    const reporting_rate_by_org_unit_level_formatted =
+        getJsonObjectsFormatFromTableFormat({
+            headers: headers_level,
+            rows: rows_level,
+            metaData: metaData_level,
+            mappedConfigurations: mappedConfigurations,
+            calculatingFor: calculatingFor,
+        })
+
+    // filtering data (overall) by provided period
+    const filteredData_overall = filterDataByProvidedPeriodConsistency(
+        reporting_rate_over_all_org_units_formatted,
+        period
+    )
+
+    // get available regions to calculate for
+    const regions = metaData_level.dimensions.ou.map((id) => ({
+        id,
+        name: metaData_level.items[id].name,
+    }))
+
+    // updating the object with orgUnitLevelsOrGroups list, divergent count & divergent percentage
+    for (const datasetID in filteredData_overall) {
+        const dataset = filteredData_overall[datasetID]
+        const regionsWithLowScore =
+            getRegionsWithLowScoreForConsistencyOfDataset({
+                reporting_rate_by_org_unit_level_formatted:
+                    reporting_rate_by_org_unit_level_formatted,
+                datasetID: datasetID,
+                overallDataset: dataset[0],
+                regions: regions,
+                period: period,
+            })
+
+        // Calculate "divergentRegionsCount" and "divergentRegionsPercent"
+        const divergentRegionsCount = regionsWithLowScore.length
+        const totalRegionsCount = regions.length
+
+        // in case no region was under the threshold, the divergent % will remain zero
+        let divergentRegionsPercent = 0
+        if (totalRegionsCount > 0) {
+            divergentRegionsPercent =
+                (divergentRegionsCount / totalRegionsCount) * 100
+        }
+
+        // Add the new properties to the dataset
+        dataset.forEach((entry) => {
+            entry.divergentRegionsCount = divergentRegionsCount
+            entry.divergentRegionsPercent = divergentRegionsPercent
+            entry.orgUnitLevelsOrGroups = regionsWithLowScore
+        })
+    }
+
+    return filteredData_overall
+}
+
 // function to structure analytics responses into different report sections as json objects using mapped configurations and chosen period
 export const getReportSectionsData = (
     reportQueryResponse,
@@ -430,7 +679,7 @@ export const getReportSectionsData = (
                         reportQueryResponse.reporting_rate_by_org_unit_level,
                     mappedConfigurations: mappedConfigurations,
                     period: period,
-                    calculatingFor: 'completeness',
+                    calculatingFor: 'section1A',
                 }), // list of objects for every dataset selected (regarding completeness)
             ],
             section1B: [
@@ -441,16 +690,31 @@ export const getReportSectionsData = (
                         reportQueryResponse.reporting_rate_by_org_unit_level,
                     mappedConfigurations: mappedConfigurations,
                     period: period,
-                    calculatingFor: 'timeliness',
+                    calculatingFor: 'section1B',
                 }), // list of objects for every dataset selected (regarding completeness)
             ],
             section1C: [
                 getCompletenessOfIndicatorData({
-                    expected_reports_over_all_org_units: reportQueryResponse.expected_reports_over_all_org_units,
-                        count_of_data_values_over_all_org_units: reportQueryResponse.count_of_data_values_over_all_org_units,
-                        reporting_timeliness_by_org_unit_level: reportQueryResponse.reporting_timeliness_by_org_unit_level,
-                    mappedConfigurations: mappedConfigurations, period:period                
-                }), 
+                    expected_reports_over_all_org_units:
+                        reportQueryResponse.expected_reports_over_all_org_units,
+                    count_of_data_values_over_all_org_units:
+                        reportQueryResponse.count_of_data_values_over_all_org_units,
+                    reporting_timeliness_by_org_unit_level:
+                        reportQueryResponse.reporting_timeliness_by_org_unit_level,
+                    mappedConfigurations: mappedConfigurations,
+                    period: period,
+                }),
+            ],
+            section1D: [
+                getConsistencyOfDatasetCompletenessData({
+                    allOrgUnitsData:
+                        reportQueryResponse.reporting_rate_over_all_org_units,
+                    byOrgUnitLevelData:
+                        reportQueryResponse.reporting_rate_by_org_unit_level,
+                    mappedConfigurations: mappedConfigurations,
+                    period: period,
+                    calculatingFor: 'section1D',
+                }), // list of objects for Consistency of dataset completeness over time
             ],
         },
     }
