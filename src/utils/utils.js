@@ -177,6 +177,45 @@ const getRegionsWithLowScoreForConsistencyOfDataset = ({
     return regionsWithDivergentScore
 }
 
+const getRegionsWithLowScoreCompletenessOfIndicator = (
+    dataValuesByLevel,
+    expectedReportsByLevel,
+    indicatorObjects
+) => {
+    if (!indicatorObjects) {
+        return [] // Return an empty array if the key is not found
+    }
+
+    // TODO: variables naming in this function could be improved
+    const regionsWithLowScore = []
+    indicatorObjects.forEach((object) => {
+        const correspondingDatasetID = object.correspondingDatasetID
+        const ou = object.ou
+
+        if (expectedReportsByLevel[correspondingDatasetID]) {
+            const matchingDataset = expectedReportsByLevel[
+                correspondingDatasetID
+            ].find((dataset) => dataset.ou === ou)
+            if (matchingDataset) {
+                const score = matchingDataset.score
+                const reportingPercentage = (object.actualValues / score) * 100
+
+                if (reportingPercentage < object.threshold) {
+                    regionsWithLowScore.push(object.orgUnitLevelsOrGroups)
+                }
+            } else {
+                console.log(
+                    `No matching dataset found for Region: ${object.orgUnitLevelsOrGroups}`
+                )
+            }
+        } else {
+            console.log(`No dataset found for ID: ${correspondingDatasetID}`)
+        }
+    })
+
+    return regionsWithLowScore
+}
+
 // returns a JSON formatted object from the table-like format from analytics
 const getJsonObjectsFormatFromTableFormat = ({
     headers,
@@ -205,6 +244,8 @@ const getJsonObjectsFormatFromTableFormat = ({
             metaData.items[row[ouHeaderIndex]].name
         rowData['dataset_name'] = metaData.items[row[dsNameIndex]].name
         const currentDataSetId = row[0].split('.')[0]
+
+        // adding thresholds where they are not
         if (calculatingFor == 'section1A') {
             rowData['threshold'] =
                 mappedConfigurations.dataSets[currentDataSetId].threshold
@@ -213,11 +254,6 @@ const getJsonObjectsFormatFromTableFormat = ({
                 mappedConfigurations.dataSets[
                     currentDataSetId
                 ].timelinessThreshold
-        } else if (calculatingFor == 'section1C') {
-            // TODO: update this line below with correct info for threshold after getting correct data to use checking for regions with divergent score
-            // This is placeholder it because clarification is needed for which data to use checking for regions with divergent score
-            rowData['threshold'] =
-                mappedConfigurations.dataSets[currentDataSetId].threshold
         } else if (calculatingFor == 'section1D') {
             const comparison =
                 mappedConfigurations.dataSets[currentDataSetId].comparison
@@ -247,7 +283,11 @@ const getJsonObjectsFormatFromTableFormat = ({
         if (!restructuredData[dx][pe]) {
             restructuredData[dx][pe] = []
         }
-        if (calculatingFor == 'section1A' || calculatingFor == 'section1B') {
+        if (
+            calculatingFor == 'section1A' ||
+            calculatingFor == 'section1B' ||
+            calculatingFor == 'section1C'
+        ) {
             restructuredData[dx][pe].push({
                 dataset_name: rowData.dataset_name,
                 orgUnitLevelsOrGroups: rowData.orgUnitLevelsOrGroups,
@@ -382,6 +422,7 @@ const getJsonObjectsFormatFromTableFormat_DataValues = ({
         const expectedValues =
             expected_overall[currentNumerator.dataSetID][period][0].score
 
+        //TODO: most values here are not needed while working on count_of_data_values_by_org_unit_level, will find a suitable condition to ignore them
         //construct the object for each
         restructuredData[dx][pe].push({
             threshold: currentNumerator.missing, // get this from missing value calculate these above in rows
@@ -479,8 +520,9 @@ const getFacilityReportingData = ({
 // get the data for section 1C
 const getCompletenessOfIndicatorData = ({
     expected_reports_over_all_org_units,
+    expected_reports_by_org_unit_level,
     count_of_data_values_over_all_org_units,
-    reporting_timeliness_by_org_unit_level,
+    count_of_data_values_by_org_unit_level,
     mappedConfigurations,
     period,
 }) => {
@@ -489,34 +531,39 @@ const getCompletenessOfIndicatorData = ({
     const rows_expected = expected_reports_over_all_org_units.rows
     const metaData_expected = expected_reports_over_all_org_units.metaData
 
-    const headers_reporting_timeliness =
-        reporting_timeliness_by_org_unit_level.headers
-    const rows_reporting_timeliness =
-        reporting_timeliness_by_org_unit_level.rows
-    const metaData_reporting_timeliness =
-        reporting_timeliness_by_org_unit_level.metaData
+    const headers_expected_by_level = expected_reports_by_org_unit_level.headers
+    const rows_expected_by_level = expected_reports_by_org_unit_level.rows
+    const metaData_expected_by_level =
+        expected_reports_by_org_unit_level.metaData
 
     const headers_data_values = count_of_data_values_over_all_org_units.headers
     const rows_data_values = count_of_data_values_over_all_org_units.rows
     const metaData_data_values =
         count_of_data_values_over_all_org_units.metaData
 
-    // exptected reports
+    const headers_data_values_by_levels =
+        count_of_data_values_by_org_unit_level.headers
+    const rows_data_values_by_levels =
+        count_of_data_values_by_org_unit_level.rows
+    const metaData_data_values_by_levels =
+        count_of_data_values_by_org_unit_level.metaData
+
+    // exptected reports overll org units
     const expected_reports_over_all_org_units_formatted =
         getJsonObjectsFormatFromTableFormat({
             headers: headers_expected,
             rows: rows_expected,
             metaData: metaData_expected,
             mappedConfigurations: mappedConfigurations,
-            calculatingFor: '',
+            calculatingFor: 'section1C',
         })
 
-    // exptected reports
-    const reporting_timeliness_by_org_unit_level_formatted =
+    // exptected reports by org unit level
+    const expected_reports_by_org_unit_level_formatted =
         getJsonObjectsFormatFromTableFormat({
-            headers: headers_reporting_timeliness,
-            rows: rows_reporting_timeliness,
-            metaData: metaData_reporting_timeliness,
+            headers: headers_expected_by_level,
+            rows: rows_expected_by_level,
+            metaData: metaData_expected_by_level,
             mappedConfigurations: mappedConfigurations,
             calculatingFor: 'section1C',
         })
@@ -528,8 +575,20 @@ const getCompletenessOfIndicatorData = ({
             rows: rows_data_values,
             metaData: metaData_data_values,
             mappedConfigurations: mappedConfigurations,
-            period: period,
             expected_overall: expected_reports_over_all_org_units_formatted,
+            period: period,
+        })
+
+    // data values by org unit levels
+    // TODO: for this the expected_reports_over_all_org_units_formatted is not neccessary improve this (will find a way to remove it without harming the code's working)
+    const count_of_data_values_by_org_unit_level_formatted =
+        getJsonObjectsFormatFromTableFormat_DataValues({
+            headers: headers_data_values_by_levels,
+            rows: rows_data_values_by_levels,
+            metaData: metaData_data_values_by_levels,
+            mappedConfigurations: mappedConfigurations,
+            expected_overall: expected_reports_over_all_org_units_formatted,
+            period: period,
         })
 
     // filtering data (levels) by provided period
@@ -537,27 +596,72 @@ const getCompletenessOfIndicatorData = ({
         count_of_data_values_over_all_org_units_formatted,
         period
     )
-    const filteredReportingTimeliness = filterDataByProvidedPeriod(
-        reporting_timeliness_by_org_unit_level_formatted,
+
+    const filteredExpectedReportsByOrgUnitLevel = filterDataByProvidedPeriod(
+        expected_reports_by_org_unit_level_formatted,
         period
     )
 
-    // updating the object with orgUnitLevelsOrGroups list, divergent count & divergent percentage
+    const filteredCountOfDataValuesByOrgUnitLevel = filterDataByProvidedPeriod(
+        count_of_data_values_by_org_unit_level_formatted,
+        period
+    )
+
     for (const key in filteredCountOfDataValues) {
-        const currentDatasetID =
-            filteredCountOfDataValues[key][0].correspondingDatasetID
+        const indicatorObjectsByLevels =
+            filteredCountOfDataValuesByOrgUnitLevel[key]
+        const currentOverAllIndicator = filteredCountOfDataValues[key]
 
-        const regionsWithLowScore = getRegionsWithLowScore(
-            filteredReportingTimeliness,
-            currentDatasetID
-        )
+        /*
+            PROCEDURE:
+            here data used are from 
+                -count_of_data_values_by_org_unit_level
+                -expected_reports_by_org_unit_level
+            
+            loop through the list of data element count_of_data_values_by_org_unit_level (format these data first if necessary)
+            for each data element decide for a region in which it appears in
+            
+            %age is found by (count of a data elment for that region / expected report for that region ) *100
+            
+            ie: 
 
-        const indicator = filteredCountOfDataValues[key]
-        const indicator_levels = filteredReportingTimeliness[currentDatasetID] // a corresponding indicator in the reporting rates by ou level
+            [
+                "YAAmrY2RPbZ",
+                "iQx6Edf0Xib",
+                "2022",
+                "807.0"
+            ],
+
+            here above, we have 807 reports for yaamr data element (pnc visi) for region iQx6Edf0Xib (region b)
+
+            to know what we expected, take that data elemtn id and search in configurations to find the dataset it corresponds to 
+            YAAmrY2RPbZ corresponds to YmRjo8j3F3M (datasetID)
+            the look into expected_reports_by_org_unit_level for this found dataset on the same perion iQx6Edf0Xib
+        
+            wer found: 
+            [
+                "YmRjo8j3F3M.EXPECTED_REPORTS",
+                "iQx6Edf0Xib",
+                "2022",
+                "1224.0"
+            ],
+
+            from here we had 807 and we expected 1224
+            so (807/1224)*100 = 66%
+            this is below 90 so it gets added to the region with divergent scores
+            */
+
+        const regionsWithLowScore =
+            getRegionsWithLowScoreCompletenessOfIndicator(
+                filteredCountOfDataValuesByOrgUnitLevel,
+                filteredExpectedReportsByOrgUnitLevel,
+                indicatorObjectsByLevels
+            ).sort()
+        // console.log(`regions for ${key}: ${regionsWithLowScore}`)
 
         // Calculate "divergentRegionsCount" and "divergentRegionsPercent"
         const divergentRegionsCount = regionsWithLowScore.length
-        const totalRegionsCount = indicator_levels.length
+        const totalRegionsCount = indicatorObjectsByLevels.length
 
         // in case no region was under the threshold, the divergent % will remain zero
         let divergentRegionsPercent = 0
@@ -566,8 +670,8 @@ const getCompletenessOfIndicatorData = ({
                 (divergentRegionsCount / totalRegionsCount) * 100
         }
 
-        // Add the new properties to the indicator
-        indicator.forEach((entry) => {
+        // Add the new properties to the currentOverAllIndicator
+        currentOverAllIndicator.forEach((entry) => {
             entry.divergentRegionsCount = divergentRegionsCount
             entry.divergentRegionsPercent = divergentRegionsPercent
             entry.orgUnitLevelsOrGroups = regionsWithLowScore
@@ -697,8 +801,12 @@ export const getReportSectionsData = (
                 getCompletenessOfIndicatorData({
                     expected_reports_over_all_org_units:
                         reportQueryResponse.expected_reports_over_all_org_units,
+                    expected_reports_by_org_unit_level:
+                        reportQueryResponse.expected_reports_by_org_unit_level,
                     count_of_data_values_over_all_org_units:
                         reportQueryResponse.count_of_data_values_over_all_org_units,
+                    count_of_data_values_by_org_unit_level:
+                        reportQueryResponse.count_of_data_values_by_org_unit_level,
                     reporting_timeliness_by_org_unit_level:
                         reportQueryResponse.reporting_timeliness_by_org_unit_level,
                     mappedConfigurations: mappedConfigurations,
