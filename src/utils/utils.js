@@ -164,7 +164,7 @@ const getRegionsWithLowScoreForConsistencyOfDataset = ({
         )
 
         // devide by number of the previous regions which is (years - 1)
-        // TODO: remember to cater for devide by zero
+        // TODO: remember to cater for devide by zero or decide whether the user is allowed to choose 0 comparison years
         const finalRegionScore =
             (chosenPeriodScore / (regionScore / (years.length - 1))) * 100
         if (
@@ -323,10 +323,6 @@ const findNumerator = (numerators, dataElementID) => {
     )
 }
 
-// const getExpectedValues = (dataSetID, expected_overall, period) => {
-//     return
-// }
-
 const filterDataByProvidedPeriod = (dataToFilter, period) => {
     const filteredData = {}
     for (const dx in dataToFilter) {
@@ -357,7 +353,7 @@ const filterDataByProvidedPeriodConsistency = (dataToFilter, period) => {
         })
 
         // the function to calculate the score using the previous chosen years
-        // TODO: remember to cater for devide by zero
+        // TODO: remember to cater for devide by zero or decide whether the user is allowed to choose 0 comparison years
         const theScore =
             (dataset[period][0].score / (totalScore / (years.length - 1))) * 100
 
