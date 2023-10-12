@@ -4,7 +4,7 @@ export const fixedPeriodSource = [{name: 'Yearly', id: 'YEARLY'}, {name: 'Financ
 export const year = moment().year()
 
 
-const periodTypesMapping = {
+export const periodTypesMapping = {
     Daily: 'DAILY',
     Weekly: 'WEEKLY',
     WeeklyMonday: 'WEEKLYMON',
@@ -57,5 +57,3 @@ const periodTypesMapping = {
     FinancialNov: 'FYNOV',
     FinancialDec: 'FYDEC',
 }
-
-export default periodTypesMapping

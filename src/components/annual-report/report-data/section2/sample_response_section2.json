@@ -1,5 +1,5 @@
 {
-    "data_by_reporting_period": {
+    "data_detail_by_reporting_period": {
         "headers": [
             {
                 "name": "dx",
@@ -529,6 +529,135 @@
             ["XeRBhx8avQY", "yeGIr7J6nX7", "2019", "1544.0"]
         ],
         "height": 93,
+        "width": 4,
+        "headerWidth": 4
+    },
+    "numerator_relations_over_all_org_units": {
+        "headers": [
+            {
+                "name": "dx",
+                "column": "Data",
+                "valueType": "TEXT",
+                "type": "java.lang.String",
+                "hidden": false,
+                "meta": true
+            },
+            {
+                "name": "ou",
+                "column": "Organisation unit",
+                "valueType": "TEXT",
+                "type": "java.lang.String",
+                "hidden": false,
+                "meta": true
+            },
+            {
+                "name": "pe",
+                "column": "Period",
+                "valueType": "TEXT",
+                "type": "java.lang.String",
+                "hidden": false,
+                "meta": true
+            },
+            {
+                "name": "value",
+                "column": "Value",
+                "valueType": "NUMBER",
+                "type": "java.lang.Double",
+                "hidden": false,
+                "meta": false
+            }
+        ],
+        "metaData": {
+            "items": {
+                "dx": { "name": "Data" },
+                "lZsCb6y0KDX": { "name": "National" },
+                "pe": { "name": "Period" },
+                "ou": { "name": "Organisation unit" },
+                "2022": { "name": "2022" },
+                "mQXljwnUv90": { "name": "default" },
+                "YlNxlxCXZzH": { "name": "Penta 1 given < 1" }
+            },
+            "dimensions": {
+                "dx": ["YlNxlxCXZzH"],
+                "pe": ["2022"],
+                "ou": ["lZsCb6y0KDX"],
+                "co": ["mQXljwnUv90"]
+            }
+        },
+        "rows": [["YlNxlxCXZzH", "lZsCb6y0KDX", "2022", "480586.0"]],
+        "height": 1,
+        "width": 4,
+        "headerWidth": 4
+    },
+    "numerator_relations_org_unit_level": {
+        "headers": [
+            {
+                "name": "dx",
+                "column": "Data",
+                "valueType": "TEXT",
+                "type": "java.lang.String",
+                "hidden": false,
+                "meta": true
+            },
+            {
+                "name": "ou",
+                "column": "Organisation unit",
+                "valueType": "TEXT",
+                "type": "java.lang.String",
+                "hidden": false,
+                "meta": true
+            },
+            {
+                "name": "pe",
+                "column": "Period",
+                "valueType": "TEXT",
+                "type": "java.lang.String",
+                "hidden": false,
+                "meta": true
+            },
+            {
+                "name": "value",
+                "column": "Value",
+                "valueType": "NUMBER",
+                "type": "java.lang.Double",
+                "hidden": false,
+                "meta": false
+            }
+        ],
+        "metaData": {
+            "items": {
+                "mPpiH4dNz9C": { "name": "Region A" },
+                "dx": { "name": "Data" },
+                "lZsCb6y0KDX": { "uid": "lZsCb6y0KDX", "name": "National" },
+                "pe": { "name": "Period" },
+                "iQx6Edf0Xib": { "name": "Region B" },
+                "ou": { "name": "Organisation unit" },
+                "bzWRxaDGI3B": { "uid": "bzWRxaDGI3B", "name": "Region" },
+                "tmIma8xiccz": { "name": "Region D" },
+                "2022": { "name": "2022" },
+                "mQXljwnUv90": { "name": "default" },
+                "YlNxlxCXZzH": { "name": "Penta 1 given < 1" },
+                "yeGIr7J6nX7": { "name": "Region C" }
+            },
+            "dimensions": {
+                "dx": ["YlNxlxCXZzH"],
+                "pe": ["2022"],
+                "ou": [
+                    "mPpiH4dNz9C",
+                    "iQx6Edf0Xib",
+                    "yeGIr7J6nX7",
+                    "tmIma8xiccz"
+                ],
+                "co": ["mQXljwnUv90"]
+            }
+        },
+        "rows": [
+            ["YlNxlxCXZzH", "iQx6Edf0Xib", "2022", "100397.0"],
+            ["YlNxlxCXZzH", "tmIma8xiccz", "2022", "167563.0"],
+            ["YlNxlxCXZzH", "mPpiH4dNz9C", "2022", "63373.0"],
+            ["YlNxlxCXZzH", "yeGIr7J6nX7", "2022", "149253.0"]
+        ],
+        "height": 4,
         "width": 4,
         "headerWidth": 4
     }

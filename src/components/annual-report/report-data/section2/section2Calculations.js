@@ -1,5 +1,6 @@
 import * as mappedConfigurations from './mappedConfigurations.json'
 import { getForecastValue, getMean, getStats } from './mathService.js'
+import { numeratorRelations } from './numeratorRelations.js'
 import * as section2Response from './sample_response_section2.json'
 import {
     getJsonObjectsFormatFromTableFormatSection2,
@@ -166,12 +167,11 @@ const calculateSection2d = ({
     overallResponse,
     levelOrGroupResponse,
     orgUnitsByLevelOrGroup,
+    periods,
 }) => {
     const results = {
         section2d: [],
     }
-    // dummy variable for now (to come from selections)
-    const periods = ['2019', '2020', '2021', '2022']
     const currentPeriod = periods.slice(-1)[0]
     const comparisonPeriods = periods.slice(0, -1)
 
@@ -243,14 +243,140 @@ const calculateSection2d = ({
     return results
 }
 
-const RESPONSE_NAME = 'data_by_reporting_period'
+const RELATIONSHIP_NAMES = {
+    eq: 'A ≈ B',
+    do: 'Dropout rate',
+    aGTb: 'A > B',
+    level: 'Level across organisation units',
+}
+
+const get2eScore = ({ A, B, type }) => {
+    if (type === 'do') {
+        if (A === B) {
+            return 0
+        }
+        return (A - B) / A
+    }
+    return A / B
+}
+
+const get2eVal = ({ response, dx, ou, pe }) => {
+    if (ou) {
+        return response[dx]?.[pe]?.find((el) => el.ou === ou)?.value
+    }
+    return response[dx]?.[pe]?.[0]?.value
+}
+
+const isDivergent2e = ({ type, score, overallScore, criteria }) => {
+    if (type === 'do') {
+        return score < 0
+    }
+    if (type === 'aGTb') {
+        return score < 1 - criteria / 100
+    }
+    if (type === 'eq') {
+        return score < 1 - criteria / 100 || score > 1 + criteria / 100
+    }
+    if (type === 'level') {
+        return (
+            score < (1 + criteria / 100) * overallScore ||
+            score > (1 + criteria / 100) * overallScore
+        )
+    }
+    return false
+}
+
+const calculateSection2e = ({
+    overallResponse,
+    levelOrGroupResponse,
+    orgUnitsByLevelOrGroup,
+    numeratorRelations,
+    currentPeriod,
+    metadata,
+}) => {
+    const results = {
+        section2e: [],
+    }
+    for (const numeratorRelation of numeratorRelations) {
+        const overallScore = get2eScore({
+            A: get2eVal({
+                response: overallResponse,
+                dx: numeratorRelation.A,
+                pe: currentPeriod,
+            }),
+            B: get2eVal({
+                response: overallResponse,
+                dx: numeratorRelation.B,
+                pe: currentPeriod,
+            }),
+            type: numeratorRelation.type,
+        })
+
+        const divergentSubOrgUnits = []
+        for (const subOrgUnit of orgUnitsByLevelOrGroup) {
+            const subOrgUnitName = metadata[subOrgUnit]
+            const subOrgUnitScore = get2eScore({
+                A: get2eVal({
+                    response: levelOrGroupResponse,
+                    ou: subOrgUnit,
+                    dx: numeratorRelation.A,
+                    pe: currentPeriod,
+                }),
+                B: get2eVal({
+                    response: levelOrGroupResponse,
+                    ou: subOrgUnit,
+                    dx: numeratorRelation.B,
+                    pe: currentPeriod,
+                }),
+                type: numeratorRelation.type,
+            })
+            if (
+                isDivergent2e({
+                    score: subOrgUnitScore,
+                    type: numeratorRelation.type,
+                    criteria: numeratorRelation.criteria,
+                    overallScore,
+                })
+            ) {
+                divergentSubOrgUnits.push(subOrgUnitName)
+            }
+        }
+
+        results.section2e.push({
+            title: numeratorRelation.name,
+            A: metadata[numeratorRelation.A]?.name,
+            B: metadata[numeratorRelation.B]?.name,
+            expectedRelationship: RELATIONSHIP_NAMES[numeratorRelation.type],
+            qualityThreshold:
+                numeratorRelation.type === 'do'
+                    ? 'Not negative'
+                    : numeratorRelation.criteria,
+            overallScore,
+            divergentSubOrgUnits: {
+                number: divergentSubOrgUnits.length,
+                percentage:
+                    (divergentSubOrgUnits.length /
+                        orgUnitsByLevelOrGroup.length) *
+                    100,
+            },
+        })
+    }
+
+    return results
+}
+
+const RESPONSE_NAME = 'data_detail_by_reporting_period'
 const OVERALL_ORG_UNIT = 'data_over_all_org_units'
 const LEVEL_OR_GROUP = 'data_by_org_unit_level'
+const OVERALL_ORG_UNIT_SECTION_2E = 'numerator_relations_over_all_org_units'
+const LEVEL_OR_GROUP_SECTION_2E = 'numerator_relations_org_unit_level'
 
 export const calculateSection2 = () => {
     const formattedResponse2a2b2c = getJsonObjectsFormatFromTableFormatSection2(
         { ...section2Response[RESPONSE_NAME], mappedConfigurations }
     )
+    // to come from selections
+    const periods = ['2019', '2020', '2021', '2022']
 
     // perform calculations
 
@@ -279,13 +405,43 @@ export const calculateSection2 = () => {
         overallResponse: formattedResponse2dOverall,
         levelOrGroupResponse: formattedResponse2dLevelOrGroup,
         orgUnitsByLevelOrGroup,
+        periods,
     })
 
     // subsection 2e (to do)
+
+    const formattedResponse2eOverall = getJsonObjectsFormatFromTableFormat({
+        ...section2Response[OVERALL_ORG_UNIT_SECTION_2E],
+        mappedConfigurations,
+        calculatingFor: 'numerator_relation',
+    })
+    const formattedResponse2eLevelOrGroup = getJsonObjectsFormatFromTableFormat(
+        {
+            ...section2Response[LEVEL_OR_GROUP_SECTION_2E],
+            mappedConfigurations,
+            calculatingFor: 'numerator_relation',
+        }
+    )
+
+    const section2e = calculateSection2e({
+        overallResponse: {
+            ...formattedResponse2eOverall,
+            ...formattedResponse2dOverall,
+        },
+        levelOrGroupResponse: {
+            ...formattedResponse2eLevelOrGroup,
+            ...formattedResponse2dLevelOrGroup,
+        },
+        orgUnitsByLevelOrGroup,
+        numeratorRelations,
+        currentPeriod: periods.slice(-1)[0],
+        metadata: section2Response[LEVEL_OR_GROUP_SECTION_2E].metaData.items,
+    })
 
     // return formatted information for report
     return {
         ...sections2a2b2c,
         ...section2d,
+        ...section2e,
     }
 }
