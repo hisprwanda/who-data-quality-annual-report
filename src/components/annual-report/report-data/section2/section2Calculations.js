@@ -1,7 +1,7 @@
 import * as mappedConfigurations from './mappedConfigurations.json'
 import { getForecastValue, getMean, getStats } from './mathService.js'
 import { numeratorRelations } from './numeratorRelations.js'
-import * as section2Response from './sample_response_section2.json'
+// import * as section2Response from './sample_response_section2.json'
 import {
     getJsonObjectsFormatFromTableFormatSection2,
     getJsonObjectsFormatFromTableFormat,
@@ -371,9 +371,19 @@ const LEVEL_OR_GROUP = 'data_by_org_unit_level'
 const OVERALL_ORG_UNIT_SECTION_2E = 'numerator_relations_over_all_org_units'
 const LEVEL_OR_GROUP_SECTION_2E = 'numerator_relations_org_unit_level'
 
-export const calculateSection2 = () => {
-    const formattedResponse2a2b2c = getJsonObjectsFormatFromTableFormatSection2(
-        { ...section2Response[RESPONSE_NAME], mappedConfigurations }
+export const calculateSection2 = ({ section2Response }) => {
+    console.log(JSON.stringify(section2Response[RESPONSE_NAME]))
+    const formattedResponse2a2b2c = section2Response[RESPONSE_NAME].reduce(
+        (mergedFormatted, indResponse) => {
+            return {
+                ...mergedFormatted,
+                ...getJsonObjectsFormatFromTableFormatSection2({
+                    ...indResponse,
+                    mappedConfigurations,
+                }),
+            }
+        },
+        {}
     )
     // to come from selections
     const periods = ['2019', '2020', '2021', '2022']

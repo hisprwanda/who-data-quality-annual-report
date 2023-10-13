@@ -1,7 +1,7 @@
-import { useDataEngine, useDataQuery } from '@dhis2/app-runtime'
+import { useDataEngine } from '@dhis2/app-runtime'
 import { generateFixedPeriods } from '@dhis2/multi-calendar-dates'
 import { Button } from '@dhis2/ui'
-import React from 'react'
+import React, { useState } from 'react'
 import { periodTypesMapping } from '../../utils/period/FixedPeriod.source.js'
 import * as mappedConfigurations from './mappedConfigurations.json'
 import { numeratorRelations } from './numeratorRelations.js'
@@ -101,7 +101,6 @@ const getValidDataElementPeriodTypes = ({
 const isWithinPeriod = ({ pe, start, end }) => {
     const startSubPeriod = new Date(pe.startDate)
     const endSubPeriod = new Date(pe.endDate)
-    // console.log(pe,start,end,startSubPeriod,endSubPeriod)
     return startSubPeriod >= start && endSubPeriod <= end
 }
 
@@ -136,15 +135,25 @@ const getSubPeriods = ({ dePeriodTypes, currentPeriod }) => {
             isWithinPeriod({ pe, start, end })
         )
 
-        deSubPeriods[de] = filteredSubPeriods.map((subPE) => subPE.id)
+        // if there are no valid subperiods, the request should not be sent (will result in error from analytics)
+        if (filteredSubPeriods.length > 0) {
+            deSubPeriods[de] = filteredSubPeriods.map((subPE) => subPE.id)
+        }
     }
     return deSubPeriods
 }
 
 export const SectionTwo = () => {
-    const { data, loading, error, refetch } = useDataQuery(section2deQueries, {
-        lazy: true,
+    // const { data, loading, error, refetch } = useDataQuery(section2deQueries, {
+    //     lazy: true,
+    // })
+    const [queryState, setQueryState] = useState({
+        loading: false,
+        data: false,
+        error: false,
     })
+    const { data, loading, error } = queryState
+
     const engine = useDataEngine()
 
     const generateReport = async () => {
@@ -171,11 +180,16 @@ export const SectionTwo = () => {
         ]
         const orgUnits = ['lZsCb6y0KDX']
         const orgUnitLevel = 'LEVEL-2'
+        const numeratorRelationDEs = [
+            ...numeratorRelations.map((rel) => rel.A),
+            ...numeratorRelations.map((rel) => rel.B),
+        ]
 
         // get data sets and check that each data element is associated with only one period type
         const dataSetResponse = await engine.query(dataSetInformation, {
             variables: { dataSets },
         })
+
         const validDataElementPeriodTypes = getValidDataElementPeriodTypes({
             dataElements,
             dataSetTypes: dataSetResponse?.dataSets?.dataSets,
@@ -198,27 +212,34 @@ export const SectionTwo = () => {
                 },
             })
         )
-        const dataBySubPeriod = await Promise.all(subPeriodRequests)
-        console.log(dataBySubPeriod) // to avoid lint error about unused variable
+        try {
+            const dataBySubPeriod = await Promise.all(subPeriodRequests)
+            const otherData = await engine.query(section2deQueries, {
+                variables: {
+                    dataElements: Object.keys(validDataElementPeriodTypes),
+                    numeratorRelationDEs,
+                    orgUnits,
+                    orgUnitLevel,
+                    periods,
+                    currentPeriod: currentPeriod.id,
+                },
+            })
+            setQueryState({
+                data: {
+                    ...otherData,
+                    data_detail_by_reporting_period: dataBySubPeriod.map(
+                        (resp) => resp.data_detail_by_reporting_period
+                    ),
+                },
+            })
+        } catch (e) {
+            console.error(e)
+            setQueryState({ error: e })
+        }
 
         // formulate requests for each valid DE/periodType
 
         // merge results
-
-        const numeratorRelationDEs = [
-            ...numeratorRelations.map((rel) => rel.A),
-            ...numeratorRelations.map((rel) => rel.B),
-        ]
-
-        const variables = {
-            dataElements: Object.keys(validDataElementPeriodTypes),
-            numeratorRelationDEs,
-            orgUnits,
-            orgUnitLevel,
-            periods,
-            currentPeriod: currentPeriod.id,
-        }
-        refetch(variables)
     }
 
     if (loading) {
@@ -230,7 +251,11 @@ export const SectionTwo = () => {
     }
 
     if (data) {
-        return <span>{JSON.stringify(calculateSection2())}</span>
+        return (
+            <span>
+                {JSON.stringify(calculateSection2({ section2Response: data }))}
+            </span>
+        )
     }
 
     return (
