@@ -5,13 +5,12 @@ import {
   completenessLabel,
 } from "../../utils/report/ReportLabel.util";
 import { ReportDataSection } from "../../report-data/ReportDataSection";
-import { useSelector, useDispatch } from "react-redux";
+import { useSelector } from "react-redux";
 import './completeness.css'
 
 export const CompletenessReport = ({ main_title, sub_title }) => {
     
   const storeSelector = useSelector(store => store)
-  const actionDispatch = useDispatch()
   const availableDataset = storeSelector.selectedValue.configuredDataset
   const group = storeSelector.selectedValue.dataSet
   const allElements = storeSelector.selectedValue.element

@@ -6,8 +6,6 @@ import {
   loadReportingRate,
   loadReportingRateOnTime,
 } from "../datasource/dataset/dataset.source";
-import { useDataQuery } from "@dhis2/app-runtime";
-import { getOrgUnitLevel } from "../utils/OrgUnitRequestProcessor";
 import { completenessLabel } from "../utils/report/ReportLabel.util";
 
 export const ReportDataSection = ({
@@ -24,7 +22,6 @@ export const ReportDataSection = ({
   let [displayDataset, setDisplayDataSet] = useState("");
   let [displayDatasetNumber, setDisplayDatasetNumber] = useState(0);
   let [completenessPercentage, setCompletenessPercentage] = useState(0);
-  let [completenessOverallScore, setCompletenessOverallScore] = useState(0);
 
   useEffect(() => {
     const response = loadOrganizationUnit(orgUnit);
@@ -103,7 +100,6 @@ export const ReportDataSection = ({
   };
 
   if(reporttype === 'Completeness of dataset' || reporttype === 'Completeness of indicator') {
-    console.log(reporttype)
     return completenessDataSection(displayDataset, moreinfo, completenessPercentage, completenessLabel.percentageNum)
   }else{
     console.log(reporttype)
