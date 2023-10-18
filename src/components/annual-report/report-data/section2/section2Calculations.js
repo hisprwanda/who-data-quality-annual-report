@@ -166,13 +166,12 @@ const calculateSection2d = ({
     overallResponse,
     levelOrGroupResponse,
     orgUnitsByLevelOrGroup,
-    periods,
+    currentPeriod,
+    comparisonPeriods,
 }) => {
     const results = {
         section2d: [],
     }
-    const currentPeriod = periods.slice(-1)[0]
-    const comparisonPeriods = periods.slice(0, -1)
 
     for (const dx in overallResponse) {
         // get overall score
@@ -383,10 +382,12 @@ export const calculateSection2 = ({ section2Response }) => {
         },
         {}
     )
-    // to come from selections
-    const periods = ['2019', '2020', '2021', '2022']
 
-    // perform calculations
+    // periods will come from response when finalized
+    const periods = ['2022', '2021', '2020', '2019']
+    // periods assumed to be in reverse order (current period first)
+    const currentPeriod = periods[0]
+    const comparisonPeriods = periods.slice(1)
 
     // Subsections 2a-2c
     const sections2a2b2c = calculateSections2a2b2c({
@@ -398,6 +399,8 @@ export const calculateSection2 = ({ section2Response }) => {
         ...section2Response[OVERALL_ORG_UNIT],
         mappedConfigurations,
         calculatingFor: 'data',
+        currentPeriod,
+        comparisonPeriods,
     })
     const formattedResponse2dLevelOrGroup = getJsonObjectsFormatFromTableFormat(
         {
@@ -413,10 +416,11 @@ export const calculateSection2 = ({ section2Response }) => {
         overallResponse: formattedResponse2dOverall,
         levelOrGroupResponse: formattedResponse2dLevelOrGroup,
         orgUnitsByLevelOrGroup,
-        periods,
+        currentPeriod,
+        comparisonPeriods,
     })
 
-    // subsection 2e (to do)
+    // subsection 2e
 
     const formattedResponse2eOverall = getJsonObjectsFormatFromTableFormat({
         ...section2Response[OVERALL_ORG_UNIT_SECTION_2E],
@@ -442,7 +446,7 @@ export const calculateSection2 = ({ section2Response }) => {
         },
         orgUnitsByLevelOrGroup,
         numeratorRelations,
-        currentPeriod: periods.slice(-1)[0],
+        currentPeriod,
         metadata: section2Response[LEVEL_OR_GROUP_SECTION_2E].metaData.items,
     })
 
