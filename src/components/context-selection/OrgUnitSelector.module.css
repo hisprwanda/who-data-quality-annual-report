@@ -1,0 +1,25 @@
+.container {
+    width: 400px;
+    padding: 16px;
+    display: flex;
+    flex-direction: column;
+}
+
+.orgUnitTreeContainer {
+    max-height: 700px;
+    overflow: auto;
+    margin-bottom: 16px;
+}
+
+.orgUnitLevelContainer {
+    margin-bottom: 16px;
+}
+
+.buttonContainer {
+    display: flex;
+    margin-top: auto;
+}
+
+.buttonContainer * {
+    margin-left: auto;
+}
