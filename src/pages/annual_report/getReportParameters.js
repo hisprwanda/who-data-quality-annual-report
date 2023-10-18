@@ -22,7 +22,7 @@ export const getReportParameters = ({
             mappedConfiguration.dataElementsAndIndicators
         ),
         orgUnits: [orgUnitID],
-        orgUnitLevel: `LEVEL_${orgUnitLevel}`,
+        orgUnitLevel: `LEVEL-${orgUnitLevel}`,
         groupID: groupID,
         periods: ['2022', '2021', '2020', '2019'],
         currentPeriod: '2022',
