@@ -1,37 +1,23 @@
 import React from 'react'
-import { DataQuery } from '@dhis2/app-runtime'
-import i18n from '@dhis2/d2-i18n'
+import { HashRouter, Routes, Route } from 'react-router-dom'
 import classes from './App.module.css'
-import './styles/variables.css';
+import './styles/variables.css'
+import Report from './pages/annual_report/Report.js'
+import Configurations from './pages/configurations/Configurations.js'
 
-import Report from './pages/annual_report/Report'
-import Configurations from './pages/configurations/Configurations'
-import { HashRouter, BrowserRouter, Routes, Route } from "react-router-dom";
-import { Provider } from 'react-redux'
-import store from './components/annual-report/store/Index'
-
-const query = {
-    me: {
-        resource: 'me',
-    },
-}
-
-const MyApp = () => (
+const App = () => (
     <div className={classes.container}>
         <HashRouter>
-          <Provider store={store}>
             <Routes>
-              <Route path="/">
-                <Route index element={<Report />} />
-                <Route path="configurations">
-                  <Route index element={<Configurations />} />
+                <Route path="/">
+                    <Route index element={<Report />} />
+                    <Route path="configurations">
+                        <Route index element={<Configurations />} />
+                    </Route>
                 </Route>
-              </Route>
             </Routes>
-          </Provider>
         </HashRouter>
     </div>
 )
 
-
-export default MyApp
+export default App
