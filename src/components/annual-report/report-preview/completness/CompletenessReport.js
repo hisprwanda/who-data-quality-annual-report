@@ -3,7 +3,6 @@ import { ParentHeader } from "../ParentHeader";
 import { HeaderSection } from "../HeaderSection";
 import {
   completenessLabel,
-  mainHeaderLabel,
 } from "../../utils/report/ReportLabel.util";
 import { ReportDataSection } from "../../report-data/ReportDataSection";
 import { useSelector, useDispatch } from "react-redux";
@@ -19,8 +18,7 @@ export const CompletenessReport = ({ main_title, sub_title }) => {
   const orgUnitID = storeSelector.selectedValue.orgUnit.id
   const orgUnitChildren = storeSelector.selectedValue.orgUnit.children
   const period = storeSelector.period.selectedPeriod
-  const moreinfo = 'More'
-  const reporttype = 'Some type'
+  
   return (
     <div>
       <ParentHeader
@@ -62,6 +60,7 @@ export const CompletenessReport = ({ main_title, sub_title }) => {
         dataheader={completenessLabel.indicator}
         reporttype="consistency"
       />
+      <ReportDataSection group={group} element={allElements} orgUnit={orgUnitID} children={orgUnitChildren} period={period} dataset={availableDataset} moreinfo='Reporting rate' reporttype='Completeness of dataset'/>
       <ReportDataSection group={group} element={allElements} orgUnit={orgUnitID} children={orgUnitChildren} period={period} dataset={availableDataset} moreinfo='Reporting rate' reporttype='Completeness of dataset'/>
       <p></p>
     </div>

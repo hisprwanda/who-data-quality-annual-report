@@ -27,6 +27,7 @@ import Actions from "../../components/annual-report/utils/enum/Index.js";
 import MenuBar from "../../components/menu-bar/MenuBar.js";
 import { SettingsProcessor } from "../../utils/SettingsProcessor.js";
 import { getConfigObjectsForAnalytics } from "../../utils/utils.js";
+import ReportPreview from "../../components/annual-report/report-preview/ReportPreview";
 // End of imports
 
 // Start of the functional component definition
@@ -60,7 +61,7 @@ const Report = function () {
 
   const [orgUnitLevelNum, setOrgUnitLevelNum] = useState(0)
 
-  const [reportStatus] = useState(false);
+  const [reportStatus, setReportStatus] = useState(false);
 
   const selectedGroupName = selectedElementStore.groupName;
   const [elements, setElements] = useState();
@@ -99,10 +100,6 @@ const Report = function () {
     //setFilteredItem(groups);
     dispatch({ type: Actions.changeGroup, payload: selectedGroupName });
   }, [selectedGroupName]);
-
-  useEffect(() => {
-    reportStatus != reportStatus;
-  }, [reportStatus]);
 
   // Function used to process the selected group, it gets the selected group names and code and dispatches action to redux
   const setSelectedDataSet = function (selectedGroup, groupCode) {
@@ -210,7 +207,7 @@ const Report = function () {
       periods: _periods,
       currentPeriod: _currentPeriod
     }
-    console.log(_response)
+    setReportStatus(true)
   
   }
  
@@ -355,6 +352,8 @@ const Report = function () {
           </div>
         </SelectorBar>
       </div>
+      
+      {reportStatus && <ReportPreview />}
     </div>
   );
 };
