@@ -10,9 +10,6 @@ import { HashRouter, BrowserRouter, Routes, Route } from "react-router-dom";
 import { Provider } from 'react-redux'
 import store from './components/annual-report/store/Index'
 
-// import { calculateSection2 } from './components/annual-report/report-data/section2/section2Calculations.js';
-import { SectionTwo } from './components/annual-report/report-data/section2/SectionTwo';
-
 const query = {
     me: {
         resource: 'me',
@@ -36,6 +33,5 @@ const MyApp = () => (
     </div>
 )
 
-const Section2 = () => (<SectionTwo />)
 
-export default Section2
+export default MyApp
