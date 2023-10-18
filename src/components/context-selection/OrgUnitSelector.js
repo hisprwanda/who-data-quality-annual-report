@@ -54,6 +54,9 @@ export const OrgUnitSelector = ({
         >
             <div className={styles.container}>
                 <div className={styles.orgUnitTreeContainer}>
+                    <span className={styles.orgUnitSpan}>
+                        Choose an organisation unit
+                    </span>
                     <OrganisationUnitTree
                         singleSelect
                         onChange={(orgUnit, e) => {

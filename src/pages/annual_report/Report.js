@@ -18,7 +18,7 @@ const configQuery = {
     me: {
         resource: 'me',
         params: {
-            fields: ['dataViewOrganisationUnits'],
+            fields: ['dataViewOrganisationUnits', 'organisationUnits'],
         },
     },
     orgUnitLevels: {
@@ -94,17 +94,21 @@ const Report = () => {
                         selectedGroup={selectedGroup}
                         setSelectedGroup={setSelectedGroup}
                     />
-                    <PeriodSelector selectedPeriodInfo={selectedPeriodInfo} />
                     <OrgUnitSelector
                         orgUnitLevels={
                             data?.orgUnitLevels?.organisationUnitLevels
                         }
-                        rootOrgUnitsInfo={data?.me?.dataViewOrganisationUnits}
+                        rootOrgUnitsInfo={
+                            data?.me?.dataViewOrganisationUnits?.length
+                                ? data.me.dataViewOrganisationUnits
+                                : data.me.organisationUnits
+                        }
                         selectedOrgUnit={selectedOrgUnit}
                         setSelectedOrgUnit={setSelectedOrgUnit}
                         selectedOrgUnitLevel={selectedOrgUnitLevel}
                         setSelectedOrgUnitLevel={setSelectedOrgUnitLevel}
                     />
+                    <PeriodSelector selectedPeriodInfo={selectedPeriodInfo} />
                 </SelectorBar>
                 <ReportData reportParameters={reportParameters} />
             </>
