@@ -35,8 +35,8 @@ export const getConfigObjectsForAnalytics = (configurations, groupCode) => {
     const numeratorsInGroup = configurations.numerators.filter((numerator) => {
         return (
             members.includes(numerator.code) &&
-            numerator.dataID !== null &&
-            numerator.dataSetID !== null
+            numerator.dataID &&
+            numerator.dataSetID
         )
     })
 
@@ -51,12 +51,11 @@ export const getConfigObjectsForAnalytics = (configurations, groupCode) => {
         }
     })
 
-     // Create an object to index datasets by their IDs
-     const indexedNumerators = {};
-     numeratorsInGroup.forEach((numerator) => {
-        indexedNumerators[numerator.dataID] = numerator;
-    });
-
+    // Create an object to index datasets by their IDs
+    const indexedNumerators = {}
+    numeratorsInGroup.forEach((numerator) => {
+        indexedNumerators[numerator.dataID] = numerator
+    })
 
     // Convert the Set to an array to match dataset IDs
     const allDatasetIDs = [...uniqueDatasetIDs]
@@ -67,15 +66,44 @@ export const getConfigObjectsForAnalytics = (configurations, groupCode) => {
     })
 
     // Create an object to index datasets by their IDs
-    const indexedDatasets = {};
+    const indexedDatasets = {}
 
     datasets.forEach((dataset) => {
-        indexedDatasets[dataset.id] = dataset;
-    });
+        indexedDatasets[dataset.id] = dataset
+    })
+
+    // filter out numerator relations where A or B is not in
+    // then map A, B numerators to ids
+    // then filter out any numerator relations where an ID is missing
+    const numeratorsInGroupCodes = numeratorsInGroup.map((num) => num.code)
+    const numeratorRelations = configurations.numeratorRelations
+        .filter(
+            (nr) =>
+                numeratorsInGroupCodes.includes(nr.A) ||
+                numeratorsInGroupCodes.includes(nr.B)
+        )
+        .map((nr) => {
+            const aID = configurations.numerators.find(
+                (num) => num.code === nr.A
+            )?.dataID
+            const bID = configurations.numerators.find(
+                (num) => num.code === nr.B
+            )?.dataID
+
+            return {
+                A: aID,
+                B: bID,
+                name: nr.name,
+                type: nr.type,
+                criteria: nr.criteria,
+            }
+        })
+        .filter((nr) => nr.A && nr.B)
 
     const configsObj = {
         dataElementsAndIndicators: indexedNumerators,
         dataSets: indexedDatasets,
+        numeratorRelations,
     }
     return configsObj
 }
