@@ -83,10 +83,10 @@ const getValidDataElementPeriodTypes = ({
         return { ...dsMap, [ds.id]: ds.periodType }
     }, {})
     dataElements.forEach((de) => {
+        const dataSetsForDE =
+            mappedConfigurations.dataElementsAndIndicators[de]?.dataSetID
         const periodTypesSet = new Set(
-            mappedConfigurations.dataElementsAndIndicators[de]?.dataSetID?.map(
-                (dsID) => dataSetTypeMap[dsID]
-            )
+            dataSetsForDE?.map((dsID) => dataSetTypeMap[dsID])
         )
         if (periodTypesSet.size === 1) {
             validDataElementPeriodTypes[de] = [...periodTypesSet][0]

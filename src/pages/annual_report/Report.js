@@ -13,7 +13,7 @@ import styles from './Report.module.css'
 
 const configQuery = {
     configuration: {
-        resource: 'dataStore/who-dqa/configurations',
+        resource: 'dataStore/who-dqa/configurationsUPDATED',
     },
     me: {
         resource: 'me',

@@ -1,32 +1,36 @@
-import { Button } from '@dhis2/ui'
-import React from 'react'
-import * as mappedConfigurations from './mappedConfigurations.json'
+import PropTypes from 'prop-types'
+import React, { useEffect } from 'react'
 import { calculateSection2 } from './section2Calculations.js'
 import { useFetchSectionTwoData } from './useFetchSectionTwoData.js'
 
-export const SectionTwo = () => {
-    const variables = {
-        periods: ['2022', '2021', '2020', '2019'],
-        currentPeriod: {
+export const SectionTwo = ({ reportParameters }) => {
+    const { loading, data, error, refetch } = useFetchSectionTwoData()
+
+    useEffect(() => {
+        // this is hardcoded until we address period selection
+        const currentPeriod = {
             id: '2022',
             startDate: '2022-01-01',
             endDate: '2022-12-31',
-        },
-        dataSets: ['dONyxVsQyGS', 'rGDF7yDdhnj', 'YmRjo8j3F3M', 'GhdP8W2GorO'],
-        dataElements: [
+        }
+
+        const oldDataElements = [
             'ieThL7l107F',
             'RvArfQFKdXe',
             'XeRBhx8avQY',
             'YRJjIr5tuD6',
             'YAAmrY2RPbZ',
             'DvUwQScvSpc',
-        ],
-        orgUnits: ['lZsCb6y0KDX'],
-        orgUnitLevel: 'LEVEL-2',
-        mappedConfigurations,
-    }
+        ]
 
-    const { loading, data, error, refetch } = useFetchSectionTwoData()
+        const variables = {
+            ...reportParameters,
+            currentPeriod,
+            dataElements: oldDataElements,
+        }
+
+        refetch({ variables })
+    }, [reportParameters]) // needs to include refetch, which needs to be made stable
 
     if (loading) {
         return <span>loading</span>
@@ -39,20 +43,21 @@ export const SectionTwo = () => {
     if (data) {
         return (
             <span>
-                {JSON.stringify(calculateSection2({ section2Response: data }))}
+                {JSON.stringify(
+                    calculateSection2({
+                        section2Response: data,
+                        mappedConfigurations:
+                            reportParameters.mappedConfigurations,
+                        periods: reportParameters.periods,
+                    })
+                )}
             </span>
         )
     }
 
-    return (
-        <Button
-            primary
-            onClick={() => {
-                refetch({ variables })
-                // generateReport()
-            }}
-        >
-            Generate
-        </Button>
-    )
+    return null
+}
+
+SectionTwo.propTypes = {
+    reportParameters: PropTypes.object,
 }

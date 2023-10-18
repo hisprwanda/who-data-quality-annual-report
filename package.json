@@ -20,6 +20,7 @@
     "@dhis2/analytics": "^25.1.10",
     "@dhis2/multi-calendar-dates": "^1.0.2",
     "@dhis2/ui-core": "^6.24.0",
-    "react-router-dom": "^6.11.1"
+    "react-router-dom": "^6.11.1",
+    "regression": "^2.0.1"
   }
 }

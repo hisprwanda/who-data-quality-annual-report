@@ -10,23 +10,23 @@ export const getReportParameters = ({
         return {}
     }
 
-    const mappedConfiguration = getConfigObjectsForAnalytics(
+    const mappedConfigurations = getConfigObjectsForAnalytics(
         configuration,
         groupID
     )
 
     // periods are hardcoded pending work on period selector
     const reportParameters = {
-        dataSets: Object.keys(mappedConfiguration.dataSets),
+        dataSets: Object.keys(mappedConfigurations.dataSets),
         dataElements: Object.keys(
-            mappedConfiguration.dataElementsAndIndicators
+            mappedConfigurations.dataElementsAndIndicators
         ),
         orgUnits: [orgUnitID],
-        orgUnitLevel: `LEVEL_${orgUnitLevel}`,
+        orgUnitLevel: `LEVEL-${orgUnitLevel}`,
         groupID: groupID,
         periods: ['2022', '2021', '2020', '2019'],
         currentPeriod: '2022',
-        mappedConfiguration,
+        mappedConfigurations,
     }
     return reportParameters
 }
