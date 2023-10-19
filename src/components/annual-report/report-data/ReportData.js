@@ -1,6 +1,14 @@
 import PropTypes from 'prop-types'
 import React from 'react'
 import { SectionTwo } from './section2/SectionTwo.js'
+import styles from './ReportData.module.css'
+
+const SectionLayout = ({title, children}) => (
+    <div>
+        <span className={styles.sectionHeading}>{title.toUpperCase()}</span>
+        {children}
+    </div>
+)
 
 export const ReportData = ({reportParameters}) => {
     if (Object.keys(reportParameters).length===0) {
@@ -9,7 +17,11 @@ export const ReportData = ({reportParameters}) => {
 
     return (
         // <>{JSON.stringify(reportParameters.mappedConfigurations)}</>
-        <SectionTwo reportParameters={reportParameters}/>
+        <div className={styles.reportContainer}>
+            <SectionLayout title='Domain 2 - Internal consistency of reported data'>
+                <SectionTwo reportParameters={reportParameters}/>
+            </SectionLayout>
+        </div>
     ) 
 }
 

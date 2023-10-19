@@ -1,4 +1,4 @@
-import { getForecastValue, getMean, getStats } from './mathService.js'
+import { getForecastValue, getMean, getStats, getRoundedValue } from './mathService.js'
 import { numeratorRelations } from './numeratorRelations.js'
 import {
     getJsonObjectsFormatFromTableFormatSection2,
@@ -21,14 +21,14 @@ const getRowInformation = ({
     overallScore:
         counts.totalValidValues === 0
             ? 0
-            : (counts[countsKey] / counts.totalValidValues) * 100,
+            : getRoundedValue((counts[countsKey] / counts.totalValidValues) * 100,1),
     divergentScores: {
         number: divergentSubOrgUnits[countsKey].length,
         percentage:
-            counts.totalValidValues === 0
+            divergentSubOrgUnits[countsKey].length === 0
                 ? 0
-                : divergentSubOrgUnits[countsKey].length /
-                  counts.totalValidValues,
+                : getRoundedValue(divergentSubOrgUnits[countsKey].length /
+                counts.orgUnitLevelsOrGroup*100,1),
         names: divergentSubOrgUnits[countsKey].sort().join(', '),
     },
 })
@@ -91,8 +91,9 @@ const calculateSections2a2b2c = ({ formattedResponse }) => {
                 )
             }
         }
-
+        
         // now push results to row
+        
         results.section2a.push(
             getRowInformation({
                 dx,
@@ -224,13 +225,13 @@ const calculateSection2d = ({
                           .orgUnitLevelsOrGroups
                     : 'Current vs Forecast',
             qualityThreshold: consistency,
-            overallScore,
+            overallScore: getRoundedValue(overallScore,1),
             divergentRegions: {
                 number: divergentSubOrgUnits.length,
                 percent:
-                    (divergentSubOrgUnits.length /
+                    getRoundedValue((divergentSubOrgUnits.length /
                         orgUnitsByLevelOrGroup.length) *
-                    100,
+                    100,1),
                 names: divergentSubOrgUnits.sort().join(', '),
             },
         })
@@ -345,14 +346,15 @@ const calculateSection2e = ({
             qualityThreshold:
                 numeratorRelation.type === 'do'
                     ? 'Not negative'
-                    : numeratorRelation.criteria,
-            overallScore,
+                    : numeratorRelation.criteria + ' %',
+            overallScore: getRoundedValue(overallScore*100,1),
             divergentSubOrgUnits: {
                 number: divergentSubOrgUnits.length,
                 percentage:
-                    (divergentSubOrgUnits.length /
+                    getRoundedValue((divergentSubOrgUnits.length /
                         orgUnitsByLevelOrGroup.length) *
-                    100,
+                    100,1),
+                names: divergentSubOrgUnits.join(', '),
             },
         })
     }
@@ -371,6 +373,7 @@ export const calculateSection2 = ({
     mappedConfigurations,
     periods,
 }) => {
+    const orgUnitsByLevelOrGroup = section2Response[LEVEL_OR_GROUP].metaData.dimensions.ou
     const formattedResponse2a2b2c = section2Response[RESPONSE_NAME].reduce(
         (mergedFormatted, indResponse) => {
             return {
@@ -391,6 +394,7 @@ export const calculateSection2 = ({
     // Subsections 2a-2c
     const sections2a2b2c = calculateSections2a2b2c({
         formattedResponse: formattedResponse2a2b2c,
+        orgUnitsByLevelOrGroup
     })
 
     // Subsection 2d
@@ -408,8 +412,6 @@ export const calculateSection2 = ({
             calculatingFor: 'data',
         }
     )
-    const orgUnitsByLevelOrGroup =
-        section2Response[LEVEL_OR_GROUP].metaData.dimensions.ou
 
     const section2d = calculateSection2d({
         overallResponse: formattedResponse2dOverall,
