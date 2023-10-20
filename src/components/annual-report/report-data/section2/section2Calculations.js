@@ -1,4 +1,3 @@
-import * as mappedConfigurations from './mappedConfigurations.json'
 import {
     getForecastValue,
     getMean,
@@ -10,6 +9,8 @@ import {
     getJsonObjectsFormatFromTableFormatSection2,
     getJsonObjectsFormatFromTableFormat,
 } from './utils.js'
+
+// format response
 
 const getStatsForSubOrganisationUnitLevelOrGroup = (valuesArray) =>
     getStats(valuesArray)
@@ -27,7 +28,10 @@ const getRowInformation = ({
     overallScore:
         counts.totalValidValues === 0
             ? 0
-            : getRoundedValue((counts[countsKey] / counts.totalValidValues) * 100,1),
+            : getRoundedValue(
+                  (counts[countsKey] / counts.totalValidValues) * 100,
+                  1
+              ),
     divergentScores: {
         number: divergentSubOrgUnits[countsKey].length,
         percentage:
@@ -101,9 +105,8 @@ const calculateSections2a2b2c = ({ formattedResponse }) => {
                 )
             }
         }
-        
+
         // now push results to row
-        
         results.section2a.push(
             getRowInformation({
                 dx,
@@ -174,8 +177,6 @@ const calculateSection2d = ({
     overallResponse,
     levelOrGroupResponse,
     orgUnitsByLevelOrGroup,
-    currentPeriod,
-    comparisonPeriods,
     currentPeriod,
     comparisonPeriods,
 }) => {
@@ -388,7 +389,6 @@ export const calculateSection2 = ({
     mappedConfigurations,
     periods,
 }) => {
-    const orgUnitsByLevelOrGroup = section2Response[LEVEL_OR_GROUP].metaData.dimensions.ou
     const formattedResponse2a2b2c = section2Response[RESPONSE_NAME].reduce(
         (mergedFormatted, indResponse) => {
             return {
@@ -402,14 +402,12 @@ export const calculateSection2 = ({
         {}
     )
 
-    // periods assumed to be in reverse order (current period first)
     const currentPeriod = periods[0]
     const comparisonPeriods = periods.slice(1)
 
     // Subsections 2a-2c
     const sections2a2b2c = calculateSections2a2b2c({
         formattedResponse: formattedResponse2a2b2c,
-        orgUnitsByLevelOrGroup
     })
 
     // Subsection 2d
@@ -427,13 +425,13 @@ export const calculateSection2 = ({
             calculatingFor: 'data',
         }
     )
+    const orgUnitsByLevelOrGroup =
+        section2Response[LEVEL_OR_GROUP].metaData.dimensions.ou
 
     const section2d = calculateSection2d({
         overallResponse: formattedResponse2dOverall,
         levelOrGroupResponse: formattedResponse2dLevelOrGroup,
         orgUnitsByLevelOrGroup,
-        currentPeriod,
-        comparisonPeriods,
         currentPeriod,
         comparisonPeriods,
     })
