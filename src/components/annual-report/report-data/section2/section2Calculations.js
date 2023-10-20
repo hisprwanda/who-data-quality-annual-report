@@ -1,4 +1,10 @@
-import { getForecastValue, getMean, getStats, getRoundedValue } from './mathService.js'
+import * as mappedConfigurations from './mappedConfigurations.json'
+import {
+    getForecastValue,
+    getMean,
+    getStats,
+    getRoundedValue,
+} from './mathService.js'
 import { numeratorRelations } from './numeratorRelations.js'
 import {
     getJsonObjectsFormatFromTableFormatSection2,
@@ -25,10 +31,14 @@ const getRowInformation = ({
     divergentScores: {
         number: divergentSubOrgUnits[countsKey].length,
         percentage:
-            divergentSubOrgUnits[countsKey].length === 0
+            counts.orgUnitLevelsOrGroup === 0
                 ? 0
-                : getRoundedValue(divergentSubOrgUnits[countsKey].length /
-                counts.orgUnitLevelsOrGroup*100,1),
+                : getRoundedValue(
+                      (divergentSubOrgUnits[countsKey].length /
+                          counts.orgUnitLevelsOrGroup) *
+                          100,
+                      1
+                  ),
         names: divergentSubOrgUnits[countsKey].sort().join(', '),
     },
 })
@@ -166,6 +176,8 @@ const calculateSection2d = ({
     orgUnitsByLevelOrGroup,
     currentPeriod,
     comparisonPeriods,
+    currentPeriod,
+    comparisonPeriods,
 }) => {
     const results = {
         section2d: [],
@@ -225,13 +237,15 @@ const calculateSection2d = ({
                           .orgUnitLevelsOrGroups
                     : 'Current vs Forecast',
             qualityThreshold: consistency,
-            overallScore: getRoundedValue(overallScore,1),
-            divergentRegions: {
+            overallScore: getRoundedValue(overallScore, 1),
+            divergentSubOrgUnits: {
                 number: divergentSubOrgUnits.length,
-                percent:
-                    getRoundedValue((divergentSubOrgUnits.length /
+                percent: getRoundedValue(
+                    (divergentSubOrgUnits.length /
                         orgUnitsByLevelOrGroup.length) *
-                    100,1),
+                        100,
+                    1
+                ),
                 names: divergentSubOrgUnits.sort().join(', '),
             },
         })
@@ -346,15 +360,16 @@ const calculateSection2e = ({
             qualityThreshold:
                 numeratorRelation.type === 'do'
                     ? 'Not negative'
-                    : numeratorRelation.criteria + ' %',
-            overallScore: getRoundedValue(overallScore*100,1),
+                    : numeratorRelation.criteria,
+            overallScore: getRoundedValue(overallScore * 100, 1),
             divergentSubOrgUnits: {
                 number: divergentSubOrgUnits.length,
-                percentage:
-                    getRoundedValue((divergentSubOrgUnits.length /
+                percentage: getRoundedValue(
+                    (divergentSubOrgUnits.length /
                         orgUnitsByLevelOrGroup.length) *
-                    100,1),
-                names: divergentSubOrgUnits.join(', '),
+                        100,
+                    1
+                ),
             },
         })
     }
@@ -417,6 +432,8 @@ export const calculateSection2 = ({
         overallResponse: formattedResponse2dOverall,
         levelOrGroupResponse: formattedResponse2dLevelOrGroup,
         orgUnitsByLevelOrGroup,
+        currentPeriod,
+        comparisonPeriods,
         currentPeriod,
         comparisonPeriods,
     })

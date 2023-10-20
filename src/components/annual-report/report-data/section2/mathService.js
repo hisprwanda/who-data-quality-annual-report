@@ -5,7 +5,7 @@ export const getRoundedValue = (val, places) => {
         return val
     }
 
-    return Math.round(val*Math.pow(10,places))/Math.pow(10,places)
+    return Math.round(val * Math.pow(10, places)) / Math.pow(10, places)
 }
 
 const getSum = (valuesArray) => {
