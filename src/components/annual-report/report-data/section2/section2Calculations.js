@@ -29,7 +29,10 @@ const getRowInformation = ({
     overallScore:
         counts.totalValidValues === 0
             ? 0
-            : (counts[countsKey] / counts.totalValidValues) * 100,
+            : getRoundedValue(
+                  (counts[countsKey] / counts.totalValidValues) * 100,
+                  1
+              ),
     divergentScores: {
         number: divergentSubOrgUnits[countsKey].length,
         percentage:
