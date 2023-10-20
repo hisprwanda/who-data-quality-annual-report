@@ -1,5 +1,10 @@
 import * as mappedConfigurations from './mappedConfigurations.json'
-import { getForecastValue, getMean, getStats } from './mathService.js'
+import {
+    getForecastValue,
+    getMean,
+    getStats,
+    getRoundedValue,
+} from './mathService.js'
 import { numeratorRelations } from './numeratorRelations.js'
 import {
     getJsonObjectsFormatFromTableFormatSection2,
@@ -28,10 +33,14 @@ const getRowInformation = ({
     divergentScores: {
         number: divergentSubOrgUnits[countsKey].length,
         percentage:
-            counts.totalValidValues === 0
+            counts.orgUnitLevelsOrGroup === 0
                 ? 0
-                : divergentSubOrgUnits[countsKey].length /
-                  counts.totalValidValues,
+                : getRoundedValue(
+                      (divergentSubOrgUnits[countsKey].length /
+                          counts.orgUnitLevelsOrGroup) *
+                          100,
+                      1
+                  ),
         names: divergentSubOrgUnits[countsKey].sort().join(', '),
     },
 })
@@ -227,13 +236,15 @@ const calculateSection2d = ({
                           .orgUnitLevelsOrGroups
                     : 'Current vs Forecast',
             qualityThreshold: consistency,
-            overallScore,
-            divergentRegions: {
+            overallScore: getRoundedValue(overallScore, 1),
+            divergentSubOrgUnits: {
                 number: divergentSubOrgUnits.length,
-                percent:
+                percent: getRoundedValue(
                     (divergentSubOrgUnits.length /
                         orgUnitsByLevelOrGroup.length) *
-                    100,
+                        100,
+                    1
+                ),
                 names: divergentSubOrgUnits.sort().join(', '),
             },
         })
@@ -349,13 +360,15 @@ const calculateSection2e = ({
                 numeratorRelation.type === 'do'
                     ? 'Not negative'
                     : numeratorRelation.criteria,
-            overallScore,
+            overallScore: getRoundedValue(overallScore * 100, 1),
             divergentSubOrgUnits: {
                 number: divergentSubOrgUnits.length,
-                percentage:
+                percentage: getRoundedValue(
                     (divergentSubOrgUnits.length /
                         orgUnitsByLevelOrGroup.length) *
-                    100,
+                        100,
+                    1
+                ),
             },
         })
     }
