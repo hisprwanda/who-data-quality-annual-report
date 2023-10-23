@@ -11,9 +11,6 @@ import {
 
 // format response
 
-const getStatsForSubOrganisationUnitLevelOrGroup = (valuesArray) =>
-    getStats(valuesArray)
-
 const getRowInformation = ({
     dx,
     counts,
@@ -74,7 +71,7 @@ const calculateSections2a2b2c = ({ formattedResponse }) => {
                 (val) => !isNaN(Number(val))
             )
 
-            const stats = getStatsForSubOrganisationUnitLevelOrGroup({
+            const stats = getStats({
                 valuesArray: validValues,
                 extremeOutlier: formattedResponse[dx].extremeOutlier,
                 moderateOutlier: formattedResponse[dx].moderateOutlier,
