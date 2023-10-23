@@ -2,7 +2,6 @@ import { useDataEngine } from '@dhis2/app-runtime'
 import { generateFixedPeriods } from '@dhis2/multi-calendar-dates'
 import { useState } from 'react'
 import { periodTypesMapping } from '../../utils/period/FixedPeriod.source.js'
-import { numeratorRelations } from './numeratorRelations.js'
 
 const dataSetInformation = {
     dataSets: {
@@ -149,8 +148,12 @@ export const useFetchSectionTwoData = () => {
 
     const refetch = async ({ variables = {} }) => {
         const numeratorRelationDEs = [
-            ...numeratorRelations.map((rel) => rel.A),
-            ...numeratorRelations.map((rel) => rel.B),
+            ...variables?.mappedConfigurations.numeratorRelations?.map(
+                (rel) => rel.A
+            ),
+            ...variables?.mappedConfigurations.numeratorRelations?.map(
+                (rel) => rel.B
+            ),
         ]
 
         // set to loading

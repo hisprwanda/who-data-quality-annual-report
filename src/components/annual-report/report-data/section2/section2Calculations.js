@@ -4,7 +4,6 @@ import {
     getStats,
     getRoundedValue,
 } from './mathService.js'
-import { numeratorRelations } from './numeratorRelations.js'
 import {
     getJsonObjectsFormatFromTableFormatSection2,
     getJsonObjectsFormatFromTableFormat,
@@ -461,7 +460,7 @@ export const calculateSection2 = ({
             ...formattedResponse2dLevelOrGroup,
         },
         orgUnitsByLevelOrGroup,
-        numeratorRelations,
+        numeratorRelations: mappedConfigurations.numeratorRelations,
         currentPeriod,
         metadata: section2Response[LEVEL_OR_GROUP_SECTION_2E].metaData.items,
     })
