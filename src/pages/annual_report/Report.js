@@ -34,20 +34,18 @@ const configQuery = {
 const Report = () => {
     const { loading, data, error } = useDataQuery(configQuery)
     const [selectedGroup, setSelectedGroup] = useState(null)
-    const [selectedPeriodInfo] = useState({
-        periodID: '2022',
-        comparisonPeriods: 3,
-    })
     const [selectedOrgUnit, setSelectedOrgUnit] = useState({})
     const [selectedOrgUnitLevel, setSelectedOrgUnitLevel] = useState(null)
+    const [selectedPeriod, setSelectedPeriod] = useState(null)
+    const [yearsForReference, setYearsForReference] = useState(3)
 
     const configuration = data?.configuration
     const reportGenerateEnabled =
         selectedGroup &&
-        selectedPeriodInfo.periodID &&
-        selectedPeriodInfo.comparisonPeriods &&
         selectedOrgUnit.id &&
-        selectedOrgUnitLevel
+        selectedOrgUnitLevel &&
+        selectedPeriod &&
+        yearsForReference
     const currentReportParameters = useMemo(
         () =>
             getReportParameters({
@@ -55,8 +53,17 @@ const Report = () => {
                 orgUnitID: selectedOrgUnit.id,
                 configuration,
                 orgUnitLevel: selectedOrgUnitLevel,
+                periodID: selectedPeriod?.id,
+                yearsForReference,
             }),
-        [selectedOrgUnit.id, selectedGroup, configuration, selectedOrgUnitLevel]
+        [
+            selectedOrgUnit.id,
+            selectedGroup,
+            configuration,
+            selectedOrgUnitLevel,
+            selectedPeriod?.id,
+            yearsForReference,
+        ]
     )
     const [reportParameters, setReportParameters] = useState({})
 
@@ -109,7 +116,12 @@ const Report = () => {
                         selectedOrgUnitLevel={selectedOrgUnitLevel}
                         setSelectedOrgUnitLevel={setSelectedOrgUnitLevel}
                     />
-                    <PeriodSelector selectedPeriodInfo={selectedPeriodInfo} />
+                    <PeriodSelector
+                        selectedPeriod={selectedPeriod}
+                        setSelectedPeriod={setSelectedPeriod}
+                        yearsForReference={yearsForReference}
+                        setYearsForReference={setYearsForReference}
+                    />
                 </SelectorBar>
                 <ReportData reportParameters={reportParameters} />
             </>

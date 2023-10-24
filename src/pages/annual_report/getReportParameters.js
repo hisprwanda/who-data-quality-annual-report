@@ -5,6 +5,8 @@ export const getReportParameters = ({
     orgUnitID,
     orgUnitLevel,
     configuration,
+    periodID,
+    // yearsForReference,
 }) => {
     if (!orgUnitID || !groupID || !configuration || !orgUnitLevel) {
         return {}
@@ -24,8 +26,9 @@ export const getReportParameters = ({
         orgUnits: [orgUnitID],
         orgUnitLevel: `LEVEL-${orgUnitLevel}`,
         groupID: groupID,
+        // todo: gotta get these from yearsForReference
         periods: ['2022', '2021', '2020', '2019'],
-        currentPeriod: '2022',
+        currentPeriod: periodID,
         mappedConfiguration,
     }
     return reportParameters
