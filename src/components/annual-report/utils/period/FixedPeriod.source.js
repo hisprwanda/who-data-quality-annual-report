@@ -1,8 +1,11 @@
-import moment from "moment"
-
-export const fixedPeriodSource = [{name: 'Yearly', id: 'YEARLY'}, {name: 'Financial Year (Start December)', id: 'FYDEC'}, {name: 'Financial Year (Start October)', id: 'FYOCT'}, {name: 'Financial Year (Start July)', id: 'FYJUL'}, {name: 'Financial Year (Start April)', id: 'FYAPR'}]
-export const year = moment().year()
-
+export const fixedPeriodSource = [
+    { name: 'Yearly', id: 'YEARLY' },
+    { name: 'Financial Year (Start December)', id: 'FYDEC' },
+    { name: 'Financial Year (Start October)', id: 'FYOCT' },
+    { name: 'Financial Year (Start July)', id: 'FYJUL' },
+    { name: 'Financial Year (Start April)', id: 'FYAPR' },
+]
+export const year = new Date().getFullYear()
 
 const periodTypesMapping = {
     Daily: 'DAILY',
