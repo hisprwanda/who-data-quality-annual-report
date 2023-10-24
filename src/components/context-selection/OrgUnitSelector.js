@@ -36,10 +36,7 @@ export const OrgUnitSelector = ({
 }) => {
     const [open, setOpen] = useState(false)
     const rootOrgUnits = rootOrgUnitsInfo.map(({ id }) => id)
-    orgUnitLevels.map((oul) => ({ ...oul, level: Number(oul.level) }))
-    orgUnitLevels.sort((a, b) => {
-        return Number(a.level) - Number(b.level)
-    })
+    
     return (
         <SelectorBarItem
             label="Organisation unit"

@@ -26,6 +26,7 @@ const configQuery = {
         params: {
             paging: false,
             fields: ['id', 'displayName', 'level'],
+            order: 'level:asc',
         },
     },
 }
