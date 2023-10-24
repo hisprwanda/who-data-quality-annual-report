@@ -12,18 +12,21 @@ export const CompletenessOfReport = () => {
                 {mainHeaderLabel.completenessOfReporting}
             </div>
             <div className={style.reportingDataSection}>
-                <div>1a. Completeness of facility reporting</div>
-                <div>
-                    The percentage of expected reports that have been entered
-                    and completed.
-                </div>
+                <div>{completenessLabel.completenessOfFacilityReporting}</div>
+                <div>{completenessLabel.completedReportPercentage}</div>
                 <div>
                     <table>
                         <tr className={style.tableTitle}>
                             <td rowSpan="2">{completenessLabel.dataset}</td>
-                            <td rowSpan="2">{completenessLabel.qualityThreashold}</td>
-                            <td rowSpan="2">{completenessLabel.overallScore}</td>
-                            <td colSpan="3">{completenessLabel.divergentScore}</td>
+                            <td rowSpan="2">
+                                {completenessLabel.qualityThreashold}
+                            </td>
+                            <td rowSpan="2">
+                                {completenessLabel.overallScore}
+                            </td>
+                            <td colSpan="3">
+                                {completenessLabel.divergentScore}
+                            </td>
                         </tr>
                         <tr className={style.tableTitle}>
                             <td>{completenessLabel.num}</td>

@@ -11,6 +11,7 @@ export const completenessLabel = {
     percent: 'Percent',
     timelinessOfFacility: '1b: Timeliness of facility reporting ',
     percentageOfExpectedEntered: ' The percentage of expected reports that have been entered and completed on time. ',
+    completedReportPercentage: 'The percentage of expected reports that have been entered and completed.',
     reportingRate: 'Reporting rate',
     reportingRateOnTime: 'Reporting rate on time',
     completenessOfIndicator: '1c: Completeness of indicator data ',
@@ -20,7 +21,8 @@ export const completenessLabel = {
     percentageNum: '100%',
     qualityThreashold: 'Quality threathold',
     divergentScore: 'with divergent score',
-    name: 'Name'
+    name: 'Name',
+    
 }
 
 export const mainHeaderLabel = {
