@@ -1,8 +1,16 @@
 :root {
     --black: #000;
+    --my-data: #0771cd;
+    --seventy-percent-width: 90%;
+    --report-main-header-background-color: #5b92e5;
+    --report-main-header-font-size: 1.5rem; 
+    --white-color: #fff;
+    --capitalized: capitalize;
+    --main-header-padding: 0.4rem;
 }
 html{
-    background-color: #f3f3f3;
+    background-color: #fff;
+    font-family: Helvetica Neue,Helvetica,Arial,sans-serif;
 
 }
 .container {

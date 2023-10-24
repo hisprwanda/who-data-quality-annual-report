@@ -1,0 +1,51 @@
+.reportParentContainer {
+    width: var(--seventy-percent-width);
+    margin: auto;
+}
+
+.reportingMainHeader {
+    background-color: var(--report-main-header-background-color);
+    font-size: var(--report-main-header-font-size);
+    color: var(--white-color);
+    text-transform: var(--capitalized);
+    padding: var(--main-header-padding);
+
+}
+
+.reportingDataSection {
+    border: 1px solid #dadada;
+    margin-top: 0.12rem;
+}
+
+.reportingDataSection > div:nth-child(1) {
+    background-color: #f9f9f9;
+    font-size: 1.1rem;
+    font-weight: 600;
+    padding: 0.4rem;
+}
+
+.reportingDataSection > div:nth-child(2) {
+    font-size: 1.2rem;
+    font-style: italic;
+    padding: 0.4rem;
+}
+
+table {
+    width: 100%;
+    border-spacing: 0rem;
+    margin-top: 1.9rem;
+    border-collapse: collapse;
+}
+
+td {
+    border: 1px solid #eaeaea;
+    padding: 0.4rem;
+}
+
+.tableTitle {
+    background-color: #f9f9f9;
+}
+
+.tableTitle td {
+    font-weight: 600;
+}
