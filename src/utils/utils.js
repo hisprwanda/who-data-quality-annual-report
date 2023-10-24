@@ -51,12 +51,11 @@ export const getConfigObjectsForAnalytics = (configurations, groupCode) => {
         }
     })
 
-     // Create an object to index datasets by their IDs
-     const indexedNumerators = {};
-     numeratorsInGroup.forEach((numerator) => {
-        indexedNumerators[numerator.dataID] = numerator;
-    });
-
+    // Create an object to index datasets by their IDs
+    const indexedNumerators = {}
+    numeratorsInGroup.forEach((numerator) => {
+        indexedNumerators[numerator.dataID] = numerator
+    })
 
     // Convert the Set to an array to match dataset IDs
     const allDatasetIDs = [...uniqueDatasetIDs]
@@ -67,15 +66,41 @@ export const getConfigObjectsForAnalytics = (configurations, groupCode) => {
     })
 
     // Create an object to index datasets by their IDs
-    const indexedDatasets = {};
+    const indexedDatasets = {}
 
     datasets.forEach((dataset) => {
-        indexedDatasets[dataset.id] = dataset;
-    });
+        indexedDatasets[dataset.id] = dataset
+    })
+
+    const denominatorRelations = configurations.denominatorRelations
+        .map((dr) => {
+            const aInfo = configurations.denominators.find(
+                (denom) => denom.code === dr.A
+            )
+            const bInfo = configurations.denominators.find(
+                (denom) => denom.code === dr.B
+            )
+
+            return {
+                A: {
+                    id: aInfo?.dataID,
+                    lowLevel: aInfo?.lowLevel,
+                },
+                B: {
+                    id: bInfo?.dataID,
+                    lowLevel: bInfo?.lowLevel,
+                },
+                name: dr.name,
+                type: dr.type,
+                criteria: dr.criteria,
+            }
+        })
+        .filter((dr) => dr.A.id && dr.A.lowLevel && dr.B.id && dr.B.lowLevel)
 
     const configsObj = {
         dataElementsAndIndicators: indexedNumerators,
         dataSets: indexedDatasets,
+        denominatorRelations,
     }
     return configsObj
 }
