@@ -73,9 +73,27 @@ export const getConfigObjectsForAnalytics = (configurations, groupCode) => {
         indexedDatasets[dataset.id] = dataset;
     });
 
+    const externalRelations = configurations.externalRelations
+    .map((er) => {
+        const denominator = configurations.denominators.find(
+            (denom) => denom.code === er.denominator
+        )?.dataID
+        const numerator = configurations.numerators.find(
+            (num) => num.code === er.numerator
+        )?.dataID
+
+        return {
+            ...er,
+            denominator,
+            numerator,
+        }
+    })
+    .filter((er) => er.denominator && er.numerator && er.externalData)
+
     const configsObj = {
         dataElementsAndIndicators: indexedNumerators,
         dataSets: indexedDatasets,
+        externalRelations,
     }
     return configsObj
 }
