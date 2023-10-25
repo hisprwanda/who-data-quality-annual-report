@@ -1,4 +1,5 @@
 import { useDataQuery } from '@dhis2/app-runtime'
+import i18n from '@dhis2/d2-i18n'
 import { Button, SelectorBar } from '@dhis2/ui'
 import React, { useMemo, useState } from 'react'
 import { ReportData } from '../../components/annual-report/report-data/ReportData.js'
@@ -72,7 +73,8 @@ const Report = () => {
     }
 
     if (error) {
-        return <span>error</span>
+        console.error(error)
+        return <span>Error</span>
     }
 
     if (data) {
@@ -87,9 +89,9 @@ const Report = () => {
                                 onClick={generateReport}
                                 disabled={!reportGenerateEnabled}
                             >
-                                Generate report
+                                {i18n.t('Generate report')}
                             </Button>
-                            <Button small>Print</Button>
+                            <Button small>{i18n.t('Print')}</Button>
                         </div>
                     }
                 >
