@@ -1,31 +1,16 @@
-.container {
-    width: 400px;
+.menuContainer {
+    min-width: 300px;
     padding: 16px;
+}
+
+.inputsContainer {
     display: flex;
     flex-direction: column;
+    gap: 16px;
+    margin-bottom: 32px;
 }
 
-.orgUnitSpan {
-    font-size: 14px;
-    line-height: 19px;
-    color: rgb(33, 41, 52);
-}
-
-.orgUnitTreeContainer {
+.orgUnitTreeScrollContainer {
     max-height: 700px;
     overflow: auto;
-    margin-bottom: 16px;
-}
-
-.orgUnitLevelContainer {
-    margin-bottom: 16px;
-}
-
-.buttonContainer {
-    display: flex;
-    margin-top: auto;
-}
-
-.buttonContainer * {
-    margin-left: auto;
 }
