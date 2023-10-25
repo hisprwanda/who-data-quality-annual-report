@@ -1,7 +1,7 @@
 import PropTypes from 'prop-types'
 import React from 'react'
+import { SectionThree } from '../section3/SectionThree.js'
 import styles from './ReportData.module.css'
-import { SectionThree } from '../section3/SectionThree'
 
 const SectionLayout = ({ title, children }) => (
     <div>
@@ -22,7 +22,7 @@ export const ReportData = ({ reportParameters }) => {
 
     return (
         <div className={styles.reportContainer}>
-            <SectionLayout title="Domain 4 - Consistency of population data">
+            <SectionLayout title="Domain 3 - External Comparison">
                 <SectionThree reportParameters={reportParameters} />
             </SectionLayout>
         </div>
