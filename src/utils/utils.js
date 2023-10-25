@@ -400,7 +400,7 @@ const getJsonObjectsFormatFromTableFormat_DataValues = ({
         rowData['indicator_name'] = metaData.items[row[dsNameIndex]].name
         const currentElementOrIndicatorUID = row[0].split('.')[0]
         const currentNumerator = findNumerator(
-            mappedConfigurations.dataElementsOrIndicators,
+            mappedConfigurations.dataElementsAndIndicators,
             currentElementOrIndicatorUID
         )
 

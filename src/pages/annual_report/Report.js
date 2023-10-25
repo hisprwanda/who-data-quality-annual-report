@@ -10,6 +10,7 @@ import {
 import MenuBar from '../../components/menu-bar/MenuBar.js'
 import { getReportParameters } from './getReportParameters.js'
 import styles from './Report.module.css'
+import { SectionOne } from '../../components/annual-report/report-data/SectionOne.js'
 
 const configQuery = {
     configuration: {
@@ -112,6 +113,10 @@ const Report = () => {
                     <PeriodSelector selectedPeriodInfo={selectedPeriodInfo} />
                 </SelectorBar>
                 <ReportData reportParameters={reportParameters} />
+
+
+                <SectionOne reportParameters={reportParameters} />
+
             </>
         )
     }
