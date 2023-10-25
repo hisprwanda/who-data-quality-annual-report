@@ -33,23 +33,27 @@ export const getConfigObjectsForAnalytics = (configurations, groupCode) => {
     const uniqueDatasetIDs = new Set()
 
     // Filter numerators with dataID not null and in the group's members
-    const numeratorsInGroup = configurations.numerators.filter((numerator) => {
-        return (
-            members.includes(numerator.code) &&
-            numerator.dataID !== null &&
-            numerator.dataSetID !== null
-        )
-    })
+    const numeratorsInGroup = configurations.numerators
+        .filter((numerator) => {
+            return (
+                members.includes(numerator.code) &&
+                numerator.dataID &&
+                numerator.dataSetID
+            )
+        })
+        // and convert numerator dataSetID to an array of IDs if not already the case (backwards compatibility)
+        .map((numerator) => ({
+            ...numerator,
+            dataSetID: Array.isArray(numerator.dataSetID)
+                ? numerator.dataSetID
+                : [numerator.dataSetID],
+        }))
 
     // Map each numerator's datasetID, which may be an array
     numeratorsInGroup.forEach((numerator) => {
-        if (Array.isArray(numerator.dataSetID)) {
-            numerator.dataSetID.forEach((id) => {
-                uniqueDatasetIDs.add(id)
-            })
-        } else {
-            uniqueDatasetIDs.add(numerator.dataSetID)
-        }
+        numerator.dataSetID.forEach((id) => {
+            uniqueDatasetIDs.add(id)
+        })
     })
 
     // Create an object to index datasets by their IDs
@@ -189,27 +193,31 @@ const getRegionsWithLowScoreCompletenessOfIndicator = (
     // TODO: variables naming in this function could be improved
     const regionsWithLowScore = []
     indicatorObjects.forEach((object) => {
-        const correspondingDatasetID = object.correspondingDatasetID
+        const correspondingDatasetIDs = object.correspondingDatasetIDs
         const ou = object.ou
 
-        if (expectedReportsByLevel[correspondingDatasetID]) {
+        let subOrgUnitScore = 0
+
+        for (const correspondingDatasetID of correspondingDatasetIDs) {
+            if (!expectedReportsByLevel[correspondingDatasetID]) {
+                console.log(
+                    `No dataset found for ID: ${correspondingDatasetID}`
+                )
+            }
             const matchingDataset = expectedReportsByLevel[
                 correspondingDatasetID
             ].find((dataset) => dataset.ou === ou)
             if (matchingDataset) {
-                const score = matchingDataset.score
-                const reportingPercentage = (object.actualValues / score) * 100
-
-                if (reportingPercentage < object.threshold) {
-                    regionsWithLowScore.push(object.orgUnitLevelsOrGroups)
-                }
+                subOrgUnitScore += matchingDataset.score
             } else {
-                console.log(
-                    `No matching dataset found for Region: ${object.orgUnitLevelsOrGroups}`
-                )
+                ;`No matching dataset ${correspondingDatasetID} found for SubOrgUnit: ${object.orgUnitLevelsOrGroups}`
             }
-        } else {
-            console.log(`No dataset found for ID: ${correspondingDatasetID}`)
+        }
+        const reportingPercentage =
+            (object.actualValues / subOrgUnitScore) * 100
+
+        if (reportingPercentage < object.threshold) {
+            regionsWithLowScore.push(object.orgUnitLevelsOrGroups)
         }
     })
 
@@ -400,7 +408,7 @@ const getJsonObjectsFormatFromTableFormat_DataValues = ({
         rowData['indicator_name'] = metaData.items[row[dsNameIndex]].name
         const currentElementOrIndicatorUID = row[0].split('.')[0]
         const currentNumerator = findNumerator(
-            mappedConfigurations.dataElementsOrIndicators,
+            mappedConfigurations.dataElementsAndIndicators,
             currentElementOrIndicatorUID
         )
 
@@ -414,9 +422,16 @@ const getJsonObjectsFormatFromTableFormat_DataValues = ({
         if (!restructuredData[dx][pe]) {
             restructuredData[dx][pe] = []
         }
-        // const expectedValues = getExpectedValues(currentNumerator.dataSetID, expected_overall, period )
-        const expectedValues =
-            expected_overall[currentNumerator.dataSetID][period][0].score
+
+        const expectedValues = currentNumerator.dataSetID.reduce(
+            (totalExpected, dsUID) => {
+                totalExpected += Number(
+                    expected_overall?.[dsUID]?.[period]?.[0]?.score ?? 0
+                )
+                return totalExpected
+            },
+            0
+        )
 
         //TODO: most values here are not needed while working on count_of_data_values_by_org_unit_level, will find a suitable condition to ignore them
         //construct the object for each
@@ -429,7 +444,7 @@ const getJsonObjectsFormatFromTableFormat_DataValues = ({
             ),
             indicator_name: rowData.indicator_name,
             orgUnitLevelsOrGroups: rowData.orgUnitLevelsOrGroups,
-            correspondingDatasetID: currentNumerator.dataSetID,
+            correspondingDatasetIDs: currentNumerator.dataSetID,
             ou: rowData.ou,
         })
     }
