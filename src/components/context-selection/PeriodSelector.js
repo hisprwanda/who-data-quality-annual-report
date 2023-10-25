@@ -20,7 +20,7 @@ const ANNUAL_REPORT_PERIOD_TYPES = [
     { label: i18n.t('Financial Year (December)'), id: 'FYDEC' },
 ]
 
-function PeriodTypeSelect({ periodType, setPeriodType, setPeriod }) {
+function PeriodTypeSelect({ periodType, setPeriodType, setPeriods }) {
     return (
         <SingleSelectField
             label={i18n.t('Period type')}
@@ -29,7 +29,7 @@ function PeriodTypeSelect({ periodType, setPeriodType, setPeriod }) {
             onChange={({ selected }) => {
                 setPeriodType(selected)
                 // Reset period selection too
-                setPeriod(null)
+                setPeriods([])
             }}
         >
             {ANNUAL_REPORT_PERIOD_TYPES.map(({ label, id }) => (
@@ -41,11 +41,18 @@ function PeriodTypeSelect({ periodType, setPeriodType, setPeriod }) {
 PeriodTypeSelect.propTypes = {
     /** Expected to be an ISO ID of the period type */
     periodType: PropTypes.string,
-    setPeriod: PropTypes.func,
     setPeriodType: PropTypes.func,
+    setPeriods: PropTypes.func,
 }
 
-function PeriodSelect({ periodType, period, setPeriod }) {
+/** Combines period and yearsForReference because their state is shared */
+const PeriodsSelect = ({
+    periodType,
+    periods,
+    setPeriods,
+    yearsForReference,
+    setYearsForReference,
+}) => {
     const generatedPeriods = React.useMemo(() => {
         return periodType
             ? generateFixedPeriods({
@@ -59,66 +66,92 @@ function PeriodSelect({ periodType, period, setPeriod }) {
             : []
     }, [periodType])
 
-    return (
-        <SingleSelectField
-            label={i18n.t('Period')}
-            placeholder={i18n.t('Choose a period')}
-            empty={i18n.t('Choose a period type first')}
-            selected={period?.id}
-            onChange={({ selected }) => {
-                const selectedPeriod = generatedPeriods.find(
-                    ({ id }) => id === selected
+    const handleChange = React.useCallback(
+        ({ periodId, newYearsForReference }) => {
+            if (!periodId) {
+                return
+            }
+
+            const selectedPeriodIdx = generatedPeriods.findIndex(
+                ({ id }) => id === periodId
+            )
+            const endIdx = selectedPeriodIdx + newYearsForReference + 1
+            // todo: add an alert to show warning in UI. Could also validate years > 0
+            if (endIdx > generatedPeriods.length) {
+                console.warn(
+                    'The current period selection uses periods older than 10 years ago. Only periods up to 10 years ago will be used.'
                 )
-                setPeriod(selectedPeriod)
-            }}
-        >
-            {generatedPeriods.map((period) => (
-                <SingleSelectOption
-                    key={period.id}
-                    label={period.name}
-                    value={period.id}
-                />
-            ))}
-        </SingleSelectField>
+            }
+
+            const selectedPeriods = generatedPeriods.slice(
+                selectedPeriodIdx,
+                endIdx
+            )
+            setPeriods(selectedPeriods)
+        },
+        [generatedPeriods, setPeriods]
+    )
+
+    return (
+        <>
+            <SingleSelectField
+                label={i18n.t('Period')}
+                placeholder={i18n.t('Choose a period')}
+                empty={i18n.t('Choose a period type first')}
+                selected={periods[0]?.id}
+                onChange={({ selected: periodId }) => {
+                    handleChange({
+                        periodId,
+                        newYearsForReference: yearsForReference,
+                    })
+                }}
+            >
+                {generatedPeriods.map((period) => (
+                    <SingleSelectOption
+                        key={period.id}
+                        label={period.name}
+                        value={period.id}
+                    />
+                ))}
+            </SingleSelectField>
+            <InputField
+                label={i18n.t('Preceding years for reference')}
+                type="number"
+                min={'1'}
+                value={String(yearsForReference)}
+                onChange={({ value }) => {
+                    const newYearsForReference = Number(value)
+                    handleChange({
+                        periodId: periods[0]?.id,
+                        newYearsForReference,
+                    })
+                    setYearsForReference(newYearsForReference)
+                }}
+            />
+        </>
     )
 }
-PeriodSelect.propTypes = {
-    period: PropTypes.object,
+PeriodsSelect.propTypes = {
     /** Expected to be an ISO ID of the period type */
     periodType: PropTypes.string,
-    setPeriod: PropTypes.func,
-}
-
-function YearsForReferenceInput({ yearsForReference, setYearsForReference }) {
-    // todo: validate that the value is > 0
-    return (
-        <InputField
-            label={i18n.t('Preceding years for reference')}
-            type="number"
-            min={'1'}
-            value={String(yearsForReference)}
-            onChange={({ value }) => setYearsForReference(Number(value))}
-        />
-    )
-}
-YearsForReferenceInput.propTypes = {
+    periods: PropTypes.array,
+    setPeriods: PropTypes.func,
     setYearsForReference: PropTypes.func,
     yearsForReference: PropTypes.number,
 }
 
 export const PeriodSelector = ({
-    selectedPeriod: period,
-    setSelectedPeriod: setPeriod,
-    yearsForReference,
-    setYearsForReference,
+    selectedPeriods: periods,
+    setSelectedPeriods: setPeriods,
 }) => {
     const [open, setOpen] = useState(false)
     const [periodType, setPeriodType] = useState()
+    const [yearsForReference, setYearsForReference] = useState(3)
 
     return (
         <SelectorBarItem
             label={i18n.t('Period')}
-            value={period?.name}
+            value={periods[0]?.name}
             noValueMessage={i18n.t('Choose a period')}
             open={open}
             setOpen={setOpen}
@@ -128,14 +161,12 @@ export const PeriodSelector = ({
                     <PeriodTypeSelect
                         periodType={periodType}
                         setPeriodType={setPeriodType}
-                        setPeriod={setPeriod}
+                        setPeriods={setPeriods}
                     />
-                    <PeriodSelect
+                    <PeriodsSelect
                         periodType={periodType}
-                        period={period}
-                        setPeriod={setPeriod}
-                    />
-                    <YearsForReferenceInput
+                        periods={periods}
+                        setPeriods={setPeriods}
                         yearsForReference={yearsForReference}
                         setYearsForReference={setYearsForReference}
                     />
@@ -155,8 +186,6 @@ export const PeriodSelector = ({
     )
 }
 PeriodSelector.propTypes = {
-    selectedPeriod: PropTypes.object,
-    setSelectedPeriod: PropTypes.func,
-    setYearsForReference: PropTypes.func,
-    yearsForReference: PropTypes.number,
+    selectedPeriods: PropTypes.array,
+    setSelectedPeriods: PropTypes.func,
 }

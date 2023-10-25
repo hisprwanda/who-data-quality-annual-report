@@ -1,4 +1,3 @@
-// todo: not sure we need any of these? (some I just used in PeriodSelector.js)
 export const fixedPeriodSource = [
     { name: 'Yearly', id: 'YEARLY' },
     { name: 'Financial Year (Start December)', id: 'FYDEC' },

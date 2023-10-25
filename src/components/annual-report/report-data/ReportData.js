@@ -1,11 +1,11 @@
 import PropTypes from 'prop-types'
 import React from 'react'
 
-export const ReportData = ({reportParameters}) => {
-    if (Object.keys(reportParameters).length===0) {
+export const ReportData = ({ reportParameters }) => {
+    if (Object.keys(reportParameters).length === 0) {
         return null
     }
-    return <span>{JSON.stringify(reportParameters)}</span>
+    return <pre>{JSON.stringify(reportParameters, null, 2)}</pre>
 }
 
 ReportData.propTypes = {

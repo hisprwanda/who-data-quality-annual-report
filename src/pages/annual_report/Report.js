@@ -36,16 +36,14 @@ const Report = () => {
     const [selectedGroup, setSelectedGroup] = useState(null)
     const [selectedOrgUnit, setSelectedOrgUnit] = useState({})
     const [selectedOrgUnitLevel, setSelectedOrgUnitLevel] = useState(null)
-    const [selectedPeriod, setSelectedPeriod] = useState(null)
-    const [yearsForReference, setYearsForReference] = useState(3)
+    const [selectedPeriods, setSelectedPeriods] = useState([])
 
     const configuration = data?.configuration
     const reportGenerateEnabled =
         selectedGroup &&
         selectedOrgUnit.id &&
         selectedOrgUnitLevel &&
-        selectedPeriod &&
-        yearsForReference
+        selectedPeriods.length > 0
     const currentReportParameters = useMemo(
         () =>
             getReportParameters({
@@ -53,16 +51,14 @@ const Report = () => {
                 orgUnitID: selectedOrgUnit.id,
                 configuration,
                 orgUnitLevel: selectedOrgUnitLevel,
-                periodID: selectedPeriod?.id,
-                yearsForReference,
+                periods: selectedPeriods,
             }),
         [
             selectedOrgUnit.id,
             selectedGroup,
             configuration,
             selectedOrgUnitLevel,
-            selectedPeriod?.id,
-            yearsForReference,
+            selectedPeriods,
         ]
     )
     const [reportParameters, setReportParameters] = useState({})
@@ -117,10 +113,8 @@ const Report = () => {
                         setSelectedOrgUnitLevel={setSelectedOrgUnitLevel}
                     />
                     <PeriodSelector
-                        selectedPeriod={selectedPeriod}
-                        setSelectedPeriod={setSelectedPeriod}
-                        yearsForReference={yearsForReference}
-                        setYearsForReference={setYearsForReference}
+                        selectedPeriods={selectedPeriods}
+                        setSelectedPeriods={setSelectedPeriods}
                     />
                 </SelectorBar>
                 <ReportData reportParameters={reportParameters} />
