@@ -96,8 +96,12 @@ const PeriodsSelect = ({
         <>
             <SingleSelectField
                 label={i18n.t('Period')}
-                placeholder={i18n.t('Choose a period')}
-                empty={i18n.t('Choose a period type first')}
+                placeholder={
+                    periodType
+                        ? i18n.t('Choose a period')
+                        : i18n.t('Choose a period type first')
+                }
+                disabled={!periodType}
                 selected={periods[0]?.id}
                 onChange={({ selected: periodId }) => {
                     handleChange({
