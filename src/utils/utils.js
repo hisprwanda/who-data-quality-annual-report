@@ -36,8 +36,9 @@ export const getConfigObjectsForAnalytics = (configurations, groupCode) => {
     const numeratorsInGroup = configurations.numerators.filter((numerator) => {
         return (
             members.includes(numerator.code) &&
-            numerator.dataID !== null &&
-            numerator.dataSetID !== null
+            numerator.dataID &&
+            numerator.dataSetID &&
+            numerator.dataSetID.length
         )
     })
 
@@ -73,9 +74,38 @@ export const getConfigObjectsForAnalytics = (configurations, groupCode) => {
         indexedDatasets[dataset.id] = dataset
     })
 
+    // filter numerator relations to include those where A or B is in group
+    // then map A, B numerators to ids
+    // then filter out any numerator relations where an ID is missing
+    const numeratorsInGroupCodes = numeratorsInGroup.map((num) => num.code)
+    const numeratorRelations = configurations.numeratorRelations
+        .filter(
+            (nr) =>
+                numeratorsInGroupCodes.includes(nr.A) ||
+                numeratorsInGroupCodes.includes(nr.B)
+        )
+        .map((nr) => {
+            const aID = configurations.numerators.find(
+                (num) => num.code === nr.A
+            )?.dataID
+            const bID = configurations.numerators.find(
+                (num) => num.code === nr.B
+            )?.dataID
+
+            return {
+                A: aID,
+                B: bID,
+                name: nr.name,
+                type: nr.type,
+                criteria: nr.criteria,
+            }
+        })
+        .filter((nr) => nr.A && nr.B)
+
     const configsObj = {
         dataElementsAndIndicators: indexedNumerators,
         dataSets: indexedDatasets,
+        numeratorRelations,
     }
     return configsObj
 }
