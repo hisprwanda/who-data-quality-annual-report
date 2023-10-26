@@ -509,8 +509,8 @@ const getFacilityReportingData = ({
             entry.orgUnitLevelsOrGroups = regionsWithLowScore
         })
     }
-
-    return filteredData_overall
+    const flattenedData = Object.values(filteredData_overall).map(item => item[0]);
+    return flattenedData
 }
 
 // get the data for section 1C
@@ -674,7 +674,8 @@ const getCompletenessOfIndicatorData = ({
         })
     }
 
-    return filteredCountOfDataValues
+    const flattenedData = Object.values(filteredCountOfDataValues).map(item => item[0]);
+    return flattenedData
 }
 
 // get the data for section 1D
@@ -756,7 +757,8 @@ const getConsistencyOfDatasetCompletenessData = ({
         })
     }
 
-    return filteredData_overall
+    const flattenedData = Object.values(filteredData_overall).map(item => item[0]);
+    return flattenedData
 }
 
 // function to structure analytics responses into different report sections as json objects using mapped configurations and chosen period
@@ -771,7 +773,7 @@ export const getReportSectionsData = (
 
     const reportSectionsData = {
         section1: {
-            section1A: [
+            section1A: 
                 getFacilityReportingData({
                     allOrgUnitsData:
                         reportQueryResponse.reporting_rate_over_all_org_units,
@@ -781,8 +783,7 @@ export const getReportSectionsData = (
                     period: period,
                     calculatingFor: 'section1A',
                 }), // list of objects for every dataset selected (regarding completeness)
-            ],
-            section1B: [
+            section1B:
                 getFacilityReportingData({
                     allOrgUnitsData:
                         reportQueryResponse.reporting_rate_over_all_org_units,
@@ -792,8 +793,7 @@ export const getReportSectionsData = (
                     period: period,
                     calculatingFor: 'section1B',
                 }), // list of objects for every dataset selected (regarding completeness)
-            ],
-            section1C: [
+            section1C:
                 getCompletenessOfIndicatorData({
                     expected_reports_over_all_org_units:
                         reportQueryResponse.expected_reports_over_all_org_units,
@@ -808,8 +808,7 @@ export const getReportSectionsData = (
                     mappedConfigurations: mappedConfigurations,
                     period: period,
                 }),
-            ],
-            section1D: [
+            section1D:
                 getConsistencyOfDatasetCompletenessData({
                     allOrgUnitsData:
                         reportQueryResponse.reporting_rate_over_all_org_units,
@@ -819,7 +818,6 @@ export const getReportSectionsData = (
                     period: period,
                     calculatingFor: 'section1D',
                 }), // list of objects for Consistency of dataset completeness over time
-            ],
         },
     }
 
