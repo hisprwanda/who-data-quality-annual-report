@@ -243,8 +243,8 @@ const getJsonObjectsFormatFromTableFormat = ({
         rowData['orgUnitLevelsOrGroups'] =
             metaData.items[row[ouHeaderIndex]].name
         rowData['dataset_name'] = metaData.items[row[dsNameIndex]].name
-        const currentDataSetId = row[0].split('.')[0]
-
+        const currentDataSetId = row[dsNameIndex].split('.')[0]
+        
         // adding thresholds where they are not
         if (calculatingFor == 'section1A') {
             rowData['threshold'] =
@@ -269,7 +269,7 @@ const getJsonObjectsFormatFromTableFormat = ({
             } else if (comparison === 'th') {
                 rowData['comparison'] = 'Current vs forecast'
             } else if (comparison == 'ou') {
-                rowData['comparison'] = metaData.items[row[ouHeaderIndex]].name // TODO: verify this a check if it is taking the upper most level of ou. i.e: National
+                rowData['comparison'] = metaData.items[row[ouHeaderIndex]].name
             }
         }
 
@@ -312,8 +312,6 @@ const getJsonObjectsFormatFromTableFormat = ({
 
 // Function to find the numerator
 const findNumerator = (numerators, dataElementID) => {
-    // console.log('numes', numerators)
-
     return (
         numerators[dataElementID] ||
         Object.values(numerators).find((item) => {
@@ -443,31 +441,19 @@ const getFacilityReportingData = ({
     period,
     calculatingFor,
 }) => {
-    // Extract key data from the analytics response
-    const headers_overall = allOrgUnitsData.headers
-    const rows_overall = allOrgUnitsData.rows
-    const metaData_overall = allOrgUnitsData.metaData
-
-    const headers_level = byOrgUnitLevelData.headers
-    const rows_level = byOrgUnitLevelData.rows
-    const metaData_level = byOrgUnitLevelData.metaData
 
     const reporting_rate_over_all_org_units_formatted =
         getJsonObjectsFormatFromTableFormat({
-            headers: headers_overall,
-            rows: rows_overall,
-            metaData: metaData_overall,
-            mappedConfigurations: mappedConfigurations,
-            calculatingFor: calculatingFor,
+            ...allOrgUnitsData,
+            mappedConfigurations,
+            calculatingFor,
         })
 
     const reporting_rate_by_org_unit_level_formatted =
         getJsonObjectsFormatFromTableFormat({
-            headers: headers_level,
-            rows: rows_level,
-            metaData: metaData_level,
-            mappedConfigurations: mappedConfigurations,
-            calculatingFor: calculatingFor,
+            ...byOrgUnitLevelData,
+            mappedConfigurations,
+            calculatingFor,
         })
 
     // filtering data (overall) by provided period
@@ -522,34 +508,11 @@ const getCompletenessOfIndicatorData = ({
     mappedConfigurations,
     period,
 }) => {
-    // Extract key data from the analytics response
-    const headers_expected = expected_reports_over_all_org_units.headers
-    const rows_expected = expected_reports_over_all_org_units.rows
-    const metaData_expected = expected_reports_over_all_org_units.metaData
-
-    const headers_expected_by_level = expected_reports_by_org_unit_level.headers
-    const rows_expected_by_level = expected_reports_by_org_unit_level.rows
-    const metaData_expected_by_level =
-        expected_reports_by_org_unit_level.metaData
-
-    const headers_data_values = count_of_data_values_over_all_org_units.headers
-    const rows_data_values = count_of_data_values_over_all_org_units.rows
-    const metaData_data_values =
-        count_of_data_values_over_all_org_units.metaData
-
-    const headers_data_values_by_levels =
-        count_of_data_values_by_org_unit_level.headers
-    const rows_data_values_by_levels =
-        count_of_data_values_by_org_unit_level.rows
-    const metaData_data_values_by_levels =
-        count_of_data_values_by_org_unit_level.metaData
-
+    
     // exptected reports overll org units
     const expected_reports_over_all_org_units_formatted =
         getJsonObjectsFormatFromTableFormat({
-            headers: headers_expected,
-            rows: rows_expected,
-            metaData: metaData_expected,
+            ...expected_reports_over_all_org_units,
             mappedConfigurations: mappedConfigurations,
             calculatingFor: 'section1C',
         })
@@ -557,9 +520,7 @@ const getCompletenessOfIndicatorData = ({
     // exptected reports by org unit level
     const expected_reports_by_org_unit_level_formatted =
         getJsonObjectsFormatFromTableFormat({
-            headers: headers_expected_by_level,
-            rows: rows_expected_by_level,
-            metaData: metaData_expected_by_level,
+            ...expected_reports_by_org_unit_level,
             mappedConfigurations: mappedConfigurations,
             calculatingFor: 'section1C',
         })
@@ -567,9 +528,7 @@ const getCompletenessOfIndicatorData = ({
     // data values
     const count_of_data_values_over_all_org_units_formatted =
         getJsonObjectsFormatFromTableFormat_DataValues({
-            headers: headers_data_values,
-            rows: rows_data_values,
-            metaData: metaData_data_values,
+            ...count_of_data_values_over_all_org_units,
             mappedConfigurations: mappedConfigurations,
             expected_overall: expected_reports_over_all_org_units_formatted,
             period: period,
@@ -579,9 +538,7 @@ const getCompletenessOfIndicatorData = ({
     // TODO: for this the expected_reports_over_all_org_units_formatted is not neccessary improve this (will find a way to remove it without harming the code's working)
     const count_of_data_values_by_org_unit_level_formatted =
         getJsonObjectsFormatFromTableFormat_DataValues({
-            headers: headers_data_values_by_levels,
-            rows: rows_data_values_by_levels,
-            metaData: metaData_data_values_by_levels,
+            ...count_of_data_values_by_org_unit_level,
             mappedConfigurations: mappedConfigurations,
             expected_overall: expected_reports_over_all_org_units_formatted,
             period: period,
@@ -686,29 +643,17 @@ const getConsistencyOfDatasetCompletenessData = ({
     period,
     calculatingFor,
 }) => {
-    // Extract key data from the analytics response
-    const headers_overall = allOrgUnitsData.headers
-    const rows_overall = allOrgUnitsData.rows
-    const metaData_overall = allOrgUnitsData.metaData
-
-    const headers_level = byOrgUnitLevelData.headers
-    const rows_level = byOrgUnitLevelData.rows
-    const metaData_level = byOrgUnitLevelData.metaData
 
     const reporting_rate_over_all_org_units_formatted =
         getJsonObjectsFormatFromTableFormat({
-            headers: headers_overall,
-            rows: rows_overall,
-            metaData: metaData_overall,
+            ...allOrgUnitsData,
             mappedConfigurations: mappedConfigurations,
             calculatingFor: calculatingFor,
         })
 
     const reporting_rate_by_org_unit_level_formatted =
         getJsonObjectsFormatFromTableFormat({
-            headers: headers_level,
-            rows: rows_level,
-            metaData: metaData_level,
+            ...byOrgUnitLevelData,
             mappedConfigurations: mappedConfigurations,
             calculatingFor: calculatingFor,
         })
@@ -720,9 +665,9 @@ const getConsistencyOfDatasetCompletenessData = ({
     )
 
     // get available regions to calculate for
-    const regions = metaData_level.dimensions.ou.map((id) => ({
+    const regions = byOrgUnitLevelData.metaData.dimensions.ou.map((id) => ({
         id,
-        name: metaData_level.items[id].name,
+        name: byOrgUnitLevelData.metaData.items[id].name,
     }))
 
     // updating the object with orgUnitLevelsOrGroups list, divergent count & divergent percentage
