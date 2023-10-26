@@ -1,7 +1,7 @@
 import i18n from '@dhis2/d2-i18n'
 import {
     Button,
-    Label,
+    Field,
     OrganisationUnitTree,
     SelectorBarItem,
     SingleSelectField,
@@ -49,12 +49,11 @@ export const OrgUnitSelector = ({
             })}
             open={open}
             setOpen={setOpen}
-            noValueMessage={'Choose an organisation unit'}
+            noValueMessage={i18n.t('Choose an organisation unit')}
         >
             <div className={styles.menuContainer}>
                 <div className={styles.inputsContainer}>
-                    <div>
-                        <Label>{i18n.t('Choose an organisation unit')}</Label>
+                    <Field label={i18n.t('Choose an organisation unit')}>
                         <div className={styles.orgUnitTreeScrollContainer}>
                             <OrganisationUnitTree
                                 singleSelect
@@ -86,7 +85,7 @@ export const OrgUnitSelector = ({
                                 }
                             />
                         </div>
-                    </div>
+                    </Field>
                     <SingleSelectField
                         label={i18n.t('Choose an organisation unit level')}
                         selected={selectedOrgUnitLevel ?? ''}
