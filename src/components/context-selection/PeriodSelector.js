@@ -1,3 +1,4 @@
+import { useAlert } from '@dhis2/app-runtime'
 import i18n from '@dhis2/d2-i18n'
 import { generateFixedPeriods } from '@dhis2/multi-calendar-dates'
 import {
@@ -16,8 +17,7 @@ const ANNUAL_REPORT_PERIOD_TYPES = [
     { label: i18n.t('Financial Year (April)'), id: 'FYAPR' },
     { label: i18n.t('Financial Year (July)'), id: 'FYJUL' },
     { label: i18n.t('Financial Year (October)'), id: 'FYOCT' },
-    // todo: wait, what? should this be Nov? see /api/periodTypes
-    { label: i18n.t('Financial Year (December)'), id: 'FYDEC' },
+    { label: i18n.t('Financial Year (November)'), id: 'FYNOV' },
 ]
 
 function PeriodTypeSelect({ periodType, setPeriodType, setPeriods }) {
@@ -53,14 +53,25 @@ const PeriodsSelect = ({
     yearsForReference,
     setYearsForReference,
 }) => {
+    const { show: showPeriodLengthWarning } = useAlert(
+        ({ period, years }) =>
+            i18n.t(
+                'The current period selection of {{period}} with {{years}} ' +
+                    'years for reference uses periods older than 10 years ago. ' +
+                    'Only periods up to 10 years ago will be used for the report.',
+                { period, years }
+            ),
+        { warning: true }
+    )
+
     const generatedPeriods = React.useMemo(() => {
         return periodType
             ? generateFixedPeriods({
-                  // todo: should this be systemInfo.calendar?
+                  // todo: internationalize; systemInfo.calendar?
                   calendar: 'gregory',
                   periodType: periodType,
                   year: new Date().getFullYear() - 1,
-                  // todo: internationalize; me.settings.keyUiLocale (or DB locale?)
+                  // todo: internationalize; me.settings.keyUiLocale (or DB locale)?
                   locale: 'en',
               })
             : []
@@ -76,12 +87,14 @@ const PeriodsSelect = ({
                 ({ id }) => id === periodId
             )
             const endIdx = selectedPeriodIdx + newYearsForReference + 1
-            // todo: add an alert to show warning in UI. Could also validate years > 0
             if (endIdx > generatedPeriods.length) {
-                console.warn(
-                    'The current period selection uses periods older than 10 years ago. Only periods up to 10 years ago will be used.'
-                )
-            }
+                showPeriodLengthWarning({
+                    period: periodId,
+                    years: newYearsForReference,
+                })
+            } 
+            // else { alert.hide() } isn't working 🤔 oh well, it's okay without
+            // todo: Could also validate years > 0
 
             const selectedPeriods = generatedPeriods.slice(
                 selectedPeriodIdx,
@@ -89,7 +102,7 @@ const PeriodsSelect = ({
             )
             setPeriods(selectedPeriods)
         },
-        [generatedPeriods, setPeriods]
+        [generatedPeriods, setPeriods, showPeriodLengthWarning]
     )
 
     return (
