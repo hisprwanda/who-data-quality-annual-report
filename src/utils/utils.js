@@ -73,7 +73,7 @@ export const getConfigObjectsForAnalytics = (configurations, groupCode) => {
         indexedDatasets[dataset.id] = dataset
     })
 
-    // filter out numerator relations where A or B is not in
+    // filter numerator relations to include those where A or B is in group
     // then map A, B numerators to ids
     // then filter out any numerator relations where an ID is missing
     const numeratorsInGroupCodes = numeratorsInGroup.map((num) => num.code)
