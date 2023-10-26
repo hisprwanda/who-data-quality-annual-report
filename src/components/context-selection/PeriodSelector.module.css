@@ -1,5 +1,5 @@
 .menuContainer {
-    width: 400px;
+    min-width: 300px;
     padding: 16px;
 }
 
@@ -8,9 +8,4 @@
     flex-direction: column;
     gap: 16px;
     margin-bottom: 32px;
-}
-
-.orgUnitTreeScrollContainer {
-    max-height: 700px;
-    overflow: auto;
 }
