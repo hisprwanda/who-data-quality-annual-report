@@ -208,7 +208,7 @@ const getRegionsWithLowScoreCompletenessOfIndicator = (
                 correspondingDatasetID
             ].find((dataset) => dataset.ou === ou)
             if (matchingDataset) {
-                subOrgUnitScore += matchingDataset.score
+                subOrgUnitScore += matchingDataset.score ?? 0
             } else {
                 ;`No matching dataset ${correspondingDatasetID} found for SubOrgUnit: ${object.orgUnitLevelsOrGroups}`
             }
