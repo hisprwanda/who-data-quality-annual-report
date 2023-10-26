@@ -36,7 +36,8 @@ export const getConfigObjectsForAnalytics = (configurations, groupCode) => {
         return (
             members.includes(numerator.code) &&
             numerator.dataID &&
-            numerator.dataSetID
+            numerator.dataSetID &&
+            numerator.dataSetID.length
         )
     })
 
