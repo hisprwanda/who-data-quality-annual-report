@@ -1,8 +1,12 @@
 import { useDataEngine } from '@dhis2/app-runtime'
 import { useCallback, useState } from 'react'
 
+export const OVERALL_RESPONSE_NAME = 'data_over_all_org_units'
+export const BY_LEVEL_RESPONSE_NAME = 'data_detail_by_level'
+export const DENOMINATOR_RELATIONS_MAP = 'denominatorRelationsMap'
+
 const section4ByLevel = {
-    data_detail_by_level: {
+    [BY_LEVEL_RESPONSE_NAME]: {
         resource: 'analytics.json',
         params: ({ dataElements, orgUnits, orgUnitLevel, periods }) => ({
             dimension: `dx:${dataElements.join(';')},ou:${
@@ -13,7 +17,7 @@ const section4ByLevel = {
 }
 
 const section4Overall = {
-    data_over_all_org_units: {
+    [OVERALL_RESPONSE_NAME]: {
         resource: 'analytics.json',
         params: ({ dataElements, orgUnits, periods }) => ({
             dimension: `dx:${dataElements.join(';')},ou:${orgUnits.join(
@@ -104,7 +108,7 @@ export const useFetchSectionFourData = () => {
                     data_detail_by_level: dataByLevel.map(
                         (resp) => resp?.data_detail_by_level
                     ),
-                    denominatorRelationsMap: byLevelRequestDenomRelations,
+                    [DENOMINATOR_RELATIONS_MAP]: byLevelRequestDenomRelations,
                 })
             } catch (e) {
                 console.error(e)
