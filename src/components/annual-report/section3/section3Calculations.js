@@ -1,10 +1,10 @@
 import { getRoundedValue } from '../utils/mathService.js'
 import { mapSectionFourResponse } from '../utils/utils.js'
-
-const OVERALL_RESPONSE_NAME = 'data_over_all_org_units'
-const BY_LEVEL_RESPONSE_NAME = 'data_detail_by_level'
-const EXTERNAL_RELATIONS_INDICES_WITH_BY_LEVEL_DATA =
-    'externalRelationsResponsesIndices'
+import {
+    OVERALL_RESPONSE_NAME,
+    BY_LEVEL_RESPONSE_NAME,
+    EXTERNAL_RELATIONS_INDICES_WITH_BY_LEVEL_DATA,
+} from './useFetchSectionThreeData.js'
 
 const getVal = ({ response, dx, ou, pe }) => {
     return response?.[dx]?.[ou]?.[pe]

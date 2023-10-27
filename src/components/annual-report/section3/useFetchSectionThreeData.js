@@ -1,8 +1,13 @@
 import { useDataEngine } from '@dhis2/app-runtime'
 import { useState } from 'react'
 
+export const OVERALL_RESPONSE_NAME = 'data_over_all_org_units'
+export const BY_LEVEL_RESPONSE_NAME = 'data_detail_by_level'
+export const EXTERNAL_RELATIONS_INDICES_WITH_BY_LEVEL_DATA =
+    'externalRelationsResponsesIndices'
+
 const section3ByLevel = {
-    data_detail_by_level: {
+    [BY_LEVEL_RESPONSE_NAME]: {
         resource: 'analytics.json',
         params: ({ dataElements, orgUnits, orgUnitLevel, periods }) => ({
             dimension: `dx:${dataElements.join(';')},ou:${
@@ -13,7 +18,7 @@ const section3ByLevel = {
 }
 
 const section3Overall = {
-    data_over_all_org_units: {
+    [OVERALL_RESPONSE_NAME]: {
         resource: 'analytics.json',
         params: ({ dataElements, orgUnits, periods }) => ({
             dimension: `dx:${dataElements.join(';')},ou:${orgUnits.join(
@@ -99,7 +104,8 @@ export const useFetchSectionThreeData = () => {
                 data_detail_by_level: dataByLevel.map(
                     (resp) => resp?.data_detail_by_level
                 ),
-                externalRelationsResponsesIndices: byLevelRequestIndices,
+                [EXTERNAL_RELATIONS_INDICES_WITH_BY_LEVEL_DATA]:
+                    byLevelRequestIndices,
             })
         } catch (e) {
             console.error(e)
