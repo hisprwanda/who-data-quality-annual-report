@@ -133,7 +133,7 @@ export const SectionFour = ({ reportParameters }) => {
         }
 
         refetch({ variables })
-    }, [reportParameters]) // should include refetch, which needs to be made stable
+    }, [refetch, reportParameters])
 
     if (loading) {
         return <span>loading</span>
