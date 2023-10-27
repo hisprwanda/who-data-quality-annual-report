@@ -101,8 +101,6 @@ export const getConfigObjectsForAnalytics = (configurations, groupCode) => {
             }
         })
         .filter((nr) => nr.A && nr.B)
-        indexedDatasets[dataset.id] = dataset
-    })
 
     const denominatorRelations = !configurations.denominatorRelations
         ? []
