@@ -43,14 +43,17 @@ export const useFetchSectionThreeData = () => {
     const engine = useDataEngine()
 
     const refetch = async ({ variables = {} }) => {
-        const { mappedConfiguration, boundaryOrgUnitLevel } = variables
-        const { externalRelations } = mappedConfiguration
+        const boundaryOrgUnitLevel = variables.boundaryOrgUnitLevel
 
-        const externalRelationsDEs = [
-            ...externalRelations?.map((rel) => rel.denominator),
-            ...externalRelations?.map((rel) => rel.numerator),
-            ...externalRelations?.map((rel) => rel.externalData),
-        ]
+        const externalRelations =
+            variables?.mappedConfiguration?.externalRelations
+        const externalRelationsDEs = externalRelations
+            ? [
+                  ...externalRelations.map((rel) => rel.denominator),
+                  ...externalRelations.map((rel) => rel.numerator),
+                  ...externalRelations.map((rel) => rel.externalData),
+              ]
+            : []
 
         // set to loading
         setLoading(true)
