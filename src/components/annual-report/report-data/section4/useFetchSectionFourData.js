@@ -38,11 +38,11 @@ export const useFetchSectionFourData = () => {
     const engine = useDataEngine()
 
     const refetch = async ({ variables = {} }) => {
-        const { denominatorRelations } = variables?.mappedConfiguration
-        const denominatorRelationDEs = [
-            ...denominatorRelations?.map((rel) => rel.A.id),
-            ...denominatorRelations?.map((rel) => rel.B.id),
-        ]
+        const denominatorRelations = variables?.mappedConfiguration?.denominatorRelations
+        const denominatorRelationDEs = denominatorRelations ? [
+            ...denominatorRelations.map((rel) => rel.A.id),
+            ...denominatorRelations.map((rel) => rel.B.id),
+        ] : []
 
         // set to loading
         setLoading(true)
