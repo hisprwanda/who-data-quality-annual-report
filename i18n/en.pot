@@ -5,8 +5,8 @@ msgstr ""
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1)\n"
-"POT-Creation-Date: 2023-06-08T09:27:39.918Z\n"
-"PO-Revision-Date: 2023-06-08T09:27:39.918Z\n"
+"POT-Creation-Date: 2023-10-26T11:52:21.650Z\n"
+"PO-Revision-Date: 2023-10-26T11:52:21.650Z\n"
 
 msgid "Select period(s)"
 msgstr "Select period(s)"
@@ -16,3 +16,60 @@ msgstr "Cancel"
 
 msgid "Save"
 msgstr "Save"
+
+msgid "Group"
+msgstr "Group"
+
+msgid "Choose a group"
+msgstr "Choose a group"
+
+msgid "Organisation unit"
+msgstr "Organisation unit"
+
+msgid "Choose an organisation unit"
+msgstr "Choose an organisation unit"
+
+msgid "Choose an organisation unit level"
+msgstr "Choose an organisation unit level"
+
+msgid "Hide menu"
+msgstr "Hide menu"
+
+msgid "Yearly"
+msgstr "Yearly"
+
+msgid "Financial Year (April)"
+msgstr "Financial Year (April)"
+
+msgid "Financial Year (July)"
+msgstr "Financial Year (July)"
+
+msgid "Financial Year (October)"
+msgstr "Financial Year (October)"
+
+msgid "Financial Year (November)"
+msgstr "Financial Year (November)"
+
+msgid "Period type"
+msgstr "Period type"
+
+msgid "Choose a period type"
+msgstr "Choose a period type"
+
+msgid "Period"
+msgstr "Period"
+
+msgid "Choose a period"
+msgstr "Choose a period"
+
+msgid "Choose a period type first"
+msgstr "Choose a period type first"
+
+msgid "Preceding years for reference"
+msgstr "Preceding years for reference"
+
+msgid "Generate report"
+msgstr "Generate report"
+
+msgid "Print"
+msgstr "Print"
