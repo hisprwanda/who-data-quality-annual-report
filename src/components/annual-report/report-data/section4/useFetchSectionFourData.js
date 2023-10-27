@@ -81,7 +81,7 @@ export const useFetchSectionFourData = () => {
                                 dataElements: [rel.A.id, rel.B.id],
                                 orgUnits: variables.orgUnits,
                                 orgUnitLevel: `LEVEL-${denomMinLevel}`,
-                                periods: [variables?.currentPeriod.id],
+                                periods: [variables.currentPeriod?.id],
                             },
                         }),
                         relation: { index, ...rel, denomMinLevel },

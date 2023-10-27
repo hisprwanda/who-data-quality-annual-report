@@ -13,7 +13,7 @@ const getVal = ({ response, dx, ou, pe }) => {
 const calculateSection4a = ({
     formattedResponseOverall,
     denominatorRelations,
-    currentPeriod,
+    currentPeriodID,
     overallOrgUnit,
 }) => {
     const section4a = []
@@ -28,13 +28,13 @@ const calculateSection4a = ({
                     response: formattedResponseOverall,
                     dx: rel.A.id,
                     ou: overallOrgUnit,
-                    pe: currentPeriod,
+                    pe: currentPeriodID,
                 }) /
                     getVal({
                         response: formattedResponseOverall,
                         dx: rel.B.id,
                         ou: overallOrgUnit,
-                        pe: currentPeriod,
+                        pe: currentPeriodID,
                     }),
                 2
             ),
@@ -53,7 +53,7 @@ const calculateSection4b = ({
     unformattedIndResponse,
     formattedResponseOverall,
     relation,
-    currentPeriod,
+    currentPeriodID,
     overallOrgUnit,
 }) => {
     const metadata = unformattedIndResponse.metaData.items
@@ -62,7 +62,7 @@ const calculateSection4b = ({
         aID: relation.A.id,
         bID: relation.B.id,
         ou: overallOrgUnit,
-        pe: currentPeriod,
+        pe: currentPeriodID,
     })
     const fourBItem = {
         overallScore,
@@ -90,7 +90,7 @@ const calculateSection4b = ({
             aID: relation.A.id,
             bID: relation.B.id,
             ou: subOrgUnitID,
-            pe: currentPeriod,
+            pe: currentPeriodID,
         })
 
         if (
@@ -133,7 +133,7 @@ export const calculateSection4 = ({
     const section4a = calculateSection4a({
         formattedResponseOverall,
         denominatorRelations: mappedConfiguration.denominatorRelations ?? [],
-        currentPeriod,
+        currentPeriodID: currentPeriod?.id,
         overallOrgUnit,
     })
 
@@ -146,7 +146,7 @@ export const calculateSection4 = ({
                 unformattedIndResponse,
                 formattedResponseOverall,
                 relation,
-                currentPeriod,
+                currentPeriodID: currentPeriod?.id,
                 overallOrgUnit,
             })
         }
