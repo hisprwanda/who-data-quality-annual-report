@@ -72,30 +72,34 @@ export const getConfigObjectsForAnalytics = (configurations, groupCode) => {
         indexedDatasets[dataset.id] = dataset
     })
 
-    const denominatorRelations = configurations.denominatorRelations
-        .map((dr) => {
-            const aInfo = configurations.denominators.find(
-                (denom) => denom.code === dr.A
-            )
-            const bInfo = configurations.denominators.find(
-                (denom) => denom.code === dr.B
-            )
+    const denominatorRelations = !configurations.denominatorRelations
+        ? []
+        : configurations.denominatorRelations
+              .map((dr) => {
+                  const aInfo = configurations.denominators.find(
+                      (denom) => denom.code === dr.A
+                  )
+                  const bInfo = configurations.denominators.find(
+                      (denom) => denom.code === dr.B
+                  )
 
-            return {
-                A: {
-                    id: aInfo?.dataID,
-                    lowLevel: aInfo?.lowLevel,
-                },
-                B: {
-                    id: bInfo?.dataID,
-                    lowLevel: bInfo?.lowLevel,
-                },
-                name: dr.name,
-                type: dr.type,
-                criteria: dr.criteria,
-            }
-        })
-        .filter((dr) => dr.A.id && dr.A.lowLevel && dr.B.id && dr.B.lowLevel)
+                  return {
+                      A: {
+                          id: aInfo?.dataID,
+                          lowLevel: aInfo?.lowLevel,
+                      },
+                      B: {
+                          id: bInfo?.dataID,
+                          lowLevel: bInfo?.lowLevel,
+                      },
+                      name: dr.name,
+                      type: dr.type,
+                      criteria: dr.criteria,
+                  }
+              })
+              .filter(
+                  (dr) => dr.A.id && dr.A.lowLevel && dr.B.id && dr.B.lowLevel
+              )
 
     const configsObj = {
         dataElementsAndIndicators: indexedNumerators,
