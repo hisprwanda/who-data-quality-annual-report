@@ -1,5 +1,7 @@
+import i18n from '@dhis2/d2-i18n'
 import {
     Button,
+    Field,
     OrganisationUnitTree,
     SelectorBarItem,
     SingleSelectField,
@@ -36,13 +38,10 @@ export const OrgUnitSelector = ({
 }) => {
     const [open, setOpen] = useState(false)
     const rootOrgUnits = rootOrgUnitsInfo.map(({ id }) => id)
-    orgUnitLevels.map((oul) => ({ ...oul, level: Number(oul.level) }))
-    orgUnitLevels.sort((a, b) => {
-        return Number(a.level) - Number(b.level)
-    })
+
     return (
         <SelectorBarItem
-            label="Organisation unit"
+            label={i18n.t('Organisation unit')}
             value={getSelectionLabel({
                 selectedOrgUnit,
                 selectedOrgUnitLevel,
@@ -50,43 +49,45 @@ export const OrgUnitSelector = ({
             })}
             open={open}
             setOpen={setOpen}
-            noValueMessage={'Choose an organisation unit'}
+            noValueMessage={i18n.t('Choose an organisation unit')}
         >
-            <div className={styles.container}>
-                <div className={styles.orgUnitTreeContainer}>
-                    <span className={styles.orgUnitSpan}>
-                        Choose an organisation unit
-                    </span>
-                    <OrganisationUnitTree
-                        singleSelect
-                        onChange={(orgUnit, e) => {
-                            e.stopPropagation()
-                            // level is not included on selected; would be better to amend
-                            const computedLevel = (
-                                orgUnit.path.match(/\//g) || []
-                            ).length
-                            // clear out selected level if selected org unit is too low
-                            if (
-                                selectedOrgUnitLevel &&
-                                Number(selectedOrgUnitLevel) <= computedLevel
-                            ) {
-                                setSelectedOrgUnitLevel(null)
-                            }
-                            setSelectedOrgUnit({
-                                ...orgUnit,
-                                level: computedLevel,
-                            })
-                        }}
-                        isUserDataViewFallback={true}
-                        roots={rootOrgUnits}
-                        selected={
-                            selectedOrgUnit?.path ? [selectedOrgUnit?.path] : []
-                        }
-                    />
-                </div>
-                <div className={styles.orgUnitTreeContainer}>
+            <div className={styles.menuContainer}>
+                <div className={styles.inputsContainer}>
+                    <Field label={i18n.t('Choose an organisation unit')}>
+                        <div className={styles.orgUnitTreeScrollContainer}>
+                            <OrganisationUnitTree
+                                singleSelect
+                                onChange={(orgUnit, e) => {
+                                    e.stopPropagation()
+                                    // level is not included on selected; would be better to amend
+                                    const computedLevel = (
+                                        orgUnit.path.match(/\//g) || []
+                                    ).length
+                                    // clear out selected level if selected org unit is too low
+                                    if (
+                                        selectedOrgUnitLevel &&
+                                        Number(selectedOrgUnitLevel) <=
+                                            computedLevel
+                                    ) {
+                                        setSelectedOrgUnitLevel(null)
+                                    }
+                                    setSelectedOrgUnit({
+                                        ...orgUnit,
+                                        level: computedLevel,
+                                    })
+                                }}
+                                isUserDataViewFallback={true}
+                                roots={rootOrgUnits}
+                                selected={
+                                    selectedOrgUnit?.path
+                                        ? [selectedOrgUnit?.path]
+                                        : []
+                                }
+                            />
+                        </div>
+                    </Field>
                     <SingleSelectField
-                        label={'Choose an organisation unit level'}
+                        label={i18n.t('Choose an organisation unit level')}
                         selected={selectedOrgUnitLevel ?? ''}
                         onChange={({ selected }) =>
                             setSelectedOrgUnitLevel(selected)
@@ -107,18 +108,15 @@ export const OrgUnitSelector = ({
                             ))}
                     </SingleSelectField>
                 </div>
-                <div className={styles.buttonContainer}>
-                    <Button
-                        small
-                        primary
-                        onClick={(_, e) => {
-                            e.stopPropagation()
-                            setOpen(false)
-                        }}
-                    >
-                        Hide
-                    </Button>
-                </div>
+                <Button
+                    secondary
+                    onClick={(_, e) => {
+                        e.stopPropagation()
+                        setOpen(false)
+                    }}
+                >
+                    {i18n.t('Hide menu')}
+                </Button>
             </div>
         </SelectorBarItem>
     )

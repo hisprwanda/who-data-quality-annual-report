@@ -1,4 +1,5 @@
 import { useDataQuery } from '@dhis2/app-runtime'
+import i18n from '@dhis2/d2-i18n'
 import { Button, SelectorBar } from '@dhis2/ui'
 import React, { useMemo, useState } from 'react'
 import { ReportData } from '../../components/annual-report/report-data/ReportData.js'
@@ -26,6 +27,7 @@ const configQuery = {
         params: {
             paging: false,
             fields: ['id', 'displayName', 'level'],
+            order: 'level:asc',
         },
     },
 }
@@ -33,20 +35,16 @@ const configQuery = {
 const Report = () => {
     const { loading, data, error } = useDataQuery(configQuery)
     const [selectedGroup, setSelectedGroup] = useState(null)
-    const [selectedPeriodInfo] = useState({
-        periodID: '2022',
-        comparisonPeriods: 3,
-    })
     const [selectedOrgUnit, setSelectedOrgUnit] = useState({})
     const [selectedOrgUnitLevel, setSelectedOrgUnitLevel] = useState(null)
+    const [selectedPeriods, setSelectedPeriods] = useState([])
 
     const configuration = data?.configuration
     const reportGenerateEnabled =
         selectedGroup &&
-        selectedPeriodInfo.periodID &&
-        selectedPeriodInfo.comparisonPeriods &&
         selectedOrgUnit.id &&
-        selectedOrgUnitLevel
+        selectedOrgUnitLevel &&
+        selectedPeriods.length > 0
     const currentReportParameters = useMemo(
         () =>
             getReportParameters({
@@ -55,13 +53,17 @@ const Report = () => {
                 boundaryOrgUnitLevel: selectedOrgUnit.level,
                 configuration,
                 orgUnitLevel: selectedOrgUnitLevel,
+                periods: selectedPeriods,
             }),
         [
+            
             selectedOrgUnit.id,
             selectedOrgUnit.level,
             selectedGroup,
             configuration,
             selectedOrgUnitLevel,
+            selectedPeriods,
+        ,
         ]
     )
     const [reportParameters, setReportParameters] = useState({})
@@ -75,7 +77,8 @@ const Report = () => {
     }
 
     if (error) {
-        return <span>error</span>
+        console.error(error)
+        return <span>Error</span>
     }
 
     if (data) {
@@ -90,9 +93,9 @@ const Report = () => {
                                 onClick={generateReport}
                                 disabled={!reportGenerateEnabled}
                             >
-                                Generate report
+                                {i18n.t('Generate report')}
                             </Button>
-                            <Button small>Print</Button>
+                            <Button small>{i18n.t('Print')}</Button>
                         </div>
                     }
                 >
@@ -115,7 +118,10 @@ const Report = () => {
                         selectedOrgUnitLevel={selectedOrgUnitLevel}
                         setSelectedOrgUnitLevel={setSelectedOrgUnitLevel}
                     />
-                    <PeriodSelector selectedPeriodInfo={selectedPeriodInfo} />
+                    <PeriodSelector
+                        selectedPeriods={selectedPeriods}
+                        setSelectedPeriods={setSelectedPeriods}
+                    />
                 </SelectorBar>
                 <ReportData reportParameters={reportParameters} />
             </>

@@ -1,0 +1,1018 @@
+{
+    "reporting_rate_over_all_org_units": {
+        "headers": [
+            {
+                "name": "dx",
+                "column": "Data",
+                "valueType": "TEXT",
+                "type": "java.lang.String",
+                "hidden": false,
+                "meta": true
+            },
+            {
+                "name": "ou",
+                "column": "Organisation unit",
+                "valueType": "TEXT",
+                "type": "java.lang.String",
+                "hidden": false,
+                "meta": true
+            },
+            {
+                "name": "pe",
+                "column": "Period",
+                "valueType": "TEXT",
+                "type": "java.lang.String",
+                "hidden": false,
+                "meta": true
+            },
+            {
+                "name": "value",
+                "column": "Value",
+                "valueType": "NUMBER",
+                "type": "java.lang.Double",
+                "hidden": false,
+                "meta": false
+            }
+        ],
+        "metaData": {
+            "items": {
+                "2020": {
+                    "name": "2020"
+                },
+                "2021": {
+                    "name": "2021"
+                },
+                "2022": {
+                    "name": "2022"
+                },
+                "dONyxVsQyGS.REPORTING_RATE": {
+                    "name": "ANC - Reporting rate"
+                },
+                "dx": {
+                    "name": "Data"
+                },
+                "lZsCb6y0KDX": {
+                    "name": "National"
+                },
+                "pe": {
+                    "name": "Period"
+                },
+                "GhdP8W2GorO.REPORTING_RATE": {
+                    "name": "Maternity - Reporting rate"
+                },
+                "ou": {
+                    "name": "Organisation unit"
+                },
+                "rGDF7yDdhnj.REPORTING_RATE": {
+                    "name": "EPI - Reporting rate"
+                },
+                "YmRjo8j3F3M.REPORTING_RATE": {
+                    "name": "HMIS - Reporting rate"
+                }
+            },
+            "dimensions": {
+                "dx": [
+                    "dONyxVsQyGS.REPORTING_RATE",
+                    "rGDF7yDdhnj.REPORTING_RATE",
+                    "YmRjo8j3F3M.REPORTING_RATE",
+                    "GhdP8W2GorO.REPORTING_RATE"
+                ],
+                "pe": ["2022", "2021", "2020"],
+                "ou": ["lZsCb6y0KDX"],
+                "co": []
+            }
+        },
+        "rows": [
+            ["rGDF7yDdhnj.REPORTING_RATE", "lZsCb6y0KDX", "2020", "3.8"],
+            ["rGDF7yDdhnj.REPORTING_RATE", "lZsCb6y0KDX", "2021", "12.0"],
+            ["rGDF7yDdhnj.REPORTING_RATE", "lZsCb6y0KDX", "2022", "44.1"],
+            ["dONyxVsQyGS.REPORTING_RATE", "lZsCb6y0KDX", "2021", "62.7"],
+            ["dONyxVsQyGS.REPORTING_RATE", "lZsCb6y0KDX", "2022", "91.5"],
+            ["YmRjo8j3F3M.REPORTING_RATE", "lZsCb6y0KDX", "2021", "72.7"],
+            ["dONyxVsQyGS.REPORTING_RATE", "lZsCb6y0KDX", "2020", "22.5"],
+            ["YmRjo8j3F3M.REPORTING_RATE", "lZsCb6y0KDX", "2020", "30.6"],
+            ["GhdP8W2GorO.REPORTING_RATE", "lZsCb6y0KDX", "2020", "22.6"],
+            ["YmRjo8j3F3M.REPORTING_RATE", "lZsCb6y0KDX", "2022", "96.1"],
+            ["GhdP8W2GorO.REPORTING_RATE", "lZsCb6y0KDX", "2022", "93.5"],
+            ["GhdP8W2GorO.REPORTING_RATE", "lZsCb6y0KDX", "2021", "64.8"]
+        ],
+        "height": 12,
+        "width": 4,
+        "headerWidth": 4
+    },
+    "reporting_rate_by_org_unit_level": {
+        "headers": [
+            {
+                "name": "dx",
+                "column": "Data",
+                "valueType": "TEXT",
+                "type": "java.lang.String",
+                "hidden": false,
+                "meta": true
+            },
+            {
+                "name": "ou",
+                "column": "Organisation unit",
+                "valueType": "TEXT",
+                "type": "java.lang.String",
+                "hidden": false,
+                "meta": true
+            },
+            {
+                "name": "pe",
+                "column": "Period",
+                "valueType": "TEXT",
+                "type": "java.lang.String",
+                "hidden": false,
+                "meta": true
+            },
+            {
+                "name": "value",
+                "column": "Value",
+                "valueType": "NUMBER",
+                "type": "java.lang.Double",
+                "hidden": false,
+                "meta": false
+            }
+        ],
+        "metaData": {
+            "items": {
+                "2020": {
+                    "name": "2020"
+                },
+                "2021": {
+                    "name": "2021"
+                },
+                "2022": {
+                    "name": "2022"
+                },
+                "iQx6Edf0Xib": {
+                    "name": "Region B"
+                },
+                "ou": {
+                    "name": "Organisation unit"
+                },
+                "bzWRxaDGI3B": {
+                    "uid": "bzWRxaDGI3B",
+                    "name": "Region"
+                },
+                "rGDF7yDdhnj.REPORTING_RATE": {
+                    "name": "EPI - Reporting rate"
+                },
+                "mPpiH4dNz9C": {
+                    "name": "Region A"
+                },
+                "dONyxVsQyGS.REPORTING_RATE": {
+                    "name": "ANC - Reporting rate"
+                },
+                "dx": {
+                    "name": "Data"
+                },
+                "lZsCb6y0KDX": {
+                    "uid": "lZsCb6y0KDX",
+                    "name": "National"
+                },
+                "pe": {
+                    "name": "Period"
+                },
+                "GhdP8W2GorO.REPORTING_RATE": {
+                    "name": "Maternity - Reporting rate"
+                },
+                "tmIma8xiccz": {
+                    "name": "Region D"
+                },
+                "YmRjo8j3F3M.REPORTING_RATE": {
+                    "name": "HMIS - Reporting rate"
+                },
+                "yeGIr7J6nX7": {
+                    "name": "Region C"
+                }
+            },
+            "dimensions": {
+                "dx": [
+                    "dONyxVsQyGS.REPORTING_RATE",
+                    "rGDF7yDdhnj.REPORTING_RATE",
+                    "YmRjo8j3F3M.REPORTING_RATE",
+                    "GhdP8W2GorO.REPORTING_RATE"
+                ],
+                "pe": ["2022", "2021", "2020"],
+                "ou": [
+                    "mPpiH4dNz9C",
+                    "iQx6Edf0Xib",
+                    "yeGIr7J6nX7",
+                    "tmIma8xiccz"
+                ],
+                "co": []
+            }
+        },
+        "rows": [
+            ["dONyxVsQyGS.REPORTING_RATE", "iQx6Edf0Xib", "2022", "98.6"],
+            ["dONyxVsQyGS.REPORTING_RATE", "iQx6Edf0Xib", "2021", "70.4"],
+            ["YmRjo8j3F3M.REPORTING_RATE", "tmIma8xiccz", "2020", "28.1"],
+            ["dONyxVsQyGS.REPORTING_RATE", "iQx6Edf0Xib", "2020", "29.1"],
+            ["rGDF7yDdhnj.REPORTING_RATE", "tmIma8xiccz", "2021", "7.8"],
+            ["rGDF7yDdhnj.REPORTING_RATE", "tmIma8xiccz", "2020", "0.0"],
+            ["rGDF7yDdhnj.REPORTING_RATE", "iQx6Edf0Xib", "2020", "1.3"],
+            ["rGDF7yDdhnj.REPORTING_RATE", "iQx6Edf0Xib", "2022", "20.2"],
+            ["rGDF7yDdhnj.REPORTING_RATE", "iQx6Edf0Xib", "2021", "2.1"],
+            ["rGDF7yDdhnj.REPORTING_RATE", "yeGIr7J6nX7", "2020", "9.0"],
+            ["rGDF7yDdhnj.REPORTING_RATE", "mPpiH4dNz9C", "2020", "3.6"],
+            ["rGDF7yDdhnj.REPORTING_RATE", "tmIma8xiccz", "2022", "50.5"],
+            ["rGDF7yDdhnj.REPORTING_RATE", "yeGIr7J6nX7", "2022", "61.0"],
+            ["rGDF7yDdhnj.REPORTING_RATE", "mPpiH4dNz9C", "2022", "34.8"],
+            ["rGDF7yDdhnj.REPORTING_RATE", "yeGIr7J6nX7", "2021", "20.7"],
+            ["rGDF7yDdhnj.REPORTING_RATE", "mPpiH4dNz9C", "2021", "14.0"],
+            ["dONyxVsQyGS.REPORTING_RATE", "mPpiH4dNz9C", "2022", "89.1"],
+            ["dONyxVsQyGS.REPORTING_RATE", "mPpiH4dNz9C", "2021", "65.0"],
+            ["dONyxVsQyGS.REPORTING_RATE", "mPpiH4dNz9C", "2020", "24.6"],
+            ["dONyxVsQyGS.REPORTING_RATE", "tmIma8xiccz", "2022", "84.6"],
+            ["dONyxVsQyGS.REPORTING_RATE", "yeGIr7J6nX7", "2020", "17.9"],
+            ["dONyxVsQyGS.REPORTING_RATE", "yeGIr7J6nX7", "2021", "58.8"],
+            ["dONyxVsQyGS.REPORTING_RATE", "yeGIr7J6nX7", "2022", "94.8"],
+            ["YmRjo8j3F3M.REPORTING_RATE", "yeGIr7J6nX7", "2020", "32.0"],
+            ["GhdP8W2GorO.REPORTING_RATE", "iQx6Edf0Xib", "2020", "30.4"],
+            ["YmRjo8j3F3M.REPORTING_RATE", "yeGIr7J6nX7", "2021", "74.6"],
+            ["YmRjo8j3F3M.REPORTING_RATE", "iQx6Edf0Xib", "2022", "99.4"],
+            ["GhdP8W2GorO.REPORTING_RATE", "iQx6Edf0Xib", "2022", "98.3"],
+            ["GhdP8W2GorO.REPORTING_RATE", "iQx6Edf0Xib", "2021", "75.9"],
+            ["GhdP8W2GorO.REPORTING_RATE", "yeGIr7J6nX7", "2021", "57.7"],
+            ["dONyxVsQyGS.REPORTING_RATE", "tmIma8xiccz", "2021", "59.1"],
+            ["GhdP8W2GorO.REPORTING_RATE", "mPpiH4dNz9C", "2020", "25.2"],
+            ["YmRjo8j3F3M.REPORTING_RATE", "iQx6Edf0Xib", "2020", "31.3"],
+            ["GhdP8W2GorO.REPORTING_RATE", "tmIma8xiccz", "2022", "89.8"],
+            ["GhdP8W2GorO.REPORTING_RATE", "yeGIr7J6nX7", "2022", "94.4"],
+            ["YmRjo8j3F3M.REPORTING_RATE", "iQx6Edf0Xib", "2021", "72.9"],
+            ["dONyxVsQyGS.REPORTING_RATE", "tmIma8xiccz", "2020", "21.0"],
+            ["GhdP8W2GorO.REPORTING_RATE", "mPpiH4dNz9C", "2022", "92.6"],
+            ["GhdP8W2GorO.REPORTING_RATE", "mPpiH4dNz9C", "2021", "67.3"],
+            ["GhdP8W2GorO.REPORTING_RATE", "yeGIr7J6nX7", "2020", "16.0"],
+            ["YmRjo8j3F3M.REPORTING_RATE", "mPpiH4dNz9C", "2020", "31.2"],
+            ["YmRjo8j3F3M.REPORTING_RATE", "mPpiH4dNz9C", "2021", "72.2"],
+            ["YmRjo8j3F3M.REPORTING_RATE", "tmIma8xiccz", "2021", "71.1"],
+            ["GhdP8W2GorO.REPORTING_RATE", "tmIma8xiccz", "2021", "62.0"],
+            ["YmRjo8j3F3M.REPORTING_RATE", "tmIma8xiccz", "2022", "93.2"],
+            ["GhdP8W2GorO.REPORTING_RATE", "tmIma8xiccz", "2020", "21.7"],
+            ["YmRjo8j3F3M.REPORTING_RATE", "mPpiH4dNz9C", "2022", "93.4"],
+            ["YmRjo8j3F3M.REPORTING_RATE", "yeGIr7J6nX7", "2022", "98.7"]
+        ],
+        "height": 48,
+        "width": 4,
+        "headerWidth": 4
+    },
+    "reporting_timeliness_over_all_org_units": {
+        "headers": [
+            {
+                "name": "dx",
+                "column": "Data",
+                "valueType": "TEXT",
+                "type": "java.lang.String",
+                "hidden": false,
+                "meta": true
+            },
+            {
+                "name": "ou",
+                "column": "Organisation unit",
+                "valueType": "TEXT",
+                "type": "java.lang.String",
+                "hidden": false,
+                "meta": true
+            },
+            {
+                "name": "pe",
+                "column": "Period",
+                "valueType": "TEXT",
+                "type": "java.lang.String",
+                "hidden": false,
+                "meta": true
+            },
+            {
+                "name": "value",
+                "column": "Value",
+                "valueType": "NUMBER",
+                "type": "java.lang.Double",
+                "hidden": false,
+                "meta": false
+            }
+        ],
+        "metaData": {
+            "items": {
+                "2022": {
+                    "name": "2022"
+                },
+                "rGDF7yDdhnj.REPORTING_RATE_ON_TIME": {
+                    "name": "EPI - Reporting rate on time"
+                },
+                "dx": {
+                    "name": "Data"
+                },
+                "lZsCb6y0KDX": {
+                    "name": "National"
+                },
+                "GhdP8W2GorO.REPORTING_RATE_ON_TIME": {
+                    "name": "Maternity - Reporting rate on time"
+                },
+                "pe": {
+                    "name": "Period"
+                },
+                "ou": {
+                    "name": "Organisation unit"
+                },
+                "dONyxVsQyGS.REPORTING_RATE_ON_TIME": {
+                    "name": "ANC - Reporting rate on time"
+                },
+                "YmRjo8j3F3M.REPORTING_RATE_ON_TIME": {
+                    "name": "HMIS - Reporting rate on time"
+                }
+            },
+            "dimensions": {
+                "dx": [
+                    "dONyxVsQyGS.REPORTING_RATE_ON_TIME",
+                    "rGDF7yDdhnj.REPORTING_RATE_ON_TIME",
+                    "YmRjo8j3F3M.REPORTING_RATE_ON_TIME",
+                    "GhdP8W2GorO.REPORTING_RATE_ON_TIME"
+                ],
+                "pe": ["2022"],
+                "ou": ["lZsCb6y0KDX"],
+                "co": []
+            }
+        },
+        "rows": [
+            [
+                "rGDF7yDdhnj.REPORTING_RATE_ON_TIME",
+                "lZsCb6y0KDX",
+                "2022",
+                "44.1"
+            ],
+            [
+                "dONyxVsQyGS.REPORTING_RATE_ON_TIME",
+                "lZsCb6y0KDX",
+                "2022",
+                "91.5"
+            ],
+            [
+                "YmRjo8j3F3M.REPORTING_RATE_ON_TIME",
+                "lZsCb6y0KDX",
+                "2022",
+                "96.1"
+            ],
+            [
+                "GhdP8W2GorO.REPORTING_RATE_ON_TIME",
+                "lZsCb6y0KDX",
+                "2022",
+                "93.5"
+            ]
+        ],
+        "height": 4,
+        "width": 4,
+        "headerWidth": 4
+    },
+    "reporting_timeliness_by_org_unit_level": {
+        "headers": [
+            {
+                "name": "dx",
+                "column": "Data",
+                "valueType": "TEXT",
+                "type": "java.lang.String",
+                "hidden": false,
+                "meta": true
+            },
+            {
+                "name": "ou",
+                "column": "Organisation unit",
+                "valueType": "TEXT",
+                "type": "java.lang.String",
+                "hidden": false,
+                "meta": true
+            },
+            {
+                "name": "pe",
+                "column": "Period",
+                "valueType": "TEXT",
+                "type": "java.lang.String",
+                "hidden": false,
+                "meta": true
+            },
+            {
+                "name": "value",
+                "column": "Value",
+                "valueType": "NUMBER",
+                "type": "java.lang.Double",
+                "hidden": false,
+                "meta": false
+            }
+        ],
+        "metaData": {
+            "items": {
+                "2022": {
+                    "name": "2022"
+                },
+                "GhdP8W2GorO.REPORTING_RATE_ON_TIME": {
+                    "name": "Maternity - Reporting rate on time"
+                },
+                "iQx6Edf0Xib": {
+                    "name": "Region B"
+                },
+                "ou": {
+                    "name": "Organisation unit"
+                },
+                "bzWRxaDGI3B": {
+                    "uid": "bzWRxaDGI3B",
+                    "name": "Region"
+                },
+                "dONyxVsQyGS.REPORTING_RATE_ON_TIME": {
+                    "name": "ANC - Reporting rate on time"
+                },
+                "mPpiH4dNz9C": {
+                    "name": "Region A"
+                },
+                "rGDF7yDdhnj.REPORTING_RATE_ON_TIME": {
+                    "name": "EPI - Reporting rate on time"
+                },
+                "dx": {
+                    "name": "Data"
+                },
+                "lZsCb6y0KDX": {
+                    "uid": "lZsCb6y0KDX",
+                    "name": "National"
+                },
+                "pe": {
+                    "name": "Period"
+                },
+                "tmIma8xiccz": {
+                    "name": "Region D"
+                },
+                "YmRjo8j3F3M.REPORTING_RATE_ON_TIME": {
+                    "name": "HMIS - Reporting rate on time"
+                },
+                "yeGIr7J6nX7": {
+                    "name": "Region C"
+                }
+            },
+            "dimensions": {
+                "dx": [
+                    "dONyxVsQyGS.REPORTING_RATE_ON_TIME",
+                    "rGDF7yDdhnj.REPORTING_RATE_ON_TIME",
+                    "YmRjo8j3F3M.REPORTING_RATE_ON_TIME",
+                    "GhdP8W2GorO.REPORTING_RATE_ON_TIME"
+                ],
+                "pe": ["2022"],
+                "ou": [
+                    "mPpiH4dNz9C",
+                    "iQx6Edf0Xib",
+                    "yeGIr7J6nX7",
+                    "tmIma8xiccz"
+                ],
+                "co": []
+            }
+        },
+        "rows": [
+            [
+                "dONyxVsQyGS.REPORTING_RATE_ON_TIME",
+                "iQx6Edf0Xib",
+                "2022",
+                "98.6"
+            ],
+            [
+                "dONyxVsQyGS.REPORTING_RATE_ON_TIME",
+                "mPpiH4dNz9C",
+                "2022",
+                "89.1"
+            ],
+            [
+                "dONyxVsQyGS.REPORTING_RATE_ON_TIME",
+                "tmIma8xiccz",
+                "2022",
+                "84.6"
+            ],
+            [
+                "dONyxVsQyGS.REPORTING_RATE_ON_TIME",
+                "yeGIr7J6nX7",
+                "2022",
+                "94.8"
+            ],
+            [
+                "YmRjo8j3F3M.REPORTING_RATE_ON_TIME",
+                "iQx6Edf0Xib",
+                "2022",
+                "99.4"
+            ],
+            [
+                "GhdP8W2GorO.REPORTING_RATE_ON_TIME",
+                "iQx6Edf0Xib",
+                "2022",
+                "98.3"
+            ],
+            [
+                "GhdP8W2GorO.REPORTING_RATE_ON_TIME",
+                "tmIma8xiccz",
+                "2022",
+                "89.8"
+            ],
+            [
+                "GhdP8W2GorO.REPORTING_RATE_ON_TIME",
+                "yeGIr7J6nX7",
+                "2022",
+                "94.4"
+            ],
+            [
+                "GhdP8W2GorO.REPORTING_RATE_ON_TIME",
+                "mPpiH4dNz9C",
+                "2022",
+                "92.6"
+            ],
+            [
+                "rGDF7yDdhnj.REPORTING_RATE_ON_TIME",
+                "iQx6Edf0Xib",
+                "2022",
+                "20.2"
+            ],
+            [
+                "YmRjo8j3F3M.REPORTING_RATE_ON_TIME",
+                "tmIma8xiccz",
+                "2022",
+                "93.2"
+            ],
+            [
+                "rGDF7yDdhnj.REPORTING_RATE_ON_TIME",
+                "tmIma8xiccz",
+                "2022",
+                "50.5"
+            ],
+            [
+                "rGDF7yDdhnj.REPORTING_RATE_ON_TIME",
+                "yeGIr7J6nX7",
+                "2022",
+                "61.0"
+            ],
+            [
+                "rGDF7yDdhnj.REPORTING_RATE_ON_TIME",
+                "mPpiH4dNz9C",
+                "2022",
+                "34.8"
+            ],
+            [
+                "YmRjo8j3F3M.REPORTING_RATE_ON_TIME",
+                "mPpiH4dNz9C",
+                "2022",
+                "93.4"
+            ],
+            [
+                "YmRjo8j3F3M.REPORTING_RATE_ON_TIME",
+                "yeGIr7J6nX7",
+                "2022",
+                "98.7"
+            ]
+        ],
+        "height": 16,
+        "width": 4,
+        "headerWidth": 4
+    },
+    "expected_reports_over_all_org_units": {
+        "headers": [
+            {
+                "name": "dx",
+                "column": "Data",
+                "valueType": "TEXT",
+                "type": "java.lang.String",
+                "hidden": false,
+                "meta": true
+            },
+            {
+                "name": "ou",
+                "column": "Organisation unit",
+                "valueType": "TEXT",
+                "type": "java.lang.String",
+                "hidden": false,
+                "meta": true
+            },
+            {
+                "name": "pe",
+                "column": "Period",
+                "valueType": "TEXT",
+                "type": "java.lang.String",
+                "hidden": false,
+                "meta": true
+            },
+            {
+                "name": "value",
+                "column": "Value",
+                "valueType": "NUMBER",
+                "type": "java.lang.Double",
+                "hidden": false,
+                "meta": false
+            }
+        ],
+        "metaData": {
+            "items": {
+                "2022": {
+                    "name": "2022"
+                },
+                "GhdP8W2GorO.EXPECTED_REPORTS": {
+                    "name": "Maternity - Expected reports"
+                },
+                "dx": {
+                    "name": "Data"
+                },
+                "lZsCb6y0KDX": {
+                    "name": "National"
+                },
+                "pe": {
+                    "name": "Period"
+                },
+                "ou": {
+                    "name": "Organisation unit"
+                },
+                "YmRjo8j3F3M.EXPECTED_REPORTS": {
+                    "name": "HMIS - Expected reports"
+                },
+                "rGDF7yDdhnj.EXPECTED_REPORTS": {
+                    "name": "EPI - Expected reports"
+                },
+                "dONyxVsQyGS.EXPECTED_REPORTS": {
+                    "name": "ANC - Expected reports"
+                }
+            },
+            "dimensions": {
+                "dx": [
+                    "dONyxVsQyGS.EXPECTED_REPORTS",
+                    "rGDF7yDdhnj.EXPECTED_REPORTS",
+                    "YmRjo8j3F3M.EXPECTED_REPORTS",
+                    "GhdP8W2GorO.EXPECTED_REPORTS"
+                ],
+                "pe": ["2022"],
+                "ou": ["lZsCb6y0KDX"],
+                "co": []
+            }
+        },
+        "rows": [
+            ["rGDF7yDdhnj.EXPECTED_REPORTS", "lZsCb6y0KDX", "2022", "6264.0"],
+            ["dONyxVsQyGS.EXPECTED_REPORTS", "lZsCb6y0KDX", "2022", "5736.0"],
+            ["YmRjo8j3F3M.EXPECTED_REPORTS", "lZsCb6y0KDX", "2022", "6132.0"],
+            ["GhdP8W2GorO.EXPECTED_REPORTS", "lZsCb6y0KDX", "2022", "5232.0"]
+        ],
+        "height": 4,
+        "width": 4,
+        "headerWidth": 4
+    },
+    "expected_reports_by_org_unit_level": {
+        "headers": [
+            {
+                "name": "dx",
+                "column": "Data",
+                "valueType": "TEXT",
+                "type": "java.lang.String",
+                "hidden": false,
+                "meta": true
+            },
+            {
+                "name": "ou",
+                "column": "Organisation unit",
+                "valueType": "TEXT",
+                "type": "java.lang.String",
+                "hidden": false,
+                "meta": true
+            },
+            {
+                "name": "pe",
+                "column": "Period",
+                "valueType": "TEXT",
+                "type": "java.lang.String",
+                "hidden": false,
+                "meta": true
+            },
+            {
+                "name": "value",
+                "column": "Value",
+                "valueType": "NUMBER",
+                "type": "java.lang.Double",
+                "hidden": false,
+                "meta": false
+            }
+        ],
+        "metaData": {
+            "items": {
+                "2022": {
+                    "name": "2022"
+                },
+                "iQx6Edf0Xib": {
+                    "name": "Region B"
+                },
+                "ou": {
+                    "name": "Organisation unit"
+                },
+                "bzWRxaDGI3B": {
+                    "uid": "bzWRxaDGI3B",
+                    "name": "Region"
+                },
+                "dONyxVsQyGS.EXPECTED_REPORTS": {
+                    "name": "ANC - Expected reports"
+                },
+                "mPpiH4dNz9C": {
+                    "name": "Region A"
+                },
+                "GhdP8W2GorO.EXPECTED_REPORTS": {
+                    "name": "Maternity - Expected reports"
+                },
+                "dx": {
+                    "name": "Data"
+                },
+                "lZsCb6y0KDX": {
+                    "uid": "lZsCb6y0KDX",
+                    "name": "National"
+                },
+                "pe": {
+                    "name": "Period"
+                },
+                "tmIma8xiccz": {
+                    "name": "Region D"
+                },
+                "YmRjo8j3F3M.EXPECTED_REPORTS": {
+                    "name": "HMIS - Expected reports"
+                },
+                "rGDF7yDdhnj.EXPECTED_REPORTS": {
+                    "name": "EPI - Expected reports"
+                },
+                "yeGIr7J6nX7": {
+                    "name": "Region C"
+                }
+            },
+            "dimensions": {
+                "dx": [
+                    "dONyxVsQyGS.EXPECTED_REPORTS",
+                    "rGDF7yDdhnj.EXPECTED_REPORTS",
+                    "YmRjo8j3F3M.EXPECTED_REPORTS",
+                    "GhdP8W2GorO.EXPECTED_REPORTS"
+                ],
+                "pe": ["2022"],
+                "ou": [
+                    "mPpiH4dNz9C",
+                    "iQx6Edf0Xib",
+                    "yeGIr7J6nX7",
+                    "tmIma8xiccz"
+                ],
+                "co": []
+            }
+        },
+        "rows": [
+            ["dONyxVsQyGS.EXPECTED_REPORTS", "iQx6Edf0Xib", "2022", "1128.0"],
+            ["dONyxVsQyGS.EXPECTED_REPORTS", "mPpiH4dNz9C", "2022", "1404.0"],
+            ["dONyxVsQyGS.EXPECTED_REPORTS", "tmIma8xiccz", "2022", "1488.0"],
+            ["dONyxVsQyGS.EXPECTED_REPORTS", "yeGIr7J6nX7", "2022", "1716.0"],
+            ["YmRjo8j3F3M.EXPECTED_REPORTS", "iQx6Edf0Xib", "2022", "1224.0"],
+            ["GhdP8W2GorO.EXPECTED_REPORTS", "iQx6Edf0Xib", "2022", "1020.0"],
+            ["GhdP8W2GorO.EXPECTED_REPORTS", "tmIma8xiccz", "2022", "1392.0"],
+            ["GhdP8W2GorO.EXPECTED_REPORTS", "yeGIr7J6nX7", "2022", "1512.0"],
+            ["GhdP8W2GorO.EXPECTED_REPORTS", "mPpiH4dNz9C", "2022", "1308.0"],
+            ["rGDF7yDdhnj.EXPECTED_REPORTS", "iQx6Edf0Xib", "2022", "1200.0"],
+            ["YmRjo8j3F3M.EXPECTED_REPORTS", "tmIma8xiccz", "2022", "1632.0"],
+            ["rGDF7yDdhnj.EXPECTED_REPORTS", "tmIma8xiccz", "2022", "1728.0"],
+            ["rGDF7yDdhnj.EXPECTED_REPORTS", "yeGIr7J6nX7", "2022", "1860.0"],
+            ["rGDF7yDdhnj.EXPECTED_REPORTS", "mPpiH4dNz9C", "2022", "1476.0"],
+            ["YmRjo8j3F3M.EXPECTED_REPORTS", "mPpiH4dNz9C", "2022", "1476.0"],
+            ["YmRjo8j3F3M.EXPECTED_REPORTS", "yeGIr7J6nX7", "2022", "1800.0"]
+        ],
+        "height": 16,
+        "width": 4,
+        "headerWidth": 4
+    },
+    "count_of_data_values_over_all_org_units": {
+        "headers": [
+            {
+                "name": "dx",
+                "column": "Data",
+                "valueType": "TEXT",
+                "type": "java.lang.String",
+                "hidden": false,
+                "meta": true
+            },
+            {
+                "name": "ou",
+                "column": "Organisation unit",
+                "valueType": "TEXT",
+                "type": "java.lang.String",
+                "hidden": false,
+                "meta": true
+            },
+            {
+                "name": "pe",
+                "column": "Period",
+                "valueType": "TEXT",
+                "type": "java.lang.String",
+                "hidden": false,
+                "meta": true
+            },
+            {
+                "name": "value",
+                "column": "Value",
+                "valueType": "NUMBER",
+                "type": "java.lang.Double",
+                "hidden": false,
+                "meta": false
+            }
+        ],
+        "metaData": {
+            "items": {
+                "2022": {
+                    "name": "2022"
+                },
+                "dx": {
+                    "name": "Data"
+                },
+                "lZsCb6y0KDX": {
+                    "name": "National"
+                },
+                "pe": {
+                    "name": "Period"
+                },
+                "ou": {
+                    "name": "Organisation unit"
+                },
+                "XeRBhx8avQY": {
+                    "name": "ANC 4 visits"
+                },
+                "YAAmrY2RPbZ": {
+                    "name": "PNC visit within 2 weeks"
+                },
+                "YRJjIr5tuD6": {
+                    "name": "Delivery place - reporting facility"
+                },
+                "mQXljwnUv90": {
+                    "name": "default"
+                },
+                "ieThL7l107F": {
+                    "name": "Albendazole 1 dose at ANC"
+                },
+                "DvUwQScvSpc": {
+                    "name": "TT for pregnant women static TT1"
+                },
+                "RvArfQFKdXe": {
+                    "name": "ANC 1 visits"
+                }
+            },
+            "dimensions": {
+                "dx": [
+                    "ieThL7l107F",
+                    "RvArfQFKdXe",
+                    "XeRBhx8avQY",
+                    "YRJjIr5tuD6",
+                    "YAAmrY2RPbZ",
+                    "DvUwQScvSpc"
+                ],
+                "pe": ["2022"],
+                "ou": ["lZsCb6y0KDX"],
+                "co": ["mQXljwnUv90"]
+            }
+        },
+        "rows": [
+            ["RvArfQFKdXe", "lZsCb6y0KDX", "2022", "5109.0"],
+            ["YRJjIr5tuD6", "lZsCb6y0KDX", "2022", "4868.0"],
+            ["XeRBhx8avQY", "lZsCb6y0KDX", "2022", "5039.0"],
+            ["DvUwQScvSpc", "lZsCb6y0KDX", "2022", "2448.0"],
+            ["ieThL7l107F", "lZsCb6y0KDX", "2022", "5081.0"],
+            ["YAAmrY2RPbZ", "lZsCb6y0KDX", "2022", "4011.0"]
+        ],
+        "height": 6,
+        "width": 4,
+        "headerWidth": 4
+    },
+    "count_of_data_values_by_org_unit_level": {
+        "headers": [
+            {
+                "name": "dx",
+                "column": "Data",
+                "valueType": "TEXT",
+                "type": "java.lang.String",
+                "hidden": false,
+                "meta": true
+            },
+            {
+                "name": "ou",
+                "column": "Organisation unit",
+                "valueType": "TEXT",
+                "type": "java.lang.String",
+                "hidden": false,
+                "meta": true
+            },
+            {
+                "name": "pe",
+                "column": "Period",
+                "valueType": "TEXT",
+                "type": "java.lang.String",
+                "hidden": false,
+                "meta": true
+            },
+            {
+                "name": "value",
+                "column": "Value",
+                "valueType": "NUMBER",
+                "type": "java.lang.Double",
+                "hidden": false,
+                "meta": false
+            }
+        ],
+        "metaData": {
+            "items": {
+                "2022": {
+                    "name": "2022"
+                },
+                "iQx6Edf0Xib": {
+                    "name": "Region B"
+                },
+                "ou": {
+                    "name": "Organisation unit"
+                },
+                "bzWRxaDGI3B": {
+                    "uid": "bzWRxaDGI3B",
+                    "name": "Region"
+                },
+                "XeRBhx8avQY": {
+                    "name": "ANC 4 visits"
+                },
+                "ieThL7l107F": {
+                    "name": "Albendazole 1 dose at ANC"
+                },
+                "mPpiH4dNz9C": {
+                    "name": "Region A"
+                },
+                "dx": {
+                    "name": "Data"
+                },
+                "lZsCb6y0KDX": {
+                    "uid": "lZsCb6y0KDX",
+                    "name": "National"
+                },
+                "pe": {
+                    "name": "Period"
+                },
+                "tmIma8xiccz": {
+                    "name": "Region D"
+                },
+                "YAAmrY2RPbZ": {
+                    "name": "PNC visit within 2 weeks"
+                },
+                "YRJjIr5tuD6": {
+                    "name": "Delivery place - reporting facility"
+                },
+                "mQXljwnUv90": {
+                    "name": "default"
+                },
+                "DvUwQScvSpc": {
+                    "name": "TT for pregnant women static TT1"
+                },
+                "yeGIr7J6nX7": {
+                    "name": "Region C"
+                },
+                "RvArfQFKdXe": {
+                    "name": "ANC 1 visits"
+                }
+            },
+            "dimensions": {
+                "dx": [
+                    "ieThL7l107F",
+                    "RvArfQFKdXe",
+                    "XeRBhx8avQY",
+                    "YRJjIr5tuD6",
+                    "YAAmrY2RPbZ",
+                    "DvUwQScvSpc"
+                ],
+                "pe": ["2022"],
+                "ou": [
+                    "mPpiH4dNz9C",
+                    "iQx6Edf0Xib",
+                    "yeGIr7J6nX7",
+                    "tmIma8xiccz"
+                ],
+                "co": ["mQXljwnUv90"]
+            }
+        },
+        "rows": [
+            ["ieThL7l107F", "iQx6Edf0Xib", "2022", "1079.0"],
+            ["YAAmrY2RPbZ", "iQx6Edf0Xib", "2022", "807.0"],
+            ["YAAmrY2RPbZ", "yeGIr7J6nX7", "2022", "1231.0"],
+            ["YAAmrY2RPbZ", "mPpiH4dNz9C", "2022", "883.0"],
+            ["YAAmrY2RPbZ", "tmIma8xiccz", "2022", "1090.0"],
+            ["YRJjIr5tuD6", "tmIma8xiccz", "2022", "1264.0"],
+            ["ieThL7l107F", "tmIma8xiccz", "2022", "1237.0"],
+            ["XeRBhx8avQY", "mPpiH4dNz9C", "2022", "1189.0"],
+            ["ieThL7l107F", "mPpiH4dNz9C", "2022", "1209.0"],
+            ["ieThL7l107F", "yeGIr7J6nX7", "2022", "1556.0"],
+            ["XeRBhx8avQY", "tmIma8xiccz", "2022", "1234.0"],
+            ["RvArfQFKdXe", "tmIma8xiccz", "2022", "1241.0"],
+            ["XeRBhx8avQY", "iQx6Edf0Xib", "2022", "1068.0"],
+            ["XeRBhx8avQY", "yeGIr7J6nX7", "2022", "1548.0"],
+            ["YRJjIr5tuD6", "iQx6Edf0Xib", "2022", "996.0"],
+            ["DvUwQScvSpc", "tmIma8xiccz", "2022", "723.0"],
+            ["YRJjIr5tuD6", "yeGIr7J6nX7", "2022", "1389.0"],
+            ["YRJjIr5tuD6", "mPpiH4dNz9C", "2022", "1219.0"],
+            ["DvUwQScvSpc", "iQx6Edf0Xib", "2022", "228.0"],
+            ["RvArfQFKdXe", "iQx6Edf0Xib", "2022", "1079.0"],
+            ["DvUwQScvSpc", "yeGIr7J6nX7", "2022", "1015.0"],
+            ["DvUwQScvSpc", "mPpiH4dNz9C", "2022", "482.0"],
+            ["RvArfQFKdXe", "mPpiH4dNz9C", "2022", "1220.0"],
+            ["RvArfQFKdXe", "yeGIr7J6nX7", "2022", "1569.0"]
+        ],
+        "height": 24,
+        "width": 4,
+        "headerWidth": 4
+    }
+}

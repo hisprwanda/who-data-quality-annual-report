@@ -6,12 +6,15 @@ export const getReportParameters = ({
     orgUnitLevel,
     boundaryOrgUnitLevel,
     configuration,
+    periods,
 }) => {
     if (
+        
         !orgUnitID ||
         !groupID ||
         !configuration ||
         !orgUnitLevel ||
+        periods.length === 0 ||
         !boundaryOrgUnitLevel
     ) {
         return {}
@@ -22,7 +25,6 @@ export const getReportParameters = ({
         groupID
     )
 
-    // periods are hardcoded pending work on period selector
     const reportParameters = {
         dataSets: Object.keys(mappedConfiguration.dataSets),
         dataElements: Object.keys(
@@ -33,8 +35,8 @@ export const getReportParameters = ({
         orgUnitLevelNumber: orgUnitLevel,
         boundaryOrgUnitLevel,
         groupID: groupID,
-        periods: ['2022', '2021', '2020', '2019'],
-        currentPeriod: '2022',
+        // note that `periods[0]` is the current period
+        periods,
         mappedConfiguration,
     }
     return reportParameters
