@@ -67,7 +67,7 @@ const calculateSection4b = ({
         overallScore,
         name: relation.name,
         A: metadata[relation.A.id]?.name,
-        B: metadata[relation.A.id]?.name,
+        B: metadata[relation.B.id]?.name,
         qualityThreshold: relation.criteria,
     }
     // return early if overallScore is invalid
