@@ -1,19 +1,19 @@
-.modal_top_content{
-    display: flex;    
+.modal_top_content {
+    display: flex;
 }
-.left{
+.left {
     width: 20%;
 }
-.left p{
+.left p {
     margin-bottom: 25px;
 }
-.right{
+.right {
     width: 70%;
 }
 .right .input {
     margin-bottom: 10px;
 }
- .grouping {
+.grouping {
     display: flex;
     justify-content: space-between;
 }
@@ -22,32 +22,30 @@
     display: flex;
     width: 50%;
 }
-.dataElementsIndicatorToggle Button{
+.dataElementsIndicatorToggle Button {
     /* color: black; */
 }
 
 .active-content-modal {
     display: block !important;
-  }
+}
 
-  .content-tabs-modal {
-    flex-grow : 1;
-  }
+.content-tabs-modal {
+    flex-grow: 1;
+}
 
-  .content-modal {
+.content-modal {
     background: white;
     padding: 20px;
     width: 100%;
     height: 100%;
     display: none;
-  }
+}
 
-
-  .bloc-tabs-modal {
+.bloc-tabs-modal {
     display: flex;
-  }
-  .tabs-modal {
-  
+}
+.tabs-modal {
     padding: 10px 0;
     text-align: center;
     width: 50%;
@@ -58,18 +56,18 @@
     position: relative;
     outline: none;
     border-radius: 2px;
-  }
-.tabs-modal:not(:last-child){
+}
+.tabs-modal:not(:last-child) {
     border-right: 1px solid rgba(0, 0, 0, 0.274);
-  }
-  
-  .active-tabs-modal  {
+}
+
+.active-tabs-modal {
     background: white;
     border-bottom: 1px solid transparent;
-  }
-  
-  .active-tabs-modal::before {
-    content: "";
+}
+
+.active-tabs-modal::before {
+    content: '';
     display: block;
     position: absolute;
     top: -1px;
@@ -79,8 +77,8 @@
     height: 2px;
     background: rgb(88, 147, 241);
     border-radius: 5px;
-  }
+}
 
-  .dataElementsSelector .select {
+.dataElementsSelector .select {
     margin-bottom: 5px;
-  }
+}
