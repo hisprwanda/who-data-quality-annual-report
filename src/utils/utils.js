@@ -102,22 +102,24 @@ export const getConfigObjectsForAnalytics = (configurations, groupCode) => {
         })
         .filter((nr) => nr.A && nr.B)
 
-    const externalRelations = configurations.externalRelations
-    .map((er) => {
-        const denominator = configurations.denominators.find(
-            (denom) => denom.code === er.denominator
-        )?.dataID
-        const numerator = configurations.numerators.find(
-            (num) => num.code === er.numerator
-        )?.dataID
+    const externalRelations = !configurations.externalRelations
+        ? []
+        : configurations.externalRelations
+              .map((er) => {
+                  const denominator = configurations.denominators.find(
+                      (denom) => denom.code === er.denominator
+                  )?.dataID
+                  const numerator = configurations.numerators.find(
+                      (num) => num.code === er.numerator
+                  )?.dataID
 
-        return {
-            ...er,
-            denominator,
-            numerator,
-        }
-    })
-    .filter((er) => er.denominator && er.numerator && er.externalData)
+                  return {
+                      ...er,
+                      denominator,
+                      numerator,
+                  }
+              })
+              .filter((er) => er.denominator && er.numerator && er.externalData)
 
     const configsObj = {
         dataElementsAndIndicators: indexedNumerators,
