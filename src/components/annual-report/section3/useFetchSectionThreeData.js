@@ -82,14 +82,18 @@ export const useFetchSectionThreeData = () => {
             (r) => r.index
         )
         try {
-            const dataByLevel = await Promise.all(byLevelRequests)
-            const overallData = await engine.query(section3Overall, {
+            const overallRequest = engine.query(section3Overall, {
                 variables: {
                     dataElements: externalRelationsDEs,
                     orgUnits: variables.orgUnits,
                     periods: [variables.currentPeriod.id],
                 },
             })
+            const [overallData, ...dataByLevel] = await Promise.all([
+                overallRequest,
+                ...byLevelRequests,
+            ])
+
             setData({
                 ...overallData,
                 data_detail_by_level: dataByLevel.map(
