@@ -19,7 +19,7 @@ const calculateSection4a = ({
     const section4a = []
     for (const rel of denominatorRelations) {
         if (rel.type !== 'un') {
-            break
+            continue
         }
         section4a.push({
             name: rel.name,
