@@ -108,16 +108,9 @@ export const SectionThree = ({ reportParameters }) => {
     const { loading, data, error, refetch } = useFetchSectionThreeData()
 
     useEffect(() => {
-        // this is hardcoded until we address period selection
-        const currentPeriod = {
-            id: '2022',
-            startDate: '2022-01-01',
-            endDate: '2022-12-31',
-        }
-
         const variables = {
             ...reportParameters,
-            currentPeriod,
+            currentPeriod: reportParameters.periods[0],
         }
 
         refetch({ variables })
@@ -135,7 +128,7 @@ export const SectionThree = ({ reportParameters }) => {
         const section3Data = calculateSection3({
             section3Response: data,
             mappedConfiguration: reportParameters.mappedConfiguration,
-            currentPeriod: reportParameters.currentPeriod,
+            currentPeriod: reportParameters.periods[0],
             overallOrgUnit: reportParameters.orgUnits[0],
         })
 

@@ -31,6 +31,8 @@ export const calculateSection3 = ({
         ...section3Response[OVERALL_RESPONSE_NAME],
     })
 
+    const currentPeriodID = currentPeriod.id
+
     const externalRelationsResponsesIndices =
         section3Response[EXTERNAL_RELATIONS_INDICES_WITH_BY_LEVEL_DATA]
 
@@ -42,13 +44,13 @@ export const calculateSection3 = ({
                 response: formattedResponseOverall,
                 dx: relation.externalData,
                 ou: overallOrgUnit,
-                pe: currentPeriod,
+                pe: currentPeriodID,
             })
             const routineValue = getRoutineValue({
                 relation,
                 response: formattedResponseOverall,
                 ou: overallOrgUnit,
-                pe: currentPeriod,
+                pe: currentPeriodID,
             })
 
             const section3aItem = {
@@ -102,13 +104,13 @@ export const calculateSection3 = ({
                     response: formattedIndividualResponse,
                     dx: relation.externalData,
                     ou: subOrgUnit,
-                    pe: currentPeriod,
+                    pe: currentPeriodID,
                 })
                 const routineValueSubOrgUnit = getRoutineValue({
                     relation,
                     response: formattedIndividualResponse,
                     ou: subOrgUnit,
-                    pe: currentPeriod,
+                    pe: currentPeriodID,
                 })
                 const scoreSubOrgUnit =
                     surveyValueSubOrgUnit / routineValueSubOrgUnit
