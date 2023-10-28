@@ -354,7 +354,7 @@ export const SectionOne = ({ reportParameters, previewReport }) => {
                                           {dataset.dataset_name}
                                       </TableCell>
                                       <TableCell>
-                                          {dataset.trend.toUpperCase() +
+                                          {dataset.trend[0].toUpperCase() +
                                               dataset.trend.slice(1)}
                                       </TableCell>
                                       <TableCell>
