@@ -14,7 +14,7 @@ import styles from './Report.module.css'
 
 const configQuery = {
     configuration: {
-        resource: 'dataStore/who-dqa/configurationsUPDATED',
+        resource: 'dataStore/who-dqa/configurations',
     },
     me: {
         resource: 'me',
@@ -56,14 +56,12 @@ const Report = () => {
                 periods: selectedPeriods,
             }),
         [
-            
             selectedOrgUnit.id,
             selectedOrgUnit.level,
             selectedGroup,
             configuration,
             selectedOrgUnitLevel,
             selectedPeriods,
-        ,
         ]
     )
     const [reportParameters, setReportParameters] = useState({})
