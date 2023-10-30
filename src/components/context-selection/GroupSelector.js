@@ -1,3 +1,4 @@
+import i18n from '@dhis2/d2-i18n'
 import { Menu, MenuItem, SelectorBarItem } from '@dhis2/ui'
 import PropTypes from 'prop-types'
 import React, { useState } from 'react'
@@ -39,11 +40,11 @@ export const GroupSelector = ({ groups, selectedGroup, setSelectedGroup }) => {
     )?.label
     return (
         <SelectorBarItem
-            label="Group"
+            label={i18n.t('Group')}
             value={selectedLabel}
             open={open}
             setOpen={setOpen}
-            noValueMessage={'Choose a group'}
+            noValueMessage={i18n.t('Choose a group')}
         >
             <MenuSelect
                 values={groupOptions}
