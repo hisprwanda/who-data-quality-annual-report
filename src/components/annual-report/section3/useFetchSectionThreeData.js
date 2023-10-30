@@ -107,8 +107,8 @@ export const useFetchSectionThreeData = () => {
 
                 setData({
                     ...overallData,
-                    data_detail_by_level: dataByLevel.map(
-                        (resp) => resp?.data_detail_by_level
+                    [BY_LEVEL_RESPONSE_NAME]: dataByLevel.map(
+                        (resp) => resp?.[BY_LEVEL_RESPONSE_NAME]
                     ),
                     [EXTERNAL_RELATIONS_INDICES_WITH_BY_LEVEL_DATA]:
                         byLevelRequestIndices,
