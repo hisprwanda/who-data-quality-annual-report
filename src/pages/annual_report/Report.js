@@ -2,8 +2,7 @@ import { useDataQuery } from '@dhis2/app-runtime'
 import i18n from '@dhis2/d2-i18n'
 import { Button, SelectorBar } from '@dhis2/ui'
 import React, { useMemo, useState } from 'react'
-// import { ReportData } from '../../components/annual-report/report-data/ReportData.js'
-import { SectionOne } from '../../components/annual-report/report-data/SectionOne.js'
+import { ReportData } from '../../components/annual-report/report-data/ReportData.js'
 import {
     GroupSelector,
     OrgUnitSelector,
@@ -35,7 +34,6 @@ const configQuery = {
 
 const Report = () => {
     const { loading, data, error } = useDataQuery(configQuery)
-    const [previewReport, setPreviewReport] = useState(false)
 
     const [selectedGroup, setSelectedGroup] = useState(null)
     const [selectedOrgUnit, setSelectedOrgUnit] = useState({})
@@ -59,21 +57,18 @@ const Report = () => {
                 periods: selectedPeriods,
             }),
         [
-            
             selectedOrgUnit.id,
             selectedOrgUnit.level,
             selectedGroup,
             configuration,
             selectedOrgUnitLevel,
             selectedPeriods,
-        ,
         ]
     )
     const [reportParameters, setReportParameters] = useState({})
 
     const generateReport = () => {
         setReportParameters(currentReportParameters)
-        setPreviewReport(true)
     }
 
     if (loading) {
@@ -127,14 +122,7 @@ const Report = () => {
                         setSelectedPeriods={setSelectedPeriods}
                     />
                 </SelectorBar>
-                {/* <ReportData reportParameters={reportParameters} /> */}
-
-                {previewReport && (
-                    <SectionOne
-                        previewReport={previewReport}
-                        reportParameters={reportParameters}
-                    />
-                )}
+                <ReportData reportParameters={reportParameters} />
             </>
         )
     }

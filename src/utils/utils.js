@@ -324,7 +324,7 @@ const getJsonObjectsFormatFromTableFormat = ({
             metaData.items[row[ouHeaderIndex]].name
         rowData['dataset_name'] = metaData.items[row[dsNameIndex]].name
         const currentDataSetId = row[dsNameIndex].split('.')[0]
-        
+
         // adding thresholds where they are not
         if (calculatingFor == 'section1A') {
             rowData['threshold'] =
@@ -476,14 +476,14 @@ const getJsonObjectsFormatFromTableFormat_DataValues = ({
         rowData['orgUnitLevelsOrGroups'] =
             metaData.items[row[ouHeaderIndex]].name
         rowData['indicator_name'] = metaData.items[row[dsNameIndex]].name
-        const currentElementOrIndicatorUID = row[0].split('.')[0]
-        const currentNumerator = findNumerator(
-            mappedConfigurations.dataElementsAndIndicators,
-            currentElementOrIndicatorUID
-        )
 
         const dx = rowData.dx.split('.')[0]
         const pe = rowData.pe
+
+        const currentNumerator = findNumerator(
+            mappedConfigurations.dataElementsAndIndicators,
+            dx
+        )
 
         if (!restructuredData[dx]) {
             restructuredData[dx] = {}
@@ -521,7 +521,6 @@ const getFacilityReportingData = ({
     period,
     calculatingFor,
 }) => {
-
     const reporting_rate_over_all_org_units_formatted =
         getJsonObjectsFormatFromTableFormat({
             ...allOrgUnitsData,
@@ -575,7 +574,9 @@ const getFacilityReportingData = ({
             entry.orgUnitLevelsOrGroups = regionsWithLowScore
         })
     }
-    const flattenedData = Object.values(filteredData_overall).map(item => item[0]);
+    const flattenedData = Object.values(filteredData_overall).map(
+        (item) => item[0]
+    )
     return flattenedData
 }
 
@@ -588,7 +589,6 @@ const getCompletenessOfIndicatorData = ({
     mappedConfigurations,
     period,
 }) => {
-    
     // exptected reports overll org units
     const expected_reports_over_all_org_units_formatted =
         getJsonObjectsFormatFromTableFormat({
@@ -711,7 +711,9 @@ const getCompletenessOfIndicatorData = ({
         })
     }
 
-    const flattenedData = Object.values(filteredCountOfDataValues).map(item => item[0]);
+    const flattenedData = Object.values(filteredCountOfDataValues).map(
+        (item) => item[0]
+    )
     return flattenedData
 }
 
@@ -723,7 +725,6 @@ const getConsistencyOfDatasetCompletenessData = ({
     period,
     calculatingFor,
 }) => {
-
     const reporting_rate_over_all_org_units_formatted =
         getJsonObjectsFormatFromTableFormat({
             ...allOrgUnitsData,
@@ -782,7 +783,9 @@ const getConsistencyOfDatasetCompletenessData = ({
         })
     }
 
-    const flattenedData = Object.values(filteredData_overall).map(item => item[0]);
+    const flattenedData = Object.values(filteredData_overall).map(
+        (item) => item[0]
+    )
     return flattenedData
 }
 
@@ -796,55 +799,47 @@ export const getReportSectionsData = (
         return {}
     }
 
-    const reportSectionsData = {
-        section1: {
-            section1A: 
-                getFacilityReportingData({
-                    allOrgUnitsData:
-                        reportQueryResponse.reporting_rate_over_all_org_units,
-                    byOrgUnitLevelData:
-                        reportQueryResponse.reporting_rate_by_org_unit_level,
-                    mappedConfigurations: mappedConfigurations,
-                    period: period,
-                    calculatingFor: 'section1A',
-                }), // list of objects for every dataset selected (regarding completeness)
-            section1B:
-                getFacilityReportingData({
-                    allOrgUnitsData:
-                        reportQueryResponse.reporting_rate_over_all_org_units,
-                    byOrgUnitLevelData:
-                        reportQueryResponse.reporting_rate_by_org_unit_level,
-                    mappedConfigurations: mappedConfigurations,
-                    period: period,
-                    calculatingFor: 'section1B',
-                }), // list of objects for every dataset selected (regarding completeness)
-            section1C:
-                getCompletenessOfIndicatorData({
-                    expected_reports_over_all_org_units:
-                        reportQueryResponse.expected_reports_over_all_org_units,
-                    expected_reports_by_org_unit_level:
-                        reportQueryResponse.expected_reports_by_org_unit_level,
-                    count_of_data_values_over_all_org_units:
-                        reportQueryResponse.count_of_data_values_over_all_org_units,
-                    count_of_data_values_by_org_unit_level:
-                        reportQueryResponse.count_of_data_values_by_org_unit_level,
-                    reporting_timeliness_by_org_unit_level:
-                        reportQueryResponse.reporting_timeliness_by_org_unit_level,
-                    mappedConfigurations: mappedConfigurations,
-                    period: period,
-                }),
-            section1D:
-                getConsistencyOfDatasetCompletenessData({
-                    allOrgUnitsData:
-                        reportQueryResponse.reporting_rate_over_all_org_units,
-                    byOrgUnitLevelData:
-                        reportQueryResponse.reporting_rate_by_org_unit_level,
-                    mappedConfigurations: mappedConfigurations,
-                    period: period,
-                    calculatingFor: 'section1D',
-                }), // list of objects for Consistency of dataset completeness over time
-        },
+    return {
+        section1A: getFacilityReportingData({
+            allOrgUnitsData:
+                reportQueryResponse.reporting_rate_over_all_org_units,
+            byOrgUnitLevelData:
+                reportQueryResponse.reporting_rate_by_org_unit_level,
+            mappedConfigurations: mappedConfigurations,
+            period: period,
+            calculatingFor: 'section1A',
+        }), // list of objects for every dataset selected (regarding completeness)
+        section1B: getFacilityReportingData({
+            allOrgUnitsData:
+                reportQueryResponse.reporting_rate_over_all_org_units,
+            byOrgUnitLevelData:
+                reportQueryResponse.reporting_rate_by_org_unit_level,
+            mappedConfigurations: mappedConfigurations,
+            period: period,
+            calculatingFor: 'section1B',
+        }), // list of objects for every dataset selected (regarding completeness)
+        section1C: getCompletenessOfIndicatorData({
+            expected_reports_over_all_org_units:
+                reportQueryResponse.expected_reports_over_all_org_units,
+            expected_reports_by_org_unit_level:
+                reportQueryResponse.expected_reports_by_org_unit_level,
+            count_of_data_values_over_all_org_units:
+                reportQueryResponse.count_of_data_values_over_all_org_units,
+            count_of_data_values_by_org_unit_level:
+                reportQueryResponse.count_of_data_values_by_org_unit_level,
+            reporting_timeliness_by_org_unit_level:
+                reportQueryResponse.reporting_timeliness_by_org_unit_level,
+            mappedConfigurations: mappedConfigurations,
+            period: period,
+        }),
+        section1D: getConsistencyOfDatasetCompletenessData({
+            allOrgUnitsData:
+                reportQueryResponse.reporting_rate_over_all_org_units,
+            byOrgUnitLevelData:
+                reportQueryResponse.reporting_rate_by_org_unit_level,
+            mappedConfigurations: mappedConfigurations,
+            period: period,
+            calculatingFor: 'section1D',
+        }), // list of objects for Consistency of dataset completeness over time
     }
-
-    return reportSectionsData
 }
