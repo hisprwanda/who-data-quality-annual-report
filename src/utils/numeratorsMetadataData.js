@@ -1,4 +1,4 @@
-import { Button, IconSubtractCircle16, TableCell, TableRow } from '@dhis2/ui'
+import { Button, IconDelete16, TableCell, TableRow } from '@dhis2/ui'
 import React from 'react'
 import relationTypes from '../data/relationTypes.json'
 
@@ -38,8 +38,8 @@ export const getNumeratorDataElement = (mappedNumerators, dataID) => {
     }
 }
 
-export const getNumeratorsInGroup = (numerators, group, onDeleteNumerator) => {
-    const numeratorsInGroup = []
+export const getNumeratorsInGroup = (numerators, group, onRemoveNumerator) => {
+  const numeratorsInGroup = [];
 
     for (const key in numerators) {
         const numerator = numerators[key]
@@ -48,41 +48,38 @@ export const getNumeratorsInGroup = (numerators, group, onDeleteNumerator) => {
         }
     }
 
-    return (
-        <>
-            {numeratorsInGroup.length > 0 ? (
-                numeratorsInGroup.map((numerator, key) => (
-                    <TableRow key={key}>
-                        <TableCell>{numerator.name}</TableCell>
-                        <TableCell>
-                            <Button
-                                name="Primary button"
-                                onClick={() =>
-                                    onDeleteNumerator(
-                                        group.code,
-                                        numerator.code
-                                    )
-                                }
-                                destructive
-                                basic
-                                button
-                                value="default"
-                                icon={<IconSubtractCircle16 />}
-                            >
-                                {' '}
-                                Delete
-                            </Button>
-                        </TableCell>
-                    </TableRow>
-                ))
-            ) : (
-                <TableRow>
-                    <TableCell>No numerators added, please add them.</TableCell>
-                    <TableCell></TableCell>
-                </TableRow>
-            )}
-        </>
-    )
+  return(
+    <>
+      {numeratorsInGroup.length > 0? numeratorsInGroup.map((numerator, key ) => (
+
+      <TableRow key={key}>
+        <TableCell>
+          {numerator.name}
+        </TableCell>
+        <TableCell>
+          <Button
+              name="Primary button" onClick={() => onRemoveNumerator(group.code, numerator.code)} 
+              destructive basic button value="default" icon={<IconDelete16 />}> Delete
+              </Button>
+        </TableCell>
+      </TableRow>
+
+
+      ))
+      :
+        <TableRow>
+          <TableCell>
+            No numerators added, please add them.
+          </TableCell>
+          <TableCell>
+            
+          </TableCell>
+
+        </TableRow>
+      }
+    </>
+  )
+  
 }
 
 export const getNumeratorRelations = (numerators, code) => {

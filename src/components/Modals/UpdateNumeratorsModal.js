@@ -60,27 +60,18 @@ const dataSetsQuery = {
     },
 }
 
-const UpdateNumeratorsModal = ({
-    configurations,
-    onClose,
-    isHidden,
-    onSave,
-    numeratorToEdit,
-    updateType,
-}) => {
-    const [toggleStateModal, setToggleStateModal] = useState(1)
-    const [selectedElementGroup, setSelectedElementGroup] = useState('')
-    const [selectedElement, setSelectedElement] = useState('')
-    const [selectedElements] = useState([])
-    const [selectedOperands, setSelectedOperands] = useState([])
-    const [filteredSelectedElements, setFilteredSelectedElements] = useState([])
-    const [mappedDataElementGroups, setMappedDataElementGroups] = useState([])
-    const [dataElements, setDataElements] = useState([])
-    const [mappedDataSets, setMappedDataSets] = useState([])
-    const [mappedDataElementOperands, setMappedDataElementOperands] = useState(
-        []
-    )
-    const [footerMessage, setFooterMessage] = useState(null)
+const UpdateNumeratorsModal = ({configurations, onClose, isHidden, onSave, numeratorToEdit, updateType, isLoading}) => {
+    const [toggleStateModal, setToggleStateModal] = useState(1);
+    const [selectedElementGroup, setSelectedElementGroup] = useState('');
+    const [selectedElement, setSelectedElement] = useState('');
+    const [selectedElements, setSelectedElements] = useState([]);
+    const [selectedOperands, setSelectedOperands] = useState([]);
+    const [filteredSelectedElements, setFilteredSelectedElements] = useState([]);
+    const [mappedDataElementGroups, setMappedDataElementGroups]  = useState([]);
+    const [dataElements, setDataElements] = useState([]);
+    const [mappedDataSets, setMappedDataSets] = useState([]);
+    const [mappedDataElementOperands, setMappedDataElementOperands] = useState([]);
+    const [footerMessage, setFooterMessage] = useState(null);
     const [numerator, setNumerator] = useState({
         name: '',
         definition: '',
@@ -572,20 +563,23 @@ const UpdateNumeratorsModal = ({
                             </div>
                         </div>
                     </div>
-                </ModalContent>
-                <ModalActions>
-                    <ButtonStrip end>
-                        <Button secondary onClick={onClose}>
-                            Cancel
-                        </Button>
-                        <Button primary onClick={() => onSave(numerator)}>
-                            Save
-                        </Button>
-                    </ButtonStrip>
-                </ModalActions>
-            </Modal>
-        </div>
-    )
+
+                </div>
+            </ModalContent>
+            <ModalActions>
+                <ButtonStrip end>
+                    <Button  secondary onClick={onClose}>
+                        Cancel
+                    </Button>
+                    <Button  primary  loading={isLoading} onClick={() => onSave(numerator, updateType)}> 
+                        {updateType ==='create'? 'Create' : 'Update'}
+                    </Button>
+                </ButtonStrip>
+            </ModalActions>
+        </Modal>
+
+    </div>
+  )
 }
 
 UpdateNumeratorsModal.propTypes = {
