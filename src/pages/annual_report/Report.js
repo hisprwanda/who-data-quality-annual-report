@@ -34,6 +34,7 @@ const configQuery = {
 
 const Report = () => {
     const { loading, data, error } = useDataQuery(configQuery)
+
     const [selectedGroup, setSelectedGroup] = useState(null)
     const [selectedOrgUnit, setSelectedOrgUnit] = useState({})
     const [selectedOrgUnitLevel, setSelectedOrgUnitLevel] = useState(null)
@@ -56,14 +57,12 @@ const Report = () => {
                 periods: selectedPeriods,
             }),
         [
-            
             selectedOrgUnit.id,
             selectedOrgUnit.level,
             selectedGroup,
             configuration,
             selectedOrgUnitLevel,
             selectedPeriods,
-        ,
         ]
     )
     const [reportParameters, setReportParameters] = useState({})
