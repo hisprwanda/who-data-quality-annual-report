@@ -4,23 +4,25 @@ import {
     getStats,
     getRoundedValue,
 } from './mathService.js'
-import {
-    getJsonObjectsFormatFromTableFormatSection2,
-    getJsonObjectsFormatFromTableFormat,
-} from './utils.js'
+import { getJsonObjectsFormatFromTableFormat } from './utils.js'
+import { convertAnalyticsResponseToObject } from '../utils/utils.js'
+
+const MODIFIED_Z_OUTLIER = 3.5
+const DEFAULT_EXTREME_OUTLIER = 3
+const DEFAULT_MODERATE_OUTLIER = 2
 
 // format response
-
 const getRowInformation = ({
-    dx,
+    dxInfo,
+    dxID,
     counts,
-    formattedResponse,
     thresholdKey,
     countsKey,
     divergentSubOrgUnits,
+    metadata,
 }) => ({
-    indicator: formattedResponse[dx].name,
-    threshold: formattedResponse[dx][thresholdKey],
+    indicator: metadata[dxID]?.name,
+    threshold: dxInfo?.[thresholdKey],
     overallScore:
         counts.totalValidValues === 0
             ? 0
@@ -39,11 +41,19 @@ const getRowInformation = ({
                           100,
                       1
                   ),
-        names: divergentSubOrgUnits[countsKey].sort().join(', '),
+        names: divergentSubOrgUnits[countsKey]
+            .map((ou) => metadata?.[ou]?.name)
+            .sort()
+            .join(', '),
     },
 })
 
-const calculateSections2a2b2c = ({ formattedResponse }) => {
+const calculateSections2a2b2c = ({
+    formattedResponse,
+    subOrgUnitIDs,
+    metadata,
+    mappedConfiguration,
+}) => {
     const results = {
         section2a: [],
         section2b: [],
@@ -51,31 +61,32 @@ const calculateSections2a2b2c = ({ formattedResponse }) => {
     }
 
     for (const dx in formattedResponse) {
+        const dxInfo = mappedConfiguration.dataElementsAndIndicators?.[dx]
         const counts = {
             totalValidValues: 0,
             extremeOutliers: 0,
             moderateOutliers: 0,
             modifiedZOutliers: 0,
-            orgUnitLevelsOrGroup: Object.keys(
-                formattedResponse[dx].orgUnitLevelsOrGroups
-            ).length,
+            orgUnitLevelsOrGroup: subOrgUnitIDs.length,
         }
         const divergentSubOrgUnits = {
             extremeOutliers: [],
             moderateOutliers: [],
             modifiedZOutliers: [],
         }
-        for (const ou in formattedResponse[dx].orgUnitLevelsOrGroups) {
-            const ouData = formattedResponse[dx].orgUnitLevelsOrGroups[ou]
-            const validValues = ouData.periodValues.filter(
+        for (const ou in formattedResponse[dx]) {
+            const ouData = formattedResponse[dx][ou]
+            const validValues = Object.values(ouData).filter(
                 (val) => !isNaN(Number(val))
             )
 
             const stats = getStats({
                 valuesArray: validValues,
-                extremeOutlier: formattedResponse[dx].extremeOutlier,
-                moderateOutlier: formattedResponse[dx].moderateOutlier,
-                modifiedZOutlier: formattedResponse[dx].modifiedZOutlier,
+                extremeOutlier:
+                    dxInfo?.extremeOutlier || DEFAULT_EXTREME_OUTLIER,
+                moderateOutlier:
+                    dxInfo?.moderateOutlier || DEFAULT_MODERATE_OUTLIER,
+                modifiedZOutlier: MODIFIED_Z_OUTLIER, // this is not definable by configuration
             })
 
             counts.totalValidValues += stats.count
@@ -84,53 +95,52 @@ const calculateSections2a2b2c = ({ formattedResponse }) => {
             counts.modifiedZOutliers += stats.modifiedZOutliers
 
             if (stats.extremeOuliers > 0) {
-                divergentSubOrgUnits.extremeOutliers.push(
-                    ouData.orgUnitLevelsOrGroupName
-                )
+                divergentSubOrgUnits.extremeOutliers.push(ou)
             }
 
             // must be at least 2 outliers for moderate/modifiedZ to be considered divergent
             if (stats.moderateOutliers > 1) {
-                divergentSubOrgUnits.moderateOutliers.push(
-                    ouData.orgUnitLevelsOrGroupName
-                )
+                divergentSubOrgUnits.moderateOutliers.push(ou)
             }
             if (stats.modifiedZOutliers > 1) {
-                divergentSubOrgUnits.modifiedZOutliers.push(
-                    ouData.orgUnitLevelsOrGroupName
-                )
+                divergentSubOrgUnits.modifiedZOutliers.push(ou)
             }
         }
 
         // now push results to row
         results.section2a.push(
             getRowInformation({
-                dx,
+                dxInfo,
+                dxID: dx,
                 counts,
-                formattedResponse,
                 thresholdKey: 'extremeOutlier',
                 countsKey: 'extremeOutliers',
                 divergentSubOrgUnits,
+                metadata,
             })
         )
         results.section2b.push(
             getRowInformation({
-                dx,
+                dxInfo,
+                dxID: dx,
                 counts,
                 formattedResponse,
                 thresholdKey: 'moderateOutlier',
                 countsKey: 'moderateOutliers',
                 divergentSubOrgUnits,
+                metadata,
             })
         )
         results.section2c.push(
             getRowInformation({
-                dx,
+                dxInfo,
+                dxID: dx,
                 counts,
                 formattedResponse,
                 thresholdKey: 'modifiedZOutlier',
                 countsKey: 'modifiedZOutliers',
                 divergentSubOrgUnits,
+                metadata,
             })
         )
     }
@@ -374,7 +384,7 @@ const calculateSection2e = ({
     return results
 }
 
-const RESPONSE_NAME = 'data_detail_by_reporting_period'
+const SUBPERIODS_RESPONSE_NAME = 'data_detail_by_reporting_period'
 const OVERALL_ORG_UNIT = 'data_over_all_org_units'
 const LEVEL_OR_GROUP = 'data_by_org_unit_level'
 const OVERALL_ORG_UNIT_SECTION_2E = 'numerator_relations_over_all_org_units'
@@ -385,34 +395,51 @@ export const calculateSection2 = ({
     mappedConfiguration,
     periods,
 }) => {
-    const formattedResponse2a2b2c = section2Response[RESPONSE_NAME].reduce(
-        (mergedFormatted, indResponse) => {
+    const formattedResponse2a2b2c = section2Response[
+        SUBPERIODS_RESPONSE_NAME
+    ].reduce((mergedFormatted, indResponse) => {
+        return {
+            ...mergedFormatted,
+            ...convertAnalyticsResponseToObject({
+                ...indResponse,
+                mappedConfiguration,
+            }),
+        }
+    }, {})
+
+    const metadata2a2b2c = section2Response[SUBPERIODS_RESPONSE_NAME].reduce(
+        (mergedMetadata, indResponse) => {
             return {
-                ...mergedFormatted,
-                ...getJsonObjectsFormatFromTableFormatSection2({
-                    ...indResponse,
-                    mappedConfiguration,
-                }),
+                ...mergedMetadata,
+                ...indResponse.metaData.items,
             }
         },
         {}
     )
 
-    const currentPeriod = periods[0]
-    const comparisonPeriods = periods.slice(1).map((p) => p.id)
+    // since all requests are for same LEVEL, they should all have the same underlying OU dimension
+    const subOrgUnitIDs =
+        section2Response[SUBPERIODS_RESPONSE_NAME]?.[0]?.metaData?.dimensions
+            ?.ou ?? []
 
     // Subsections 2a-2c
     const sections2a2b2c = calculateSections2a2b2c({
         formattedResponse: formattedResponse2a2b2c,
+        metadata: metadata2a2b2c,
+        subOrgUnitIDs,
+        mappedConfiguration,
     })
+
+    const currentPeriodID = periods[0].id
+    const comparisonPeriodsIDs = periods.slice(1).map((p) => p.id)
 
     // Subsection 2d
     const formattedResponse2dOverall = getJsonObjectsFormatFromTableFormat({
         ...section2Response[OVERALL_ORG_UNIT],
         mappedConfiguration,
         calculatingFor: 'data',
-        currentPeriod: currentPeriod.id,
-        comparisonPeriods,
+        currentPeriod: currentPeriodID,
+        comparisonPeriods: comparisonPeriodsIDs,
     })
     const formattedResponse2dLevelOrGroup = getJsonObjectsFormatFromTableFormat(
         {
@@ -429,8 +456,8 @@ export const calculateSection2 = ({
         overallResponse: formattedResponse2dOverall,
         levelOrGroupResponse: formattedResponse2dLevelOrGroup,
         orgUnitsByLevelOrGroup,
-        currentPeriodID: currentPeriod.id,
-        comparisonPeriods,
+        currentPeriodID: currentPeriodID,
+        comparisonPeriods: comparisonPeriodsIDs,
     })
 
     // subsection 2e
@@ -459,7 +486,7 @@ export const calculateSection2 = ({
         },
         orgUnitsByLevelOrGroup,
         numeratorRelations: mappedConfiguration.numeratorRelations,
-        currentPeriod: currentPeriod.id,
+        currentPeriod: currentPeriodID,
         metadata: section2Response[LEVEL_OR_GROUP_SECTION_2E].metaData.items,
     })
 
