@@ -5,7 +5,6 @@ import {
     getStats,
     getRoundedValue,
 } from './mathService.js'
-import { getJsonObjectsFormatFromTableFormat } from './utils.js'
 
 const MODIFIED_Z_OUTLIER = 3.5
 const DEFAULT_EXTREME_OUTLIER = 3
@@ -278,13 +277,6 @@ const get2eScore = ({ A, B, type }) => {
     return A / B
 }
 
-const get2eVal = ({ response, dx, ou, pe }) => {
-    if (ou) {
-        return response[dx]?.[pe]?.find((el) => el.ou === ou)?.value
-    }
-    return response[dx]?.[pe]?.[0]?.value
-}
-
 const isDivergent2e = ({ type, score, overallScore, criteria }) => {
     if (type === 'do') {
         return score < 0
@@ -307,40 +299,44 @@ const isDivergent2e = ({ type, score, overallScore, criteria }) => {
 const calculateSection2e = ({
     overallResponse,
     levelOrGroupResponse,
-    orgUnitsByLevelOrGroup,
-    numeratorRelations,
+    mappedConfiguration,
+    subOrgUnitIDs,
+    overallOrgUnit,
     currentPeriod,
     metadata,
 }) => {
     const results = {
         section2e: [],
     }
+    const numeratorRelations = mappedConfiguration?.numeratorRelations ?? []
     for (const numeratorRelation of numeratorRelations) {
         const overallScore = get2eScore({
-            A: get2eVal({
+            A: getVal({
                 response: overallResponse,
                 dx: numeratorRelation.A,
                 pe: currentPeriod,
+                ou: overallOrgUnit,
             }),
-            B: get2eVal({
+            B: getVal({
                 response: overallResponse,
                 dx: numeratorRelation.B,
                 pe: currentPeriod,
+                ou: overallOrgUnit,
             }),
             type: numeratorRelation.type,
         })
 
         const divergentSubOrgUnits = []
-        for (const subOrgUnit of orgUnitsByLevelOrGroup) {
+        for (const subOrgUnit of subOrgUnitIDs) {
             const subOrgUnitName = metadata[subOrgUnit]
             const subOrgUnitScore = get2eScore({
-                A: get2eVal({
+                A: getVal({
                     response: levelOrGroupResponse,
                     ou: subOrgUnit,
                     dx: numeratorRelation.A,
                     pe: currentPeriod,
                 }),
-                B: get2eVal({
+                B: getVal({
                     response: levelOrGroupResponse,
                     ou: subOrgUnit,
                     dx: numeratorRelation.B,
@@ -374,7 +370,7 @@ const calculateSection2e = ({
                 number: divergentSubOrgUnits.length,
                 percentage: getRoundedValue(
                     (divergentSubOrgUnits.length /
-                        orgUnitsByLevelOrGroup.length) *
+                        (subOrgUnitIDs.length || 1)) *
                         100,
                     1
                 ),
@@ -386,8 +382,8 @@ const calculateSection2e = ({
 }
 
 const SUBPERIODS_RESPONSE_NAME = 'data_detail_by_reporting_period'
-const OVERALL_ORG_UNIT = 'data_over_all_org_units'
-const LEVEL_OR_GROUP = 'data_by_org_unit_level'
+const OVERALL_ORG_UNIT_SECTION_2D = 'data_over_all_org_units'
+const LEVEL_OR_GROUP_SECTION_2D = 'data_by_org_unit_level'
 const OVERALL_ORG_UNIT_SECTION_2E = 'numerator_relations_over_all_org_units'
 const LEVEL_OR_GROUP_SECTION_2E = 'numerator_relations_org_unit_level'
 
@@ -436,21 +432,21 @@ export const calculateSection2 = ({
     const comparisonPeriodsIDs = periods.slice(1).map((p) => p.id)
 
     const formattedResponse2dOverall = convertAnalyticsResponseToObject({
-        ...section2Response[OVERALL_ORG_UNIT],
+        ...section2Response[OVERALL_ORG_UNIT_SECTION_2D],
         mappedConfiguration,
     })
     const formattedResponse2dLevelOrGroup = convertAnalyticsResponseToObject({
-        ...section2Response[LEVEL_OR_GROUP],
+        ...section2Response[LEVEL_OR_GROUP_SECTION_2D],
         mappedConfiguration,
     })
 
     const metadata2d = {
-        ...section2Response[OVERALL_ORG_UNIT].metaData.items,
-        ...section2Response[LEVEL_OR_GROUP].metaData.items,
+        ...section2Response[OVERALL_ORG_UNIT_SECTION_2D].metaData.items,
+        ...section2Response[LEVEL_OR_GROUP_SECTION_2D].metaData.items,
     }
 
     const subOrgUnitIDs2d =
-        section2Response[LEVEL_OR_GROUP].metaData.dimensions.ou
+        section2Response[LEVEL_OR_GROUP_SECTION_2D].metaData.dimensions.ou
 
     const section2d = calculateSection2d({
         overallResponse: formattedResponse2dOverall,
@@ -465,32 +461,35 @@ export const calculateSection2 = ({
 
     // subsection 2e
 
-    const formattedResponse2eOverall = getJsonObjectsFormatFromTableFormat({
+    const formattedResponse2eOverall = convertAnalyticsResponseToObject({
         ...section2Response[OVERALL_ORG_UNIT_SECTION_2E],
         mappedConfiguration,
-        calculatingFor: 'numerator_relation',
     })
-    const formattedResponse2eLevelOrGroup = getJsonObjectsFormatFromTableFormat(
-        {
-            ...section2Response[LEVEL_OR_GROUP_SECTION_2E],
-            mappedConfiguration,
-            calculatingFor: 'numerator_relation',
-        }
-    )
+    const formattedResponse2eLevelOrGroup = convertAnalyticsResponseToObject({
+        ...section2Response[LEVEL_OR_GROUP_SECTION_2E],
+        mappedConfiguration,
+    })
+
+    const metadata2e = {
+        ...section2Response[OVERALL_ORG_UNIT_SECTION_2E].metaData.items,
+        ...section2Response[LEVEL_OR_GROUP_SECTION_2E].metaData.items,
+    }
+
+    const subOrgUnitIDs2e =
+        section2Response[LEVEL_OR_GROUP_SECTION_2E].metaData.dimensions.ou
 
     const section2e = calculateSection2e({
         overallResponse: {
             ...formattedResponse2eOverall,
-            ...formattedResponse2dOverall,
         },
         levelOrGroupResponse: {
             ...formattedResponse2eLevelOrGroup,
-            ...formattedResponse2dLevelOrGroup,
         },
-        orgUnitsByLevelOrGroup: [],
-        numeratorRelations: mappedConfiguration.numeratorRelations,
+        mappedConfiguration,
+        subOrgUnitIDs: subOrgUnitIDs2e,
+        overallOrgUnit,
         currentPeriod: currentPeriodID,
-        metadata: section2Response[LEVEL_OR_GROUP_SECTION_2E].metaData.items,
+        metadata: metadata2e,
     })
 
     // return formatted information for report

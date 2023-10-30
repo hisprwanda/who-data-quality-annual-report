@@ -169,11 +169,14 @@ const Section2EBlock = ({ dataRow }) => (
             </tr>
             <tr>
                 <td>Expected relationship</td>
-                <td>±{dataRow.expectedRelationship}</td>
+                <td>{dataRow.expectedRelationship}</td>
             </tr>
             <tr>
                 <td>Quality threshold</td>
-                <td>±{dataRow.qualityThreshold}</td>
+                <td>
+                    {dataRow.expectedRelationship === 'Dropout rate' ? '' : '±'}
+                    {dataRow.qualityThreshold}
+                </td>
             </tr>
             <tr>
                 <td>Overall score</td>
@@ -185,7 +188,7 @@ const Section2EBlock = ({ dataRow }) => (
             </tr>
             <tr>
                 <td>Percent of Region with divergent score</td>
-                <td>{dataRow.divergentSubOrgUnits?.percent}%</td>
+                <td>{dataRow.divergentSubOrgUnits?.percentage}%</td>
             </tr>
             <tr>
                 <td colSpan="2">{dataRow.divergentSubOrgUnits?.names}</td>
@@ -268,11 +271,11 @@ export const SectionTwo = ({ reportParameters }) => {
                     subtitle={sectionInformation.section2d.subtitle}
                     subsectionData={section2Data.section2d}
                 />
-                {/* <Section2E
+                <Section2E
                     title={sectionInformation.section2e.title}
                     subtitle={sectionInformation.section2e.subtitle}
                     subsectionData={section2Data.section2e}
-                /> */}
+                />
             </>
         )
     }
