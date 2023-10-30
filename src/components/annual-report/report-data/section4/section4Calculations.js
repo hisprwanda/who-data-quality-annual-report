@@ -1,5 +1,5 @@
 import { getRoundedValue } from '../utils/mathService.js'
-import { mapSectionFourResponse } from '../utils/utils.js'
+import { convertAnalyticsResponseToObject } from '../utils/utils.js'
 import {
     OVERALL_RESPONSE_NAME,
     BY_LEVEL_RESPONSE_NAME,
@@ -77,7 +77,7 @@ const calculateSection4b = ({
     }
 
     // elsewise, loop through subOrgUnits to find divergent subOrgUnits
-    const formattedIndResponse = mapSectionFourResponse({
+    const formattedIndResponse = convertAnalyticsResponseToObject({
         ...unformattedIndResponse,
     })
     const subOrgUnits = unformattedIndResponse?.metaData?.dimensions?.ou || []
@@ -126,7 +126,7 @@ export const calculateSection4 = ({
     currentPeriod,
     overallOrgUnit,
 }) => {
-    const formattedResponseOverall = mapSectionFourResponse({
+    const formattedResponseOverall = convertAnalyticsResponseToObject({
         ...section4Response[OVERALL_RESPONSE_NAME],
     })
 

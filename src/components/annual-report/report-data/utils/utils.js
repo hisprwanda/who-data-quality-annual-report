@@ -10,7 +10,7 @@ const getRowData = ({ headers, row }) => {
     return rowData
 }
 
-export const mapSectionFourResponse = ({ headers, rows }) => {
+export const convertAnalyticsResponseToObject = ({ headers, rows }) => {
     const restructuredData = {}
 
     for (const row of rows) {
