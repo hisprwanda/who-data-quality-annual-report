@@ -13,8 +13,8 @@ import {
     SingleSelect,
     SingleSelectOption,
 } from '@dhis2/ui'
-import PropTypes from 'prop-types'
 import React, { useState, useEffect } from 'react'
+
 import '../Modals/edit_modal_styles.css'
 import {
     filterSelectedMetadata,
@@ -60,18 +60,28 @@ const dataSetsQuery = {
     },
 }
 
-const UpdateNumeratorsModal = ({configurations, onClose, isHidden, onSave, numeratorToEdit, updateType, isLoading}) => {
-    const [toggleStateModal, setToggleStateModal] = useState(1);
-    const [selectedElementGroup, setSelectedElementGroup] = useState('');
-    const [selectedElement, setSelectedElement] = useState('');
-    const [selectedElements, setSelectedElements] = useState([]);
-    const [selectedOperands, setSelectedOperands] = useState([]);
-    const [filteredSelectedElements, setFilteredSelectedElements] = useState([]);
-    const [mappedDataElementGroups, setMappedDataElementGroups]  = useState([]);
-    const [dataElements, setDataElements] = useState([]);
-    const [mappedDataSets, setMappedDataSets] = useState([]);
-    const [mappedDataElementOperands, setMappedDataElementOperands] = useState([]);
-    const [footerMessage, setFooterMessage] = useState(null);
+const UpdateNumeratorsModal = ({
+    configurations,
+    onClose,
+    isHidden,
+    onSave,
+    numeratorToEdit,
+    updateType,
+    isLoading,
+}) => {
+    const [toggleStateModal, setToggleStateModal] = useState(1)
+    const [selectedElementGroup, setSelectedElementGroup] = useState('')
+    const [selectedElement, setSelectedElement] = useState('')
+    const [selectedElements, setSelectedElements] = useState([])
+    const [selectedOperands, setSelectedOperands] = useState([])
+    const [filteredSelectedElements, setFilteredSelectedElements] = useState([])
+    const [mappedDataElementGroups, setMappedDataElementGroups] = useState([])
+    const [dataElements, setDataElements] = useState([])
+    const [mappedDataSets, setMappedDataSets] = useState([])
+    const [mappedDataElementOperands, setMappedDataElementOperands] = useState(
+        []
+    )
+    const [footerMessage, setFooterMessage] = useState(null)
     const [numerator, setNumerator] = useState({
         name: '',
         definition: '',
@@ -79,28 +89,34 @@ const UpdateNumeratorsModal = ({configurations, onClose, isHidden, onSave, numer
     })
 
     // run the data element groups querry
-    const { data: datalementGroupsData } = useDataQuery(
-        dataElementGroupsQuery,
-        {
-            lazy: false,
-        }
-    )
+    const {
+        loading: lementGroupsLoading,
+        error: elementGroupsError,
+        data: datalementGroupsData,
+        refetch: lementGroupsRefetch,
+    } = useDataQuery(dataElementGroupsQuery, {
+        lazy: false,
+    })
 
     // run the data elements querry
-    const { data: dataElementsData, refetch: elementsRefetch } = useDataQuery(
-        dataElementsQuery,
-        {
-            lazy: true,
-        }
-    )
+    const {
+        loading: elementsLoading,
+        error: elementsError,
+        data: dataElementsData,
+        refetch: elementsRefetch,
+    } = useDataQuery(dataElementsQuery, {
+        lazy: true,
+    })
 
     // run the datasets querry
-    const { data: dataSetsData, refetch: dataSetsRefetch } = useDataQuery(
-        dataSetsQuery,
-        {
-            lazy: true,
-        }
-    )
+    const {
+        loading: dataSetsLoading,
+        error: dataSetsError,
+        data: dataSetsData,
+        refetch: dataSetsRefetch,
+    } = useDataQuery(dataSetsQuery, {
+        lazy: true,
+    })
 
     // TODO this action is duplicated in other components, do it once and save it globaly
     useEffect(() => {
@@ -148,6 +164,21 @@ const UpdateNumeratorsModal = ({configurations, onClose, isHidden, onSave, numer
             )
         }
     }, [dataSetsData])
+
+    // TODO: remove these styles from here
+    const boxStyles = {
+        border: '1px solid rgb(160, 173, 186)',
+        borderRadius: '3px',
+        marginBottom: '2px',
+        minHeight: '40px',
+        cursor: 'pointer',
+        color: '#6c7787',
+        display: 'flex',
+        alignItems: 'center',
+        fontSize: '14px',
+        lineHeight: '16px',
+        paddingLeft: '11px',
+    }
 
     const newCode = generateNumeratorCode(configurations.numerators)
 
@@ -556,30 +587,30 @@ const UpdateNumeratorsModal = ({configurations, onClose, isHidden, onSave, numer
                                 </SingleSelect>
 
                                 <p>
-                                    $
-                                    {`"DPT 1" will be mapped to "Penta 1 doses
-                                    given"`}
+                                    &quot;DPT 1&quot; will be mapped to
+                                    &quot;Penta 1 doses given&quot;
                                 </p>
                             </div>
                         </div>
                     </div>
-
-                </div>
-            </ModalContent>
-            <ModalActions>
-                <ButtonStrip end>
-                    <Button  secondary onClick={onClose}>
-                        Cancel
-                    </Button>
-                    <Button  primary  loading={isLoading} onClick={() => onSave(numerator, updateType)}> 
-                        {updateType ==='create'? 'Create' : 'Update'}
-                    </Button>
-                </ButtonStrip>
-            </ModalActions>
-        </Modal>
-
-    </div>
-  )
+                </ModalContent>
+                <ModalActions>
+                    <ButtonStrip end>
+                        <Button secondary onClick={onClose}>
+                            Cancel
+                        </Button>
+                        <Button
+                            primary
+                            loading={isLoading}
+                            onClick={() => onSave(numerator, updateType)}
+                        >
+                            {updateType === 'create' ? 'Create' : 'Update'}
+                        </Button>
+                    </ButtonStrip>
+                </ModalActions>
+            </Modal>
+        </div>
+    )
 }
 
 UpdateNumeratorsModal.propTypes = {

@@ -64,85 +64,129 @@ export const NumeratorGroups = ({ toggleState, configurations }) => {
                 numeratorCode: numerator,
             }
 
-            const updatedConfigurations = updateConfigurations({
+            const updatedConfigurations = updateConfigurations(
                 configurations,
-                configurationType: 'groups',
-                updateType: 'update',
-                configsUpdateInfo: groupUpdateInfo,
-            })
+                'groups',
+                'update',
+                groupUpdateInfo
+            )
             await mutate({ configurations: updatedConfigurations })
             const message = 'Numerator added successfully to the group'
             show({ message, status: 'success' })
             setSelectedNumerator(null)
         }
     }
-  } 
 
-  const onRemoveNumerator = async(group, numerator) => {
-    const groupUpdateInfo = {
-      groupCode: group,
-      numeratorCode: numerator
+    const onRemoveNumerator = async (group, numerator) => {
+        const groupUpdateInfo = {
+            groupCode: group,
+            numeratorCode: numerator,
+        }
+        const updatedConfigurations = updateConfigurations(
+            configurations,
+            'groups',
+            'delete',
+            groupUpdateInfo
+        )
+        await mutate({ configurations: updatedConfigurations })
+        const message = 'Numerator deleted successfully from the group'
+        show({ message, status: 'success' })
     }
-    const updatedConfigurations = updateConfigurations(configurations, 'groups', 'delete', groupUpdateInfo);
-    await mutate({ configurations: updatedConfigurations })
-    const message = 'Numerator deleted successfully from the group';
-    show({ message, status: 'success' });
-  }
 
     useEffect(() => {
         setGroups(configurations.groups)
         setNumerators(configurations.numerators)
     }, [])
 
-  return (
-    <div className={toggleState === 2 ? "content  active-content" : "content"} >
-          <p>Add and remove numerators to/from groups, and to add new groups.</p>
-          <hr />
-          <div className="groupsContainer">
-            {groups? groups.map((group,key) => ( 
-                <div key={key} className="group">
-                <h2>{group.name}</h2>
-                  <Table>
-                    <TableHead>
-                        <TableRowHead>
-                            <TableCellHead>Data</TableCellHead>
-                            <TableCellHead>Actions</TableCellHead>
-                        </TableRowHead>
-                    </TableHead>
-                    <TableBody>
-                          {getNumeratorsInGroup(numerators, group, onRemoveNumerator)}
-                      
-    
-                      <TableRow>
-                        <TableCell>
-
-                        <SingleSelect className="select" 
-                                onChange={(selected)=> handleNumeratorSelection(selected.selected)} 
-                                // placeholder="Select Numerator"
-                                selected={selectedNumerator}
-                            >
-                                <SingleSelectOption label='Select Numerator' value="NA" />
-                                {numerators.map((numerator, key) => 
-                                    <SingleSelectOption label={numerator.name} value={numerator.code} key={key} />
-                                )}
-                            </SingleSelect>
- 
-                        </TableCell>
-                        <TableCell>
-                        <Button
-                            name="Primary button" disabled={selectedNumerator!='NA'? false: true} onClick={() => handleAddNumerator(selectedNumerator, group)} 
-                            primary button value="default" icon={<IconAdd16 />}> Add Numerators
-                        </Button>
-                        </TableCell>
-                      </TableRow>
-                      </TableBody>
-                  </Table>
-              </div>
-            ))
-            :
-            ""
+    return (
+        <div
+            className={
+                toggleState === 2 ? 'content  active-content' : 'content'
             }
-              
+        >
+            <p>
+                Add and remove numerators to/from groups, and to add new groups.
+            </p>
+            <hr />
+            <div className="groupsContainer">
+                {groups
+                    ? groups.map((group, key) => (
+                          <div key={key} className="group">
+                              <h2>{group.name}</h2>
+                              <Table>
+                                  <TableHead>
+                                      <TableRowHead>
+                                          <TableCellHead>Data</TableCellHead>
+                                          <TableCellHead>Actions</TableCellHead>
+                                      </TableRowHead>
+                                  </TableHead>
+                                  <TableBody>
+                                      {getNumeratorsInGroup(
+                                          numerators,
+                                          group,
+                                          onRemoveNumerator
+                                      )}
+
+                                      <TableRow>
+                                          <TableCell>
+                                              <SingleSelect
+                                                  className="select"
+                                                  onChange={(selected) =>
+                                                      handleNumeratorSelection(
+                                                          selected.selected
+                                                      )
+                                                  }
+                                                  // placeholder="Select Numerator"
+                                                  selected={selectedNumerator}
+                                              >
+                                                  <SingleSelectOption
+                                                      label="Select Numerator"
+                                                      value="NA"
+                                                  />
+                                                  {numerators.map(
+                                                      (numerator, key) => (
+                                                          <SingleSelectOption
+                                                              label={
+                                                                  numerator.name
+                                                              }
+                                                              value={
+                                                                  numerator.code
+                                                              }
+                                                              key={key}
+                                                          />
+                                                      )
+                                                  )}
+                                              </SingleSelect>
+                                          </TableCell>
+                                          <TableCell>
+                                              <Button
+                                                  name="Primary button"
+                                                  disabled={
+                                                      selectedNumerator != 'NA'
+                                                          ? false
+                                                          : true
+                                                  }
+                                                  onClick={() =>
+                                                      handleAddNumerator(
+                                                          selectedNumerator,
+                                                          group
+                                                      )
+                                                  }
+                                                  primary
+                                                  button
+                                                  value="default"
+                                                  icon={<IconAdd16 />}
+                                              >
+                                                  {' '}
+                                                  Add Numerators
+                                              </Button>
+                                          </TableCell>
+                                      </TableRow>
+                                  </TableBody>
+                              </Table>
+                          </div>
+                      ))
+                    : ''}
             </div>
         </div>
     )
@@ -150,5 +194,5 @@ export const NumeratorGroups = ({ toggleState, configurations }) => {
 
 NumeratorGroups.propTypes = {
     configurations: PropTypes.object,
-    toggleState: PropTypes.string,
+    toggleState: PropTypes.number,
 }
