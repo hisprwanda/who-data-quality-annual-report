@@ -1,0 +1,179 @@
+import { convertAnalyticsResponseToObject } from '../utils/utils.js'
+import { getStats, getRoundedValue } from './mathService.js'
+import { SUBPERIODS_RESPONSE_NAME } from './useFetchSectionTwoData.js'
+
+const MODIFIED_Z_OUTLIER = 3.5
+const DEFAULT_EXTREME_OUTLIER = 3
+const DEFAULT_MODERATE_OUTLIER = 2
+
+// format response
+const getRowInformation = ({
+    dxID,
+    counts,
+    countsKey,
+    thresholdValue,
+    divergentSubOrgUnits,
+    metadata,
+}) => ({
+    indicator: metadata[dxID]?.name,
+    threshold: thresholdValue,
+    overallScore:
+        counts.totalValidValues === 0
+            ? 0
+            : getRoundedValue(
+                  (counts[countsKey] / counts.totalValidValues) * 100,
+                  1
+              ),
+    divergentScores: {
+        number: divergentSubOrgUnits[countsKey].length,
+        percentage:
+            counts.orgUnitLevelsOrGroup === 0
+                ? 0
+                : getRoundedValue(
+                      (divergentSubOrgUnits[countsKey].length /
+                          counts.orgUnitLevelsOrGroup) *
+                          100,
+                      1
+                  ),
+        names: divergentSubOrgUnits[countsKey]
+            .map((ou) => metadata?.[ou]?.name)
+            .sort()
+            .join(', '),
+    },
+})
+
+const calculateSections2a2b2c = ({
+    formattedResponse,
+    subOrgUnitIDs,
+    metadata,
+    mappedConfiguration,
+}) => {
+    const results = {
+        section2a: [],
+        section2b: [],
+        section2c: [],
+    }
+
+    for (const dx in formattedResponse) {
+        const dxInfo = mappedConfiguration.dataElementsAndIndicators?.[dx]
+        const thresholdValues = {
+            extremeOutlier: dxInfo?.extremeOutlier || DEFAULT_EXTREME_OUTLIER,
+            moderateOutlier:
+                dxInfo?.moderateOutlier || DEFAULT_MODERATE_OUTLIER,
+            modifiedZOutlier: MODIFIED_Z_OUTLIER, // this is not definable by configuration
+        }
+
+        const counts = {
+            totalValidValues: 0,
+            extremeOutliers: 0,
+            moderateOutliers: 0,
+            modifiedZOutliers: 0,
+            orgUnitLevelsOrGroup: subOrgUnitIDs.length,
+        }
+        const divergentSubOrgUnits = {
+            extremeOutliers: [],
+            moderateOutliers: [],
+            modifiedZOutliers: [],
+        }
+        for (const ou in formattedResponse[dx]) {
+            const ouData = formattedResponse[dx][ou]
+            const validValues = Object.values(ouData).filter(
+                (val) => !isNaN(Number(val))
+            )
+
+            const stats = getStats({
+                valuesArray: validValues,
+                ...thresholdValues,
+            })
+
+            counts.totalValidValues += stats.count
+            counts.extremeOutliers += stats.extremeOutliers
+            counts.moderateOutliers += stats.moderateOutliers
+            counts.modifiedZOutliers += stats.modifiedZOutliers
+
+            if (stats.extremeOuliers > 0) {
+                divergentSubOrgUnits.extremeOutliers.push(ou)
+            }
+
+            // must be at least 2 outliers for moderate/modifiedZ to be considered divergent
+            if (stats.moderateOutliers > 1) {
+                divergentSubOrgUnits.moderateOutliers.push(ou)
+            }
+            if (stats.modifiedZOutliers > 1) {
+                divergentSubOrgUnits.modifiedZOutliers.push(ou)
+            }
+        }
+
+        // now push results to row
+        results.section2a.push(
+            getRowInformation({
+                dxID: dx,
+                counts,
+                thresholdValue: thresholdValues.extremeOutlier,
+                countsKey: 'extremeOutliers',
+                divergentSubOrgUnits,
+                metadata,
+            })
+        )
+        results.section2b.push(
+            getRowInformation({
+                dxID: dx,
+                counts,
+                formattedResponse,
+                thresholdValue: thresholdValues.moderateOutlier,
+                countsKey: 'moderateOutliers',
+                divergentSubOrgUnits,
+                metadata,
+            })
+        )
+        results.section2c.push(
+            getRowInformation({
+                dxID: dx,
+                counts,
+                formattedResponse,
+                thresholdValue: thresholdValues.modifiedZOutlier,
+                countsKey: 'modifiedZOutliers',
+                divergentSubOrgUnits,
+                metadata,
+            })
+        )
+    }
+    return results
+}
+
+export const getSection2abc = ({ section2Response, mappedConfiguration }) => {
+    const formattedResponse2a2b2c = section2Response[
+        SUBPERIODS_RESPONSE_NAME
+    ].reduce((mergedFormatted, indResponse) => {
+        return {
+            ...mergedFormatted,
+            ...convertAnalyticsResponseToObject({
+                ...indResponse,
+                mappedConfiguration,
+            }),
+        }
+    }, {})
+
+    const metadata2a2b2c = section2Response[SUBPERIODS_RESPONSE_NAME].reduce(
+        (mergedMetadata, indResponse) => {
+            return {
+                ...mergedMetadata,
+                ...indResponse.metaData.items,
+            }
+        },
+        {}
+    )
+
+    // since all requests are for same LEVEL, they should all have the same underlying OU dimension
+    const subOrgUnitIDs2abc =
+        section2Response[SUBPERIODS_RESPONSE_NAME]?.[0]?.metaData?.dimensions
+            ?.ou ?? []
+
+    // Subsections 2a-2c
+    return calculateSections2a2b2c({
+        formattedResponse: formattedResponse2a2b2c,
+        metadata: metadata2a2b2c,
+        subOrgUnitIDs: subOrgUnitIDs2abc,
+        mappedConfiguration,
+    })
+}
