@@ -75,7 +75,7 @@ export const fetchDataBySubPeriod = async ({ engine, variables }) => {
 const getValidDataElementPeriodTypes = ({
     dataElements,
     dataSetTypes,
-    mappedConfigurations,
+    mappedConfiguration,
 }) => {
     const validDataElementPeriodTypes = {}
     const dataSetTypeMap = dataSetTypes.reduce((dsMap, ds) => {
@@ -83,7 +83,7 @@ const getValidDataElementPeriodTypes = ({
     }, {})
     dataElements.forEach((de) => {
         const dataSetsForDE =
-            mappedConfigurations.dataElementsAndIndicators[de]?.dataSetID
+            mappedConfiguration.dataElementsAndIndicators[de]?.dataSetID
         const periodTypesSet = new Set(
             dataSetsForDE?.map((dsID) => dataSetTypeMap[dsID])
         )
@@ -148,10 +148,10 @@ export const useFetchSectionTwoData = () => {
 
     const refetch = async ({ variables = {} }) => {
         const numeratorRelationDEs = [
-            ...variables?.mappedConfigurations.numeratorRelations?.map(
+            ...variables?.mappedConfiguration.numeratorRelations?.map(
                 (rel) => rel.A
             ),
-            ...variables?.mappedConfigurations.numeratorRelations?.map(
+            ...variables?.mappedConfiguration.numeratorRelations?.map(
                 (rel) => rel.B
             ),
         ]
@@ -166,7 +166,7 @@ export const useFetchSectionTwoData = () => {
         const validDataElementPeriodTypes = getValidDataElementPeriodTypes({
             dataElements: variables.dataElements,
             dataSetTypes: dataSetResponse?.dataSets?.dataSets,
-            mappedConfigurations: variables.mappedConfigurations,
+            mappedConfiguration: variables.mappedConfiguration,
         })
 
         // get sub periods within current period for each periodType
@@ -193,7 +193,7 @@ export const useFetchSectionTwoData = () => {
                     numeratorRelationDEs,
                     orgUnits: variables.orgUnits,
                     orgUnitLevel: variables.orgUnitLevel,
-                    periods: variables.periods,
+                    periods: variables.periods.map((p) => p.id),
                     currentPeriod: variables.currentPeriod.id,
                 },
             })

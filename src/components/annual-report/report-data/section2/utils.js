@@ -15,7 +15,7 @@ export const getJsonObjectsFormatFromTableFormat = ({
     headers,
     rows,
     metaData,
-    mappedConfigurations,
+    mappedConfiguration,
     calculatingFor,
 }) => {
     const restructuredData = {}
@@ -34,23 +34,23 @@ export const getJsonObjectsFormatFromTableFormat = ({
         const currentDataSetId = row[0].split('.')[0]
         if (calculatingFor == 'completeness') {
             rowData['threshold'] =
-                mappedConfigurations.dataSets[currentDataSetId].threshold
+                mappedConfiguration.dataSets[currentDataSetId].threshold
         } else if (calculatingFor == 'timeliness') {
             rowData['threshold'] =
-                mappedConfigurations.dataSets[
+                mappedConfiguration.dataSets[
                     currentDataSetId
                 ].timelinessThreshold
         } else if (calculatingFor === 'data') {
             rowData.consistency =
-                mappedConfigurations.dataElementsAndIndicators[
+                mappedConfiguration.dataElementsAndIndicators[
                     currentDataSetId
                 ].consistency
             rowData.trend =
-                mappedConfigurations.dataElementsAndIndicators[
+                mappedConfiguration.dataElementsAndIndicators[
                     currentDataSetId
                 ].trend
             rowData.comparison =
-                mappedConfigurations.dataElementsAndIndicators[
+                mappedConfiguration.dataElementsAndIndicators[
                     currentDataSetId
                 ].comparison
         }
@@ -80,7 +80,7 @@ export const getJsonObjectsFormatFromTableFormatSection2 = ({
     headers,
     rows,
     metaData,
-    mappedConfigurations,
+    mappedConfiguration,
 }) => {
     const restructuredData = {}
     const ouHeaderIndex = headers.map((header) => header.name).indexOf('ou')
@@ -98,10 +98,10 @@ export const getJsonObjectsFormatFromTableFormatSection2 = ({
             restructuredData[dx] = {
                 orgUnitLevelsOrGroups: {},
                 extremeOutlier:
-                    mappedConfigurations.dataElementsAndIndicators[dx]
+                    mappedConfiguration.dataElementsAndIndicators[dx]
                         .extremeOutlier,
                 moderateOutlier:
-                    mappedConfigurations.dataElementsAndIndicators[dx]
+                    mappedConfiguration.dataElementsAndIndicators[dx]
                         .moderateOutlier,
                 modifiedZOutlier: MODIFIED_Z_OUTLIER,
                 name: metaData.items[row[dsNameIndex]].name,

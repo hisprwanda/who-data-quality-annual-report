@@ -17,15 +17,15 @@ export const getReportParameters = ({
         return {}
     }
 
-    const mappedConfigurations = getConfigObjectsForAnalytics(
+    const mappedConfiguration = getConfigObjectsForAnalytics(
         configuration,
         groupID
     )
 
     const reportParameters = {
-        dataSets: Object.keys(mappedConfigurations.dataSets),
+        dataSets: Object.keys(mappedConfiguration.dataSets),
         dataElements: Object.keys(
-            mappedConfigurations.dataElementsAndIndicators
+            mappedConfiguration.dataElementsAndIndicators
         ),
         orgUnits: [orgUnitID],
         orgUnitLevel: `LEVEL-${orgUnitLevel}`,
