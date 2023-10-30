@@ -11,7 +11,7 @@ import {
 } from '@dhis2/ui'
 import PropTypes from 'prop-types'
 import React, { useEffect } from 'react'
-import { getReportSectionsData } from '../../../../utils/utils.js'
+import { calculateSection1 } from './section1Calculations.js'
 
 const reportQueries = {
     reporting_rate_over_all_org_units: {
@@ -126,11 +126,11 @@ export const SectionOne = ({ reportParameters }) => {
     }
 
     if (data) {
-        sectionData = getReportSectionsData(
-            data,
-            reportParameters.mappedConfiguration,
-            reportParameters.periods[0].id
-        )
+        sectionData = calculateSection1({
+            reportQueryResponse: data,
+            mappedConfigurations: reportParameters.mappedConfiguration,
+            period: reportParameters.periods[0].id,
+        })
 
         return (
             <>
