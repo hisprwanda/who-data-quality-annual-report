@@ -50,16 +50,20 @@ const Report = () => {
             getReportParameters({
                 groupID: selectedGroup,
                 orgUnitID: selectedOrgUnit.id,
+                boundaryOrgUnitLevel: selectedOrgUnit.level,
                 configuration,
                 orgUnitLevel: selectedOrgUnitLevel,
                 periods: selectedPeriods,
             }),
         [
+            
             selectedOrgUnit.id,
+            selectedOrgUnit.level,
             selectedGroup,
             configuration,
             selectedOrgUnitLevel,
             selectedPeriods,
+        ,
         ]
     )
     const [reportParameters, setReportParameters] = useState({})
