@@ -64,7 +64,7 @@ const dataElementGroupsQuery = {
   };
 
 
-const UpdateNumeratorsModal = ({configurations, onClose, isHidden, onSave, numeratorToEdit, updateType}) => {
+const UpdateNumeratorsModal = ({configurations, onClose, isHidden, onSave, numeratorToEdit, updateType, isLoading}) => {
     const [toggleStateModal, setToggleStateModal] = useState(1);
     const [selectedElementGroup, setSelectedElementGroup] = useState('');
     const [selectedElement, setSelectedElement] = useState('');
@@ -411,8 +411,8 @@ const UpdateNumeratorsModal = ({configurations, onClose, isHidden, onSave, numer
                     <Button  secondary onClick={onClose}>
                         Cancel
                     </Button>
-                    <Button  primary onClick={() => onSave(numerator)}> 
-                        Save
+                    <Button  primary  loading={isLoading} onClick={() => onSave(numerator, updateType)}> 
+                        {updateType ==='create'? 'Create' : 'Update'}
                     </Button>
                 </ButtonStrip>
             </ModalActions>

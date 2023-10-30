@@ -132,7 +132,7 @@ export const updateConfigurations = (configurations, configurationType, updateTy
     case 'numerators':
       configurationsToSave = {
         metaDataVersion,
-        numerators: updateNumerator(numerators, configsUpdateInfo),
+        numerators: updateNumerator(numerators, updateType, configsUpdateInfo),
         coreIndicators,
         dataSets,
         denominators,
@@ -189,15 +189,18 @@ const clearNumerator = (numerators, numeratorToUpdate) => {
   return numerators;
 }
 
-// TODO: can u use the spread operator ?
-// TODO: check all changed data and update them accordingly. i.e: core, groups, etc
-const updateNumerator = (numerators, updatedNumerator) => {
-    const numerator = numerators.find(numerator => numerator.code === updatedNumerator.code);
-  if (numerator) {
+const updateNumerator = (numerators, updateType, updatedNumerator) => {
+  const numerator = numerators.find(numerator => numerator.code === updatedNumerator.code);    
+  
+  if (numerator && updateType === 'update') {
+    // TODO: check all changed data and update them accordingly. i.e: core, groups, etc bcz now it updates names and definition
     // numerator.dataSetID = updatedNumerator.dataSetID;
     // numerator.dataID = updatedNumerator.dataID;
     numerator.name = updatedNumerator.name;
     numerator.definition = updatedNumerator.definition;
+
+  }else if (numerator && updateType == 'delete') {
+    numerators = numerators.filter(numerator => numerator.code !== updatedNumerator.code)
   }
   return numerators;
 }

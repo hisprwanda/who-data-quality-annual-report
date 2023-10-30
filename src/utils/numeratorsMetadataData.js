@@ -1,6 +1,6 @@
 import {
   Button,
-  IconSubtractCircle16,
+  IconDelete16,
   TableCell,
   TableRow} from '@dhis2/ui'
 
@@ -46,7 +46,7 @@ export const getNumeratorDataElement = (mappedNumerators, dataID) => {
   }
 }
 
-export const getNumeratorsInGroup = (numerators, group, onDeleteNumerator) => {
+export const getNumeratorsInGroup = (numerators, group, onRemoveNumerator) => {
   const numeratorsInGroup = [];
 
   for (let key in numerators) {
@@ -66,8 +66,8 @@ export const getNumeratorsInGroup = (numerators, group, onDeleteNumerator) => {
         </TableCell>
         <TableCell>
           <Button
-              name="Primary button" onClick={() => onDeleteNumerator(group.code, numerator.code)} 
-              destructive basic button value="default" icon={<IconSubtractCircle16 />}> Delete
+              name="Primary button" onClick={() => onRemoveNumerator(group.code, numerator.code)} 
+              destructive basic button value="default" icon={<IconDelete16 />}> Delete
               </Button>
         </TableCell>
       </TableRow>

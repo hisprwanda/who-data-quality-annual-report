@@ -11,9 +11,9 @@ import {
     TableRow,
     TableRowHead,
     IconEdit16,
-    IconSubtractCircle16	
-  
+    IconDelete16  
   } from '@dhis2/ui'
+
 import WarningModal from "../../Modals/WarningModal";
 import PeriodsModal from '../../Modals/PeriodsModal';
 import { DataSelectorModal } from '../../Modals/DataSelectorModal';
@@ -45,48 +45,37 @@ export const Numerators = ({toggleState, configurations}) => {
     const togglePeriodModal = () => setIsHiddenPeriod(state => !state)
     const toggleDataModal = () => setIsHiddenDataModal(state => !state)
     const [dataElements, setDataElements] = useState(null);
-    const [numerators, setNumerators] = useState([]);
+    const [numerators, setNumerators] = useState(configurations.numerators);
     const [numeratorToEdit, setNumeratorToEdit] = useState(null);
+    const [isLoading, setIsLoading] = useState(false)
 
     const [mutate, { error, data }] = useDataMutation( updateConfigurationsMutation )
     const [updateType, setUpdateType] = useState(null);
 
-    const onClose = () => {
-        setIsHidden(true);
-    }
-
-    const onCloseEdit = () => {
-        setIsHiddenEdit(true);
-    }
 
     const onCloseCreate = () => {
         setIsHiddenUpdateModal(true);
     }
     
-    const onDelete = () => {
-        setIsHidden(true);
-        setDataElements(null)
-    }
+    const onSaveNumeratorUpdates = async(newNumeratorInfo, updateType) => {
+        //show a loader while updating
+        setIsLoading(true)
 
-    const onSave = async(numerator) => {
-        console.log("numerator data: ", numerator);
-        setIsHiddenEdit(true);
-        const updatedConfigurations = updateConfigurations(configurations, 'numerators', 'update', numerator);
-        await mutate({ configurations: updatedConfigurations })
-    }
-
-    const onSaveNumeratorUpdates = async(newNumeratorInfo) => {
-        // TODO: check if u're editing or updating
-        // TODO: remember to add datasets as a list of strings
-        // TODO: implement chosing
-        // TODO: pull indicators as well
-
-        console.log('new numerator info', newNumeratorInfo)
-        const updatedConfigurations =  createNewNumerator(configurations, newNumeratorInfo);       
-        await mutate({ configurations: updatedConfigurations })
-
-        setNumerators(numerators => [...numerators, newNumeratorInfo]);
-        setIsHiddenUpdateModal(true)
+        if (updateType === 'create') {
+            const updatedConfigurations =  createNewNumerator(configurations, newNumeratorInfo);       
+            await mutate({ configurations: updatedConfigurations })
+            setNumerators(numerators => [...numerators, newNumeratorInfo]);
+            setIsHiddenUpdateModal(true)
+            
+        } else if( updateType === 'update') {
+            const updatedConfigurations = updateConfigurations(configurations, 'numerators', 'update', newNumeratorInfo);
+            let response = await mutate({ configurations: updatedConfigurations })
+            if (response) {
+                //stop the loader after updating
+                setIsLoading(false)
+            }
+            setIsHiddenUpdateModal(true)
+        }
     }
 
     const onSavePeriod = (selected) => { 
@@ -94,27 +83,11 @@ export const Numerators = ({toggleState, configurations}) => {
         const dataFromUtils = getNumeratorMemberGroups()
     }
 
-    const onSaveData = (selected) => { 
-        toggleDataModal;
-        // console.log('Saved data: ', selected);
-    }
-
-    // FIXME: this is running every time a tab is switched find why and fix
-    const isDisabled = (dataID, dataSetID) => {
-        const element = configurations.denominators.find((element) => element.dataID == dataID);
-        const dataset = configurations.dataSets.find((dataset) => dataset.id == dataSetID);
-        
-        if (element || dataset) {
-            // console.log('elemnt and dataset ', element + ' ' +dataset);
-            return false
-        }else{
-            return true
-        }
-    }
-
-    const clearNumeratorElements = async(numerator) =>{
+    const onDeleteNumerator = async(numeratorToDelete) =>{
         // setIsHidden(false);    //TODO: uncomment after implementing warning modal
-        const updatedConfigurations = clearConfigurations(configurations, 'numerators', 'delete', numerator);
+
+        const updatedConfigurations = updateConfigurations(configurations, 'numerators', 'delete', numeratorToDelete);
+        setNumerators(numerators.filter(numerator => numerator.code !== numeratorToDelete.code));
         await mutate({ configurations: updatedConfigurations })
     }
 
@@ -131,9 +104,9 @@ export const Numerators = ({toggleState, configurations}) => {
         setNumeratorToEdit(numerator);
     }
 
-    useEffect(() => {
-        setNumerators(configurations.numerators)    
-      }, [])
+    // useEffect(() => {
+    //     setNumerators(configurations.numerators)    
+    //   }, [])
 
   return (
     <div className={toggleState === 1 ? "content  active-content" : "content"} >
@@ -170,8 +143,8 @@ export const Numerators = ({toggleState, configurations}) => {
                         </Button>
                         
                         <Button
-                            name="Primary button" onClick={() => clearNumeratorElements(numerator)} 
-                            basic button icon={<IconSubtractCircle16 />} disabled={isDisabled(numerator.dataID, numerator.dataSetID)}> Clear
+                            name="Primary button" onClick={() => onDeleteNumerator(numerator)} 
+                            destructive basic button icon={<IconDelete16 />} disabled={!numerator.custom}> Delete
                         </Button>
                         </TableCell>
                     </TableRow>
@@ -202,6 +175,7 @@ export const Numerators = ({toggleState, configurations}) => {
             onSave={onSaveNumeratorUpdates}
             updateType={updateType}
             numeratorToEdit={numeratorToEdit}
+            isLoading={isLoading}
         />
         <PeriodsModal 
             isHiddenPeriod={isHiddenPeriod}

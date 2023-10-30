@@ -75,7 +75,7 @@ const [mutate, { error, data }] = useDataMutation( updateConfigurationsMutation 
     }
   } 
 
-  const onDeleteNumerator = async(group, numerator) => {
+  const onRemoveNumerator = async(group, numerator) => {
     const groupUpdateInfo = {
       groupCode: group,
       numeratorCode: numerator
@@ -108,7 +108,7 @@ const [mutate, { error, data }] = useDataMutation( updateConfigurationsMutation 
                         </TableRowHead>
                     </TableHead>
                     <TableBody>
-                          {getNumeratorsInGroup(numerators, group, onDeleteNumerator)}
+                          {getNumeratorsInGroup(numerators, group, onRemoveNumerator)}
                       
     
                       <TableRow>
