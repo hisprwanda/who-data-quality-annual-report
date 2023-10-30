@@ -3,6 +3,13 @@ import { generateFixedPeriods } from '@dhis2/multi-calendar-dates'
 import { useCallback, useState } from 'react'
 import { periodTypesMapping } from '../../utils/period/FixedPeriod.source.js'
 
+export const SUBPERIODS_RESPONSE_NAME = 'data_detail_by_reporting_period'
+export const OVERALL_ORG_UNIT_SECTION_2D = 'data_over_all_org_units'
+export const LEVEL_OR_GROUP_SECTION_2D = 'data_by_org_unit_level'
+export const OVERALL_ORG_UNIT_SECTION_2E =
+    'numerator_relations_over_all_org_units'
+export const LEVEL_OR_GROUP_SECTION_2E = 'numerator_relations_org_unit_level'
+
 const dataSetInformation = {
     dataSets: {
         resource: 'dataSets',
@@ -15,7 +22,7 @@ const dataSetInformation = {
 }
 
 const section2abcQuery = {
-    data_detail_by_reporting_period: {
+    [SUBPERIODS_RESPONSE_NAME]: {
         resource: 'analytics.json',
         params: ({ dataElements, orgUnits, orgUnitLevel, subPeriods }) => ({
             dimension: `dx:${dataElements.join(';')},ou:${
@@ -26,7 +33,7 @@ const section2abcQuery = {
 }
 
 const section2deQueries = {
-    data_over_all_org_units: {
+    [OVERALL_ORG_UNIT_SECTION_2D]: {
         resource: 'analytics.json',
         params: ({ dataElements, orgUnits, periods }) => ({
             dimension: `dx:${dataElements.join(';')},ou:${orgUnits.join(
@@ -34,7 +41,7 @@ const section2deQueries = {
             )},pe:${periods.join(';')}`,
         }),
     },
-    data_by_org_unit_level: {
+    [LEVEL_OR_GROUP_SECTION_2D]: {
         resource: 'analytics.json',
         params: ({ dataElements, orgUnits, orgUnitLevel, periods }) => ({
             dimension: `dx:${dataElements.join(';')},ou:${
@@ -42,7 +49,7 @@ const section2deQueries = {
             },pe:${periods.join(';')}`,
         }),
     },
-    numerator_relations_over_all_org_units: {
+    [OVERALL_ORG_UNIT_SECTION_2E]: {
         resource: 'analytics.json',
         params: ({ numeratorRelationDEs, orgUnits, currentPeriod }) => ({
             dimension: `dx:${numeratorRelationDEs.join(';')},ou:${orgUnits.join(
@@ -50,7 +57,7 @@ const section2deQueries = {
             )},pe:${currentPeriod}`,
         }),
     },
-    numerator_relations_org_unit_level: {
+    [LEVEL_OR_GROUP_SECTION_2E]: {
         resource: 'analytics.json',
         params: ({
             numeratorRelationDEs,
@@ -187,8 +194,7 @@ export const useFetchSectionTwoData = () => {
                 })
             )
             try {
-                const dataBySubPeriod = await Promise.all(subPeriodRequests)
-                const otherData = await engine.query(section2deQueries, {
+                const otherRequest = engine.query(section2deQueries, {
                     variables: {
                         dataElements: Object.keys(validDataElementPeriodTypes),
                         numeratorRelationDEs,
@@ -198,10 +204,16 @@ export const useFetchSectionTwoData = () => {
                         currentPeriod: variables.currentPeriod.id,
                     },
                 })
+
+                const [otherData, ...dataBySubPeriod] = await Promise.all([
+                    otherRequest,
+                    ...subPeriodRequests,
+                ])
+
                 setData({
                     ...otherData,
-                    data_detail_by_reporting_period: dataBySubPeriod.map(
-                        (resp) => resp.data_detail_by_reporting_period
+                    [SUBPERIODS_RESPONSE_NAME]: dataBySubPeriod.map(
+                        (resp) => resp[SUBPERIODS_RESPONSE_NAME]
                     ),
                 })
             } catch (e) {

@@ -5,6 +5,13 @@ import {
     getStats,
     getRoundedValue,
 } from './mathService.js'
+import {
+    SUBPERIODS_RESPONSE_NAME,
+    OVERALL_ORG_UNIT_SECTION_2D,
+    LEVEL_OR_GROUP_SECTION_2D,
+    OVERALL_ORG_UNIT_SECTION_2E,
+    LEVEL_OR_GROUP_SECTION_2E,
+} from './useFetchSectionTwoData.js'
 
 const MODIFIED_Z_OUTLIER = 3.5
 const DEFAULT_EXTREME_OUTLIER = 3
@@ -379,12 +386,6 @@ const calculateSection2e = ({
 
     return results
 }
-
-const SUBPERIODS_RESPONSE_NAME = 'data_detail_by_reporting_period'
-const OVERALL_ORG_UNIT_SECTION_2D = 'data_over_all_org_units'
-const LEVEL_OR_GROUP_SECTION_2D = 'data_by_org_unit_level'
-const OVERALL_ORG_UNIT_SECTION_2E = 'numerator_relations_over_all_org_units'
-const LEVEL_OR_GROUP_SECTION_2E = 'numerator_relations_org_unit_level'
 
 export const calculateSection2 = ({
     section2Response,
