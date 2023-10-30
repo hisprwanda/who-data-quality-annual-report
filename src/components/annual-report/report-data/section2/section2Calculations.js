@@ -12,16 +12,15 @@ const DEFAULT_MODERATE_OUTLIER = 2
 
 // format response
 const getRowInformation = ({
-    dxInfo,
     dxID,
     counts,
-    thresholdKey,
     countsKey,
+    thresholdValue,
     divergentSubOrgUnits,
     metadata,
 }) => ({
     indicator: metadata[dxID]?.name,
-    threshold: dxInfo?.[thresholdKey],
+    threshold: thresholdValue,
     overallScore:
         counts.totalValidValues === 0
             ? 0
@@ -61,6 +60,13 @@ const calculateSections2a2b2c = ({
 
     for (const dx in formattedResponse) {
         const dxInfo = mappedConfiguration.dataElementsAndIndicators?.[dx]
+        const thresholdValues = {
+            extremeOutlier: dxInfo?.extremeOutlier || DEFAULT_EXTREME_OUTLIER,
+            moderateOutlier:
+                dxInfo?.moderateOutlier || DEFAULT_MODERATE_OUTLIER,
+            modifiedZOutlier: MODIFIED_Z_OUTLIER, // this is not definable by configuration
+        }
+
         const counts = {
             totalValidValues: 0,
             extremeOutliers: 0,
@@ -81,11 +87,7 @@ const calculateSections2a2b2c = ({
 
             const stats = getStats({
                 valuesArray: validValues,
-                extremeOutlier:
-                    dxInfo?.extremeOutlier || DEFAULT_EXTREME_OUTLIER,
-                moderateOutlier:
-                    dxInfo?.moderateOutlier || DEFAULT_MODERATE_OUTLIER,
-                modifiedZOutlier: MODIFIED_Z_OUTLIER, // this is not definable by configuration
+                ...thresholdValues,
             })
 
             counts.totalValidValues += stats.count
@@ -109,10 +111,9 @@ const calculateSections2a2b2c = ({
         // now push results to row
         results.section2a.push(
             getRowInformation({
-                dxInfo,
                 dxID: dx,
                 counts,
-                thresholdKey: 'extremeOutlier',
+                thresholdValue: thresholdValues.extremeOutlier,
                 countsKey: 'extremeOutliers',
                 divergentSubOrgUnits,
                 metadata,
@@ -120,11 +121,10 @@ const calculateSections2a2b2c = ({
         )
         results.section2b.push(
             getRowInformation({
-                dxInfo,
                 dxID: dx,
                 counts,
                 formattedResponse,
-                thresholdKey: 'moderateOutlier',
+                thresholdValue: thresholdValues.moderateOutlier,
                 countsKey: 'moderateOutliers',
                 divergentSubOrgUnits,
                 metadata,
@@ -132,11 +132,10 @@ const calculateSections2a2b2c = ({
         )
         results.section2c.push(
             getRowInformation({
-                dxInfo,
                 dxID: dx,
                 counts,
                 formattedResponse,
-                thresholdKey: 'modifiedZOutlier',
+                thresholdValue: thresholdValues.modifiedZOutlier,
                 countsKey: 'modifiedZOutliers',
                 divergentSubOrgUnits,
                 metadata,
