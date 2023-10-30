@@ -1,3 +1,4 @@
+import { convertAnalyticsResponseToObject, getVal } from '../utils/utils.js'
 import {
     getForecastValue,
     getMean,
@@ -5,7 +6,6 @@ import {
     getRoundedValue,
 } from './mathService.js'
 import { getJsonObjectsFormatFromTableFormat } from './utils.js'
-import { convertAnalyticsResponseToObject } from '../utils/utils.js'
 
 const MODIFIED_Z_OUTLIER = 3.5
 const DEFAULT_EXTREME_OUTLIER = 3
@@ -149,20 +149,19 @@ const calculateSections2a2b2c = ({
 
 const get2dScore = ({
     ou,
+    dx,
     trend,
-    dxResponse,
+    response,
     currentPeriodID,
     comparisonPeriods,
 }) => {
     const currentPeriodValue = Number(
-        dxResponse?.[currentPeriodID]?.filter((e) => e.ou === ou)?.[0]?.value
+        getVal({ response, dx, pe: currentPeriodID, ou })
     )
 
-    // need to keep relative distance for forecast (hence points)
+    // need to keep relative distance for forecast (hence get index, then filter out invalid values)
     const comparisonPeriodPoints = comparisonPeriods
-        .map((pe) =>
-            Number(dxResponse?.[pe]?.filter((e) => e.ou === ou)?.[0]?.value)
-        )
+        .map((pe) => Number(getVal({ response, dx, pe, ou })))
         .map((val, index) => [index, val])
         .filter((point) => !isNaN(point[1]))
 
@@ -182,7 +181,10 @@ const get2dScore = ({
 const calculateSection2d = ({
     overallResponse,
     levelOrGroupResponse,
-    orgUnitsByLevelOrGroup,
+    mappedConfiguration,
+    metadata,
+    overallOrgUnit,
+    subOrgUnitIDs,
     currentPeriodID,
     comparisonPeriods,
 }) => {
@@ -191,33 +193,35 @@ const calculateSection2d = ({
     }
 
     for (const dx in overallResponse) {
-        // get overall score
-        const currentPeriodData = overallResponse[dx]?.[currentPeriodID][0]
-        if (!currentPeriodData) {
-            // break if current period data is missing
-            return
+        // retrieve info for dx
+        const dxInfo = mappedConfiguration?.dataElementsAndIndicators?.[dx]
+        if (!overallResponse[dx][overallOrgUnit][currentPeriodID]) {
+            // skip if current period data is missing
+            continue
         }
-        const consistency = currentPeriodData.consistency
-        const trend = currentPeriodData.trend
-        const comparison = currentPeriodData.comparison
-        const ou = currentPeriodData.ou
+        const consistency = dxInfo.consistency
+        const trend = dxInfo.trend
+        const comparison = dxInfo.comparison
 
         // calculate overall score
         const overallScore = get2dScore({
-            ou,
+            ou: overallOrgUnit,
+            dx,
+            response: overallResponse,
             trend,
-            dxResponse: overallResponse[dx],
             currentPeriodID,
             comparisonPeriods,
         })
 
         // then get divergent subOrgUnits
         const divergentSubOrgUnits = []
-        orgUnitsByLevelOrGroup.forEach((subOrgUnit) => {
+
+        subOrgUnitIDs.forEach((subOrgUnit) => {
             const subOrgUnitScore = get2dScore({
                 ou: subOrgUnit,
+                dx,
+                response: levelOrGroupResponse,
                 trend,
-                dxResponse: levelOrGroupResponse[dx],
                 currentPeriodID,
                 comparisonPeriods,
             })
@@ -228,20 +232,17 @@ const calculateSection2d = ({
                 subOrgUnitScore < comparisonPoint * (1 - consistency / 100) ||
                 subOrgUnitScore > comparisonPoint * (1 + consistency / 100)
             ) {
-                const orgUnitName = levelOrGroupResponse[dx][
-                    currentPeriodID
-                ].find((e) => e.ou === subOrgUnit).orgUnitLevelsOrGroups
+                const orgUnitName = metadata?.[subOrgUnit]?.name
                 divergentSubOrgUnits.push(orgUnitName)
             }
         })
 
         results.section2d.push({
-            name: overallResponse[dx][currentPeriodID][0].dataset_name,
+            name: metadata?.[dx]?.name,
             expectedTrend: trend === 'constant' ? 'Constant' : 'TBD',
             compareRegionTo:
                 comparison === 'ou'
-                    ? overallResponse[dx][currentPeriodID][0]
-                          .orgUnitLevelsOrGroups
+                    ? metadata?.[overallOrgUnit]?.name
                     : 'Current vs Forecast',
             qualityThreshold: consistency,
             overallScore: getRoundedValue(overallScore, 1),
@@ -249,7 +250,7 @@ const calculateSection2d = ({
                 number: divergentSubOrgUnits.length,
                 percent: getRoundedValue(
                     (divergentSubOrgUnits.length /
-                        orgUnitsByLevelOrGroup.length) *
+                        (subOrgUnitIDs.length ?? 1)) *
                         100,
                     1
                 ),
@@ -394,6 +395,7 @@ export const calculateSection2 = ({
     section2Response,
     mappedConfiguration,
     periods,
+    overallOrgUnit,
 }) => {
     const formattedResponse2a2b2c = section2Response[
         SUBPERIODS_RESPONSE_NAME
@@ -418,7 +420,7 @@ export const calculateSection2 = ({
     )
 
     // since all requests are for same LEVEL, they should all have the same underlying OU dimension
-    const subOrgUnitIDs =
+    const subOrgUnitIDs2abc =
         section2Response[SUBPERIODS_RESPONSE_NAME]?.[0]?.metaData?.dimensions
             ?.ou ?? []
 
@@ -426,36 +428,37 @@ export const calculateSection2 = ({
     const sections2a2b2c = calculateSections2a2b2c({
         formattedResponse: formattedResponse2a2b2c,
         metadata: metadata2a2b2c,
-        subOrgUnitIDs,
+        subOrgUnitIDs: subOrgUnitIDs2abc,
         mappedConfiguration,
     })
 
     const currentPeriodID = periods[0].id
     const comparisonPeriodsIDs = periods.slice(1).map((p) => p.id)
 
-    // Subsection 2d
-    const formattedResponse2dOverall = getJsonObjectsFormatFromTableFormat({
+    const formattedResponse2dOverall = convertAnalyticsResponseToObject({
         ...section2Response[OVERALL_ORG_UNIT],
         mappedConfiguration,
-        calculatingFor: 'data',
-        currentPeriod: currentPeriodID,
-        comparisonPeriods: comparisonPeriodsIDs,
     })
-    const formattedResponse2dLevelOrGroup = getJsonObjectsFormatFromTableFormat(
-        {
-            ...section2Response[LEVEL_OR_GROUP],
-            mappedConfiguration,
-            calculatingFor: 'data',
-        }
-    )
+    const formattedResponse2dLevelOrGroup = convertAnalyticsResponseToObject({
+        ...section2Response[LEVEL_OR_GROUP],
+        mappedConfiguration,
+    })
 
-    const orgUnitsByLevelOrGroup =
+    const metadata2d = {
+        ...section2Response[OVERALL_ORG_UNIT].metaData.items,
+        ...section2Response[LEVEL_OR_GROUP].metaData.items,
+    }
+
+    const subOrgUnitIDs2d =
         section2Response[LEVEL_OR_GROUP].metaData.dimensions.ou
 
     const section2d = calculateSection2d({
         overallResponse: formattedResponse2dOverall,
         levelOrGroupResponse: formattedResponse2dLevelOrGroup,
-        orgUnitsByLevelOrGroup,
+        mappedConfiguration,
+        metadata: metadata2d,
+        overallOrgUnit,
+        subOrgUnitIDs: subOrgUnitIDs2d,
         currentPeriodID: currentPeriodID,
         comparisonPeriods: comparisonPeriodsIDs,
     })
@@ -484,7 +487,7 @@ export const calculateSection2 = ({
             ...formattedResponse2eLevelOrGroup,
             ...formattedResponse2dLevelOrGroup,
         },
-        orgUnitsByLevelOrGroup,
+        orgUnitsByLevelOrGroup: [],
         numeratorRelations: mappedConfiguration.numeratorRelations,
         currentPeriod: currentPeriodID,
         metadata: section2Response[LEVEL_OR_GROUP_SECTION_2E].metaData.items,

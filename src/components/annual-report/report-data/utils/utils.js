@@ -1,3 +1,7 @@
+export const getVal = ({ response, dx, ou, pe }) => {
+    return response?.[dx]?.[ou]?.[pe]
+}
+
 const getRowData = ({ headers, row }) => {
     const rowData = {}
     for (let i = 0; i < headers.length; i++) {

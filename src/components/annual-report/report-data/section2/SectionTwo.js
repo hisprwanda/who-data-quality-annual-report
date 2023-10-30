@@ -244,6 +244,7 @@ export const SectionTwo = ({ reportParameters }) => {
             section2Response: data,
             mappedConfiguration: reportParameters.mappedConfiguration,
             periods: reportParameters.periods,
+            overallOrgUnit: reportParameters.orgUnits[0],
         })
         return (
             <>
@@ -267,11 +268,11 @@ export const SectionTwo = ({ reportParameters }) => {
                     subtitle={sectionInformation.section2d.subtitle}
                     subsectionData={section2Data.section2d}
                 />
-                <Section2E
+                {/* <Section2E
                     title={sectionInformation.section2e.title}
                     subtitle={sectionInformation.section2e.subtitle}
                     subsectionData={section2Data.section2e}
-                />
+                /> */}
             </>
         )
     }
