@@ -1,5 +1,5 @@
 import { getRoundedValue } from '../utils/mathService.js'
-import { mapSectionFourResponse } from '../utils/utils.js'
+import { convertAnalyticsResponseToObject } from '../utils/utils.js'
 import {
     OVERALL_RESPONSE_NAME,
     BY_LEVEL_RESPONSE_NAME,
@@ -27,7 +27,7 @@ export const calculateSection3 = ({
     currentPeriod,
     overallOrgUnit,
 }) => {
-    const formattedResponseOverall = mapSectionFourResponse({
+    const formattedResponseOverall = convertAnalyticsResponseToObject({
         ...section3Response[OVERALL_RESPONSE_NAME],
     })
 
@@ -78,9 +78,10 @@ export const calculateSection3 = ({
                 section3Response[BY_LEVEL_RESPONSE_NAME][correspondingIndex]
             const levelMetadata = individualResponse.metaData.items
             const subOrgUnits = individualResponse.metaData.dimensions.ou
-            const formattedIndividualResponse = mapSectionFourResponse({
-                ...individualResponse,
-            })
+            const formattedIndividualResponse =
+                convertAnalyticsResponseToObject({
+                    ...individualResponse,
+                })
 
             // if one of the DEs is missing from the response data, the values are not calculable
             const requiredDEs = [
