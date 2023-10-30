@@ -98,11 +98,7 @@ export const Numerators = ({ toggleState, configurations }) => {
             'delete',
             numeratorToDelete
         )
-        setNumerators(
-            numerators.filter(
-                (numerator) => numerator.code !== numeratorToDelete.code
-            )
-        )
+        setNumerators(updatedConfigurations.numerators)
         await mutate({ configurations: updatedConfigurations })
     }
 
