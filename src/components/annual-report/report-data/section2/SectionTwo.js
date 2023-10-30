@@ -232,7 +232,7 @@ export const SectionTwo = ({ reportParameters }) => {
         }
 
         refetch({ variables })
-    }, [reportParameters]) // should include refetch, which needs to be made stable
+    }, [refetch, reportParameters]) // should include refetch, which needs to be made stable
 
     if (loading) {
         return <span>loading</span>

@@ -1,6 +1,6 @@
 import { useDataEngine } from '@dhis2/app-runtime'
 import { generateFixedPeriods } from '@dhis2/multi-calendar-dates'
-import { useState } from 'react'
+import { useCallback, useState } from 'react'
 import { periodTypesMapping } from '../../utils/period/FixedPeriod.source.js'
 
 const dataSetInformation = {
@@ -146,69 +146,72 @@ export const useFetchSectionTwoData = () => {
 
     const engine = useDataEngine()
 
-    const refetch = async ({ variables = {} }) => {
-        const numeratorRelationDEs = [
-            ...variables?.mappedConfiguration.numeratorRelations?.map(
-                (rel) => rel.A
-            ),
-            ...variables?.mappedConfiguration.numeratorRelations?.map(
-                (rel) => rel.B
-            ),
-        ]
-
-        // set to loading
-        setLoading(true)
-        // get data sets and check that each data element is associated with only one period type
-        const dataSetResponse = await engine.query(dataSetInformation, {
-            variables: { dataSets: variables.dataSets },
-        })
-
-        const validDataElementPeriodTypes = getValidDataElementPeriodTypes({
-            dataElements: variables.dataElements,
-            dataSetTypes: dataSetResponse?.dataSets?.dataSets,
-            mappedConfiguration: variables.mappedConfiguration,
-        })
-
-        // get sub periods within current period for each periodType
-        const subPeriodsByDE = getSubPeriods({
-            dePeriodTypes: validDataElementPeriodTypes,
-            currentPeriod: variables.currentPeriod,
-        })
-        const subPeriodRequests = Object.keys(subPeriodsByDE).map((de) =>
-            fetchDataBySubPeriod({
-                engine,
-                variables: {
-                    dataElements: [de],
-                    orgUnits: variables.orgUnits,
-                    orgUnitLevel: variables.orgUnitLevel,
-                    subPeriods: subPeriodsByDE[de],
-                },
-            })
-        )
-        try {
-            const dataBySubPeriod = await Promise.all(subPeriodRequests)
-            const otherData = await engine.query(section2deQueries, {
-                variables: {
-                    dataElements: Object.keys(validDataElementPeriodTypes),
-                    numeratorRelationDEs,
-                    orgUnits: variables.orgUnits,
-                    orgUnitLevel: variables.orgUnitLevel,
-                    periods: variables.periods.map((p) => p.id),
-                    currentPeriod: variables.currentPeriod.id,
-                },
-            })
-            setData({
-                ...otherData,
-                data_detail_by_reporting_period: dataBySubPeriod.map(
-                    (resp) => resp.data_detail_by_reporting_period
+    const refetch = useCallback(
+        async ({ variables = {} }) => {
+            const numeratorRelationDEs = [
+                ...variables?.mappedConfiguration.numeratorRelations?.map(
+                    (rel) => rel.A
                 ),
+                ...variables?.mappedConfiguration.numeratorRelations?.map(
+                    (rel) => rel.B
+                ),
+            ]
+
+            // set to loading
+            setLoading(true)
+            // get data sets and check that each data element is associated with only one period type
+            const dataSetResponse = await engine.query(dataSetInformation, {
+                variables: { dataSets: variables.dataSets },
             })
-        } catch (e) {
-            console.error(e)
-            setError(e)
-        } finally {
-            setLoading(false)
-        }
-    }
+
+            const validDataElementPeriodTypes = getValidDataElementPeriodTypes({
+                dataElements: variables.dataElements,
+                dataSetTypes: dataSetResponse?.dataSets?.dataSets,
+                mappedConfiguration: variables.mappedConfiguration,
+            })
+
+            // get sub periods within current period for each periodType
+            const subPeriodsByDE = getSubPeriods({
+                dePeriodTypes: validDataElementPeriodTypes,
+                currentPeriod: variables.currentPeriod,
+            })
+            const subPeriodRequests = Object.keys(subPeriodsByDE).map((de) =>
+                fetchDataBySubPeriod({
+                    engine,
+                    variables: {
+                        dataElements: [de],
+                        orgUnits: variables.orgUnits,
+                        orgUnitLevel: variables.orgUnitLevel,
+                        subPeriods: subPeriodsByDE[de],
+                    },
+                })
+            )
+            try {
+                const dataBySubPeriod = await Promise.all(subPeriodRequests)
+                const otherData = await engine.query(section2deQueries, {
+                    variables: {
+                        dataElements: Object.keys(validDataElementPeriodTypes),
+                        numeratorRelationDEs,
+                        orgUnits: variables.orgUnits,
+                        orgUnitLevel: variables.orgUnitLevel,
+                        periods: variables.periods.map((p) => p.id),
+                        currentPeriod: variables.currentPeriod.id,
+                    },
+                })
+                setData({
+                    ...otherData,
+                    data_detail_by_reporting_period: dataBySubPeriod.map(
+                        (resp) => resp.data_detail_by_reporting_period
+                    ),
+                })
+            } catch (e) {
+                console.error(e)
+                setError(e)
+            } finally {
+                setLoading(false)
+            }
+        },
+        [engine]
+    )
     return { loading, data, error, refetch }
 }
