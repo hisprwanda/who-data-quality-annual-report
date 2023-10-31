@@ -1,7 +1,6 @@
 import { useDataQuery, useAlert } from '@dhis2/app-runtime'
 import React, { useState, useEffect } from 'react'
 import ConfigTabs from '../../components/config-tabs/ConfigTabs.js'
-import MenuBar from '../../components/menu-bar/MenuBar.js'
 import './configurations.css'
 
 //TODO: use a global state or context api to share these settings accross components
@@ -43,8 +42,6 @@ const Configurations = () => {
 
     return (
         <div className="configurationsContainer">
-            <MenuBar />
-
             <div className="subContainer">
                 <div className="descriptionText">
                     <p>
