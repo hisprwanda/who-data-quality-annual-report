@@ -152,7 +152,7 @@ export const getSection2d = ({
     const subOrgUnitIDs2d =
         section2Response[LEVEL_OR_GROUP_SECTION_2D].metaData.dimensions.ou
 
-    return calculateSection2d({
+    const section2d = calculateSection2d({
         overallResponse: formattedResponse2dOverall,
         levelOrGroupResponse: formattedResponse2dLevelOrGroup,
         mappedConfiguration,
@@ -162,4 +162,7 @@ export const getSection2d = ({
         currentPeriodID: currentPeriodID,
         comparisonPeriods: comparisonPeriodsIDs,
     })
+
+    section2d.section2d.sort((a, b) => a.name.localeCompare(b.name))
+    return section2d
 }

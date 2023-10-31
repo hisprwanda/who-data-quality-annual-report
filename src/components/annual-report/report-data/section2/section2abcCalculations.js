@@ -170,10 +170,21 @@ export const getSection2abc = ({ section2Response, mappedConfiguration }) => {
             ?.ou ?? []
 
     // Subsections 2a-2c
-    return calculateSections2a2b2c({
+    const sections2a2b2c = calculateSections2a2b2c({
         formattedResponse: formattedResponse2a2b2c,
         metadata: metadata2a2b2c,
         subOrgUnitIDs: subOrgUnitIDs2abc,
         mappedConfiguration,
     })
+
+    sections2a2b2c.section2a.sort((a, b) =>
+        a.indicator.localeCompare(b.indicator)
+    )
+    sections2a2b2c.section2b.sort((a, b) =>
+        a.indicator.localeCompare(b.indicator)
+    )
+    sections2a2b2c.section2c.sort((a, b) =>
+        a.indicator.localeCompare(b.indicator)
+    )
+    return sections2a2b2c
 }

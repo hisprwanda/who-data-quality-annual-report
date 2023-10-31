@@ -67,18 +67,16 @@ const Sections2a2b2c = ({ title, subtitle, subsectionData }) => (
                 <th width="110">Number</th> <th width="110">Percent</th>
                 <th>Names</th>
             </tr>
-            {subsectionData
-                .sort((a, b) => a.indicator.localeCompare(b.indicator))
-                .map((dataRow) => (
-                    <tr key={dataRow.indicator}>
-                        <td>{dataRow.indicator}</td>
-                        <td>{dataRow.threshold} SD</td>
-                        <td>{dataRow.overallScore}</td>
-                        <td>{dataRow.divergentScores?.number}</td>
-                        <td>{dataRow.divergentScores?.percentage}</td>
-                        <td>{dataRow.divergentScores?.names}</td>
-                    </tr>
-                ))}
+            {subsectionData.map((dataRow) => (
+                <tr key={dataRow.indicator}>
+                    <td>{dataRow.indicator}</td>
+                    <td>{dataRow.threshold} SD</td>
+                    <td>{dataRow.overallScore}</td>
+                    <td>{dataRow.divergentScores?.number}</td>
+                    <td>{dataRow.divergentScores?.percentage}</td>
+                    <td>{dataRow.divergentScores?.names}</td>
+                </tr>
+            ))}
         </tbody>
     </table>
 )
@@ -137,11 +135,9 @@ const Section2D = ({ title, subtitle, subsectionData }) => (
                 <SubSectionLayout title={title} subtitle={subtitle} />
             </tbody>
         </table>
-        {subsectionData
-            .sort((a, b) => a.name.localeCompare(b.name))
-            .map((dataRow) => (
-                <Section2DBlock key={dataRow.name} dataRow={dataRow} />
-            ))}
+        {subsectionData.map((dataRow) => (
+            <Section2DBlock key={dataRow.name} dataRow={dataRow} />
+        ))}
     </>
 )
 
@@ -206,11 +202,9 @@ const Section2E = ({ title, subtitle, subsectionData }) => (
                 <SubSectionLayout title={title} subtitle={subtitle} />
             </tbody>
         </table>
-        {subsectionData
-            .sort((a, b) => a.title.localeCompare(b.title))
-            .map((dataRow) => (
-                <Section2EBlock key={dataRow.title} dataRow={dataRow} />
-            ))}
+        {subsectionData.map((dataRow) => (
+            <Section2EBlock key={dataRow.title} dataRow={dataRow} />
+        ))}
     </>
 )
 
