@@ -2,7 +2,7 @@ import React from 'react'
 import { HashRouter, Routes, Route } from 'react-router-dom'
 import classes from './App.module.css'
 import './styles/variables.css'
-import Report from './pages/annual_report/Report.js'
+import Report from './pages/annual_report/AnnualReport.js'
 import Configurations from './pages/configurations/Configurations.js'
 
 const App = () => (
