@@ -166,6 +166,8 @@ const generateScatterChartConfig = (chartId, chartInfo) => {
             title: {
                 enabled: false,
             },
+            min: 0,
+            softMax: 100,
         },
         series: [routineSeries, surveySeries],
         tooltip: {
