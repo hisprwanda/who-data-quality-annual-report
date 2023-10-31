@@ -1,10 +1,16 @@
 import { getRoundedValue } from '../utils/mathService.js'
-import { convertAnalyticsResponseToObject } from '../utils/utils.js'
+import {
+    convertAnalyticsResponseToObject,
+    sortArrayAfterIndex1,
+} from '../utils/utils.js'
 import {
     OVERALL_RESPONSE_NAME,
     BY_LEVEL_RESPONSE_NAME,
     EXTERNAL_RELATIONS_INDICES_WITH_BY_LEVEL_DATA,
 } from './useFetchSectionThreeData.js'
+
+const MULTIPLE_ORG_UNITS_CHART_TYPE = 'scatter'
+const SINGLE_ORG_UNITS_CHART_TYPE = 'bullet'
 
 const getVal = ({ response, dx, ou, pe }) => {
     return response?.[dx]?.[ou]?.[pe]
@@ -21,6 +27,9 @@ const getRoutineValue = ({ relation, response, ou, pe }) => {
     return (numeratorValue / denominatorValue) * 100 // the value must be a percentage as externalData is assumed to be percentage
 }
 
+const isDivergent3a = ({ score, criteria }) =>
+    score < 1 - criteria / 100 || score > 1 + criteria / 100
+
 export const calculateSection3 = ({
     section3Response,
     mappedConfiguration,
@@ -30,6 +39,8 @@ export const calculateSection3 = ({
     const formattedResponseOverall = convertAnalyticsResponseToObject({
         ...section3Response[OVERALL_RESPONSE_NAME],
     })
+    const overallMetadata =
+        section3Response[OVERALL_RESPONSE_NAME].metaData.items
 
     const currentPeriodID = currentPeriod.id
 
@@ -64,6 +75,21 @@ export const calculateSection3 = ({
                     1
                 ),
                 divergentSubOrgUnits: {},
+                chartInfo: {
+                    name: relation.name,
+                    type: SINGLE_ORG_UNITS_CHART_TYPE, // default
+                    values: [
+                        {
+                            name: overallMetadata[overallOrgUnit]?.name,
+                            survey: getRoundedValue(surveyValue, 1),
+                            routine: getRoundedValue(routineValue, 1),
+                            divergent: isDivergent3a({
+                                score: routineValue / surveyValue,
+                                criteria: relation.criteria,
+                            }),
+                        },
+                    ],
+                },
             }
 
             // then calculate the divergence on subOrgUnits
@@ -98,6 +124,9 @@ export const calculateSection3 = ({
                 return section3aItem
             }
 
+            // if we have gotten here, we can theoretically calculate values and chart is multi-orgunit
+            section3aItem.chartInfo.type = MULTIPLE_ORG_UNITS_CHART_TYPE
+
             const divergentSubOrgUnits = []
             const invalidSubOrgUnits = []
             for (const subOrgUnit of subOrgUnits) {
@@ -116,16 +145,32 @@ export const calculateSection3 = ({
                 const scoreSubOrgUnit =
                     surveyValueSubOrgUnit / routineValueSubOrgUnit
 
-                if (isNaN(scoreSubOrgUnit)) {
-                    invalidSubOrgUnits.push(subOrgUnit)
-                }
-                if (
-                    scoreSubOrgUnit < 1 - relation.criteria / 100 ||
-                    scoreSubOrgUnit > 1 + relation.criteria / 100
-                ) {
+                const subOrgUnitIsDivergent = isDivergent3a({
+                    score: scoreSubOrgUnit,
+                    criteria: relation.criteria,
+                })
+                if (subOrgUnitIsDivergent) {
                     divergentSubOrgUnits.push(subOrgUnit)
                 }
+
+                const subOrgUnitChartInfo = {
+                    name: levelMetadata[subOrgUnit]?.name,
+                    survey: getRoundedValue(surveyValueSubOrgUnit, 1),
+                    routine: getRoundedValue(routineValueSubOrgUnit, 1),
+                    divergent: subOrgUnitIsDivergent,
+                }
+
+                if (isNaN(scoreSubOrgUnit)) {
+                    invalidSubOrgUnits.push(subOrgUnit)
+                    subOrgUnitChartInfo.invalid = true
+                }
+
+                section3aItem.chartInfo.values.push(subOrgUnitChartInfo)
             }
+
+            section3aItem.chartInfo.values = sortArrayAfterIndex1(
+                section3aItem.chartInfo.values
+            )
 
             return {
                 ...section3aItem,
