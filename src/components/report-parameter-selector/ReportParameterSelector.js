@@ -62,7 +62,6 @@ export const ReportParameterSelector = ({ setReportParameters }) => {
             selectedPeriods,
         ]
     )
-    // const [reportParameters, setReportParameters] = useState({})
 
     const generateReport = () => {
         setReportParameters(currentReportParameters)
