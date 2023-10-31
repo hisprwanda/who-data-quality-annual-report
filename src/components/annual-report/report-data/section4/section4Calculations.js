@@ -117,7 +117,7 @@ const calculateSection4b = ({
             y: aVal,
             name: metadata[subOrgUnitID]?.name,
             divergent,
-            invalid: isNaN(subOrgUnitScore),
+            invalid: isNaN(aVal) || isNaN(bVal),
         })
     }
 
