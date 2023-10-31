@@ -1,7 +1,7 @@
 import PropTypes from 'prop-types'
 import React, { useEffect } from 'react'
+import { Chart } from '../Chart.js'
 import { calculateSection3 } from './section3Calculations.js'
-import { generateChart } from './section3ChartGenerator.js'
 import { useFetchSectionThreeData } from './useFetchSectionThreeData.js'
 
 const isNotMissing = (val) => val !== undefined && val !== null
@@ -32,19 +32,6 @@ SubSectionLayout.propTypes = {
     title: PropTypes.string,
 }
 
-const Chart = ({ chartId, chartInfo }) => {
-    useEffect(() => {
-        generateChart(chartId, chartInfo)
-    }, [chartId, chartInfo])
-
-    return <div id={chartId} />
-}
-
-Chart.propTypes = {
-    chartId: PropTypes.string.isRequired,
-    chartInfo: PropTypes.object.isRequired,
-}
-
 const Section3A = ({ title, subtitle, subsectionData }) => (
     <>
         <table>
@@ -55,8 +42,6 @@ const Section3A = ({ title, subtitle, subsectionData }) => (
         {subsectionData
             .sort((a, b) => a.name.localeCompare(b.name))
             .map((dataRow, index) => {
-                const chartId = `section3a-chart${index}`
-
                 return (
                     <>
                         <table key={dataRow.name}>
@@ -121,7 +106,8 @@ const Section3A = ({ title, subtitle, subsectionData }) => (
                             </tbody>
                         </table>
                         <Chart
-                            chartId={chartId}
+                            sectionId={'section3'}
+                            chartId={`chart${index}`}
                             chartInfo={dataRow.chartInfo}
                         />
                     </>

@@ -1,61 +1,14 @@
 import H from 'highcharts'
-import HB from 'highcharts/modules/bullet'
 
-// init Highcharts
-// eslint-disable-next-line max-params
-H.SVGRenderer.prototype.symbols.plus = (x, y, w, h) => [
-    'M',
-    x,
-    y + (5 * h) / 8,
-    'L',
-    x,
-    y + (3 * h) / 8,
-    'L',
-    x + (3 * w) / 8,
-    y + (3 * h) / 8,
-    'L',
-    x + (3 * w) / 8,
-    y,
-    'L',
-    x + (5 * w) / 8,
-    y,
-    'L',
-    x + (5 * w) / 8,
-    y + (3 * h) / 8,
-    'L',
-    x + w,
-    y + (3 * h) / 8,
-    'L',
-    x + w,
-    y + (5 * h) / 8,
-    'L',
-    x + (5 * w) / 8,
-    y + (5 * h) / 8,
-    'L',
-    x + (5 * w) / 8,
-    y + h,
-    'L',
-    x + (3 * w) / 8,
-    y + h,
-    'L',
-    x + (3 * w) / 8,
-    y + (5 * h) / 8,
-    'L',
-    x,
-    y + (5 * h) / 8,
-    'z',
-]
-HB(H)
-
-export const generateChart = (chartId, chartInfo) => {
+export const generateSection3Chart = (canvasId, chartInfo) => {
     let chartConfig
 
     switch (chartInfo.type) {
         case 'bullet':
-            chartConfig = generateBulletChartConfig(chartId, chartInfo)
+            chartConfig = generateBulletChartConfig(canvasId, chartInfo)
             break
         case 'scatter':
-            chartConfig = generateScatterChartConfig(chartId, chartInfo)
+            chartConfig = generateScatterChartConfig(canvasId, chartInfo)
             break
     }
 
@@ -78,9 +31,9 @@ export const generateChart = (chartId, chartInfo) => {
     })
 }
 
-const generateBulletChartConfig = (chartId, chartInfo) => ({
+const generateBulletChartConfig = (canvasId, chartInfo) => ({
     chart: {
-        renderTo: chartId,
+        renderTo: canvasId,
         type: 'bullet',
         inverted: true,
         height: 115,
@@ -120,7 +73,7 @@ const generateBulletChartConfig = (chartId, chartInfo) => ({
     },
 })
 
-const generateScatterChartConfig = (chartId, chartInfo) => {
+const generateScatterChartConfig = (canvasId, chartInfo) => {
     const routineSeries = {
         name: 'Routine',
         color: 'blue',
@@ -158,7 +111,7 @@ const generateScatterChartConfig = (chartId, chartInfo) => {
 
     return {
         chart: {
-            renderTo: chartId,
+            renderTo: canvasId,
             type: 'scatter',
         },
         xAxis: {
