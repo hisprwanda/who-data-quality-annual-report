@@ -86,7 +86,7 @@ const Sections2a2b2c = ({ title, subtitle, subsectionData }) => (
 )
 
 Sections2a2b2c.propTypes = {
-    subsectionData: PropTypes.object,
+    subsectionData: PropTypes.array,
     subtitle: PropTypes.string,
     title: PropTypes.string,
 }
@@ -148,7 +148,7 @@ const Section2D = ({ title, subtitle, subsectionData }) => (
 )
 
 Section2D.propTypes = {
-    subsectionData: PropTypes.object,
+    subsectionData: PropTypes.array,
     subtitle: PropTypes.string,
     title: PropTypes.string,
 }
@@ -217,7 +217,7 @@ const Section2E = ({ title, subtitle, subsectionData }) => (
 )
 
 Section2E.propTypes = {
-    subsectionData: PropTypes.object,
+    subsectionData: PropTypes.array,
     subtitle: PropTypes.string,
     title: PropTypes.string,
 }
