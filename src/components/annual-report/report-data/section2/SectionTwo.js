@@ -52,22 +52,20 @@ const Sections2a2b2c = ({ title, subtitle, subsectionData }) => (
         <tbody>
             <SubSectionLayout title={title} subtitle={subtitle} />
             <tr>
-                {' '}
                 <th rowSpan="2" width="200">
                     Indicator
-                </th>{' '}
+                </th>
                 <th rowSpan="2" width="80">
                     Threshold
-                </th>{' '}
+                </th>
                 <th rowSpan="2" width="80">
                     Overall score (%)
-                </th>{' '}
-                <th colSpan="3">Region with divergent score</th>{' '}
+                </th>
+                <th colSpan="3">Region with divergent score</th>
             </tr>
             <tr>
-                {' '}
-                <th width="110">Number</th> <th width="110">Percent</th>{' '}
-                <th>Names</th>{' '}
+                <th width="110">Number</th> <th width="110">Percent</th>
+                <th>Names</th>
             </tr>
             {subsectionData
                 .sort((a, b) => a.indicator.localeCompare(b.indicator))
@@ -92,7 +90,7 @@ Sections2a2b2c.propTypes = {
 }
 
 const Section2DBlock = ({ dataRow }) => (
-    <div>
+    <table>
         <tbody>
             <tr>
                 <th colSpan="2">{dataRow.name}</th>
@@ -125,7 +123,7 @@ const Section2DBlock = ({ dataRow }) => (
                 <td colSpan="2">{dataRow.divergentSubOrgUnits?.names}</td>
             </tr>
         </tbody>
-    </div>
+    </table>
 )
 
 Section2DBlock.propTypes = {
@@ -154,7 +152,7 @@ Section2D.propTypes = {
 }
 
 const Section2EBlock = ({ dataRow }) => (
-    <div>
+    <table>
         <tbody>
             <tr>
                 <th colSpan="2">{dataRow.title}</th>
@@ -194,7 +192,7 @@ const Section2EBlock = ({ dataRow }) => (
                 <td colSpan="2">{dataRow.divergentSubOrgUnits?.names}</td>
             </tr>
         </tbody>
-    </div>
+    </table>
 )
 
 Section2EBlock.propTypes = {
