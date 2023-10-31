@@ -1,6 +1,6 @@
 import { useDataQuery, useAlert } from '@dhis2/app-runtime'
 import React, { useState, useEffect } from 'react'
-import ConfigTabs from '../../components/config-tabs/ConfigTabs.js'
+import ConfigTabs from '../components/config-tabs/ConfigTabs.js'
 import './configurations.css'
 
 //TODO: use a global state or context api to share these settings accross components
@@ -10,8 +10,7 @@ const readDataStoreQuery = {
     },
 }
 
-
-const Configurations = () => {
+export const Configurations = () => {
     // A dynamic alert to communicate success or failure
     // TODO: put this one in a reusable function
     // const { show } = useAlert(
@@ -30,7 +29,7 @@ const Configurations = () => {
     // running the query
     const { loading, error, data } = useDataQuery(readDataStoreQuery)
 
-    let configurations = null;
+    let configurations = null
 
     if (data) {
         configurations = data.dataStore
@@ -68,5 +67,3 @@ const Configurations = () => {
         </div>
     )
 }
-
-export default Configurations
