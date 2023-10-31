@@ -18,9 +18,10 @@ const get2dScore = ({
     )
 
     // need to keep relative distance for forecast (hence get index, then filter out invalid values)
+    // periods are in reverse chronological order, hence flip of indices during mapping
     const comparisonPeriodPoints = comparisonPeriods
         .map((pe) => Number(getVal({ response, dx, pe, ou })))
-        .map((val, index) => [index, val])
+        .map((val, index) => [comparisonPeriods.length - index - 1, val])
         .filter((point) => !isNaN(point[1]))
 
     if (trend === 'constant') {
@@ -30,10 +31,16 @@ const get2dScore = ({
         return (currentPeriodValue / getMean(comparisonPeriodValues)) * 100
     }
     // else forecast
-    return getForecastValue({
-        pointsArray: comparisonPeriodPoints,
-        forecastX: comparisonPeriods.length,
-    })
+
+    // negative forecast values are limited to zero
+    const forecastValue = Math.max(
+        getForecastValue({
+            pointsArray: comparisonPeriodPoints,
+            forecastX: comparisonPeriods.length,
+        }),
+        0
+    )
+    return (currentPeriodValue / forecastValue) * 100
 }
 
 const calculateSection2d = ({
@@ -97,7 +104,7 @@ const calculateSection2d = ({
 
         results.section2d.push({
             name: metadata?.[dx]?.name,
-            expectedTrend: trend === 'constant' ? 'Constant' : 'TBD',
+            expectedTrend: trend === 'constant' ? 'Constant' : trend,
             compareRegionTo:
                 comparison === 'ou'
                     ? metadata?.[overallOrgUnit]?.name
