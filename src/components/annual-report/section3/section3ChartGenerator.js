@@ -132,27 +132,29 @@ const generateScatterChartConfig = (chartId, chartInfo) => {
         data: [],
     }
 
-    chartInfo.values.forEach(({ routine, survey, divergent }) => {
-        routineSeries.data.push({
-            y: routine,
-            custom: {
-                survey,
-            },
-            marker: {
-                symbol: divergent ? 'triangle' : 'plus',
-            },
-        })
+    chartInfo.values
+        .filter(({ invalid }) => !invalid)
+        .forEach(({ routine, survey, divergent }) => {
+            routineSeries.data.push({
+                y: routine,
+                custom: {
+                    survey,
+                },
+                marker: {
+                    symbol: divergent ? 'triangle' : 'plus',
+                },
+            })
 
-        surveySeries.data.push({
-            y: survey,
-            custom: {
-                routine,
-            },
-            marker: {
-                symbol: divergent ? 'triangle-down' : 'circle',
-            },
+            surveySeries.data.push({
+                y: survey,
+                custom: {
+                    routine,
+                },
+                marker: {
+                    symbol: divergent ? 'triangle-down' : 'circle',
+                },
+            })
         })
-    })
 
     return {
         chart: {
