@@ -73,6 +73,7 @@ export const generateChart = (sectionId, canvasId, chartInfo) => {
     }
 
     return new H.Chart({
+        // global settings
         accessibility: {
             enabled: false,
         },
@@ -85,7 +86,6 @@ export const generateChart = (sectionId, canvasId, chartInfo) => {
         title: {
             text: null,
         },
-
         // specific settings
         ...chartConfig,
     })

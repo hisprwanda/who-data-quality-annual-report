@@ -1,18 +1,13 @@
 import i18n from '@dhis2/d2-i18n'
-import H from 'highcharts'
 
 export const generateSection3Chart = (canvasId, chartInfo) => {
-    let chartConfig
-
     switch (chartInfo.type) {
         case 'bullet':
-            chartConfig = generateBulletChartConfig(canvasId, chartInfo)
-            break
+            return generateBulletChartConfig(canvasId, chartInfo)
         case 'scatter':
-            chartConfig = generateScatterChartConfig(canvasId, chartInfo)
-            break
+            return generateScatterChartConfig(canvasId, chartInfo)
         default:
-            chartConfig = {
+            return {
                 chart: {
                     renderTo: canvasId,
                 },
@@ -20,26 +15,7 @@ export const generateSection3Chart = (canvasId, chartInfo) => {
                     noData: i18n.t('Chart not available'),
                 },
             }
-            break
     }
-
-    return new H.Chart({
-        // global settings
-        accessibility: {
-            enabled: false,
-        },
-        credits: {
-            enabled: false,
-        },
-        exporting: {
-            enabled: false,
-        },
-        title: {
-            text: null,
-        },
-        // specific settings
-        ...chartConfig,
-    })
 }
 
 const generateBulletChartConfig = (canvasId, chartInfo) => {
