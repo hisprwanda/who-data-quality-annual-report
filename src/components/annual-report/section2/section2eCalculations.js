@@ -1,5 +1,5 @@
+import { getRoundedValue } from '../utils/mathService.js'
 import { convertAnalyticsResponseToObject, getVal } from '../utils/utils.js'
-import { getRoundedValue } from './mathService.js'
 import {
     OVERALL_ORG_UNIT_SECTION_2E,
     LEVEL_OR_GROUP_SECTION_2E,

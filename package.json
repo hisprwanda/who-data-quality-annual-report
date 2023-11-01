@@ -1,28 +1,28 @@
 {
-  "name": "who-data-quality-annual-report",
-  "version": "1.0.0",
-  "description": "",
-  "license": "BSD-3-Clause",
-  "private": true,
-  "scripts": {
-    "build": "d2-app-scripts build",
-    "start": "d2-app-scripts start",
-    "test": "d2-app-scripts test",
-    "deploy": "d2-app-scripts deploy",
-    "lint": "d2-style check",
-    "format": "d2-style apply"
-  },
-  "devDependencies": {
-    "@dhis2/cli-app-scripts": "^10.3.8",
-    "@dhis2/cli-style": "^10.5.1"
-  },
-  "dependencies": {
-    "@dhis2/analytics": "^25.1.10",
-    "@dhis2/app-runtime": "^3.9.4",
-    "@dhis2/multi-calendar-dates": "^1.0.2",
-    "@dhis2/ui": "^8.14.9",
-    "@dhis2/ui-core": "^6.24.0",
-    "react-router-dom": "^6.11.1",
-    "regression": "^2.0.1"
-  }
+    "name": "who-data-quality-annual-report",
+    "version": "1.0.0",
+    "description": "",
+    "license": "BSD-3-Clause",
+    "private": true,
+    "scripts": {
+        "build": "d2-app-scripts build",
+        "start": "d2-app-scripts start",
+        "test": "d2-app-scripts test",
+        "deploy": "d2-app-scripts deploy",
+        "lint": "d2-style check",
+        "format": "d2-style apply"
+    },
+    "devDependencies": {
+        "@dhis2/cli-app-scripts": "^10.3.8",
+        "@dhis2/cli-style": "^10.5.1"
+    },
+    "dependencies": {
+        "@dhis2/analytics": "^25.1.10",
+        "@dhis2/app-runtime": "^3.9.4",
+        "@dhis2/multi-calendar-dates": "^1.0.2",
+        "@dhis2/ui": "^8.14.9",
+        "@dhis2/ui-core": "^6.24.0",
+        "react-router-dom": "^6.11.1",
+        "regression": "^2.0.1"
+    }
 }

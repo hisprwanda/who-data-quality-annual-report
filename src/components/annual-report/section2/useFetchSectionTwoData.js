@@ -1,7 +1,7 @@
 import { useDataEngine } from '@dhis2/app-runtime'
 import { generateFixedPeriods } from '@dhis2/multi-calendar-dates'
 import { useCallback, useState } from 'react'
-import { periodTypesMapping } from '../../utils/period/FixedPeriod.source.js'
+import { periodTypesMap } from './periodTypesMap.js'
 
 export const SUBPERIODS_RESPONSE_NAME = 'data_detail_by_reporting_period'
 export const OVERALL_ORG_UNIT_SECTION_2D = 'data_over_all_org_units'
@@ -122,7 +122,7 @@ const getSubPeriods = ({ dePeriodTypes, currentPeriod }) => {
     const deSubPeriods = {}
 
     for (const de in dePeriodTypes) {
-        const periodType = periodTypesMapping[dePeriodTypes[de]]
+        const periodType = periodTypesMap[dePeriodTypes[de]]
         // TBD on whether year is start or end date
 
         // need to generate current and previous year periods then filter between start/end dates

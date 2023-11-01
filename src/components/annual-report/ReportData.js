@@ -1,9 +1,9 @@
 import PropTypes from 'prop-types'
 import React from 'react'
-import { SectionThree } from '../section3/SectionThree.js'
 import styles from './ReportData.module.css'
 import { SectionOne } from './section1/SectionOne.js'
 import { SectionTwo } from './section2/SectionTwo.js'
+import { SectionThree } from './section3/SectionThree.js'
 import { SectionFour } from './section4/SectionFour.js'
 
 const SectionLayout = ({ title, children }) => (
@@ -28,7 +28,7 @@ export const ReportData = ({ reportParameters }) => {
             <SectionLayout title="Domain 1 - Completeness of Reporting">
                 <SectionOne reportParameters={reportParameters} />
             </SectionLayout>
-            <SectionLayout title="Domain 2 - Internal consistency of reported data">
+            <SectionLayout title="Domain 2 - Internal Consistency of Reported Data">
                 <SectionTwo reportParameters={reportParameters} />
             </SectionLayout>
             <SectionLayout title="Domain 3 - External Comparison">

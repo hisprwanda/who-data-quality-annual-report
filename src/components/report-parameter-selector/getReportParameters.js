@@ -9,7 +9,6 @@ export const getReportParameters = ({
     periods,
 }) => {
     if (
-        
         !orgUnitID ||
         !groupID ||
         !configuration ||
