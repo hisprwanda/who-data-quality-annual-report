@@ -1,3 +1,5 @@
+import { convertAnalyticsResponseToObject, getVal } from '../utils/utils.js'
+
 // gets a list of retions in which the reporting rate score was lower than the threshold
 const getRegionsWithLowScore = (filterd_datasets, key) => {
     const dataset = filterd_datasets[key]
@@ -638,11 +640,47 @@ const getConsistencyOfDatasetCompletenessData = ({
     return flattenedData
 }
 
+// get chart info for section 1
+const getSection1dChartInfo = ({ allOrgUnitsData, periodsIDs, ou }) => {
+    // the periods are from most recent to oldest; we want to present data in the reverse
+    const periods = [...periodsIDs]
+    periods.reverse()
+
+    const chartInfo = {
+        x: periods,
+        values: [],
+    }
+
+    const formattedData = convertAnalyticsResponseToObject({
+        ...allOrgUnitsData,
+    })
+
+    for (const dx in formattedData) {
+        const points = periods.map((pe) =>
+            getVal({ response: formattedData, dx, ou, pe })
+        )
+
+        // if all points are undefined: skip; otherwise, add
+        if (points.some((val) => val !== undefined)) {
+            chartInfo.values.push({
+                name: allOrgUnitsData.metaData?.items?.[dx]?.name ?? '',
+                points,
+            })
+        }
+    }
+
+    chartInfo.values.sort((a, b) => a.name.localeCompare(b.name))
+
+    return chartInfo
+}
+
 // function to structure analytics responses into different report sections as json objects using mapped configurations and chosen period
 export const calculateSection1 = ({
     reportQueryResponse,
     mappedConfigurations,
     period,
+    periodsIDs,
+    overallOrgUnit,
 }) => {
     if (!reportQueryResponse || !mappedConfigurations) {
         return {}
@@ -690,5 +728,11 @@ export const calculateSection1 = ({
             period: period,
             calculatingFor: 'section1D',
         }), // list of objects for Consistency of dataset completeness over time
+        chartInfo: getSection1dChartInfo({
+            allOrgUnitsData:
+                reportQueryResponse.reporting_rate_over_all_org_units,
+            periodsIDs,
+            ou: overallOrgUnit,
+        }),
     }
 }
