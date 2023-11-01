@@ -1,8 +1,7 @@
 import { useDataQuery } from '@dhis2/app-runtime'
 import React from 'react'
-import ConfigTabs from '../../components/config-tabs/ConfigTabs.js'
-import MenuBar from '../../components/menu-bar/MenuBar.js'
-import './configurations.css'
+import ConfigTabs from '../components/config-tabs/ConfigTabs.js'
+import styles from './Configurations.module.css'
 
 //TODO: use a global state or context api to share these settings accross components
 const readDataStoreQuery = {
@@ -11,7 +10,7 @@ const readDataStoreQuery = {
     },
 }
 
-const Configurations = () => {
+export const Configurations = () => {
     // A dynamic alert to communicate success or failure
     // TODO: put this one in a reusable function
     // const { show } = useAlert(
@@ -41,11 +40,9 @@ const Configurations = () => {
     }
 
     return (
-        <div className="configurationsContainer">
-            <MenuBar />
-
-            <div className="subContainer">
-                <div className="descriptionText">
+        <div className={styles.configurationsContainer}>
+            <div className={styles.subContainer}>
+                <div className={styles.descriptionText}>
                     <p>
                         This module is used for configuring the WHO Data Quality
                         Annual Report, and mapping the proposed data quality
@@ -56,7 +53,7 @@ const Configurations = () => {
                     </p>
                 </div>
 
-                <div className="config-tabs-container">
+                <div>
                     {configurations ? (
                         <ConfigTabs
                             loading={loading}
@@ -70,5 +67,3 @@ const Configurations = () => {
         </div>
     )
 }
-
-export default Configurations

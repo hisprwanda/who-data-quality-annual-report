@@ -46,8 +46,11 @@ const calculateSection4a = ({
 const get4BScore = ({ response, aID, bID, ou, pe }) => {
     const aVal = getVal({ response, dx: aID, ou, pe })
     const bVal = getVal({ response, dx: bID, ou, pe })
-    return aVal / bVal
+    return { aVal, bVal, score: aVal / bVal }
 }
+
+const isDivergent4b = ({ score, criteria }) =>
+    score > 1 + criteria / 100 || score < 1 - criteria / 100
 
 const calculateSection4b = ({
     unformattedIndResponse,
@@ -57,7 +60,7 @@ const calculateSection4b = ({
     overallOrgUnit,
 }) => {
     const metadata = unformattedIndResponse.metaData.items
-    const overallScore = get4BScore({
+    const { score: overallScore } = get4BScore({
         response: formattedResponseOverall,
         aID: relation.A.id,
         bID: relation.B.id,
@@ -70,6 +73,12 @@ const calculateSection4b = ({
         A: metadata[relation.A.id]?.name,
         B: metadata[relation.B.id]?.name,
         qualityThreshold: relation.criteria,
+        chartInfo: {
+            x: metadata[relation.B.id]?.name,
+            y: metadata[relation.A.id]?.name,
+            threshold: relation.criteria,
+            values: [],
+        },
     }
     // return early if overallScore is invalid
     if (isNaN(overallScore)) {
@@ -85,20 +94,31 @@ const calculateSection4b = ({
     const divergentSubOrgUnits = []
 
     for (const subOrgUnitID of subOrgUnits) {
-        const subOrgUnitScore = get4BScore({
+        const {
+            score: subOrgUnitScore,
+            aVal,
+            bVal,
+        } = get4BScore({
             response: formattedIndResponse,
             aID: relation.A.id,
             bID: relation.B.id,
             ou: subOrgUnitID,
             pe: currentPeriodID,
         })
-
-        if (
-            subOrgUnitScore > 1 + relation.criteria / 100 ||
-            subOrgUnitScore < 1 - relation.criteria / 100
-        ) {
+        const divergent = isDivergent4b({
+            score: subOrgUnitScore,
+            criteria: relation.criteria,
+        })
+        if (divergent) {
             divergentSubOrgUnits.push(subOrgUnitID)
         }
+        fourBItem.chartInfo.values.push({
+            x: bVal,
+            y: aVal,
+            name: metadata[subOrgUnitID]?.name,
+            divergent,
+            invalid: isNaN(aVal) || isNaN(bVal),
+        })
     }
 
     return {
