@@ -41,13 +41,11 @@ export function EditNumeratorRelationModal({
                 <Table>
                     <TableBody>
                         <TableRow>
-                            <TableCell>
-                                <p>Name</p>
-                            </TableCell>
+                            <TableCell>Name</TableCell>
                             <TableCell>
                                 <Input
-                                    label="Name"
                                     name="name"
+                                    required
                                     value={newNumeratorRelationInfo.name}
                                     onChange={(e) =>
                                         setNewNumeratorRelationInfo({
@@ -55,26 +53,22 @@ export function EditNumeratorRelationModal({
                                             name: e.value,
                                         })
                                     }
-                                    required
-                                    className="input"
                                 />
                             </TableCell>
                         </TableRow>
                         <TableRow>
-                            <TableCell>
-                                <p>Type</p>
-                            </TableCell>
+                            <TableCell>Type</TableCell>
                             <TableCell>
                                 <SingleSelect
-                                    className="select"
+                                    name="type"
+                                    placeholder="Select relation type"
+                                    selected={newNumeratorRelationInfo.type}
                                     onChange={(e) =>
                                         setNewNumeratorRelationInfo({
                                             ...newNumeratorRelationInfo,
                                             type: e.selected,
                                         })
                                     }
-                                    placeholder="Select relation type"
-                                    selected={newNumeratorRelationInfo.type}
                                 >
                                     {relationTypes.map((type, key) => (
                                         <SingleSelectOption
@@ -87,50 +81,18 @@ export function EditNumeratorRelationModal({
                             </TableCell>
                         </TableRow>
                         <TableRow>
-                            <TableCell>
-                                <p>Numerator A</p>
-                            </TableCell>
+                            <TableCell>Numerator A</TableCell>
                             <TableCell>
                                 <SingleSelect
-                                    className="select"
+                                    name="A"
+                                    placeholder="Select numerator A"
+                                    selected={newNumeratorRelationInfo.A}
                                     onChange={(e) =>
                                         setNewNumeratorRelationInfo({
                                             ...newNumeratorRelationInfo,
                                             A: e.selected,
                                         })
                                     }
-                                    placeholder="Select numerator A"
-                                    selected={newNumeratorRelationInfo.A}
-                                >
-                                    {numeratorsWithDataIds
-                                        ? numeratorsWithDataIds.map(
-                                              (numerator, key) => (
-                                                  <SingleSelectOption
-                                                      label={numerator.name}
-                                                      value={numerator.code}
-                                                      key={key}
-                                                  />
-                                              )
-                                          )
-                                        : ''}
-                                </SingleSelect>
-                            </TableCell>
-                        </TableRow>
-                        <TableRow>
-                            <TableCell>
-                                <p>Numerator B</p>
-                            </TableCell>
-                            <TableCell>
-                                <SingleSelect
-                                    className="select"
-                                    onChange={(e) =>
-                                        setNewNumeratorRelationInfo({
-                                            ...newNumeratorRelationInfo,
-                                            B: e.selected,
-                                        })
-                                    }
-                                    placeholder="Select numerator B"
-                                    selected={newNumeratorRelationInfo.B}
                                 >
                                     {numeratorsWithDataIds.map(
                                         (numerator, key) => (
@@ -145,16 +107,38 @@ export function EditNumeratorRelationModal({
                             </TableCell>
                         </TableRow>
                         <TableRow>
+                            <TableCell>Numerator B</TableCell>
                             <TableCell>
-                                <p>Threshold (+/-) %</p>
+                                <SingleSelect
+                                    name="B"
+                                    placeholder="Select numerator B"
+                                    selected={newNumeratorRelationInfo.B}
+                                    onChange={(e) =>
+                                        setNewNumeratorRelationInfo({
+                                            ...newNumeratorRelationInfo,
+                                            B: e.selected,
+                                        })
+                                    }
+                                >
+                                    {numeratorsWithDataIds.map(
+                                        (numerator, key) => (
+                                            <SingleSelectOption
+                                                label={numerator.name}
+                                                value={numerator.code}
+                                                key={key}
+                                            />
+                                        )
+                                    )}
+                                </SingleSelect>
                             </TableCell>
+                        </TableRow>
+                        <TableRow>
+                            <TableCell>Threshold (+/-) %</TableCell>
                             <TableCell>
                                 <Input
-                                    label="Name"
-                                    name="name"
-                                    required
-                                    className="input"
+                                    name="criteria"
                                     type="number"
+                                    required
                                     value={newNumeratorRelationInfo.criteria}
                                     onChange={(e) =>
                                         setNewNumeratorRelationInfo({
@@ -183,7 +167,7 @@ export function EditNumeratorRelationModal({
                             alert('todo: add/update numerator relation')
                         }}
                     >
-                        Create
+                        Save
                     </Button>
                 </ButtonStrip>
             </ModalActions>
