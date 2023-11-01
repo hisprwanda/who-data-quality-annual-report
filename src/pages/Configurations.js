@@ -1,5 +1,5 @@
-import { useDataQuery, useAlert } from '@dhis2/app-runtime'
-import React, { useState, useEffect } from 'react'
+import { useDataQuery } from '@dhis2/app-runtime'
+import React from 'react'
 import ConfigTabs from '../components/config-tabs/ConfigTabs.js'
 import styles from './Configurations.module.css'
 
