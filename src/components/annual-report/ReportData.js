@@ -1,8 +1,8 @@
 import PropTypes from 'prop-types'
 import React from 'react'
-import { SectionThree } from '../section3/SectionThree.js'
 import styles from './ReportData.module.css'
 import { SectionOne } from './section1/SectionOne.js'
+import { SectionThree } from './section3/SectionThree.js'
 import { SectionFour } from './section4/SectionFour.js'
 
 const SectionLayout = ({ title, children }) => (
