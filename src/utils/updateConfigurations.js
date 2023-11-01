@@ -108,23 +108,58 @@ export const createNewDenominator = (configurations, newDenominatorInfo) => {
     return configurationsToSave
 }
 
-export const updateConfigurations = ({
-    configurations,
-    configurationType,
-    updateType,
-    configsUpdateInfo,
-}) => {
-    const metaDataVersion = configurations.metaDataVersion
-    const numerators = configurations.numerators
-    const coreIndicators = configurations.coreIndicators
-    const dataSets = configurations.dataSets
-    const denominatorRelations = configurations.denominatorRelations
-    const denominators = configurations.denominators
-    const externalRelations = configurations.externalRelations
-    const numeratorRelations = configurations.numeratorRelations
-    const groups = configurations.groups
+// create new denominator relation 
+export const updateDenominatorRelations = (configurations, newDenominatorRelationInfo, updateType) => {
+  
+    const metaDataVersion = configurations.metaDataVersion; 
+    const numerators = configurations.numerators;
+    const coreIndicators = configurations.coreIndicators;
+    const dataSets = configurations.dataSets;
+    const denominatorRelations = configurations.denominatorRelations;
+    const denominators = configurations.denominators;
+    const externalRelations = configurations.externalRelations; 
+    const numeratorRelations = configurations.numeratorRelations;
+    const groups = configurations.groups;
+  
+    // construct a numerator object
+    const newDenominatorRelation = {
+      A: newDenominatorRelationInfo.A,
+      B: newDenominatorRelationInfo.B,
+      code: newDenominatorRelationInfo.code,
+      name: newDenominatorRelationInfo.name,
+      criteria: newDenominatorRelationInfo.criteria,
+      type: newDenominatorRelationInfo.type
+    }
+  
+    const configurationsToSave = {
+      metaDataVersion,
+      numerators,
+      coreIndicators,
+      dataSets,
+      denominators,
+      denominatorRelations: [...denominatorRelations, newDenominatorRelation],
+      externalRelations,
+      numeratorRelations,
+      groups
+    }
+  
+    return configurationsToSave;
 
-    let configurationsToSave = {}
+}
+
+export const updateConfigurations = (configurations, configurationType, updateType, configsUpdateInfo) => {
+   
+  const metaDataVersion = configurations.metaDataVersion; 
+  const numerators = configurations.numerators;
+  const coreIndicators = configurations.coreIndicators;
+  const dataSets = configurations.dataSets;
+  const denominatorRelations = configurations.denominatorRelations;
+  const denominators = configurations.denominators;
+  const externalRelations = configurations.externalRelations; 
+  const numeratorRelations = configurations.numeratorRelations;
+  const groups = configurations.groups;
+
+  let configurationsToSave = {};
 
     switch (configurationType) {
         case 'numerators':

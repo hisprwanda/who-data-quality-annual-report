@@ -1,4 +1,6 @@
 // generate a new numerator code
+//TODO: this function should be improved to cater for the case where the last code is not a number
+//TODO: make a generic function to generate codes for all types of configuration objects
 export const generateNumeratorCode = (numerators) => {
     if (numerators.length == 0) {
         return 'C' + '1'
@@ -8,6 +10,20 @@ export const generateNumeratorCode = (numerators) => {
 
     const newCodeNumber = lastNumber + 1
     const newCode = 'C' + newCodeNumber
+
+    return newCode
+}
+
+// generate a new denominator code
+
+// generate a new denominator relation code
+//TODO: make a generic function to generate codes for all types of configuration objects
+
+export const generateDenominatorRelationCode = (denominatorRelations) => {
+    if (denominatorRelations.length == 0) {
+        return 'DR' + '1'
+    }
+    const newCode = 'DR' + denominatorRelations.length + 1
 
     return newCode
 }

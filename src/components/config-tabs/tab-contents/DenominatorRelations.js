@@ -1,3 +1,4 @@
+import { useDataMutation } from '@dhis2/app-runtime'
 import { useState, useEffect } from "react";
 import {
     Button,
@@ -20,13 +21,23 @@ import {
     ButtonStrip, 
     Input
   } from '@dhis2/ui'
-import { getDenominatorRelations } from "../../../utils/denominatorsMetadataData";
-import relationTypes from '../../../data/relationTypes.json';
+import { getDenominatorRelations, filterDenominatorsByType } from "../../../utils/denominatorsMetadataData";
 import denominatorTypes from "../../../data/denominatorTypes.json";
+import { updateDenominatorRelations } from "../../../utils/updateConfigurations";
+import { generateDenominatorRelationCode } from "../../../utils/utils";
 
-
+//TODO: move these configuration mutations to a separate file of dhis2 queries
+const updateConfigurationsMutation = {
+  resource: 'dataStore/who-dqa/configurations',
+  type: 'update',
+  data: ({ configurations }) => ({
+      ...configurations,
+      lastUpdated: new Date().toJSON(),
+  }),
+}
 
 export const DenominatorRelations = ({toggleState, configurations}) => {
+  const [mutate] = useDataMutation(updateConfigurationsMutation)
   const [relations, setRelations] = useState(null);
   const [isModalHidden, setIsModalHidden] = useState(true);
   const [newDenominatorRelationInfo, setNewDenominatorRelationInfo] = useState({
@@ -37,15 +48,66 @@ export const DenominatorRelations = ({toggleState, configurations}) => {
     name: "",
     type: ""
   });
+  const [selectedDenominatorA, setSelectedDenominatorA] = useState('')
+  const [selectedDenominatorB, setSelectedDenominatorB] = useState('')
+  const [filteredDenominators, setFilteredDenominators] = useState([]);
+  const [isLoading, setIsLoading] = useState(false);
 
-  let denominatorsWithDataIds  = configurations.denominators.filter(denominator => denominator.dataID != null);
+
+  const handleDenominatorTypeChange = (type) => {
+      // reset the selected denominators
+      setSelectedDenominatorA('')
+      setSelectedDenominatorB('')
+      
+      // filter denominators by type
+      setFilteredDenominators(filterDenominatorsByType(configurations.denominators, type));
+      setNewDenominatorRelationInfo({...newDenominatorRelationInfo, type:type})
+    
+  }
+
+  const onSaveDenominatorUpdates = async (updateType) => {
+    // generate and set the new denominator code
+    const newDenominatorCode = generateDenominatorRelationCode(configurations.denominatorRelations)
+    setNewDenominatorRelationInfo({...newDenominatorRelationInfo, code:newDenominatorCode})
+
+    //show a loader while updating
+    setIsLoading(true)
+
+    if (updateType === 'create') {
+        const updatedConfigurations = updateDenominatorRelations(
+            configurations,
+            newDenominatorRelationInfo,
+            updateType
+        )
+        const response = await mutate({ configurations: updatedConfigurations })
+        
+        console.log(updatedConfigurations)
+        if (response) {
+          //stop the loader after updating
+            setRelations([...relations, newDenominatorRelationInfo])
+            setIsLoading(false)
+        }
+        setIsModalHidden(true)
+    } else if (updateType === 'update') {
+        const updatedConfigurations = updateDenominatorRelations (
+            configurations,
+            newDenominatorRelationInfo,
+            updateType
+        )
+        const response = await mutate({ configurations: updatedConfigurations})
+        if (response) {
+            //stop the loader after updating
+            setIsLoading(false)
+        }
+        setIsModalHidden(true)
+    }
+}
 
 
   useEffect(() => {
     setRelations(configurations.denominatorRelations)
   }, [])
-      
-
+  
   return (
     <div className={toggleState === 6 ? "content  active-content" : "content"} >
     <p>Please map alternative denominators for comparison, for example denominiators from the National Bureau of Statistics with denominators used by health programmes.</p>
@@ -93,7 +155,7 @@ export const DenominatorRelations = ({toggleState, configurations}) => {
                   <TableCell></TableCell>
                   <TableCell> 
                     <Button
-                        name="Primary button" onClick={() => window.alert('It works!')} 
+                        name="Primary button" onClick={() => setIsModalHidden(false)} 
                         primary button value="default" icon={<IconAdd16 />}> Add Relations
                     </Button>
                   </TableCell>
@@ -124,12 +186,12 @@ export const DenominatorRelations = ({toggleState, configurations}) => {
                         </TableCell>
                         <TableCell>
                             <SingleSelect className="select" 
-                                onChange={(e) => setNewDenominatorRelationInfo({...newDenominatorRelationInfo, type:e.selected})}
+                                onChange={(e) => handleDenominatorTypeChange(e.selected)}
                                 placeholder="Select relation type"
                                 selected={newDenominatorRelationInfo.type}
                             >
-                                {relationTypes? relationTypes.map((type, key) =>
-                                    <SingleSelectOption label={type.displayName} value={type.code} key={key} />
+                                {denominatorTypes? denominatorTypes.map((type, key) =>
+                                    <SingleSelectOption label={type.label} value={type.value} key={key} />
 
                                 ) : '' }
                             </SingleSelect>
@@ -141,12 +203,15 @@ export const DenominatorRelations = ({toggleState, configurations}) => {
                         </TableCell>
                         <TableCell>
                             <SingleSelect className="select" 
-                                onChange={(e)=> setNewDenominatorRelationInfo({...newDenominatorRelationInfo, A:e.selected})}
+                                onChange={(e)=> {
+                                  setNewDenominatorRelationInfo({...newDenominatorRelationInfo, A:e.selected})
+                                  setSelectedDenominatorA(e.selected)
+                                }}
                                 placeholder="Select denominator A"
-                                selected={newDenominatorRelationInfo.A}
+                                selected={selectedDenominatorA}
                             > 
-                            {denominatorsWithDataIds? denominatorsWithDataIds.map((denominator, key) =>
-                                <SingleSelectOption label={denominator.name} value={denominator.code} key={key} />
+                            {filteredDenominators? filteredDenominators.map((denominator, key) =>
+                                <SingleSelectOption label={denominator.displayName} value={denominator.code} key={key} />
                                 ) : '' }
                             </SingleSelect>
                         </TableCell>                      
@@ -157,11 +222,14 @@ export const DenominatorRelations = ({toggleState, configurations}) => {
                         </TableCell>
                         <TableCell>
                             <SingleSelect className="select" 
-                                onChange={(e)=> setNewDenominatorRelationInfo({...newDenominatorRelationInfo, B:e.selected})}
+                                onChange={(e)=> {
+                                  setNewDenominatorRelationInfo({...newDenominatorRelationInfo, B:e.selected})
+                                  setSelectedDenominatorB(e.selected)
+                                }}
                                 placeholder="Select denominator B"
-                                selected={newDenominatorRelationInfo.B}
+                                selected={selectedDenominatorB}
                             > 
-                            {denominatorsWithDataIds? denominatorsWithDataIds.map((denominator, key) =>
+                            {filteredDenominators? filteredDenominators.map((denominator, key) =>
                                 <SingleSelectOption label={denominator.name} value={denominator.code} key={key} />
                                 ) : '' }
                             </SingleSelect>
@@ -184,7 +252,7 @@ export const DenominatorRelations = ({toggleState, configurations}) => {
             <ModalActions>
                 <ButtonStrip end>
                     <Button  secondary onClick={() => setIsModalHidden(true)}> Cancel </Button>
-                    <Button  primary onClick={()=>console.log('creating denominator relations')}>   Create </Button>
+                    <Button loading={isLoading}  primary onClick={()=> onSaveDenominatorUpdates('create')}>   Create </Button>
                 </ButtonStrip>
             </ModalActions>
         </Modal>

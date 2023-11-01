@@ -164,7 +164,7 @@ export const NumeratorRelations = ({ toggleState, configurations }) => {
                 </Table>
             </div>
 
-            {/* TODO: will move this modal in it's own component */}
+            {/* TODO: Implement modal reuse */}
             <Modal
                 onClose={() => setIsModalHidden(true)}
                 hide={isModalHidden}
