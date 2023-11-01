@@ -1,7 +1,9 @@
+import i18n from '@dhis2/d2-i18n'
 import H from 'highcharts'
 import HB from 'highcharts/modules/bullet'
+import HNDTD from 'highcharts/modules/no-data-to-display'
 //import { generateSection3Chart } from './section3/section3ChartGenerator.js'
-import { generateSection4Chart } from './report-data/section4/section4ChartGenerator.js'
+import { generateSection4Chart } from './section4/section4ChartGenerator.js'
 
 // init Highcharts
 // eslint-disable-next-line max-params
@@ -48,13 +50,20 @@ H.SVGRenderer.prototype.symbols.plus = (x, y, w, h) => [
     'z',
 ]
 HB(H)
+HNDTD(H)
+
+H.setOptions({
+    lang: {
+        noData: i18n.t('No data to display'),
+    },
+})
 
 export const generateChart = (sectionId, canvasId, chartInfo) => {
     let chartConfig
 
     switch (sectionId) {
         case 'section3': {
-            //generateSection3Chart(canvasId, chartInfo)
+            //chartConfig = generateSection3Chart(canvasId, chartInfo)
             break
         }
         case 'section4': {

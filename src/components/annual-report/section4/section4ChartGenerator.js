@@ -31,7 +31,7 @@ export const generateSection4Chart = (canvasId, chartInfo) => {
             {
                 type: 'line',
                 name: 'A = B',
-                data: [0, { x: xMax, y: xMax }],
+                data: dataPoints.length ? [0, { x: xMax, y: xMax }] : [],
                 color: 'black',
                 marker: { enabled: false },
                 enableMouseTracking: false,
@@ -39,7 +39,9 @@ export const generateSection4Chart = (canvasId, chartInfo) => {
             {
                 type: 'line',
                 name: `+ ${chartInfo.threshold}%`,
-                data: [0, { x: xMax, y: xMax + xMaxThreshold }],
+                data: dataPoints.length
+                    ? [0, { x: xMax, y: xMax + xMaxThreshold }]
+                    : [],
                 color: 'rgb(176,176,176)',
                 marker: { enabled: false },
                 enableMouseTracking: false,
@@ -47,7 +49,9 @@ export const generateSection4Chart = (canvasId, chartInfo) => {
             {
                 type: 'line',
                 name: `- ${chartInfo.threshold}%`,
-                data: [0, { x: xMax, y: xMax - xMaxThreshold }],
+                data: dataPoints.length
+                    ? [0, { x: xMax, y: xMax - xMaxThreshold }]
+                    : [],
                 color: 'rgb(176,176,176)',
                 marker: { enabled: false },
                 enableMouseTracking: false,
