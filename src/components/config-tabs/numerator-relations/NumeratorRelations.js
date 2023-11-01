@@ -23,7 +23,7 @@ import PropTypes from 'prop-types'
 import React, { useState } from 'react'
 import relationTypes from '../../../data/relationTypes.json'
 import {
-    getNumeratorRelations,
+    getNumeratorNameByCode,
     getRelationType,
 } from '../../../utils/numeratorsMetadataData.js'
 
@@ -66,13 +66,13 @@ export const NumeratorRelations = ({ configurations }) => {
                             <TableRow key={key}>
                                 <TableCell>{relation.name}</TableCell>
                                 <TableCell>
-                                    {getNumeratorRelations(
+                                    {getNumeratorNameByCode(
                                         configurations.numerators,
                                         relation.A
                                     )}
                                 </TableCell>
                                 <TableCell>
-                                    {getNumeratorRelations(
+                                    {getNumeratorNameByCode(
                                         configurations.numerators,
                                         relation.B
                                     )}
