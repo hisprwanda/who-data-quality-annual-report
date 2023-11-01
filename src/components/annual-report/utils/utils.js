@@ -1,3 +1,7 @@
+export const getVal = ({ response, dx, ou, pe }) => {
+    return response?.[dx]?.[ou]?.[pe]
+}
+
 export const sortArrayAfterIndex1 = (unsortedArray) => {
     const unsortedItems = unsortedArray.slice(0, 1)
     const sortedItems = unsortedArray.slice(1)
