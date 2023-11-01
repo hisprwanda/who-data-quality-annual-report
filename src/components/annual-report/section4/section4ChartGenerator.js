@@ -1,3 +1,5 @@
+import i18n from '@dhis2/d2-i18n'
+
 export const generateSection4Chart = (canvasId, chartInfo) => {
     const dataPoints = chartInfo.values
         .filter(({ invalid }) => !invalid)
@@ -24,7 +26,7 @@ export const generateSection4Chart = (canvasId, chartInfo) => {
         },
         series: [
             {
-                name: 'Orgunits',
+                name: i18n.t('Orgunits'),
                 data: dataPoints,
                 color: 'rgb(31,119,180)',
             },
@@ -83,7 +85,16 @@ export const generateSection4Chart = (canvasId, chartInfo) => {
         tooltip: {
             headerFormat: '',
             pointFormatter: function () {
-                return `<b>${this.custom.name}</b><br />${this.custom.yLabel}: ${this.y}<br/>${this.custom.xLabel}: ${this.x}`
+                return i18n.t(
+                    '<b>{{name}}</b><br/>{{yLabel}}: {{y}}<br/>{{xLabel}}: {{x}}',
+                    {
+                        name: this.custom.name,
+                        yLabel: this.custom.yLabel,
+                        y: this.y,
+                        xLabel: this.custom.xLabel,
+                        x: this.x,
+                    }
+                )
             },
         },
     }
