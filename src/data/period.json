@@ -1,7 +1,5 @@
 {
-    "relative": {
-
-    },
+    "relative": {},
     "fixed": {
         "data": [
             {
@@ -43,4 +41,3 @@
         ]
     }
 }
-

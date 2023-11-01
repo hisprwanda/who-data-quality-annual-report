@@ -1,5 +1,5 @@
-import { useDataQuery, useAlert } from '@dhis2/app-runtime'
-import React, { useState, useEffect } from 'react'
+import { useDataQuery } from '@dhis2/app-runtime'
+import React from 'react'
 import ConfigTabs from '../../components/config-tabs/ConfigTabs.js'
 import MenuBar from '../../components/menu-bar/MenuBar.js'
 import './configurations.css'
@@ -10,7 +10,6 @@ const readDataStoreQuery = {
         resource: 'dataStore/who-dqa/configurations',
     },
 }
-
 
 const Configurations = () => {
     // A dynamic alert to communicate success or failure
@@ -31,7 +30,7 @@ const Configurations = () => {
     // running the query
     const { loading, error, data } = useDataQuery(readDataStoreQuery)
 
-    let configurations = null;
+    let configurations = null
 
     if (data) {
         configurations = data.dataStore
