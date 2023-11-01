@@ -1,3 +1,4 @@
+import i18n from '@dhis2/d2-i18n'
 import H from 'highcharts'
 
 export const generateSection3Chart = (canvasId, chartInfo) => {
@@ -9,6 +10,16 @@ export const generateSection3Chart = (canvasId, chartInfo) => {
             break
         case 'scatter':
             chartConfig = generateScatterChartConfig(canvasId, chartInfo)
+            break
+        default:
+            chartConfig = {
+                chart: {
+                    renderTo: canvasId,
+                },
+                lang: {
+                    noData: i18n.t('Chart not available'),
+                },
+            }
             break
     }
 
