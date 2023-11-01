@@ -1,6 +1,6 @@
 import PropTypes from 'prop-types'
 import React, { useEffect } from 'react'
-import { Chart } from '../../Chart.js'
+import { Chart } from '../Chart.js'
 import { calculateSection4 } from './section4Calculations.js'
 import { useFetchSectionFourData } from './useFetchSectionFourData.js'
 
