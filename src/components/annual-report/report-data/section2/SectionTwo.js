@@ -64,7 +64,8 @@ const Sections2a2b2c = ({ title, subtitle, subsectionData }) => (
                 <th colSpan="3">Region with divergent score</th>
             </tr>
             <tr>
-                <th width="110">Number</th> <th width="110">Percent</th>
+                <th width="110">Number</th>
+                <th width="110">Percent</th>
                 <th>Names</th>
             </tr>
             {subsectionData.map((dataRow) => (
