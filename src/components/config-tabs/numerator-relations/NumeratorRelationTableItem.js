@@ -6,27 +6,30 @@ import {
     IconEdit16,
 } from '@dhis2/ui'
 import PropTypes from 'prop-types'
-import React from 'react'
+import React, { useState, useMemo } from 'react'
 import {
     getNumeratorNameByCode,
     getRelationType,
 } from '../../../utils/numeratorsMetadataData.js'
+import { EditNumeratorRelationModal } from './EditNumeratorRelationModal.js'
 
 export function NumeratorRelationTableItem({
     configurations,
     numeratorRelation: relation,
 }) {
+    const [editModalOpen, setEditModalOpen] = useState(false)
+
     // some of these values are hard to memoize effectively:
     // they depend on the large configurations object
-    const numeratorAName = React.useMemo(
+    const numeratorAName = useMemo(
         () => getNumeratorNameByCode(configurations.numerators, relation.A),
         [configurations.numerators, relation.A]
     )
-    const numeratorBName = React.useMemo(
+    const numeratorBName = useMemo(
         () => getNumeratorNameByCode(configurations.numerators, relation.B),
         [configurations.numerators, relation.B]
     )
-    const relationType = React.useMemo(
+    const relationType = useMemo(
         () => getRelationType(relation.type),
         [relation.type]
     )
@@ -43,7 +46,7 @@ export function NumeratorRelationTableItem({
             <TableCell>
                 <Button
                     icon={<IconEdit16 />}
-                    onClick={() => alert('todo: edit')}
+                    onClick={() => setEditModalOpen(true)}
                 >
                     Edit
                 </Button>
@@ -55,6 +58,13 @@ export function NumeratorRelationTableItem({
                     Delete
                 </Button>
             </TableCell>
+            {editModalOpen && (
+                <EditNumeratorRelationModal
+                    previousRelation={relation}
+                    configurations={configurations}
+                    onClose={() => setEditModalOpen(false)}
+                />
+            )}
         </TableRow>
     )
 }

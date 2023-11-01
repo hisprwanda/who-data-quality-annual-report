@@ -17,22 +17,21 @@ import PropTypes from 'prop-types'
 import React, { useState } from 'react'
 import relationTypes from '../../../data/relationTypes.json'
 
-export function EditNumeratorRelationModal({ configurations, hide, onClose }) {
-    const [newNumeratorRelationInfo, setNewNumeratorRelationInfo] = useState({
-        A: '',
-        B: '',
-        code: '',
-        criteria: 10,
-        name: '',
-        type: '',
-    })
+export function EditNumeratorRelationModal({
+    previousRelation,
+    configurations,
+    onClose,
+}) {
+    const [newNumeratorRelationInfo, setNewNumeratorRelationInfo] =
+        useState(previousRelation)
+    // A, B, code, criteria, name, type
 
     const numeratorsWithDataIds = configurations.numerators.filter(
         (numerator) => numerator.dataID != null
     )
 
     return (
-        <Modal onClose={onClose} hide={hide} position="middle">
+        <Modal onClose={onClose} position="middle">
             <ModalTitle>Numerator relation</ModalTitle>
             <ModalContent>
                 <Table>
@@ -180,9 +179,9 @@ export function EditNumeratorRelationModal({ configurations, hide, onClose }) {
                     </Button>
                     <Button
                         primary
-                        onClick={() =>
-                            console.log('creating numerator relations')
-                        }
+                        onClick={() => {
+                            alert('todo: add/update numerator relation')
+                        }}
                     >
                         Create
                     </Button>
@@ -193,6 +192,6 @@ export function EditNumeratorRelationModal({ configurations, hide, onClose }) {
 }
 EditNumeratorRelationModal.propTypes = {
     configurations: PropTypes.object,
-    hide: PropTypes.bool,
+    previousRelation: PropTypes.object,
     onClose: PropTypes.func,
 }
