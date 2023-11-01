@@ -85,7 +85,14 @@ const generateBulletChartConfig = (canvasId, chartInfo) => {
         tooltip: {
             headerFormat: '',
             pointFormatter: function () {
-                return `<b>${this.custom.name}</b><br/>Survey: ${this.target}%<br/>Routine: ${this.y}%`
+                return i18n.t(
+                    '<b>{{name}}</b><br/>Survey: {{survey}}%<br/>Routine: {{routine}}%',
+                    {
+                        name: this.custom.name,
+                        survey: this.target,
+                        routine: this.y,
+                    }
+                )
             },
         },
     }
@@ -93,12 +100,12 @@ const generateBulletChartConfig = (canvasId, chartInfo) => {
 
 const generateScatterChartConfig = (canvasId, chartInfo) => {
     const routineSeries = {
-        name: 'Routine',
+        name: i18n.t('Routine'),
         color: 'blue',
         data: [],
     }
     const surveySeries = {
-        name: 'Survey',
+        name: i18n.t('Survey'),
         color: 'red',
         data: [],
     }
@@ -146,8 +153,10 @@ const generateScatterChartConfig = (canvasId, chartInfo) => {
         tooltip: {
             headerFormat: '<b>{point.key}</b><br/>',
             pointFormatter: function () {
-                return `Survey: ${(this.custom.survey ??=
-                    this.y)}%<br/>Routine: ${(this.custom.routine ??= this.y)}%`
+                return i18n.t('Survey: {{survey}}%<br/>Routine: {{routine}}%', {
+                    survey: this.custom.survey ?? this.y,
+                    routine: this.custom.routine ?? this.y,
+                })
             },
         },
         plotOptions: {
