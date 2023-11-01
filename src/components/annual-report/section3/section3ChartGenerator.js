@@ -63,13 +63,18 @@ const generateBulletChartConfig = (canvasId, chartInfo) => ({
                 {
                     y: chartInfo.values[0].routine,
                     target: chartInfo.values[0].survey,
+                    custom: {
+                        name: chartInfo.values[0].name,
+                    },
                 },
             ],
         },
     ],
     tooltip: {
-        headerFormat: '<b>National</b><br/>',
-        pointFormat: 'Survey: {point.target}%<br/>Routine: {point.y}%',
+        headerFormat: '',
+        pointFormatter: function () {
+            return `<b>${this.custom.name}</b><br/>Survey: ${this.target}%<br/>Routine: ${this.y}%`
+        },
     },
 })
 
