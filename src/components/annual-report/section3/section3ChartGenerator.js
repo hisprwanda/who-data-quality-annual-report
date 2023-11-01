@@ -42,52 +42,54 @@ export const generateSection3Chart = (canvasId, chartInfo) => {
     })
 }
 
-const generateBulletChartConfig = (canvasId, chartInfo) => ({
-    chart: {
-        renderTo: canvasId,
-        type: 'bullet',
-        inverted: true,
-        height: 115,
-    },
-    legend: {
-        enabled: false,
-    },
-    xAxis: {
-        categories: [chartInfo.name],
-    },
-    yAxis: {
-        gridLineWidth: 0,
-        plotBands: [
-            {
-                from: 0,
-                to: 100,
-                color: '#bababa',
-            },
-        ],
-        title: null,
-    },
-    series: [
-        {
-            color: '#1f77b4',
-            borderWidth: 0,
-            data: [
+const generateBulletChartConfig = (canvasId, chartInfo) => {
+    const data = chartInfo.values.map(({ routine, survey, name }) => ({
+        y: routine,
+        target: survey,
+        custom: {
+            name,
+        },
+    }))
+
+    return {
+        chart: {
+            renderTo: canvasId,
+            type: 'bullet',
+            inverted: true,
+            height: 115,
+        },
+        legend: {
+            enabled: false,
+        },
+        xAxis: {
+            categories: [chartInfo.name],
+        },
+        yAxis: {
+            gridLineWidth: 0,
+            plotBands: [
                 {
-                    y: chartInfo.values[0].routine,
-                    target: chartInfo.values[0].survey,
-                    custom: {
-                        name: chartInfo.values[0].name,
-                    },
+                    from: 0,
+                    to: 100,
+                    color: '#bababa',
                 },
             ],
+            title: null,
         },
-    ],
-    tooltip: {
-        headerFormat: '',
-        pointFormatter: function () {
-            return `<b>${this.custom.name}</b><br/>Survey: ${this.target}%<br/>Routine: ${this.y}%`
+        series: [
+            {
+                color: '#1f77b4',
+                borderWidth: 0,
+                data,
+            },
+        ],
+        tooltip: {
+            headerFormat: '',
+            pointFormatter: function () {
+                return `<b>${this.custom.name}</b><br/>Survey: ${this.target}%<br/>Routine: ${this.y}%`
+            },
         },
-    },
-})
+    }
+}
 
 const generateScatterChartConfig = (canvasId, chartInfo) => {
     const routineSeries = {
