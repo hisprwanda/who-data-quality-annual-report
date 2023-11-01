@@ -1,3 +1,10 @@
+export const sortArrayAfterIndex1 = (unsortedArray) => {
+    const unsortedItems = unsortedArray.slice(0, 1)
+    const sortedItems = unsortedArray.slice(1)
+    sortedItems.sort((a, b) => a.name.localeCompare(b.name))
+    return [...unsortedItems, ...sortedItems]
+}
+
 const getRowData = ({ headers, row }) => {
     const rowData = {}
     for (let i = 0; i < headers.length; i++) {

@@ -1,9 +1,9 @@
 [
-    {"label": "Total Population", "value": "total"},
-    {"label": "Live births", "value": "lb"},
-    {"label": "Children < 1 year", "value": "lt1"},
-    {"label": "Expected pregnancies", "value": "ep"},
-    {"label": "People living with HIV", "value": "plhiv"},
-    {"label": "Other", "value": "other"},
-    {"label": "UN population projection", "value": "un"}
+    { "label": "Total Population", "value": "total" },
+    { "label": "Live births", "value": "lb" },
+    { "label": "Children < 1 year", "value": "lt1" },
+    { "label": "Expected pregnancies", "value": "ep" },
+    { "label": "People living with HIV", "value": "plhiv" },
+    { "label": "Other", "value": "other" },
+    { "label": "UN population projection", "value": "un" }
 ]

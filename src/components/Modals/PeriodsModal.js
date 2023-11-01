@@ -1,5 +1,5 @@
-import React, { useState } from 'react'
-import PropTypes from 'prop-types'
+import { PeriodDimension } from '@dhis2/analytics'
+import i18n from '@dhis2/d2-i18n'
 import {
     Button,
     ButtonStrip,
@@ -8,15 +8,19 @@ import {
     ModalContent,
     ModalActions,
 } from '@dhis2/ui'
-import { PeriodDimension } from '@dhis2/analytics'
-import i18n from '../../locales'
+import PropTypes from 'prop-types'
+import React, { useState } from 'react'
 
-export function PeriodsModal({ isHiddenPeriod, currentlySelected = [], toggleModal, onSave, }) {
+export function PeriodsModal({
+    isHiddenPeriod,
+    currentlySelected = [],
+    toggleModal,
+    onSave,
+}) {
     const [selected, setSelected] = useState(currentlySelected)
 
-
     return (
-        <Modal onClose={toggleModal} hide={isHiddenPeriod} >
+        <Modal onClose={toggleModal} hide={isHiddenPeriod}>
             <ModalTitle>{i18n.t('Select period(s)')}</ModalTitle>
             <ModalContent>
                 <PeriodDimension
@@ -24,7 +28,6 @@ export function PeriodsModal({ isHiddenPeriod, currentlySelected = [], toggleMod
                     selectedPeriods={selected}
                     onSelect={({ items }) => setSelected(items)}
                 />
-                
             </ModalContent>
             <ModalActions>
                 <ButtonStrip end>
@@ -54,7 +57,7 @@ PeriodsModal.propTypes = {
             path: PropTypes.string,
         })
     ),
-    open: PropTypes.bool,
+    isHiddenPeriod: PropTypes.bool,
 }
 
 export default PeriodsModal

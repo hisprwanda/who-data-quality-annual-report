@@ -92,7 +92,7 @@ const PeriodsSelect = ({
                     period: periodId,
                     years: newYearsForReference,
                 })
-            } 
+            }
             // else { alert.hide() } isn't working 🤔 oh well, it's okay without
             // todo: Could also validate years > 0
 
