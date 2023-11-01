@@ -7,21 +7,14 @@ import {
     TableHead,
     TableRow,
     TableRowHead,
-    IconDelete16,
-    IconEdit16,
     IconAdd16,
+    ButtonStrip,
 } from '@dhis2/ui'
 import PropTypes from 'prop-types'
-import React, { useState } from 'react'
-import {
-    getNumeratorNameByCode,
-    getRelationType,
-} from '../../../utils/numeratorsMetadataData.js'
-import { EditNumeratorRelationModal } from './EditNumeratorRelationModal.js'
+import React from 'react'
+import { NumeratorRelationTableItem } from './NumeratorRelationTableItem.js'
 
 export const NumeratorRelations = ({ configurations }) => {
-    const [isModalHidden, setIsModalHidden] = useState(true)
-
     const relations = configurations.numeratorRelations
 
     return (
@@ -43,57 +36,12 @@ export const NumeratorRelations = ({ configurations }) => {
                 </TableHead>
                 <TableBody>
                     {relations ? (
-                        relations.map((relation, key) => (
-                            <TableRow key={key}>
-                                <TableCell>{relation.name}</TableCell>
-                                <TableCell>
-                                    {getNumeratorNameByCode(
-                                        configurations.numerators,
-                                        relation.A
-                                    )}
-                                </TableCell>
-                                <TableCell>
-                                    {getNumeratorNameByCode(
-                                        configurations.numerators,
-                                        relation.B
-                                    )}
-                                </TableCell>
-                                <TableCell>
-                                    {getRelationType(relation.type).displayName}
-                                </TableCell>
-                                <TableCell>{relation.criteria}</TableCell>
-                                <TableCell>
-                                    {
-                                        getRelationType(relation.type)
-                                            .thresholdDescription
-                                    }
-                                </TableCell>
-                                <TableCell>
-                                    {getRelationType(relation.type).description}
-                                </TableCell>
-                                <TableCell>
-                                    <Button
-                                        name="Primary button"
-                                        onClick={() => setIsModalHidden(false)}
-                                        basic
-                                        button
-                                        value="default"
-                                        icon={<IconEdit16 />}
-                                    >
-                                        Edit
-                                    </Button>
-                                    <Button
-                                        name="Primary button"
-                                        onClick={() => console.log('It works!')}
-                                        destructive
-                                        button
-                                        value="default"
-                                        icon={<IconDelete16 />}
-                                    >
-                                        Delete
-                                    </Button>
-                                </TableCell>
-                            </TableRow>
+                        relations.map((relation) => (
+                            <NumeratorRelationTableItem
+                                numeratorRelation={relation}
+                                configurations={configurations}
+                                key={relation.code}
+                            />
                         ))
                     ) : (
                         <TableRow>
@@ -101,34 +49,20 @@ export const NumeratorRelations = ({ configurations }) => {
                         </TableRow>
                     )}
                     <TableRow>
-                        <TableCell></TableCell>
-                        <TableCell></TableCell>
-                        <TableCell></TableCell>
-                        <TableCell></TableCell>
-                        <TableCell></TableCell>
-                        <TableCell></TableCell>
-                        <TableCell></TableCell>
-                        <TableCell>
-                            <Button
-                                name="Primary button"
-                                onClick={() => setIsModalHidden(false)}
-                                primary
-                                button
-                                value="default"
-                                icon={<IconAdd16 />}
-                            >
-                                Add Numerator Relation
-                            </Button>
+                        <TableCell colSpan="8">
+                            <ButtonStrip end>
+                                <Button
+                                    primary
+                                    icon={<IconAdd16 />}
+                                    onClick={() => alert('todo')}
+                                >
+                                    Add Numerator Relation
+                                </Button>
+                            </ButtonStrip>
                         </TableCell>
                     </TableRow>
                 </TableBody>
             </Table>
-
-            <EditNumeratorRelationModal
-                onClose={() => setIsModalHidden(true)}
-                hide={isModalHidden}
-                configurations={configurations}
-            />
         </div>
     )
 }
