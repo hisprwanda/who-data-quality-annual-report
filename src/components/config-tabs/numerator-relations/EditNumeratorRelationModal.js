@@ -8,22 +8,29 @@ import {
     ModalActions,
     ModalContent,
     ModalTitle,
-    SingleSelect,
-    SingleSelectOption,
     ButtonStrip,
-    Input,
+    InputFieldFF,
+    SingleSelectFieldFF,
+    ReactFinalForm,
 } from '@dhis2/ui'
 import PropTypes from 'prop-types'
-import React, { useState } from 'react'
+import React from 'react'
 import relationTypes from '../../../data/relationTypes.json'
 
+const { Form, Field } = ReactFinalForm
+
 const DEFAULT_FORM_VALUES = {
-    name: '',
+    name: undefined,
     type: undefined,
     A: undefined,
     B: undefined,
     criteria: 0,
 }
+
+const RELATION_TYPE_OPTIONS = relationTypes.map((type) => ({
+    label: type.displayName,
+    value: type.code,
+}))
 
 /**
  * If `numeratorRelationToEdit`, is provided, this will behave in "update" mode:
@@ -40,153 +47,112 @@ export function EditNumeratorRelationModal({
     configurations,
     onClose,
 }) {
-    // A, B, code, criteria, name, type
-    const [formState, setFormState] = useState(
-        numeratorRelationToEdit || DEFAULT_FORM_VALUES
-    )
-
-    const numeratorsWithDataIds = React.useMemo(
-        () =>
-            configurations.numerators.filter(
-                (numerator) => numerator.dataID != null
-            ),
-        [configurations.numerators]
-    )
+    const numeratorOptions = React.useMemo(() => {
+        const numeratorsWithDataIds = configurations.numerators.filter(
+            (numerator) => numerator.dataID != null
+        )
+        return numeratorsWithDataIds.map(({ name, code }) => ({
+            label: name,
+            value: code,
+        }))
+    }, [configurations.numerators])
 
     return (
-        <Modal onClose={onClose} position="middle">
-            <ModalTitle>Numerator relation</ModalTitle>
-            <ModalContent>
-                <Table>
-                    <TableBody>
-                        <TableRow>
-                            <TableCell>Name</TableCell>
-                            <TableCell>
-                                <Input
-                                    name="name"
-                                    required
-                                    value={formState.name}
-                                    onChange={(e) =>
-                                        setFormState({
-                                            ...formState,
-                                            name: e.value,
-                                        })
-                                    }
-                                />
-                            </TableCell>
-                        </TableRow>
-                        <TableRow>
-                            <TableCell>Type</TableCell>
-                            <TableCell>
-                                <SingleSelect
-                                    name="type"
-                                    placeholder="Select relation type"
-                                    selected={formState.type}
-                                    onChange={(e) =>
-                                        setFormState({
-                                            ...formState,
-                                            type: e.selected,
-                                        })
-                                    }
-                                >
-                                    {relationTypes.map((type) => (
-                                        <SingleSelectOption
-                                            label={type.displayName}
-                                            value={type.code}
-                                            key={type.code}
+        <Form
+            onSubmit={(...submitProps) => {
+                alert('todo')
+                console.log({ submitProps })
+            }}
+            initialValues={numeratorRelationToEdit || DEFAULT_FORM_VALUES}
+            // not subcribing to `values` prevents rerendering the entire form on every input change
+            subscription={{ submitting: true }}
+        >
+            {({ handleSubmit }) => (
+                <Modal onClose={onClose} position="middle">
+                    <ModalTitle>Numerator relation</ModalTitle>
+                    <ModalContent>
+                        <Table>
+                            <TableBody>
+                                <TableRow>
+                                    <TableCell>Name</TableCell>
+                                    <TableCell>
+                                        <Field
+                                            name="name"
+                                            component={InputFieldFF}
                                         />
-                                    ))}
-                                </SingleSelect>
-                            </TableCell>
-                        </TableRow>
-                        <TableRow>
-                            <TableCell>Numerator A</TableCell>
-                            <TableCell>
-                                <SingleSelect
-                                    name="A"
-                                    placeholder="Select numerator A"
-                                    selected={formState.A}
-                                    onChange={(e) =>
-                                        setFormState({
-                                            ...formState,
-                                            A: e.selected,
-                                        })
-                                    }
-                                >
-                                    {numeratorsWithDataIds.map((numerator) => (
-                                        <SingleSelectOption
-                                            label={numerator.name}
-                                            value={numerator.code}
-                                            key={numerator.code}
+                                    </TableCell>
+                                </TableRow>
+                                <TableRow>
+                                    <TableCell>Type</TableCell>
+                                    <TableCell>
+                                        <Field
+                                            name="type"
+                                            component={SingleSelectFieldFF}
+                                            options={RELATION_TYPE_OPTIONS}
+                                            placeholder="Select relation type"
                                         />
-                                    ))}
-                                </SingleSelect>
-                            </TableCell>
-                        </TableRow>
-                        <TableRow>
-                            <TableCell>Numerator B</TableCell>
-                            <TableCell>
-                                <SingleSelect
-                                    name="B"
-                                    placeholder="Select numerator B"
-                                    selected={formState.B}
-                                    onChange={(e) =>
-                                        setFormState({
-                                            ...formState,
-                                            B: e.selected,
-                                        })
-                                    }
-                                >
-                                    {numeratorsWithDataIds.map((numerator) => (
-                                        <SingleSelectOption
-                                            label={numerator.name}
-                                            value={numerator.code}
-                                            key={numerator.code}
+                                    </TableCell>
+                                </TableRow>
+                                <TableRow>
+                                    <TableCell>Numerator A</TableCell>
+                                    <TableCell>
+                                        <Field
+                                            name="A"
+                                            component={SingleSelectFieldFF}
+                                            options={numeratorOptions}
+                                            placeholder="Select numerator A"
                                         />
-                                    ))}
-                                </SingleSelect>
-                            </TableCell>
-                        </TableRow>
-                        <TableRow>
-                            <TableCell>Threshold (+/-) %</TableCell>
-                            <TableCell>
-                                <Input
-                                    name="criteria"
-                                    type="number"
-                                    required
-                                    value={String(formState.criteria)}
-                                    onChange={(e) =>
-                                        setFormState({
-                                            ...formState,
-                                            criteria: Number(e.value),
-                                        })
-                                    }
-                                />
-                            </TableCell>
-                        </TableRow>
-                    </TableBody>
-                </Table>
-                <p>
-                    Threshold denotes the % difference from national figure that
-                    is accepted for a sub-national unit.
-                </p>
-            </ModalContent>
-            <ModalActions>
-                <ButtonStrip end>
-                    <Button secondary onClick={onClose}>
-                        Cancel
-                    </Button>
-                    <Button
-                        primary
-                        onClick={() => {
-                            alert('todo: add/update numerator relation')
-                        }}
-                    >
-                        Save
-                    </Button>
-                </ButtonStrip>
-            </ModalActions>
-        </Modal>
+                                    </TableCell>
+                                </TableRow>
+                                <TableRow>
+                                    <TableCell>Numerator B</TableCell>
+                                    <TableCell>
+                                        <Field
+                                            name="B"
+                                            component={SingleSelectFieldFF}
+                                            options={numeratorOptions}
+                                            placeholder="Select numerator B"
+                                        />
+                                    </TableCell>
+                                </TableRow>
+                                <TableRow>
+                                    <TableCell>Threshold (+/-) %</TableCell>
+                                    <TableCell>
+                                        <Field
+                                            name="criteria"
+                                            component={InputFieldFF}
+                                            subscription={{ value: true }}
+                                            parse={(value) => Number(value)}
+                                            format={(value) => String(value)}
+                                        />
+                                    </TableCell>
+                                </TableRow>
+                            </TableBody>
+                        </Table>
+                        <p>
+                            Threshold denotes the % difference from national
+                            figure that is accepted for a sub-national unit.
+                        </p>
+                    </ModalContent>
+                    <ModalActions>
+                        <ButtonStrip end>
+                            <Button secondary onClick={onClose}>
+                                Cancel
+                            </Button>
+                            <Button
+                                primary
+                                type="submit"
+                                onClick={() => {
+                                    handleSubmit()
+                                }}
+                            >
+                                Save
+                            </Button>
+                        </ButtonStrip>
+                    </ModalActions>
+                </Modal>
+            )}
+        </Form>
     )
 }
 EditNumeratorRelationModal.propTypes = {
