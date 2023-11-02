@@ -72,7 +72,6 @@ export const generateChart = (sectionId, canvasId, chartInfo) => {
         }
     }
 
-    console.log('chartconfig', chartConfig)
     return new H.Chart({
         accessibility: {
             enabled: false,
