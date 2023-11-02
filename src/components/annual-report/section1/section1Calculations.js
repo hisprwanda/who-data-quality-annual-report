@@ -657,8 +657,7 @@ const getSection1dChartInfo = ({ allOrgUnitsData, periodsIDs, ou }) => {
 
     for (const dx in formattedData) {
         const points = periods.map(
-            (pe) =>
-                getVal({ response: formattedData, dx: 'wrong', ou, pe }) ?? null
+            (pe) => getVal({ response: formattedData, dx, ou, pe }) ?? null
         )
 
         // if all points are null: skip; otherwise, add
