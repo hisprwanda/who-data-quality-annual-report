@@ -35,12 +35,12 @@ const RELATION_TYPE_OPTIONS = relationTypes.map((type) => ({
 /**
  * If `numeratorRelationToEdit`, is provided, this will behave in "update" mode:
  * - the fields will be prefilled with the values of that relation
- * - the data store mutation will be an "update" action on that relation, (todo)
  * - some text in the modal will refer to editing/updating
+ * - the data store mutation will be an "update" action on that relation (todo)
  * Otherwise, this will behave in "add new" mode:
  * - the fields will be empty
+ * - text in the modal will refer to creating/adding new
  * - the data store mutation will create a new numeratorRelation object (todo)
- * - text in the modal will refer to creating/adding new (todo)
  */
 export function EditNumeratorRelationModal({
     numeratorRelationToEdit,
@@ -69,7 +69,10 @@ export function EditNumeratorRelationModal({
         >
             {({ handleSubmit }) => (
                 <Modal onClose={onClose} position="middle">
-                    <ModalTitle>Configure numerator relation</ModalTitle>
+                    <ModalTitle>
+                        {numeratorRelationToEdit ? 'Edit ' : 'Create '}
+                        numerator relation
+                    </ModalTitle>
                     <ModalContent>
                         <Table>
                             <TableBody>
@@ -146,7 +149,7 @@ export function EditNumeratorRelationModal({
                                     handleSubmit()
                                 }}
                             >
-                                Save
+                                {numeratorRelationToEdit ? 'Save' : 'Create'}
                             </Button>
                         </ButtonStrip>
                     </ModalActions>
