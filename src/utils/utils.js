@@ -33,24 +33,28 @@ export const getConfigObjectsForAnalytics = (configurations, groupCode) => {
     const uniqueDatasetIDs = new Set()
 
     // Filter numerators with dataID not null and in the group's members
-    const numeratorsInGroup = configurations.numerators.filter((numerator) => {
-        return (
-            members.includes(numerator.code) &&
-            numerator.dataID &&
-            numerator.dataSetID &&
-            numerator.dataSetID.length
-        )
-    })
+    const numeratorsInGroup = configurations.numerators
+        .filter((numerator) => {
+            return (
+                members.includes(numerator.code) &&
+                numerator.dataID &&
+                numerator.dataSetID &&
+                numerator.dataSetID.length
+            )
+        })
+        // and convert numerator dataSetID to an array of IDs if not already the case (backwards compatibility)
+        .map((numerator) => ({
+            ...numerator,
+            dataSetID: Array.isArray(numerator.dataSetID)
+                ? numerator.dataSetID
+                : [numerator.dataSetID],
+        }))
 
     // Map each numerator's datasetID, which may be an array
     numeratorsInGroup.forEach((numerator) => {
-        if (Array.isArray(numerator.dataSetID)) {
-            numerator.dataSetID.forEach((id) => {
-                uniqueDatasetIDs.add(id)
-            })
-        } else {
-            uniqueDatasetIDs.add(numerator.dataSetID)
-        }
+        numerator.dataSetID.forEach((id) => {
+            uniqueDatasetIDs.add(id)
+        })
     })
 
     // Create an object to index datasets by their IDs

@@ -2,6 +2,7 @@ import PropTypes from 'prop-types'
 import React from 'react'
 import styles from './ReportData.module.css'
 import { SectionOne } from './section1/SectionOne.js'
+import { SectionTwo } from './section2/SectionTwo.js'
 import { SectionThree } from './section3/SectionThree.js'
 import { SectionFour } from './section4/SectionFour.js'
 
@@ -26,6 +27,9 @@ export const ReportData = ({ reportParameters }) => {
         <div className={styles.reportContainer}>
             <SectionLayout title="Domain 1 - Completeness of Reporting">
                 <SectionOne reportParameters={reportParameters} />
+            </SectionLayout>
+            <SectionLayout title="Domain 2 - Internal Consistency of Reported Data">
+                <SectionTwo reportParameters={reportParameters} />
             </SectionLayout>
             <SectionLayout title="Domain 3 - External Comparison">
                 <SectionThree reportParameters={reportParameters} />
