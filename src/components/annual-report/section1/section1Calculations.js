@@ -656,12 +656,13 @@ const getSection1dChartInfo = ({ allOrgUnitsData, periodsIDs, ou }) => {
     })
 
     for (const dx in formattedData) {
-        const points = periods.map((pe) =>
-            getVal({ response: formattedData, dx, ou, pe })
+        const points = periods.map(
+            (pe) =>
+                getVal({ response: formattedData, dx: 'wrong', ou, pe }) ?? null
         )
 
-        // if all points are undefined: skip; otherwise, add
-        if (points.some((val) => val !== undefined)) {
+        // if all points are null: skip; otherwise, add
+        if (points.some((val) => val !== null)) {
             chartInfo.values.push({
                 name: allOrgUnitsData.metaData?.items?.[dx]?.name ?? '',
                 points,
