@@ -26,7 +26,7 @@ export const generateSection4Chart = (canvasId, chartInfo) => {
         },
         series: [
             {
-                name: i18n.t('Orgunits'),
+                name: i18n.t('Org units'),
                 data: dataPoints,
                 color: 'rgb(31,119,180)',
             },
