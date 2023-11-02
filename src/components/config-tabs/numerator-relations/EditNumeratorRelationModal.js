@@ -38,7 +38,7 @@ const RELATION_TYPE_OPTIONS = relationTypes.map((type) => ({
  * - the data store mutation will be an "update" action on that relation, (todo)
  * - some text in the modal will refer to editing/updating
  * Otherwise, this will behave in "add new" mode:
- * - the fields will be empty (todo)
+ * - the fields will be empty
  * - the data store mutation will create a new numeratorRelation object (todo)
  * - text in the modal will refer to creating/adding new (todo)
  */
