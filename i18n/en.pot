@@ -5,8 +5,8 @@ msgstr ""
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1)\n"
-"POT-Creation-Date: 2023-10-26T11:52:21.650Z\n"
-"PO-Revision-Date: 2023-10-26T11:52:21.650Z\n"
+"POT-Creation-Date: 2023-11-02T09:47:40.459Z\n"
+"PO-Revision-Date: 2023-11-02T09:47:40.459Z\n"
 
 msgid "Select period(s)"
 msgstr "Select period(s)"
@@ -16,6 +16,21 @@ msgstr "Cancel"
 
 msgid "Save"
 msgstr "Save"
+
+msgid "No data to display"
+msgstr "No data to display"
+
+msgid "Chart not available"
+msgstr "Chart not available"
+
+msgid "Routine"
+msgstr "Routine"
+
+msgid "Survey"
+msgstr "Survey"
+
+msgid "Org units"
+msgstr "Org units"
 
 msgid "Group"
 msgstr "Group"
