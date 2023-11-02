@@ -43,8 +43,8 @@ const Section3A = ({ title, subtitle, subsectionData }) => (
             .sort((a, b) => a.name.localeCompare(b.name))
             .map((dataRow, index) => {
                 return (
-                    <>
-                        <table key={dataRow.name}>
+                    <React.Fragment key={dataRow.name}>
+                        <table>
                             <thead>
                                 <tr>
                                     <th>{dataRow.name}</th>
@@ -110,7 +110,7 @@ const Section3A = ({ title, subtitle, subsectionData }) => (
                             chartId={`chart${index}`}
                             chartInfo={dataRow.chartInfo}
                         />
-                    </>
+                    </React.Fragment>
                 )
             })}
     </>
