@@ -60,7 +60,7 @@ export function NumeratorRelationTableItem({
             </TableCell>
             {editModalOpen && (
                 <EditNumeratorRelationModal
-                    previousRelation={relation}
+                    numeratorRelationToEdit={relation}
                     configurations={configurations}
                     onClose={() => setEditModalOpen(false)}
                 />

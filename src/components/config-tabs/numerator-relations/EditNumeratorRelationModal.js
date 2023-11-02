@@ -17,14 +17,33 @@ import PropTypes from 'prop-types'
 import React, { useState } from 'react'
 import relationTypes from '../../../data/relationTypes.json'
 
+const DEFAULT_FORM_VALUES = {
+    name: '',
+    type: undefined,
+    A: undefined,
+    B: undefined,
+    criteria: 0,
+}
+
+/**
+ * If `numeratorRelationToEdit`, is provided, this will behave in "update" mode:
+ * - the fields will be prefilled with the values of that relation
+ * - the data store mutation will be an "update" action on that relation, (todo)
+ * - some text in the modal will refer to editing/updating
+ * Otherwise, this will behave in "add new" mode:
+ * - the fields will be empty (todo)
+ * - the data store mutation will create a new numeratorRelation object (todo)
+ * - text in the modal will refer to creating/adding new (todo)
+ */
 export function EditNumeratorRelationModal({
-    previousRelation,
+    numeratorRelationToEdit,
     configurations,
     onClose,
 }) {
-    const [newNumeratorRelationInfo, setNewNumeratorRelationInfo] =
-        useState(previousRelation)
     // A, B, code, criteria, name, type
+    const [formState, setFormState] = useState(
+        numeratorRelationToEdit || DEFAULT_FORM_VALUES
+    )
 
     const numeratorsWithDataIds = React.useMemo(
         () =>
@@ -46,10 +65,10 @@ export function EditNumeratorRelationModal({
                                 <Input
                                     name="name"
                                     required
-                                    value={newNumeratorRelationInfo.name}
+                                    value={formState.name}
                                     onChange={(e) =>
-                                        setNewNumeratorRelationInfo({
-                                            ...newNumeratorRelationInfo,
+                                        setFormState({
+                                            ...formState,
                                             name: e.value,
                                         })
                                     }
@@ -62,19 +81,19 @@ export function EditNumeratorRelationModal({
                                 <SingleSelect
                                     name="type"
                                     placeholder="Select relation type"
-                                    selected={newNumeratorRelationInfo.type}
+                                    selected={formState.type}
                                     onChange={(e) =>
-                                        setNewNumeratorRelationInfo({
-                                            ...newNumeratorRelationInfo,
+                                        setFormState({
+                                            ...formState,
                                             type: e.selected,
                                         })
                                     }
                                 >
-                                    {relationTypes.map((type, key) => (
+                                    {relationTypes.map((type) => (
                                         <SingleSelectOption
                                             label={type.displayName}
                                             value={type.code}
-                                            key={key}
+                                            key={type.code}
                                         />
                                     ))}
                                 </SingleSelect>
@@ -86,23 +105,21 @@ export function EditNumeratorRelationModal({
                                 <SingleSelect
                                     name="A"
                                     placeholder="Select numerator A"
-                                    selected={newNumeratorRelationInfo.A}
+                                    selected={formState.A}
                                     onChange={(e) =>
-                                        setNewNumeratorRelationInfo({
-                                            ...newNumeratorRelationInfo,
+                                        setFormState({
+                                            ...formState,
                                             A: e.selected,
                                         })
                                     }
                                 >
-                                    {numeratorsWithDataIds.map(
-                                        (numerator, key) => (
-                                            <SingleSelectOption
-                                                label={numerator.name}
-                                                value={numerator.code}
-                                                key={key}
-                                            />
-                                        )
-                                    )}
+                                    {numeratorsWithDataIds.map((numerator) => (
+                                        <SingleSelectOption
+                                            label={numerator.name}
+                                            value={numerator.code}
+                                            key={numerator.code}
+                                        />
+                                    ))}
                                 </SingleSelect>
                             </TableCell>
                         </TableRow>
@@ -112,23 +129,21 @@ export function EditNumeratorRelationModal({
                                 <SingleSelect
                                     name="B"
                                     placeholder="Select numerator B"
-                                    selected={newNumeratorRelationInfo.B}
+                                    selected={formState.B}
                                     onChange={(e) =>
-                                        setNewNumeratorRelationInfo({
-                                            ...newNumeratorRelationInfo,
+                                        setFormState({
+                                            ...formState,
                                             B: e.selected,
                                         })
                                     }
                                 >
-                                    {numeratorsWithDataIds.map(
-                                        (numerator, key) => (
-                                            <SingleSelectOption
-                                                label={numerator.name}
-                                                value={numerator.code}
-                                                key={key}
-                                            />
-                                        )
-                                    )}
+                                    {numeratorsWithDataIds.map((numerator) => (
+                                        <SingleSelectOption
+                                            label={numerator.name}
+                                            value={numerator.code}
+                                            key={numerator.code}
+                                        />
+                                    ))}
                                 </SingleSelect>
                             </TableCell>
                         </TableRow>
@@ -139,11 +154,11 @@ export function EditNumeratorRelationModal({
                                     name="criteria"
                                     type="number"
                                     required
-                                    value={newNumeratorRelationInfo.criteria}
+                                    value={String(formState.criteria)}
                                     onChange={(e) =>
-                                        setNewNumeratorRelationInfo({
-                                            ...newNumeratorRelationInfo,
-                                            criteria: e.value,
+                                        setFormState({
+                                            ...formState,
+                                            criteria: Number(e.value),
                                         })
                                     }
                                 />
@@ -176,6 +191,6 @@ export function EditNumeratorRelationModal({
 }
 EditNumeratorRelationModal.propTypes = {
     configurations: PropTypes.object,
-    previousRelation: PropTypes.object,
+    numeratorRelationToEdit: PropTypes.object,
     onClose: PropTypes.func,
 }
