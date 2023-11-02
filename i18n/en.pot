@@ -32,6 +32,12 @@ msgstr "Survey"
 msgid "Org units"
 msgstr "Org units"
 
+msgid "% Completeness"
+msgstr "% Completeness"
+
+msgid "Reporting completeness over time"
+msgstr "Reporting completeness over time"
+
 msgid "Group"
 msgstr "Group"
 
