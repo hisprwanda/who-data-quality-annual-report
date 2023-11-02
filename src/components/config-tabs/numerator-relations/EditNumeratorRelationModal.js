@@ -69,7 +69,7 @@ export function EditNumeratorRelationModal({
         >
             {({ handleSubmit }) => (
                 <Modal onClose={onClose} position="middle">
-                    <ModalTitle>Numerator relation</ModalTitle>
+                    <ModalTitle>Configure numerator relation</ModalTitle>
                     <ModalContent>
                         <Table>
                             <TableBody>

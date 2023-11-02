@@ -2,8 +2,7 @@ import {
     Button,
     TableCell,
     TableRow,
-    IconDelete16,
-    IconEdit16,
+    ButtonStrip,
 } from '@dhis2/ui'
 import PropTypes from 'prop-types'
 import React, { useState, useMemo } from 'react'
@@ -44,19 +43,21 @@ export function NumeratorRelationTableItem({
             <TableCell>{relationType.thresholdDescription}</TableCell>
             <TableCell>{relationType.description}</TableCell>
             <TableCell>
-                <Button
-                    icon={<IconEdit16 />}
-                    onClick={() => setEditModalOpen(true)}
-                >
-                    Edit
-                </Button>
-                <Button
-                    destructive
-                    icon={<IconDelete16 />}
-                    onClick={() => alert('todo: delete')}
-                >
-                    Delete
-                </Button>
+                <ButtonStrip>
+                    <Button
+                        small
+                        onClick={() => setEditModalOpen(true)}
+                    >
+                        Edit
+                    </Button>
+                    <Button
+                        small
+                        destructive
+                        onClick={() => alert('todo: delete')}
+                    >
+                        Delete
+                    </Button>
+                </ButtonStrip>
             </TableCell>
             {editModalOpen && (
                 <EditNumeratorRelationModal
