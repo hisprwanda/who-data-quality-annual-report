@@ -76,6 +76,8 @@ const generateBulletChartConfig = (canvasId, chartInfo) => {
 }
 
 const generateScatterChartConfig = (canvasId, chartInfo) => {
+    const categories = []
+
     const routineSeries = {
         name: i18n.t('Routine'),
         color: 'blue',
@@ -89,7 +91,9 @@ const generateScatterChartConfig = (canvasId, chartInfo) => {
 
     chartInfo.values
         .filter(({ invalid }) => !invalid)
-        .forEach(({ routine, survey, divergent }) => {
+        .forEach(({ name, routine, survey, divergent }) => {
+            categories.push(name)
+
             routineSeries.data.push({
                 y: routine,
                 custom: {
@@ -117,7 +121,7 @@ const generateScatterChartConfig = (canvasId, chartInfo) => {
             type: 'scatter',
         },
         xAxis: {
-            categories: chartInfo.values.map(({ name }) => name),
+            categories,
         },
         yAxis: {
             title: {
