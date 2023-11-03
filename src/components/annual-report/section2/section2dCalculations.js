@@ -28,41 +28,73 @@ const get2dScore = ({
         .map((val, index) => [comparisonPeriods.length - index - 1, val])
         .filter((point) => !isNaN(point[1]))
 
+    let referenceValue = undefined
     if (trend === 'constant') {
         const comparisonPeriodValues = comparisonPeriodPoints.map(
             (point) => point[1]
         )
-        return (currentPeriodValue / getMean(comparisonPeriodValues)) * 100
+        referenceValue = getMean(comparisonPeriodValues)
+    } else {
+        // else forecast
+        // negative forecast values are limited to zero
+        referenceValue = Math.max(
+            getForecastValue({
+                pointsArray: comparisonPeriodPoints,
+                forecastX: comparisonPeriods.length,
+            }),
+            0
+        )
     }
-    // else forecast
 
-    // negative forecast values are limited to zero
-    const forecastValue = Math.max(
-        getForecastValue({
-            pointsArray: comparisonPeriodPoints,
-            forecastX: comparisonPeriods.length,
-        }),
-        0
-    )
-    return (currentPeriodValue / forecastValue) * 100
+    return {
+        score: (currentPeriodValue / referenceValue) * 100,
+        current: currentPeriodValue,
+        reference: referenceValue,
+    }
 }
 
-const get2dLineChartInfo = ({response, periods, name, ou, dx, }) => {
+const get2dLineChartInfo = ({ response, periods, name, ou, dx }) => {
     const reversePeriods = [...periods]
     reversePeriods.reverse()
 
-    return ({
-        "type": "line",
-        "xPointLabel": "Institutional Deliveries",
-        "x":reversePeriods,
-        "y":reversePeriods.map(pe=>(getVal({response,dx,ou,pe})??null))
-    })
+    return {
+        type: 'line',
+        xPointLabel: name,
+        x: reversePeriods,
+        y: reversePeriods.map((pe) => getVal({ response, dx, ou, pe }) ?? null),
+    }
 }
 
-const get2dScatterChartInfoBasic = ({trend, comparison, }) => {
-
+const get2dScatterChartInfoBasic = ({
+    trend,
+    comparison,
+    overallScore,
+    overallOrgUnitName,
+    consistency,
+    comparisonPeriods,
+    currentPeriodID,
+}) => {
+    const xAxisTitle =
+        trend !== 'constant'
+            ? 'Forecasted value'
+            : `Average of ${comparisonPeriods.length} period${
+                  comparisonPeriods.length > 1 ? 's' : ''
+              }`
+    const lineLabelNonOu = `Current = ${
+        trend !== 'constant' ? 'Forecast' : 'Average'
+    }`
+    const lineLabel = comparison === 'ou' ? overallOrgUnitName : lineLabelNonOu
+    return {
+        type: 'scatter',
+        slope: comparison === 'ou' ? overallScore / 100 : 1,
+        threshold: consistency,
+        xAxisTitle,
+        yAxisTitle: currentPeriodID,
+        lineLabel,
+        values: [],
+    }
 }
- 
+
 const calculateSection2d = ({
     overallResponse,
     levelOrGroupResponse,
@@ -89,7 +121,7 @@ const calculateSection2d = ({
         const comparison = dxInfo.comparison
 
         // calculate overall score
-        const overallScore = get2dScore({
+        const { score: overallScore } = get2dScore({
             ou: overallOrgUnit,
             dx,
             response: overallResponse,
@@ -98,22 +130,33 @@ const calculateSection2d = ({
             comparisonPeriods,
         })
 
-        const lineChartInfo = get2dLineChartInfo({response: overallResponse, periods: [currentPeriodID, ...comparisonPeriods], name: metadata?.[dx]?.name, ou: overallOrgUnit, dx })
-        const scatterChartInfo = {
-            type: 'scatter',
-            slope: 1,
-            threshold:15,
-            xAxisTitle:'Blah',
-            yAxisTitle: 'YBlah',
-            lineLabel:'line',
-            values: []
-        }
+        const lineChartInfo = get2dLineChartInfo({
+            response: overallResponse,
+            periods: [currentPeriodID, ...comparisonPeriods],
+            name: metadata?.[dx]?.name,
+            ou: overallOrgUnit,
+            dx,
+        })
+        // not that orgUnitLevel name is hardcoded; we will need to bring that
+        const scatterChartInfo = get2dScatterChartInfoBasic({
+            trend,
+            comparison,
+            overallScore,
+            overallOrgUnitName: metadata?.[overallOrgUnit]?.name,
+            consistency,
+            comparisonPeriods,
+            currentPeriodID,
+        })
 
         // then get divergent subOrgUnits
         const divergentSubOrgUnits = []
 
         subOrgUnitIDs.forEach((subOrgUnit) => {
-             const subOrgUnitScore = get2dScore({
+            const {
+                score: subOrgUnitScore,
+                current,
+                reference,
+            } = get2dScore({
                 ou: subOrgUnit,
                 dx,
                 response: levelOrGroupResponse,
@@ -121,16 +164,22 @@ const calculateSection2d = ({
                 currentPeriodID,
                 comparisonPeriods,
             })
+            const orgUnitName = metadata?.[subOrgUnit]?.name
             const comparisonPoint = comparison === 'ou' ? overallScore : 100
-
-            // subOrgUnit is divergent if it is outside of range +/- consistency
-            if (
+            const isDivergent =
                 subOrgUnitScore < comparisonPoint * (1 - consistency / 100) ||
                 subOrgUnitScore > comparisonPoint * (1 + consistency / 100)
-            ) {
-                const orgUnitName = metadata?.[subOrgUnit]?.name
+            // subOrgUnit is divergent if it is outside of range +/- consistency
+            if (isDivergent) {
                 divergentSubOrgUnits.push(orgUnitName)
             }
+            scatterChartInfo.values.push({
+                name: orgUnitName,
+                x: reference,
+                y: current,
+                divergent: isDivergent,
+                invalid: isNaN(subOrgUnitScore),
+            })
         })
 
         results.section2d.push({
@@ -151,6 +200,10 @@ const calculateSection2d = ({
                     1
                 ),
                 names: divergentSubOrgUnits.sort().join(', '),
+            },
+            chartInfo: {
+                scatterChartInfo,
+                lineChartInfo,
             },
         })
     }
