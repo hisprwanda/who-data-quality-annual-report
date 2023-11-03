@@ -61,12 +61,14 @@ export function EditNumeratorRelationModal({
     return (
         <Form
             onSubmit={(values, form) => {
-                console.log({ values, form })
+                // todo: validate! 🥳
+                console.log('onSubmit', { values, form })
                 if (onSave) {
                     onSave(values)
                 } else {
                     alert('todo')
                 }
+                onClose()
             }}
             initialValues={numeratorRelationToEdit || DEFAULT_FORM_VALUES}
             // not subcribing to `values` prevents rerendering the entire form on every input change
