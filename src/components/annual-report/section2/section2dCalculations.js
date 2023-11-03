@@ -47,6 +47,22 @@ const get2dScore = ({
     return (currentPeriodValue / forecastValue) * 100
 }
 
+const get2dLineChartInfo = ({response, periods, name, ou, dx, }) => {
+    const reversePeriods = [...periods]
+    reversePeriods.reverse()
+
+    return ({
+        "type": "line",
+        "xPointLabel": "Institutional Deliveries",
+        "x":reversePeriods,
+        "y":reversePeriods.map(pe=>(getVal({response,dx,ou,pe})??null))
+    })
+}
+
+const get2dScatterChartInfoBasic = ({trend, comparison, }) => {
+
+}
+ 
 const calculateSection2d = ({
     overallResponse,
     levelOrGroupResponse,
@@ -82,11 +98,22 @@ const calculateSection2d = ({
             comparisonPeriods,
         })
 
+        const lineChartInfo = get2dLineChartInfo({response: overallResponse, periods: [currentPeriodID, ...comparisonPeriods], name: metadata?.[dx]?.name, ou: overallOrgUnit, dx })
+        const scatterChartInfo = {
+            type: 'scatter',
+            slope: 1,
+            threshold:15,
+            xAxisTitle:'Blah',
+            yAxisTitle: 'YBlah',
+            lineLabel:'line',
+            values: []
+        }
+
         // then get divergent subOrgUnits
         const divergentSubOrgUnits = []
 
         subOrgUnitIDs.forEach((subOrgUnit) => {
-            const subOrgUnitScore = get2dScore({
+             const subOrgUnitScore = get2dScore({
                 ou: subOrgUnit,
                 dx,
                 response: levelOrGroupResponse,
