@@ -61,7 +61,10 @@ const get2dLineChartInfo = ({ response, periods, name, ou, dx }) => {
         type: 'line',
         xPointLabel: name,
         x: reversePeriods,
-        y: reversePeriods.map((pe) => getVal({ response, dx, ou, pe }) ?? null),
+        y: reversePeriods.map((pe) => {
+            const yVal = getVal({ response, dx, ou, pe })
+            return yVal ? getRoundedValue(yVal, 2) : null
+        }),
     }
 }
 
@@ -175,8 +178,8 @@ const calculateSection2d = ({
             }
             scatterChartInfo.values.push({
                 name: orgUnitName,
-                x: reference,
-                y: current,
+                x: getRoundedValue(reference, 2),
+                y: getRoundedValue(current, 2),
                 divergent: isDivergent,
                 invalid: isNaN(subOrgUnitScore),
             })
