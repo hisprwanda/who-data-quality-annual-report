@@ -45,6 +45,7 @@ const RELATION_TYPE_OPTIONS = relationTypes.map((type) => ({
 export function EditNumeratorRelationModal({
     numeratorRelationToEdit,
     configurations,
+    onSave,
     onClose,
 }) {
     const numeratorOptions = React.useMemo(() => {
@@ -59,9 +60,13 @@ export function EditNumeratorRelationModal({
 
     return (
         <Form
-            onSubmit={(...submitProps) => {
-                alert('todo')
-                console.log({ submitProps })
+            onSubmit={(values, form) => {
+                console.log({ values, form })
+                if (onSave) {
+                    onSave(values)
+                } else {
+                    alert('todo')
+                }
             }}
             initialValues={numeratorRelationToEdit || DEFAULT_FORM_VALUES}
             // not subcribing to `values` prevents rerendering the entire form on every input change
@@ -162,4 +167,5 @@ EditNumeratorRelationModal.propTypes = {
     configurations: PropTypes.object,
     numeratorRelationToEdit: PropTypes.object,
     onClose: PropTypes.func,
+    onSave: PropTypes.func,
 }

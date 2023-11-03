@@ -13,11 +13,39 @@ import {
 } from '@dhis2/ui'
 import PropTypes from 'prop-types'
 import React, { useState } from 'react'
+import {
+    useConfigurations,
+    useUpdateConfigurations,
+} from '../../../utils/configurations/configurationsContext.js'
+import { getNextAvailableCode } from '../../../utils/getNextAvailableCode.js'
 import { EditNumeratorRelationModal } from './EditNumeratorRelationModal.js'
 import { NumeratorRelationTableItem } from './NumeratorRelationTableItem.js'
 
 const NumeratorRelationTableFoot = ({ configurations }) => {
     const [addNewModalOpen, setAddNewModalOpen] = useState(false)
+    const updateConfigurations = useUpdateConfigurations()
+
+    const openModal = React.useCallback(() => setAddNewModalOpen(true), [])
+    const closeModal = React.useCallback(() => setAddNewModalOpen(false), [])
+
+    // todo: abstract to reducer
+    const addNewNumeratorRelation = (newNumeratorRelation) => {
+        const prevNumeratorRelations = configurations.numeratorRelations
+        const nextAvailableCode = getNextAvailableCode(
+            prevNumeratorRelations,
+            'R'
+        )
+        newNumeratorRelation.code = nextAvailableCode
+        const newConfigurations = {
+            ...configurations,
+            numeratorRelations: [
+                ...prevNumeratorRelations,
+                newNumeratorRelation,
+            ],
+        }
+        updateConfigurations(newConfigurations)
+        setAddNewModalOpen(false)
+    }
 
     return (
         <TableFoot>
@@ -27,7 +55,7 @@ const NumeratorRelationTableFoot = ({ configurations }) => {
                         <Button
                             primary
                             icon={<IconAdd16 />}
-                            onClick={() => setAddNewModalOpen(true)}
+                            onClick={openModal}
                         >
                             Add Numerator Relation
                         </Button>
@@ -37,7 +65,8 @@ const NumeratorRelationTableFoot = ({ configurations }) => {
             {addNewModalOpen && (
                 <EditNumeratorRelationModal
                     configurations={configurations}
-                    onClose={() => setAddNewModalOpen(false)}
+                    onSave={addNewNumeratorRelation}
+                    onClose={closeModal}
                 />
             )}
         </TableFoot>
@@ -45,7 +74,8 @@ const NumeratorRelationTableFoot = ({ configurations }) => {
 }
 NumeratorRelationTableFoot.propTypes = { configurations: PropTypes.object }
 
-export const NumeratorRelations = ({ configurations }) => {
+export const NumeratorRelations = () => {
+    const configurations = useConfigurations()
     const relations = configurations.numeratorRelations
 
     return (
@@ -84,8 +114,4 @@ export const NumeratorRelations = ({ configurations }) => {
             </Table>
         </div>
     )
-}
-
-NumeratorRelations.propTypes = {
-    configurations: PropTypes.object,
 }
