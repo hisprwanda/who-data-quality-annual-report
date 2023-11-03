@@ -67,6 +67,7 @@ const generateBulletChartConfig = (canvasId, chartInfo) => {
                         name: this.custom.name,
                         survey: this.target,
                         routine: this.y,
+                        nsSeparator: '-:-',
                     }
                 )
             },
@@ -130,8 +131,15 @@ const generateScatterChartConfig = (canvasId, chartInfo) => {
             headerFormat: '<b>{point.key}</b><br/>',
             pointFormatter: function () {
                 return i18n.t('Survey: {{survey}}%<br/>Routine: {{routine}}%', {
-                    survey: this.custom.survey ?? this.y,
-                    routine: this.custom.routine ?? this.y,
+                    survey:
+                        this.custom.survey !== undefined
+                            ? this.custom.survey
+                            : this.y,
+                    routine:
+                        this.custom.routine !== undefined
+                            ? this.custom.routine
+                            : this.y,
+                    nsSeparator: '-:-',
                 })
             },
         },
