@@ -4,15 +4,7 @@ export const CREATE_NUMERATOR_RELATION = 'CREATE_NUMERATOR_RELATION'
 export const UPDATE_NUMERATOR_RELATION = 'UPDATE_NUMERATOR_RELATION'
 export const DELETE_NUMERATOR_RELATION = 'DELETE_NUMERATOR_RELATION'
 
-/**
- * Adds a current lastUpdated and applies keys/values in
- * `updates` object to the new configurations object
- */
-const getNewConfigurations = (configurations, updates) => ({
-    ...configurations,
-    ...updates,
-    lastUpdated: new Date().toISOString(),
-})
+const getISOTimestamp = () => new Date().toISOString()
 
 /**
  * This function is part of an action/reducer pattern
@@ -41,38 +33,32 @@ export function configurationsReducer(configurations, { type, payload }) {
                 ...payload.newNumeratorRelation,
                 code: nextAvailableCode,
             }
-            const newConfigurations = getNewConfigurations(configurations, {
+            const newConfigurations = {
+                ...configurations,
                 numeratorRelations: [
                     ...prevNumeratorRelations,
                     newNumeratorRelation,
                 ],
-            })
+                lastUpdated: getISOTimestamp(),
+            }
             return newConfigurations
         }
 
         case UPDATE_NUMERATOR_RELATION: {
             const { updatedNumeratorRelation, code } = payload
-            // todo: keep in these checks?
-            if (!code) {
-                throw new Error(
-                    '`code` is required to update the item ' +
-                        updatedNumeratorRelation.name
-                )
-            }
             const prevNumeratorRelations = configurations.numeratorRelations
             const targetIndex = prevNumeratorRelations.findIndex(
                 (nr) => nr.code === code
             )
-            if (targetIndex === -1) {
-                throw new Error(`Item with code ${code} not found`)
-            }
-            const newConfigurations = getNewConfigurations(configurations, {
+            const newConfigurations = {
+                ...configurations,
                 numeratorRelations: [
                     ...prevNumeratorRelations.slice(0, targetIndex),
                     updatedNumeratorRelation,
                     ...prevNumeratorRelations.slice(targetIndex + 1),
                 ],
-            })
+                lastUpdated: getISOTimestamp(),
+            }
             return newConfigurations
         }
 
@@ -82,12 +68,14 @@ export function configurationsReducer(configurations, { type, payload }) {
             const targetIndex = prevNumeratorRelations.findIndex(
                 (nr) => nr.code === code
             )
-            const newConfigurations = getNewConfigurations(configurations, {
+            const newConfigurations = {
+                ...configurations,
                 numeratorRelations: [
                     ...prevNumeratorRelations.slice(0, targetIndex),
                     ...prevNumeratorRelations.slice(targetIndex + 1),
                 ],
-            })
+                lastUpdated: getISOTimestamp(),
+            }
             return newConfigurations
         }
 
