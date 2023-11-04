@@ -15,38 +15,26 @@ import PropTypes from 'prop-types'
 import React, { useState, useCallback } from 'react'
 import {
     useConfigurations,
-    useUpdateConfigurations,
-} from '../../../utils/configurations/configurationsContext.js'
-import { getNextAvailableCode } from '../../../utils/getNextAvailableCode.js'
+    useDispatchConfigurationsUpdate,
+    CREATE_NUMERATOR_RELATION,
+} from '../../../utils/index.js'
 import { EditNumeratorRelationModal } from './EditNumeratorRelationModal.js'
 import { NumeratorRelationTableItem } from './NumeratorRelationTableItem.js'
 
 const AddNumeratorRelationButton = ({ configurations }) => {
     const [addNewModalOpen, setAddNewModalOpen] = useState(false)
-    const updateConfigurations = useUpdateConfigurations()
+    const dispatch = useDispatchConfigurationsUpdate()
 
     const openModal = useCallback(() => setAddNewModalOpen(true), [])
     const closeModal = useCallback(() => setAddNewModalOpen(false), [])
 
-    // todo: abstract to reducer
     const addNewNumeratorRelation = useCallback(
-        (newNumeratorRelation) => {
-            const prevNumeratorRelations = configurations.numeratorRelations
-            const nextAvailableCode = getNextAvailableCode(
-                prevNumeratorRelations,
-                'R'
-            )
-            newNumeratorRelation.code = nextAvailableCode
-            const newConfigurations = {
-                ...configurations,
-                numeratorRelations: [
-                    ...prevNumeratorRelations,
-                    newNumeratorRelation,
-                ],
-            }
-            updateConfigurations(newConfigurations)
-        },
-        [configurations, updateConfigurations]
+        (newNumeratorRelation) =>
+            dispatch({
+                type: CREATE_NUMERATOR_RELATION,
+                payload: { newNumeratorRelation },
+            }),
+        [dispatch]
     )
 
     return (
