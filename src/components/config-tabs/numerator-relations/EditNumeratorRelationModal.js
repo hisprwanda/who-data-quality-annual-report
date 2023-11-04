@@ -77,8 +77,8 @@ export function EditNumeratorRelationModal({
             {({ handleSubmit }) => (
                 <Modal onClose={onClose} position="middle">
                     <ModalTitle>
-                        {numeratorRelationToEdit ? 'Edit ' : 'Create '}
-                        numerator relation
+                        {(numeratorRelationToEdit ? 'Edit' : 'Create') +
+                            ' numerator relation'}
                     </ModalTitle>
                     <ModalContent>
                         <Table>
