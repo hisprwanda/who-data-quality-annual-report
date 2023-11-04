@@ -16,6 +16,7 @@ import {
 import PropTypes from 'prop-types'
 import React from 'react'
 import relationTypes from '../../../data/relationTypes.json'
+import { useConfigurations } from '../../../utils/index.js'
 
 const { Form, Field } = ReactFinalForm
 
@@ -44,10 +45,10 @@ const RELATION_TYPE_OPTIONS = relationTypes.map((type) => ({
  */
 export function EditNumeratorRelationModal({
     numeratorRelationToEdit,
-    configurations,
     onSave,
     onClose,
 }) {
+    const configurations = useConfigurations()
     const numeratorOptions = React.useMemo(() => {
         const numeratorsWithDataIds = configurations.numerators.filter(
             (numerator) => numerator.dataID != null
@@ -166,7 +167,6 @@ export function EditNumeratorRelationModal({
     )
 }
 EditNumeratorRelationModal.propTypes = {
-    configurations: PropTypes.object,
     numeratorRelationToEdit: PropTypes.object,
     onClose: PropTypes.func,
     onSave: PropTypes.func,
