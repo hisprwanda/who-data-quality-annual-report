@@ -7,7 +7,7 @@ export const DELETE_NUMERATOR_RELATION = 'DELETE_NUMERATOR_RELATION'
 const getISOTimestamp = () => new Date().toISOString()
 
 /**
- * This function is part of an action/reducer pattern
+ * This function is part of an action/reducer pattern:
  * It receives two args: 1) the previous configurations object and
  * 2) an arbitrary `data` object sent when calling `dispatch`
  *

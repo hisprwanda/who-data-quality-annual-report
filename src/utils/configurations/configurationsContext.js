@@ -84,6 +84,7 @@ ConfigurationsProvider.propTypes = {
     children: PropTypes.node,
 }
 
+/** Returns just the configuration state */
 export const useConfigurations = () => {
     const context = useContext(ConfigurationsContext)
 
@@ -104,14 +105,11 @@ const UPDATE_CONFIGURATIONS_MUTATION = {
 }
 
 /**
- * Returns [updateConfigurations, mutationOutput], where
- * updateConfigurations accepts a complete new configuration object,
+ * Returns updateConfigurations, which accepts a complete new configuration object,
  * updates the `configurations` state locally, and syncs the new configurations
- * with the server. It also handles errors with the network request.
- * `mutationOutput` is { called, loading, error, data }, the same as
- * for useDataMutation
+ * with the server. It also handles errors with the network request
  */
-export const useUpdateConfigurations = () => {
+const useUpdateConfigurations = () => {
     const context = useContext(ConfigurationsContext)
     const engine = useDataEngine()
     const { show } = useAlert(
