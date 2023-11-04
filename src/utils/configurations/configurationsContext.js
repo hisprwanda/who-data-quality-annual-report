@@ -8,6 +8,7 @@ import {
 } from '@dhis2/ui'
 import PropTypes from 'prop-types'
 import React, { useState, useContext } from 'react'
+import { configurationsReducer } from './configurationsReducer.js'
 
 // todo:
 // 1. fetch & share configurations with all consumers ✅
@@ -128,6 +129,7 @@ export const useUpdateConfigurations = () => {
     const updateConfigurations = React.useCallback(
         async (newConfigurations) => {
             // update lastUpdate property in configurations
+            // todo: do here or in configurations reducer?
             newConfigurations.lastUpdated = new Date().toISOString()
             // set local configurations object (optimistically)
             let configurationsBackup
@@ -153,4 +155,22 @@ export const useUpdateConfigurations = () => {
     )
 
     return updateConfigurations
+}
+
+export const useDispatchConfigurationsUpdate = () => {
+    const configurations = useConfigurations()
+    const updateConfigurations = useUpdateConfigurations()
+
+    const dispatch = React.useCallback(
+        ({ type, payload }) => {
+            const newConfigurations = configurationsReducer(configurations, {
+                type,
+                payload,
+            })
+            updateConfigurations(newConfigurations)
+        },
+        [configurations, updateConfigurations]
+    )
+
+    return dispatch
 }
