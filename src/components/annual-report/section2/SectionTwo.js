@@ -1,5 +1,6 @@
 import PropTypes from 'prop-types'
 import React, { useEffect } from 'react'
+import { Chart } from '../Chart.js'
 import { calculateSection2 } from './section2Calculations.js'
 import { useFetchSectionTwoData } from './useFetchSectionTwoData.js'
 
@@ -89,40 +90,95 @@ Sections2a2b2c.propTypes = {
 }
 
 const Section2DBlock = ({ dataRow }) => (
-    <table>
-        <tbody>
-            <tr>
-                <th colSpan="2">{dataRow.name}</th>
-            </tr>
-            <tr>
-                <td>Expected trend</td>
-                <td>{dataRow.expectedTrend}</td>
-            </tr>
-            <tr>
-                <td>Compare region to</td>
-                <td>{dataRow.compareRegionTo}</td>
-            </tr>
-            <tr>
-                <td>Quality threshold</td>
-                <td>±{dataRow.qualityThreshold}%</td>
-            </tr>
-            <tr>
-                <td>Overall score</td>
-                <td>{dataRow.overallScore}%</td>
-            </tr>
-            <tr>
-                <td>Number of Region with divergent score</td>
-                <td>{dataRow.divergentSubOrgUnits?.number}</td>
-            </tr>
-            <tr>
-                <td>Percent of Region with divergent score</td>
-                <td>{dataRow.divergentSubOrgUnits?.percent}%</td>
-            </tr>
-            <tr>
-                <td colSpan="2">{dataRow.divergentSubOrgUnits?.names}</td>
-            </tr>
-        </tbody>
-    </table>
+    <>
+        <table>
+            <tbody>
+                <tr>
+                    <th colSpan="2">{dataRow.name}</th>
+                </tr>
+                <tr>
+                    <td>Expected trend</td>
+                    <td>{dataRow.expectedTrend}</td>
+                </tr>
+                <tr>
+                    <td>Compare region to</td>
+                    <td>{dataRow.compareRegionTo}</td>
+                </tr>
+                <tr>
+                    <td>Quality threshold</td>
+                    <td>±{dataRow.qualityThreshold}%</td>
+                </tr>
+                <tr>
+                    <td>Overall score</td>
+                    <td>{dataRow.overallScore}%</td>
+                </tr>
+                <tr>
+                    <td>Number of Region with divergent score</td>
+                    <td>{dataRow.divergentSubOrgUnits?.number}</td>
+                </tr>
+                <tr>
+                    <td>Percent of Region with divergent score</td>
+                    <td>{dataRow.divergentSubOrgUnits?.percent}%</td>
+                </tr>
+                <tr>
+                    <td colSpan="2">{dataRow.divergentSubOrgUnits?.names}</td>
+                </tr>
+            </tbody>
+        </table>
+        <Chart
+            sectionId={'section2d'}
+            chartId={'chart1'}
+            chartInfo={{
+                type: 'line',
+                xPointLabel: 'Albendazole 1 dose at ANC',
+                x: ['2019', '2020', '2021', '2022'],
+                y: [65822, 247661, 326583, 368306],
+            }}
+        />
+        <Chart
+            sectionId={'section2d'}
+            chartId={'chart2'}
+            chartInfo={{
+                type: 'scatter',
+                slope: 1.9,
+                threshold: 33,
+                xAxisTitle: 'Average of 3 previous periods',
+                lineLabel: 'Current=Average',
+                yAxisTitle: '2022',
+                xPointLabel: 'Average',
+                values: [
+                    {
+                        name: 'Region A',
+                        x: 35845.7,
+                        y: 60539,
+                        divergent: false,
+                        invalid: false,
+                    },
+                    {
+                        name: 'Region B',
+                        x: 47031.3,
+                        y: 75453,
+                        divergent: false,
+                        invalid: false,
+                    },
+                    {
+                        name: 'Region C',
+                        x: 58226,
+                        y: 137034,
+                        divergent: false,
+                        invalid: false,
+                    },
+                    {
+                        name: 'Region D',
+                        x: 69649,
+                        y: 124386,
+                        divergent: false,
+                        invalid: false,
+                    },
+                ],
+            }}
+        />
+    </>
 )
 
 Section2DBlock.propTypes = {
@@ -149,47 +205,103 @@ Section2D.propTypes = {
 }
 
 const Section2EBlock = ({ dataRow }) => (
-    <table>
-        <tbody>
-            <tr>
-                <th colSpan="2">{dataRow.title}</th>
-            </tr>
-            <tr>
-                <td>Denominator A</td>
-                <td>{dataRow.A}</td>
-            </tr>
-            <tr>
-                <td>Denominator B</td>
-                <td>{dataRow.B}</td>
-            </tr>
-            <tr>
-                <td>Expected relationship</td>
-                <td>{dataRow.expectedRelationship}</td>
-            </tr>
-            <tr>
-                <td>Quality threshold</td>
-                <td>
-                    {dataRow.expectedRelationship === 'Dropout rate' ? '' : '±'}
-                    {dataRow.qualityThreshold}
-                </td>
-            </tr>
-            <tr>
-                <td>Overall score</td>
-                <td>{dataRow.overallScore}%</td>
-            </tr>
-            <tr>
-                <td>Number of Region with divergent score</td>
-                <td>{dataRow.divergentSubOrgUnits?.number}</td>
-            </tr>
-            <tr>
-                <td>Percent of Region with divergent score</td>
-                <td>{dataRow.divergentSubOrgUnits?.percentage}%</td>
-            </tr>
-            <tr>
-                <td colSpan="2">{dataRow.divergentSubOrgUnits?.names}</td>
-            </tr>
-        </tbody>
-    </table>
+    <>
+        <table>
+            <tbody>
+                <tr>
+                    <th colSpan="2">{dataRow.title}</th>
+                </tr>
+                <tr>
+                    <td>Denominator A</td>
+                    <td>{dataRow.A}</td>
+                </tr>
+                <tr>
+                    <td>Denominator B</td>
+                    <td>{dataRow.B}</td>
+                </tr>
+                <tr>
+                    <td>Expected relationship</td>
+                    <td>{dataRow.expectedRelationship}</td>
+                </tr>
+                <tr>
+                    <td>Quality threshold</td>
+                    <td>
+                        {dataRow.expectedRelationship === 'Dropout rate'
+                            ? ''
+                            : '±'}
+                        {dataRow.qualityThreshold}
+                    </td>
+                </tr>
+                <tr>
+                    <td>Overall score</td>
+                    <td>{dataRow.overallScore}%</td>
+                </tr>
+                <tr>
+                    <td>Number of Region with divergent score</td>
+                    <td>{dataRow.divergentSubOrgUnits?.number}</td>
+                </tr>
+                <tr>
+                    <td>Percent of Region with divergent score</td>
+                    <td>{dataRow.divergentSubOrgUnits?.percentage}%</td>
+                </tr>
+                <tr>
+                    <td colSpan="2">{dataRow.divergentSubOrgUnits?.names}</td>
+                </tr>
+            </tbody>
+        </table>
+        <Chart
+            sectionId={'section2e'}
+            chartId={'chart1'}
+            chartInfo={{
+                disableTopThresholdLine: true,
+                type: 'scatter',
+                slope: 1,
+                threshold: 30,
+                xAxisTitle: 'Penta 1 given < 1',
+                xPointLabel: 'Penta 1 given < 1',
+                lineLabel: 'National',
+                yAxisTitle: 'ANC 1 Visits',
+                values: [
+                    {
+                        name: 'Region A',
+                        x: 63373,
+                        y: 72003,
+                        divergent: true,
+                        invalid: false,
+                    },
+                ],
+            }}
+        />
+        <Chart
+            sectionId={'section2e'}
+            chartId={'chart2'}
+            chartInfo={{
+                type: 'column',
+                values: [
+                    {
+                        name: 'Region A',
+                        value: 80.83,
+                        invalid: false,
+                    },
+                    {
+                        name: 'Region B',
+                        value: 78.93,
+                        invalid: false,
+                    },
+                    {
+                        name: 'Region C',
+                        value: 79.99,
+                        invalid: false,
+                    },
+                    {
+                        name: 'Region D',
+                        value: -10,
+                        invalid: false,
+                    },
+                ],
+            }}
+        />
+    </>
 )
 
 Section2EBlock.propTypes = {
