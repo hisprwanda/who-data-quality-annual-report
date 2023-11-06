@@ -12,6 +12,7 @@ import {
     IconDelete16,
 } from '@dhis2/ui'
 import { Chip } from '@dhis2/ui-core'
+import PropTypes from 'prop-types'
 import React, { useState } from 'react'
 import {
     getNumeratorDataElement,
@@ -251,4 +252,9 @@ export const Numerators = ({ toggleState, configurations }) => {
             />
         </div>
     )
+}
+
+Numerators.propTypes = {
+    configurations: PropTypes.object.isRequired,
+    toggleState: PropTypes.func.isRequired,
 }

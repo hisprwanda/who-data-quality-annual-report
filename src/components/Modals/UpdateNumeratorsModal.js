@@ -13,8 +13,8 @@ import {
     SingleSelect,
     SingleSelectOption,
 } from '@dhis2/ui'
+import PropTypes from 'prop-types'
 import React, { useState, useEffect } from 'react'
-
 import '../Modals/edit_modal_styles.css'
 import {
     filterSelectedMetadata,
