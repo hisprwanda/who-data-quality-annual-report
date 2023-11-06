@@ -47,7 +47,11 @@ const ErrorInfo = ({ errorMessage }) => (
 )
 ErrorInfo.propTypes = { errorMessage: PropTypes.string }
 
+// These contexts are separated so that 'update' consumers don't
+// necessarily rerender when the `configurations` object updates
+// and vice versa (it's a small optimization)
 const ConfigurationsContext = React.createContext()
+const SetConfigurationsContext = React.createContext()
 
 /**
  * This will fetch configurations once, then maintain it in state.
@@ -73,10 +77,10 @@ export const ConfigurationsProvider = ({ children }) => {
     }
 
     return (
-        <ConfigurationsContext.Provider
-            value={[configurations, setConfigurations]}
-        >
-            {children}
+        <ConfigurationsContext.Provider value={configurations}>
+            <SetConfigurationsContext.Provider value={setConfigurations}>
+                {children}
+            </SetConfigurationsContext.Provider>
         </ConfigurationsContext.Provider>
     )
 }
@@ -86,16 +90,16 @@ ConfigurationsProvider.propTypes = {
 
 /** Returns just the configuration state */
 export const useConfigurations = () => {
-    const context = useContext(ConfigurationsContext)
+    const configurations = useContext(ConfigurationsContext)
 
-    if (!context) {
+    if (!configurations) {
         throw new Error(
             'useConfigurations must be used inside of a ConfigurationsProvider'
         )
     }
 
     // return just `configurations`, not `setConfigurations`
-    return context[0]
+    return configurations
 }
 
 const UPDATE_CONFIGURATIONS_MUTATION = {
@@ -110,27 +114,27 @@ const UPDATE_CONFIGURATIONS_MUTATION = {
  * with the server. It also handles errors with the network request
  */
 const useUpdateConfigurations = () => {
-    const context = useContext(ConfigurationsContext)
+    const setConfigurations = useContext(SetConfigurationsContext)
     const engine = useDataEngine()
     const { show } = useAlert(
         ({ errorMessage }) => 'Configurations update failed: ' + errorMessage,
         { critical: true }
     )
 
-    if (!context) {
+    if (!setConfigurations) {
         throw new Error(
             'useUpdateConfigurations must be used inside of a ConfigurationsProvider'
         )
     }
-    const [, setConfigurations] = context
 
     const updateConfigurations = React.useCallback(
         async (newConfigurations) => {
             // update lastUpdate property in configurations
             // todo: do here or in configurations reducer?
             newConfigurations.lastUpdated = new Date().toISOString()
-            // set local configurations object (optimistically)
             let configurationsBackup
+            // set local configurations object (optimistically)
+            // use a function as the arg to avoid needing a dependency on `configurations`
             setConfigurations((prevConfigurations) => {
                 // save a backup in case the mutation fails
                 configurationsBackup = prevConfigurations
