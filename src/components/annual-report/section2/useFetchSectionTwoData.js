@@ -231,9 +231,12 @@ export const useFetchSectionTwoData = () => {
                           },
                       })
 
-                const dataBySubPeriod = await Promise.all(subPeriodRequests)
-                const section2dData = await section2dRequest
-                const section2eData = await section2eRequest
+                const [section2dData, section2eData, ...dataBySubPeriod] =
+                    await Promise.all([
+                        section2dRequest,
+                        section2eRequest,
+                        ...subPeriodRequests,
+                    ])
 
                 setData({
                     ...section2dData,

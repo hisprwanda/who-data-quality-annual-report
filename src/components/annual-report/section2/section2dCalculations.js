@@ -136,6 +136,14 @@ export const getSection2d = ({
     periods,
     overallOrgUnit,
 }) => {
+    // if there is no data for subsection, skip calculations and return empty array
+
+    if (
+        Object.keys(section2Response[OVERALL_ORG_UNIT_SECTION_2D] ?? {})
+            .length === 0
+    ) {
+        return { section2d: [] }
+    }
     const currentPeriodID = periods[0].id
     const comparisonPeriodsIDs = periods.slice(1).map((p) => p.id)
 
