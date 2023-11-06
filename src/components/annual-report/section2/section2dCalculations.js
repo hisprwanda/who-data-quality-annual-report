@@ -80,12 +80,11 @@ const get2dScatterChartInfoBasic = ({
     const xAxisTitle =
         trend !== 'constant'
             ? 'Forecasted value'
-            : `Average of ${comparisonPeriods.length} period${
+            : `Average of ${comparisonPeriods.length} previous period${
                   comparisonPeriods.length > 1 ? 's' : ''
               }`
-    const lineLabelNonOu = `Current = ${
-        trend !== 'constant' ? 'Forecast' : 'Average'
-    }`
+    const xPointLabel = trend !== 'constant' ? 'Forecast' : 'Average'
+    const lineLabelNonOu = `Current = ${xPointLabel}`
     const lineLabel = comparison === 'ou' ? overallOrgUnitName : lineLabelNonOu
     return {
         type: 'scatter',
@@ -93,6 +92,7 @@ const get2dScatterChartInfoBasic = ({
         threshold: consistency,
         xAxisTitle,
         yAxisTitle: currentPeriodID,
+        xPointLabel,
         lineLabel,
         values: [],
     }

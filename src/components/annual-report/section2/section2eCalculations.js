@@ -65,6 +65,7 @@ const getSection2EChartInfoBasic = ({
         threshold: criteria,
         xAxisTitle: metadata[B]?.name,
         yAxisTitle: metadata[A]?.name,
+        xPointLabel: metadata[B]?.name,
         lineLabel:
             type === 'level'
                 ? metadata[overallOrgUnit]?.name
