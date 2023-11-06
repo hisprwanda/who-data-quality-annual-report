@@ -1,7 +1,6 @@
 import { useDataQuery } from '@dhis2/app-runtime'
 import React from 'react'
 import ConfigTabs from '../components/config-tabs/ConfigTabs.js'
-import { ConfigurationsProvider } from '../utils/configurations/configurationsContext.js'
 import styles from './Configurations.module.css'
 
 //TODO: use a global state or context api to share these settings accross components
@@ -41,33 +40,30 @@ export const Configurations = () => {
     }
 
     return (
-        <ConfigurationsProvider>
-            <div className={styles.configurationsContainer}>
-                <div className={styles.subContainer}>
-                    <div className={styles.descriptionText}>
-                        <p>
-                            This module is used for configuring the WHO Data
-                            Quality Annual Report, and mapping the proposed data
-                            quality indicators to data elements and indicators
-                            in the DHIS 2 database. This configuration is used
-                            as the basis for the Annual Report, and the
-                            numerator and numerator group configuration is also
-                            used for the Dashboard.
-                        </p>
-                    </div>
+        <div className={styles.configurationsContainer}>
+            <div className={styles.subContainer}>
+                <div className={styles.descriptionText}>
+                    <p>
+                        This module is used for configuring the WHO Data Quality
+                        Annual Report, and mapping the proposed data quality
+                        indicators to data elements and indicators in the DHIS 2
+                        database. This configuration is used as the basis for
+                        the Annual Report, and the numerator and numerator group
+                        configuration is also used for the Dashboard.
+                    </p>
+                </div>
 
-                    <div>
-                        {configurations ? (
-                            <ConfigTabs
-                                loading={loading}
-                                configurations={configurations}
-                            />
-                        ) : (
-                            ''
-                        )}
-                    </div>
+                <div>
+                    {configurations ? (
+                        <ConfigTabs
+                            loading={loading}
+                            configurations={configurations}
+                        />
+                    ) : (
+                        ''
+                    )}
                 </div>
             </div>
-        </ConfigurationsProvider>
+        </div>
     )
 }
