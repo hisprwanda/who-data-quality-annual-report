@@ -52,7 +52,7 @@ export const DenominatorRelations = ({toggleState, configurations}) => {
   const [selectedDenominatorB, setSelectedDenominatorB] = useState('')
   const [filteredDenominators, setFilteredDenominators] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
-
+  const [updateType, setUpdateType] = useState('');
 
   const handleDenominatorTypeChange = (type) => {
       // reset the selected denominators
@@ -66,33 +66,34 @@ export const DenominatorRelations = ({toggleState, configurations}) => {
   }
 
   const onSaveDenominatorUpdates = async (updateType) => {
-    // generate and set the new denominator code
-    const newDenominatorCode = generateDenominatorRelationCode(configurations.denominatorRelations)
-    setNewDenominatorRelationInfo({...newDenominatorRelationInfo, code:newDenominatorCode})
-
     //show a loader while updating
     setIsLoading(true)
 
     if (updateType === 'create') {
-        const updatedConfigurations = updateDenominatorRelations(
-            configurations,
-            newDenominatorRelationInfo,
-            updateType
-        )
-        const response = await mutate({ configurations: updatedConfigurations })
-        
-        console.log(updatedConfigurations)
-        if (response) {
-          //stop the loader after updating
-            setRelations([...relations, newDenominatorRelationInfo])
-            setIsLoading(false)
-        }
-        setIsModalHidden(true)
+        // generate and set the new denominator code for create only
+        const newDenominatorCode = generateDenominatorRelationCode(configurations.denominatorRelations)
+
+            const updatedConfigurations = updateDenominatorRelations(
+                configurations,
+                newDenominatorRelationInfo,
+                updateType,
+                newDenominatorCode
+            )
+            const response = await mutate({ configurations: updatedConfigurations })
+            
+            console.log(updatedConfigurations)
+            if (response) {
+                //stop the loader after updating
+                setRelations([...relations, newDenominatorRelationInfo])
+                setIsLoading(false)
+            }
+            setIsModalHidden(true)
     } else if (updateType === 'update') {
         const updatedConfigurations = updateDenominatorRelations (
             configurations,
             newDenominatorRelationInfo,
-            updateType
+            updateType,
+            null
         )
         const response = await mutate({ configurations: updatedConfigurations})
         if (response) {
@@ -102,6 +103,15 @@ export const DenominatorRelations = ({toggleState, configurations}) => {
         setIsModalHidden(true)
     }
 }
+
+const onEditRelation = (relation) => {
+    setIsModalHidden(false)
+    setNewDenominatorRelationInfo(relation)
+    setSelectedDenominatorA(relation.A)
+    setSelectedDenominatorB(relation.B)
+    setFilteredDenominators(filterDenominatorsByType(configurations.denominators, relation.type))
+}
+
 
 // delete a denominator relation
 const onDelete = async (relation) => {
@@ -146,7 +156,11 @@ const onDelete = async (relation) => {
                   <TableCell>{relation.criteria}%</TableCell>
                   <TableCell>
                     <Button
-                        name="Primary button" onClick={() => setIsModalHidden(false)} 
+                        name="Primary button" onClick={() => {
+                                onEditRelation(relation)
+                                setUpdateType('update')
+                            }
+                        } 
                         basic button value="default" icon={<IconEdit16 />}> Edit
                     </Button>
                     <Button
@@ -169,7 +183,11 @@ const onDelete = async (relation) => {
                   <TableCell></TableCell>
                   <TableCell> 
                     <Button
-                        name="Primary button" onClick={() => setIsModalHidden(false)} 
+                        name="Primary button" onClick={() => {
+                            setIsModalHidden(false)
+                            setUpdateType('create')
+                        }
+                        } 
                         primary button value="default" icon={<IconAdd16 />}> Add Relations
                     </Button>
                   </TableCell>
@@ -266,7 +284,7 @@ const onDelete = async (relation) => {
             <ModalActions>
                 <ButtonStrip end>
                     <Button  secondary onClick={() => setIsModalHidden(true)}> Cancel </Button>
-                    <Button loading={isLoading}  primary onClick={()=> onSaveDenominatorUpdates('create')}>   Create </Button>
+                    <Button loading={isLoading}  primary onClick={()=> onSaveDenominatorUpdates(updateType)}> {updateType=== 'create'? 'Create': 'Update'} </Button>
                 </ButtonStrip>
             </ModalActions>
         </Modal>

@@ -109,7 +109,7 @@ export const createNewDenominator = (configurations, newDenominatorInfo) => {
 }
 
 // create new denominator relation 
-export const updateDenominatorRelations = (configurations, newDenominatorRelationInfo, updateType) => {
+export const updateDenominatorRelations = (configurations, newDenominatorRelationInfo, updateType, newCode) => {
   
     const metaDataVersion = configurations.metaDataVersion; 
     const numerators = configurations.numerators;
@@ -125,7 +125,7 @@ export const updateDenominatorRelations = (configurations, newDenominatorRelatio
     const newDenominatorRelation = {
       A: newDenominatorRelationInfo.A,
       B: newDenominatorRelationInfo.B,
-      code: newDenominatorRelationInfo.code,
+      code: newCode,
       name: newDenominatorRelationInfo.name,
       criteria: newDenominatorRelationInfo.criteria,
       type: newDenominatorRelationInfo.type
@@ -137,10 +137,18 @@ export const updateDenominatorRelations = (configurations, newDenominatorRelatio
     switch (updateType) {
         case 'update':
             configurationsToSave = {
-                // finish this later
+                metaDataVersion,
+                numerators,
+                coreIndicators,
+                dataSets,
+                denominators,
+                denominatorRelations: updateDenominatorRelation(denominatorRelations, newDenominatorRelationInfo),
+                externalRelations,
+                numeratorRelations,
+                groups
             }
             break
-        case 'add':
+        case 'create':
             configurationsToSave = {
                 metaDataVersion,
                 numerators,
@@ -272,6 +280,25 @@ const updateNumerator = (numerators, updatedNumerator) => {
     return numerators
 }
 
+const updateDenominatorRelation = (denominatorRelations, updatedDenominatorRelation) => {
+    
+        const currentDenominatorRelation = denominatorRelations.find(
+            (denominatorRelation) =>
+                denominatorRelation.code === updatedDenominatorRelation.code
+        )
+        if (currentDenominatorRelation) {
+            //update the numerator with new values
+            currentDenominatorRelation.A = updatedDenominatorRelation.A
+            currentDenominatorRelation.B = updatedDenominatorRelation.B
+            currentDenominatorRelation.name = updatedDenominatorRelation.name
+            currentDenominatorRelation.criteria = updatedDenominatorRelation.criteria
+            currentDenominatorRelation.type = updatedDenominatorRelation.type
+        }
+    return denominatorRelations
+}
+
+
+
 const updateNumeratorParameters = (numerators, updatedNumerators) => {
     //   const numerator = numerators.find(numerator => numerator.code === updatedNumerator.code);
     // if (numerator) {
@@ -353,3 +380,10 @@ const updateOneGroup = (groups, groupUpdateInfo, updateType) => {
             break
     }
 }
+
+const deleteDenominatorRelation = (denominatorRelations, denominatorRelationCode) => {
+    return denominatorRelations.filter(denominatorRelation => denominatorRelation.code !== denominatorRelationCode);
+}
+
+
+

@@ -23,7 +23,7 @@ export const generateDenominatorRelationCode = (denominatorRelations) => {
     if (denominatorRelations.length == 0) {
         return 'DR' + '1'
     }
-    const newCode = 'DR' + denominatorRelations.length + 1
+    const newCode = 'DR' + (denominatorRelations.length + 1)
 
     return newCode
 }
