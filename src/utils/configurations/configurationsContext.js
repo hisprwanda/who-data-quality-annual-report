@@ -13,8 +13,8 @@ import { configurationsReducer } from './configurationsReducer.js'
 // todo:
 // 4. set up a datastore key if one isn't already with default config (RWDQA-50)
 
-// todo: edit endpoint
-const DATASTORE_ENDPOINT = 'dataStore/who-dqa/configurationsKai'
+const DATASTORE_KEY = process.env.REACT_APP_DHIS2_APP_DATASTORE_KEY || 'configurations'
+const DATASTORE_ENDPOINT = 'dataStore/who-dqa/' + DATASTORE_KEY
 const CONFIGURATIONS_QUERY = {
     configurations: {
         resource: DATASTORE_ENDPOINT,
