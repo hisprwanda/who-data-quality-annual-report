@@ -131,6 +131,8 @@ export const SectionOne = ({ reportParameters }) => {
             reportQueryResponse: data,
             mappedConfigurations: reportParameters.mappedConfiguration,
             period: reportParameters.periods[0].id,
+            periodsIDs: reportParameters.periods.map((p) => p.id),
+            overallOrgUnit: reportParameters.orgUnits[0],
         })
 
         return (

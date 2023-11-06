@@ -3,6 +3,7 @@ import H from 'highcharts'
 import HB from 'highcharts/modules/bullet'
 import HNDTD from 'highcharts/modules/no-data-to-display'
 import { generateSection1Chart } from './section1/section1ChartGenerator.js'
+import { generateSection2Chart } from './section2/section2ChartGenerator.js'
 import { generateSection3Chart } from './section3/section3ChartGenerator.js'
 import { generateSection4Chart } from './section4/section4ChartGenerator.js'
 
@@ -65,6 +66,11 @@ export const generateChart = (sectionId, canvasId, chartInfo) => {
     switch (sectionId) {
         case 'section1': {
             chartConfig = generateSection1Chart(canvasId, chartInfo)
+            break
+        }
+        case 'section2d':
+        case 'section2e': {
+            chartConfig = generateSection2Chart(canvasId, chartInfo)
             break
         }
         case 'section3': {

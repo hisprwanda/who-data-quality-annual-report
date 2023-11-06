@@ -5,8 +5,8 @@ msgstr ""
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1)\n"
-"POT-Creation-Date: 2023-11-02T09:47:40.459Z\n"
-"PO-Revision-Date: 2023-11-02T09:47:40.459Z\n"
+"POT-Creation-Date: 2023-11-02T15:06:16.778Z\n"
+"PO-Revision-Date: 2023-11-02T15:06:16.778Z\n"
 
 msgid "Select period(s)"
 msgstr "Select period(s)"
@@ -23,11 +23,17 @@ msgstr "No data to display"
 msgid "Chart not available"
 msgstr "Chart not available"
 
+msgid "<b>{{name}}</b><br/>Survey: {{survey}}%<br/>Routine: {{routine}}%"
+msgstr "<b>{{name}}</b><br/>Survey: {{survey}}%<br/>Routine: {{routine}}%"
+
 msgid "Routine"
 msgstr "Routine"
 
 msgid "Survey"
 msgstr "Survey"
+
+msgid "Survey: {{survey}}%<br/>Routine: {{routine}}%"
+msgstr "Survey: {{survey}}%<br/>Routine: {{routine}}%"
 
 msgid "Org units"
 msgstr "Org units"
@@ -37,6 +43,9 @@ msgstr "% Completeness"
 
 msgid "Reporting completeness over time"
 msgstr "Reporting completeness over time"
+
+msgid "<b>{{name}}</b><br/>{{yLabel}}: {{y}}<br/>{{xLabel}}: {{x}}"
+msgstr "<b>{{name}}</b><br/>{{yLabel}}: {{y}}<br/>{{xLabel}}: {{x}}"
 
 msgid "Group"
 msgstr "Group"
