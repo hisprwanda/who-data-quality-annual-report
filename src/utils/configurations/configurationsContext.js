@@ -11,10 +11,6 @@ import React, { useState, useContext } from 'react'
 import { configurationsReducer } from './configurationsReducer.js'
 
 // todo:
-// 1. fetch & share configurations with all consumers ✅
-// 2. make a generic mutation function ✅
-// 3. each mutation should 1) sync with the server 2) check for errors ✅✅
-// - if there's an error, 1) roll back local state 2) show an error message ✅✅
 // 4. set up a datastore key if one isn't already with default config (RWDQA-50)
 
 // todo: edit endpoint
@@ -103,7 +99,6 @@ export const useConfigurations = () => {
         )
     }
 
-    // return just `configurations`, not `setConfigurations`
     return configurations
 }
 

@@ -1,5 +1,6 @@
 import { getNextAvailableCode } from '../getNextAvailableCode.js'
 
+// Action types
 export const CREATE_NUMERATOR_RELATION = 'CREATE_NUMERATOR_RELATION'
 export const UPDATE_NUMERATOR_RELATION = 'UPDATE_NUMERATOR_RELATION'
 export const DELETE_NUMERATOR_RELATION = 'DELETE_NUMERATOR_RELATION'
