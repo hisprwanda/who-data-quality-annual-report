@@ -1,4 +1,3 @@
-import { CircularLoader } from '@dhis2/ui'
 import PropTypes from 'prop-types'
 import React, { useState } from 'react'
 import styles from './ConfigTabs.module.css'
@@ -10,7 +9,7 @@ import { NumeratorGroups } from './tab-contents/NumeratorGroups.js'
 import { NumeratorParameters } from './tab-contents/NumeratorParameters.js'
 import { Numerators } from './tab-contents/Numerators.js'
 
-function Tabs({ loading, configurations, mappedNumerators }) {
+function Tabs({ configurations, mappedNumerators }) {
     const [toggleState, setToggleState] = useState(1)
 
     const toggleTab = (index) => {
@@ -86,101 +85,93 @@ function Tabs({ loading, configurations, mappedNumerators }) {
             </div>
 
             <div className={styles.contentTabs}>
-                {loading ? (
-                    <div className={styles.circularLoader}>
-                        <CircularLoader large />
-                    </div>
-                ) : (
-                    <>
-                        {/* TODO: find a way to pass the state globally or use the context api to share these data */}
-                        <div
-                            className={
-                                toggleState === 1
-                                    ? styles.activeContent
-                                    : styles.content
-                            }
-                        >
-                            <Numerators
-                                toggleState={toggleState}
-                                configurations={configurations}
-                            />
-                        </div>
-                        <div
-                            className={
-                                toggleState === 2
-                                    ? styles.activeContent
-                                    : styles.content
-                            }
-                        >
-                            <NumeratorGroups
-                                toggleState={toggleState}
-                                configurations={configurations}
-                            />
-                        </div>
-                        <div
-                            className={
-                                toggleState === 3
-                                    ? styles.activeContent
-                                    : styles.content
-                            }
-                        >
-                            <NumeratorRelations
-                                toggleState={toggleState}
-                                configurations={configurations}
-                                mappedNumerators={mappedNumerators}
-                            />
-                        </div>
-                        <div
-                            className={
-                                toggleState === 4
-                                    ? styles.activeContent
-                                    : styles.content
-                            }
-                        >
-                            <NumeratorParameters
-                                toggleState={toggleState}
-                                configurations={configurations}
-                                mappedNumerators={mappedNumerators}
-                            />
-                        </div>
-                        <div
-                            className={
-                                toggleState === 5
-                                    ? styles.activeContent
-                                    : styles.content
-                            }
-                        >
-                            <Denominators
-                                toggleState={toggleState}
-                                configurations={configurations}
-                            />
-                        </div>
-                        <div
-                            className={
-                                toggleState === 6
-                                    ? styles.activeContent
-                                    : styles.content
-                            }
-                        >
-                            <DenominatorRelations
-                                toggleState={toggleState}
-                                configurations={configurations}
-                            />
-                        </div>
-                        <div
-                            className={
-                                toggleState === 7
-                                    ? styles.activeContent
-                                    : styles.content
-                            }
-                        >
-                            <ExternalDataComparison
-                                toggleState={toggleState}
-                                configurations={configurations}
-                            />
-                        </div>
-                    </>
-                )}
+                {/* TODO: use useConfigurations instead of prop drilling */}
+                <div
+                    className={
+                        toggleState === 1
+                            ? styles.activeContent
+                            : styles.content
+                    }
+                >
+                    <Numerators
+                        toggleState={toggleState}
+                        configurations={configurations}
+                    />
+                </div>
+                <div
+                    className={
+                        toggleState === 2
+                            ? styles.activeContent
+                            : styles.content
+                    }
+                >
+                    <NumeratorGroups
+                        toggleState={toggleState}
+                        configurations={configurations}
+                    />
+                </div>
+                <div
+                    className={
+                        toggleState === 3
+                            ? styles.activeContent
+                            : styles.content
+                    }
+                >
+                    <NumeratorRelations
+                        toggleState={toggleState}
+                        configurations={configurations}
+                        mappedNumerators={mappedNumerators}
+                    />
+                </div>
+                <div
+                    className={
+                        toggleState === 4
+                            ? styles.activeContent
+                            : styles.content
+                    }
+                >
+                    <NumeratorParameters
+                        toggleState={toggleState}
+                        configurations={configurations}
+                        mappedNumerators={mappedNumerators}
+                    />
+                </div>
+                <div
+                    className={
+                        toggleState === 5
+                            ? styles.activeContent
+                            : styles.content
+                    }
+                >
+                    <Denominators
+                        toggleState={toggleState}
+                        configurations={configurations}
+                    />
+                </div>
+                <div
+                    className={
+                        toggleState === 6
+                            ? styles.activeContent
+                            : styles.content
+                    }
+                >
+                    <DenominatorRelations
+                        toggleState={toggleState}
+                        configurations={configurations}
+                    />
+                </div>
+                <div
+                    className={
+                        toggleState === 7
+                            ? styles.activeContent
+                            : styles.content
+                    }
+                >
+                    <ExternalDataComparison
+                        toggleState={toggleState}
+                        configurations={configurations}
+                    />
+                </div>
             </div>
         </div>
     )
@@ -188,7 +179,6 @@ function Tabs({ loading, configurations, mappedNumerators }) {
 
 Tabs.propTypes = {
     configurations: PropTypes.object,
-    loading: PropTypes.bool,
     mappedNumerators: PropTypes.array,
 }
 
