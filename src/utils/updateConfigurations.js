@@ -130,23 +130,54 @@ export const updateDenominatorRelations = (configurations, newDenominatorRelatio
       criteria: newDenominatorRelationInfo.criteria,
       type: newDenominatorRelationInfo.type
     }
-  
-    const configurationsToSave = {
-      metaDataVersion,
-      numerators,
-      coreIndicators,
-      dataSets,
-      denominators,
-      denominatorRelations: [...denominatorRelations, newDenominatorRelation],
-      externalRelations,
-      numeratorRelations,
-      groups
+
+    let configurationsToSave = {};
+
+
+    switch (updateType) {
+        case 'update':
+            configurationsToSave = {
+                // finish this later
+            }
+            break
+        case 'add':
+            configurationsToSave = {
+                metaDataVersion,
+                numerators,
+                coreIndicators,
+                dataSets,
+                denominators,
+                denominatorRelations: [...denominatorRelations, newDenominatorRelation],
+                externalRelations,
+                numeratorRelations,
+                groups
+              }
+            break
+        case 'delete':
+            configurationsToSave = {
+                    metaDataVersion,
+                    numerators,
+                    coreIndicators,
+                    dataSets,
+                    denominators,
+                    denominatorRelations: deleteDenominatorRelation(denominatorRelations, newDenominatorRelationInfo.code),
+                    externalRelations,
+                    numeratorRelations,
+                    groups
+            }
+            break
+
+        default:
+            break
     }
+  
+    
   
     return configurationsToSave;
 
 }
 
+// TODO: update this method to handle all types of configurations update and if succeed delete the other update methods
 export const updateConfigurations = (configurations, configurationType, updateType, configsUpdateInfo) => {
    
   const metaDataVersion = configurations.metaDataVersion; 

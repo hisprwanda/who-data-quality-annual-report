@@ -103,6 +103,20 @@ export const DenominatorRelations = ({toggleState, configurations}) => {
     }
 }
 
+// delete a denominator relation
+const onDelete = async (relation) => {
+    const updatedConfigurations = updateDenominatorRelations(
+        configurations,
+        relation,
+        'delete'
+    )
+    const response = await mutate({ configurations: updatedConfigurations })
+    if (response) {
+        setRelations(relations.filter((item) => item.code !== relation.code))
+    }
+}
+
+
 
   useEffect(() => {
     setRelations(configurations.denominatorRelations)
@@ -136,7 +150,7 @@ export const DenominatorRelations = ({toggleState, configurations}) => {
                         basic button value="default" icon={<IconEdit16 />}> Edit
                     </Button>
                     <Button
-                        name="Primary button" onClick={() => window.alert('It works!')} 
+                        name="Primary button" onClick={() => onDelete(relation)} 
                         destructive button value="default" icon={<IconDelete16 />}> Delete
                     </Button>
                   </TableCell>
@@ -211,7 +225,7 @@ export const DenominatorRelations = ({toggleState, configurations}) => {
                                 selected={selectedDenominatorA}
                             > 
                             {filteredDenominators? filteredDenominators.map((denominator, key) =>
-                                <SingleSelectOption label={denominator.displayName} value={denominator.code} key={key} />
+                                <SingleSelectOption label={denominator.name} value={denominator.code} key={key} />
                                 ) : '' }
                             </SingleSelect>
                         </TableCell>                      
