@@ -45,7 +45,7 @@ export const ReportData = ({ reportParameters }) => {
                 )}
             </SectionLayout>
             <SectionLayout title="Domain 4 - Consistency of Population Data">
-                {reportParameters?.mappedConfiguration?.externalRelations
+                {reportParameters?.mappedConfiguration?.denominatorRelations
                     ?.length > 0 ? (
                     <SectionFour reportParameters={reportParameters} />
                 ) : (
