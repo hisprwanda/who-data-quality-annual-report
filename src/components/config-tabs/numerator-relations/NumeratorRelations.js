@@ -15,7 +15,7 @@ import PropTypes from 'prop-types'
 import React, { useState, useCallback } from 'react'
 import {
     useConfigurations,
-    useDispatchConfigurationsUpdate,
+    useConfigurationsDispatch,
     CREATE_NUMERATOR_RELATION,
 } from '../../../utils/index.js'
 import { EditNumeratorRelationModal } from './EditNumeratorRelationModal.js'
@@ -23,7 +23,7 @@ import { NumeratorRelationTableItem } from './NumeratorRelationTableItem.js'
 
 const AddNumeratorRelationButton = ({ configurations }) => {
     const [addNewModalOpen, setAddNewModalOpen] = useState(false)
-    const dispatch = useDispatchConfigurationsUpdate()
+    const dispatch = useConfigurationsDispatch()
 
     const openModal = useCallback(() => setAddNewModalOpen(true), [])
     const closeModal = useCallback(() => setAddNewModalOpen(false), [])

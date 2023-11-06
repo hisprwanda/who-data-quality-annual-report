@@ -2,7 +2,7 @@ import { Button, TableCell, TableRow, ButtonStrip } from '@dhis2/ui'
 import PropTypes from 'prop-types'
 import React, { useState, useMemo, useCallback } from 'react'
 import {
-    useDispatchConfigurationsUpdate,
+    useConfigurationsDispatch,
     DELETE_NUMERATOR_RELATION,
     UPDATE_NUMERATOR_RELATION,
 } from '../../../utils/index.js'
@@ -16,7 +16,7 @@ import { EditNumeratorRelationModal } from './EditNumeratorRelationModal.js'
 /** Manages the "update form" modal and datastore mutation */
 const EditRelationButton = ({ relation }) => {
     const [editModalOpen, setEditModalOpen] = useState(false)
-    const dispatch = useDispatchConfigurationsUpdate()
+    const dispatch = useConfigurationsDispatch()
 
     const openModal = useCallback(() => setEditModalOpen(true), [])
     const closeModal = useCallback(() => setEditModalOpen(false), [])
@@ -56,7 +56,7 @@ EditRelationButton.propTypes = {
 /** Manages the "delete confirmation" modal and datastore mutation */
 const DeleteRelationButton = ({ relation }) => {
     const [confirmationModalOpen, setConfirmationModalOpen] = useState(false)
-    const dispatch = useDispatchConfigurationsUpdate()
+    const dispatch = useConfigurationsDispatch()
 
     const openModal = useCallback(() => setConfirmationModalOpen(true), [])
     const closeModal = useCallback(() => setConfirmationModalOpen(false), [])

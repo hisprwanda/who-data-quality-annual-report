@@ -58,8 +58,8 @@ const SetConfigurationsContext = React.createContext()
  * Further updates should be reflected locally without needing to refetch
  */
 export const ConfigurationsProvider = ({ children }) => {
-    const [configurations, setConfigurations] = useState()
-    const { loading, error } = useDataQuery(CONFIGURATIONS_QUERY, {
+    const [configurations, setConfigurations] = useState({})
+    const { loading, error, data } = useDataQuery(CONFIGURATIONS_QUERY, {
         onComplete: (data) => {
             setConfigurations(data.configurations)
         },
@@ -74,6 +74,11 @@ export const ConfigurationsProvider = ({ children }) => {
     if (error) {
         console.error(error)
         return <ErrorInfo errorMessage={error.message} />
+    }
+
+    // this check helps avoid crashes during hot-reloads in development
+    if (!data) {
+        return null
     }
 
     return (
@@ -113,7 +118,7 @@ const UPDATE_CONFIGURATIONS_MUTATION = {
  * updates the `configurations` state locally, and syncs the new configurations
  * with the server. It also handles errors with the network request
  */
-const useUpdateConfigurations = () => {
+export const useUpdateConfigurations = () => {
     const setConfigurations = useContext(SetConfigurationsContext)
     const engine = useDataEngine()
     const { show } = useAlert(
@@ -159,19 +164,67 @@ const useUpdateConfigurations = () => {
     return updateConfigurations
 }
 
-export const useDispatchConfigurationsUpdate = () => {
-    const configurations = useConfigurations()
-    const updateConfigurations = useUpdateConfigurations()
+/**
+ * Returns a `dispatch` function, intended to a `data` parameter with the shape
+ * { type, payload }.
+ * type is an action type, which can be found in configurationsReducer.js
+ * payload is the required information to complete the relevant action
+ *
+ * Invokes the reducer function found in configurationsReducer.js to get a new
+ * configurations object, then sets the local state to that new object,
+ * attempts to sync that object with the server, and handles any errors
+ *
+ * Doesn't exactly use `useReducer` under the hood, but matches the same
+ * behavior, pattern, and function signature, so the guidelines at
+ * https://react.dev/reference/react/useReducer are relevant and helpful.
+ * (`useState` is used here to help integrate with optimistic updates and
+ * error checking)
+ */
+export const useConfigurationsDispatch = () => {
+    const setConfigurations = useContext(SetConfigurationsContext)
+    const engine = useDataEngine()
+    const { show } = useAlert(
+        ({ errorMessage }) => 'Configurations update failed: ' + errorMessage,
+        { critical: true }
+    )
+
+    if (!setConfigurations) {
+        throw new Error(
+            'useUpdateConfigurations must be used inside of a ConfigurationsProvider'
+        )
+    }
 
     const dispatch = React.useCallback(
-        ({ type, payload }) => {
-            const newConfigurations = configurationsReducer(configurations, {
-                type,
-                payload,
+        async ({ type, payload }) => {
+            let configurationsBackup
+            let newConfigurations
+            // set local configurations object (optimistically)
+            // use a function as an arg to get previous value without needing
+            // a dependency on `configurations`
+            setConfigurations((prevConfigurations) => {
+                // save a backup in case the mutation fails
+                configurationsBackup = prevConfigurations
+                // use reducer to get the new configurations object
+                newConfigurations = configurationsReducer(prevConfigurations, {
+                    type,
+                    payload,
+                })
+                return newConfigurations
             })
-            updateConfigurations(newConfigurations)
+            try {
+                // update the configurations on the server
+                await engine.mutate(UPDATE_CONFIGURATIONS_MUTATION, {
+                    variables: { newConfigurations },
+                })
+            } catch (err) {
+                // if it fails, roll back to previous configurations locally
+                setConfigurations(configurationsBackup)
+                // and alert the error
+                show({ errorMessage: err.message })
+                console.error(err)
+            }
         },
-        [configurations, updateConfigurations]
+        [setConfigurations, engine, show]
     )
 
     return dispatch
