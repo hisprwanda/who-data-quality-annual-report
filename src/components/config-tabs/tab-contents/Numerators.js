@@ -87,7 +87,7 @@ export const Numerators = ({toggleState, configurations}) => {
         // setIsHidden(false);    //TODO: uncomment after implementing warning modal
         console.log('configurations in ondelete: ', configurations)
 
-        const updatedConfigurations = updateConfigurations({configurations, 'numerators', 'delete', numeratorToDelete});
+        const updatedConfigurations = updateConfigurations(configurations, 'numerators', 'delete', numeratorToDelete);
         setNumerators(numerators.filter(numerator => numerator.code !== numeratorToDelete.code));
         await mutate({ configurations: updatedConfigurations })
     }
