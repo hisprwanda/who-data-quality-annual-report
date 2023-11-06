@@ -69,7 +69,9 @@ export const ConfigurationsProvider = ({ children }) => {
 
     if (error) {
         console.error(error)
-        return <ErrorInfo errorMessage={error.message} />
+        return (
+            <ErrorInfo errorMessage={error.details?.message || error.message} />
+        )
     }
 
     // this check helps avoid crashes during hot-reloads in development
@@ -146,11 +148,11 @@ export const useUpdateConfigurations = () => {
                     variables: { newConfigurations },
                 })
             } catch (err) {
-                console.error(err)
                 // if it fails, roll back to previous configurations locally
                 setConfigurations(configurationsBackup)
                 // and alert the error
-                show({ errorMessage: err.message })
+                show({ errorMessage: err.details?.message || err.message })
+                console.error(err, { details: err.details })
             }
         },
         [setConfigurations, engine, show]
@@ -215,8 +217,8 @@ export const useConfigurationsDispatch = () => {
                 // if it fails, roll back to previous configurations locally
                 setConfigurations(configurationsBackup)
                 // and alert the error
-                show({ errorMessage: err.message })
-                console.error(err)
+                show({ errorMessage: err.details?.message || err.message })
+                console.error(err, { details: err.details })
             }
         },
         [setConfigurations, engine, show]
