@@ -49,6 +49,7 @@ ErrorInfo.propTypes = { errorMessage: PropTypes.string }
 // and vice versa (it's a small optimization)
 const ConfigurationsContext = React.createContext()
 const SetConfigurationsContext = React.createContext()
+const RefetchConfigurationsContext = React.createContext()
 
 /**
  * This will fetch configurations once, then maintain it in state.
@@ -56,7 +57,7 @@ const SetConfigurationsContext = React.createContext()
  */
 export const ConfigurationsProvider = ({ children }) => {
     const [configurations, setConfigurations] = useState(null)
-    const { loading, error } = useDataQuery(CONFIGURATIONS_QUERY, {
+    const { loading, error, refetch } = useDataQuery(CONFIGURATIONS_QUERY, {
         onComplete: (data) => {
             setConfigurations(data.configurations)
         },
@@ -83,7 +84,9 @@ export const ConfigurationsProvider = ({ children }) => {
     return (
         <ConfigurationsContext.Provider value={configurations}>
             <SetConfigurationsContext.Provider value={setConfigurations}>
-                {children}
+                <RefetchConfigurationsContext.Provider value={refetch}>
+                    {children}
+                </RefetchConfigurationsContext.Provider>
             </SetConfigurationsContext.Provider>
         </ConfigurationsContext.Provider>
     )
@@ -103,6 +106,18 @@ export const useConfigurations = () => {
     }
 
     return configurations
+}
+
+export const useRefetchConfigurations = () => {
+    const refetch = useContext(RefetchConfigurationsContext)
+
+    if (refetch === undefined) {
+        throw new Error(
+            'useConfigurations must be used inside of a ConfigurationsProvider'
+        )
+    }
+
+    return refetch
 }
 
 const UPDATE_CONFIGURATIONS_MUTATION = {
