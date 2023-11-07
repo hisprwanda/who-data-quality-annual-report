@@ -59,7 +59,6 @@ export const ConfigurationsProvider = ({ children }) => {
     const [configurations, setConfigurations] = useState(null)
     const { loading, error, refetch } = useDataQuery(CONFIGURATIONS_QUERY, {
         onComplete: (data) => {
-            console.log('complete')
             setConfigurations(data.configurations)
         },
         // todo: on error, check if the datastore key doesn't exist yet.
@@ -109,6 +108,15 @@ export const useConfigurations = () => {
     return configurations
 }
 
+/**
+ * NOTE THAT THIS IS A HOLD-OVER TO HANDLE THE CURRENT STATE MANAGEMENT,
+ * i.e. before refactoring to use the more optimized tools in this file like
+ * useConfigurationsDispatch().
+ * 
+ * This app should move towards not using this at all and instead using the
+ * other tools in this file. At that point, this hook can be removed.
+ * See the handling in Numerator Relations for examples
+ */
 export const useRefetchConfigurations = () => {
     const refetch = useContext(RefetchConfigurationsContext)
 
