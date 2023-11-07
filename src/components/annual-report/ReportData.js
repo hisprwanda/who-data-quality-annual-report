@@ -8,7 +8,7 @@ import { SectionFour } from './section4/SectionFour.js'
 
 const SectionLayout = ({ title, children }) => (
     <div>
-        <span className={styles.sectionHeading}>{title.toUpperCase()}</span>
+        <div className={styles.sectionHeading}>{title.toUpperCase()}</div>
         {children}
     </div>
 )

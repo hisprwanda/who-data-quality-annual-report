@@ -1,10 +1,11 @@
 .reportContainer {
-    margin: 16px;
+    padding: 16px;
+    /* this matches the workspaces in other apps */
+    background-color: white;
 }
 
 .sectionHeading {
-    display: block;
-    background: #90caf9; /*blue300*/
+    background: var(--colors-blue400);
     padding: 8px;
     margin: 8px 0;
     font-size: 24px;
