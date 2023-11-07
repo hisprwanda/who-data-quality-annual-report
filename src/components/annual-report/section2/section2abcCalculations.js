@@ -56,6 +56,11 @@ const calculateSections2a2b2c = ({
 
     for (const dx in formattedResponse) {
         const dxInfo = mappedConfiguration.dataElementsAndIndicators?.[dx]
+        // skip if dx is missing from configuration
+        if (!dxInfo) {
+            continue
+        }
+
         const thresholdValues = {
             extremeOutlier: dxInfo?.extremeOutlier || DEFAULT_EXTREME_OUTLIER,
             moderateOutlier:
