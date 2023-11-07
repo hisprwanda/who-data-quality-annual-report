@@ -13,7 +13,8 @@ import { configurationsReducer } from './configurationsReducer.js'
 // todo:
 // 4. set up a datastore key if one isn't already with default config (RWDQA-50)
 
-const DATASTORE_KEY = process.env.REACT_APP_DHIS2_APP_DATASTORE_KEY || 'configurations'
+const DATASTORE_KEY =
+    process.env.REACT_APP_DHIS2_APP_DATASTORE_KEY || 'configurations'
 const DATASTORE_ENDPOINT = 'dataStore/who-dqa/' + DATASTORE_KEY
 const CONFIGURATIONS_QUERY = {
     configurations: {
@@ -54,8 +55,8 @@ const SetConfigurationsContext = React.createContext()
  * Further updates should be reflected locally without needing to refetch
  */
 export const ConfigurationsProvider = ({ children }) => {
-    const [configurations, setConfigurations] = useState({})
-    const { loading, error, data } = useDataQuery(CONFIGURATIONS_QUERY, {
+    const [configurations, setConfigurations] = useState(null)
+    const { loading, error } = useDataQuery(CONFIGURATIONS_QUERY, {
         onComplete: (data) => {
             setConfigurations(data.configurations)
         },
@@ -75,7 +76,7 @@ export const ConfigurationsProvider = ({ children }) => {
     }
 
     // this check helps avoid crashes during hot-reloads in development
-    if (!data) {
+    if (!configurations) {
         return null
     }
 
@@ -95,7 +96,7 @@ ConfigurationsProvider.propTypes = {
 export const useConfigurations = () => {
     const configurations = useContext(ConfigurationsContext)
 
-    if (!configurations) {
+    if (configurations === undefined) {
         throw new Error(
             'useConfigurations must be used inside of a ConfigurationsProvider'
         )
