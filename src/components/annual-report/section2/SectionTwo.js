@@ -1,6 +1,16 @@
+import {
+    Table,
+    TableBody,
+    TableCell,
+    TableCellHead,
+    TableHead,
+    TableRow,
+    TableRowHead,
+} from '@dhis2/ui'
 import PropTypes from 'prop-types'
 import React, { useEffect } from 'react'
 import { Chart } from '../Chart.js'
+import styles from '../reportTables.module.css'
 import { calculateSection2 } from './section2Calculations.js'
 import { useFetchSectionTwoData } from './useFetchSectionTwoData.js'
 
@@ -11,7 +21,7 @@ const sectionInformation = {
             'Extreme outliers, using the standard method. Threshold denotes the number of standard deviations from the mean. Region are counted as divergent if they have one or more extreme outliers for an indicator.',
     },
     section2b: {
-        title: '2a: Moderate outliers',
+        title: '2b: Moderate outliers',
         subtitle:
             'Moderate outliers, using the standard method. Threshold denotes the number of standard deviations from the mean. Region are counted as divergent if they have two or more moderate outliers for an indicator.',
     },
@@ -34,12 +44,16 @@ const sectionInformation = {
 
 const SubSectionLayout = ({ title, subtitle }) => (
     <>
-        <tr>
-            <th colSpan="6">{title}</th>
-        </tr>
-        <tr>
-            <th colSpan="6">{subtitle}</th>
-        </tr>
+        <TableRowHead className={styles.tableRowHead}>
+            <TableCellHead dense colSpan="999">
+                {title}
+            </TableCellHead>
+        </TableRowHead>
+        <TableRow>
+            <TableCell dense colSpan="999">
+                {subtitle}
+            </TableCell>
+        </TableRow>
     </>
 )
 
@@ -49,38 +63,54 @@ SubSectionLayout.propTypes = {
 }
 
 const Sections2a2b2c = ({ title, subtitle, subsectionData }) => (
-    <table>
-        <tbody>
-            <SubSectionLayout title={title} subtitle={subtitle} />
-            <tr>
-                <th rowSpan="2" width="200">
-                    Indicator
-                </th>
-                <th rowSpan="2" width="80">
-                    Threshold
-                </th>
-                <th rowSpan="2" width="80">
-                    Overall score (%)
-                </th>
-                <th colSpan="3">Region with divergent score</th>
-            </tr>
-            <tr>
-                <th width="110">Number</th>
-                <th width="110">Percent</th>
-                <th>Names</th>
-            </tr>
-            {subsectionData.map((dataRow) => (
-                <tr key={dataRow.indicator}>
-                    <td>{dataRow.indicator}</td>
-                    <td>{dataRow.threshold} SD</td>
-                    <td>{dataRow.overallScore}</td>
-                    <td>{dataRow.divergentScores?.number}</td>
-                    <td>{dataRow.divergentScores?.percentage}</td>
-                    <td>{dataRow.divergentScores?.names}</td>
-                </tr>
-            ))}
-        </tbody>
-    </table>
+    <div className={styles.tableContainer}>
+        <Table suppressZebraStriping className={styles.reportTable}>
+            <TableHead>
+                <SubSectionLayout title={title} subtitle={subtitle} />
+                <TableRowHead className={styles.tableRowHead}>
+                    <TableCellHead dense rowSpan="2" width="200">
+                        Indicator
+                    </TableCellHead>
+                    <TableCellHead dense rowSpan="2" width="80">
+                        Threshold
+                    </TableCellHead>
+                    <TableCellHead dense rowSpan="2" width="80">
+                        Overall score (%)
+                    </TableCellHead>
+                    <TableCellHead dense colSpan="3">
+                        Region with divergent score
+                    </TableCellHead>
+                </TableRowHead>
+                <TableRowHead className={styles.tableRowHead}>
+                    <TableCellHead dense width="110">
+                        Number
+                    </TableCellHead>
+                    <TableCellHead dense width="110">
+                        Percent
+                    </TableCellHead>
+                    <TableCellHead dense>Names</TableCellHead>
+                </TableRowHead>
+            </TableHead>
+            <TableBody>
+                {subsectionData.map((dataRow) => (
+                    <TableRow key={dataRow.indicator}>
+                        <TableCell dense>{dataRow.indicator}</TableCell>
+                        <TableCell dense>{dataRow.threshold} SD</TableCell>
+                        <TableCell dense>{dataRow.overallScore}</TableCell>
+                        <TableCell dense>
+                            {dataRow.divergentScores?.number}
+                        </TableCell>
+                        <TableCell dense>
+                            {dataRow.divergentScores?.percentage}
+                        </TableCell>
+                        <TableCell dense>
+                            {dataRow.divergentScores?.names}
+                        </TableCell>
+                    </TableRow>
+                ))}
+            </TableBody>
+        </Table>
+    </div>
 )
 
 Sections2a2b2c.propTypes = {
