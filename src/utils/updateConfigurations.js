@@ -111,10 +111,11 @@ export const createNewDenominator = (configurations, newDenominatorInfo) => {
 // create new denominator relation
 export const updateDenominatorRelations = ({
     configurations,
-    newDenominatorRelationInfo,
+    relation,
     updateType,
     newCode,
 }) => {
+
     const metaDataVersion = configurations.metaDataVersion
     const numerators = configurations.numerators
     const coreIndicators = configurations.coreIndicators
@@ -124,16 +125,18 @@ export const updateDenominatorRelations = ({
     const externalRelations = configurations.externalRelations
     const numeratorRelations = configurations.numeratorRelations
     const groups = configurations.groups
-
+    
     // construct a numerator object
     const newDenominatorRelation = {
-        A: newDenominatorRelationInfo.A,
-        B: newDenominatorRelationInfo.B,
+        A: relation.A,
+        B: relation.B,
         code: newCode,
-        name: newDenominatorRelationInfo.name,
-        criteria: newDenominatorRelationInfo.criteria,
-        type: newDenominatorRelationInfo.type,
+        name: relation.name,
+        criteria: relation.criteria,
+        type: relation.type,
     }
+
+
 
     let configurationsToSave = {}
 
@@ -147,7 +150,7 @@ export const updateDenominatorRelations = ({
                 denominators,
                 denominatorRelations: updateDenominatorRelation(
                     denominatorRelations,
-                    newDenominatorRelationInfo
+                    relation
                 ),
                 externalRelations,
                 numeratorRelations,
@@ -179,7 +182,7 @@ export const updateDenominatorRelations = ({
                 denominators,
                 denominatorRelations: deleteDenominatorRelation(
                     denominatorRelations,
-                    newDenominatorRelationInfo.code
+                    relation.code
                 ),
                 externalRelations,
                 numeratorRelations,
