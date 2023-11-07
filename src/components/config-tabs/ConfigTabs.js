@@ -1,5 +1,6 @@
 import PropTypes from 'prop-types'
 import React, { useState } from 'react'
+import { useRefetchConfigurations } from '../../utils/index.js'
 import styles from './ConfigTabs.module.css'
 import { NumeratorRelations } from './numerator-relations/index.js'
 import { DenominatorRelations } from './tab-contents/DenominatorRelations.js'
@@ -11,8 +12,10 @@ import { Numerators } from './tab-contents/Numerators.js'
 
 function Tabs({ configurations, mappedNumerators }) {
     const [toggleState, setToggleState] = useState(1)
+    const refetch = useRefetchConfigurations()
 
     const toggleTab = (index) => {
+        refetch()
         setToggleState(index)
     }
 

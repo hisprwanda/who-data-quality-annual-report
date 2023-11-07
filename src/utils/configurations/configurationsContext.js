@@ -59,6 +59,7 @@ export const ConfigurationsProvider = ({ children }) => {
     const [configurations, setConfigurations] = useState(null)
     const { loading, error, refetch } = useDataQuery(CONFIGURATIONS_QUERY, {
         onComplete: (data) => {
+            console.log('complete')
             setConfigurations(data.configurations)
         },
         // todo: on error, check if the datastore key doesn't exist yet.
