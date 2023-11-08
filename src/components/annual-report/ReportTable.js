@@ -25,7 +25,7 @@ ReportRowHead.propTypes = { className: PropTypes.string }
 export const ReportTable = ({ className, ...props }) => (
     <Table
         suppressZebraStriping
-        className={cx(styles.tableRowHead, className)}
+        className={cx(styles.reportTable, className)}
         {...props}
     />
 )

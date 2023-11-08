@@ -1,13 +1,8 @@
 import {
-    Table,
     TableBody,
-    TableCell,
-    TableCellHead,
     TableHead,
     TableRow,
-    TableRowHead,
 } from '@dhis2/ui'
-import cx from 'classnames'
 import PropTypes from 'prop-types'
 import React, { useEffect } from 'react'
 import { Chart } from '../Chart.js'
@@ -17,7 +12,6 @@ import {
     ReportRowHead,
     ReportTable,
 } from '../ReportTable.js'
-import tableStyles from '../reportTables.module.css'
 import { calculateSection2 } from './section2Calculations.js'
 import styles from './SectionTwo.module.css'
 import { useFetchSectionTwoData } from './useFetchSectionTwoData.js'
@@ -121,55 +115,52 @@ Sections2a2b2c.propTypes = {
 
 const Section2DBlock = ({ dataRow, index }) => (
     <div className={styles.section2dGrid}>
-        <Table
-            suppressZebraStriping
-            className={cx(tableStyles.reportTable, styles.section2dTable)}
-        >
+        <ReportTable className={styles.section2dTable}>
             <TableHead>
-                <TableRowHead className={tableStyles.tableRowHead}>
-                    <TableCellHead colSpan="2">{dataRow.name}</TableCellHead>
-                </TableRowHead>
+                <ReportRowHead>
+                    <ReportCellHead colSpan="2">{dataRow.name}</ReportCellHead>
+                </ReportRowHead>
             </TableHead>
             <TableBody>
                 <TableRow>
-                    <TableCell dense>Expected trend</TableCell>
-                    <TableCell dense>{dataRow.expectedTrend}</TableCell>
+                    <ReportCell>Expected trend</ReportCell>
+                    <ReportCell>{dataRow.expectedTrend}</ReportCell>
                 </TableRow>
                 <TableRow>
-                    <TableCell dense>Compare region to</TableCell>
-                    <TableCell dense>{dataRow.compareRegionTo}</TableCell>
+                    <ReportCell>Compare region to</ReportCell>
+                    <ReportCell>{dataRow.compareRegionTo}</ReportCell>
                 </TableRow>
                 <TableRow>
-                    <TableCell dense>Quality threshold</TableCell>
-                    <TableCell dense>±{dataRow.qualityThreshold}%</TableCell>
+                    <ReportCell>Quality threshold</ReportCell>
+                    <ReportCell>±{dataRow.qualityThreshold}%</ReportCell>
                 </TableRow>
                 <TableRow>
-                    <TableCell dense>Overall score</TableCell>
-                    <TableCell dense>{dataRow.overallScore}%</TableCell>
+                    <ReportCell>Overall score</ReportCell>
+                    <ReportCell>{dataRow.overallScore}%</ReportCell>
                 </TableRow>
                 <TableRow>
-                    <TableCell dense>
+                    <ReportCell>
                         Number of Region with divergent score
-                    </TableCell>
-                    <TableCell dense>
+                    </ReportCell>
+                    <ReportCell>
                         {dataRow.divergentSubOrgUnits?.number}
-                    </TableCell>
+                    </ReportCell>
                 </TableRow>
                 <TableRow>
-                    <TableCell dense>
+                    <ReportCell>
                         Percent of Region with divergent score
-                    </TableCell>
-                    <TableCell dense>
+                    </ReportCell>
+                    <ReportCell>
                         {dataRow.divergentSubOrgUnits?.percent}%
-                    </TableCell>
+                    </ReportCell>
                 </TableRow>
                 <TableRow>
-                    <TableCell dense colSpan="2">
+                    <ReportCell colSpan="2">
                         {dataRow.divergentSubOrgUnits?.names}
-                    </TableCell>
+                    </ReportCell>
                 </TableRow>
             </TableBody>
-        </Table>
+        </ReportTable>
         {dataRow?.chartInfo?.lineChartInfo && (
             <Chart
                 sectionId={'section2d'}
@@ -196,13 +187,11 @@ Section2DBlock.propTypes = {
 
 const Section2D = ({ title, subtitle, subsectionData }) => (
     <>
-        <div className={styles.marginBottom4}>
-            <Table suppressZebraStriping className={tableStyles.reportTable}>
-                <TableHead>
-                    <SubSectionLayout title={title} subtitle={subtitle} />
-                </TableHead>
-            </Table>
-        </div>
+        <ReportTable className={styles.marginBottom4}>
+            <TableHead>
+                <SubSectionLayout title={title} subtitle={subtitle} />
+            </TableHead>
+        </ReportTable>
         {subsectionData.map((dataRow, index) => (
             <Section2DBlock
                 key={dataRow.name}
@@ -221,71 +210,65 @@ Section2D.propTypes = {
 
 const Section2EBlock = ({ dataRow, index }) => (
     <div className={styles.section2eGrid}>
-        <Table
-            suppressZebraStriping
-            className={cx(tableStyles.reportTable, styles.section2eTable)}
-        >
+        <ReportTable className={styles.section2eTable}>
             <TableHead>
-                <TableRowHead className={tableStyles.tableRowHead}>
-                    <TableCellHead dense colSpan="2">
-                        {dataRow.title}
-                    </TableCellHead>
-                </TableRowHead>
+                <ReportRowHead>
+                    <ReportCellHead colSpan="2">{dataRow.title}</ReportCellHead>
+                </ReportRowHead>
             </TableHead>
             <TableBody>
                 <TableRow>
-                    <TableCell dense>Denominator A</TableCell>
-                    <TableCell dense>{dataRow.A}</TableCell>
+                    <ReportCell>Denominator A</ReportCell>
+                    <ReportCell>{dataRow.A}</ReportCell>
                 </TableRow>
                 <TableRow>
-                    <TableCell dense>Denominator B</TableCell>
-                    <TableCell dense>{dataRow.B}</TableCell>
+                    <ReportCell>Denominator B</ReportCell>
+                    <ReportCell>{dataRow.B}</ReportCell>
                 </TableRow>
                 <TableRow>
-                    <TableCell dense>Expected relationship</TableCell>
-                    <TableCell dense>{dataRow.expectedRelationship}</TableCell>
+                    <ReportCell>Expected relationship</ReportCell>
+                    <ReportCell>{dataRow.expectedRelationship}</ReportCell>
                 </TableRow>
                 <TableRow>
-                    <TableCell dense>Quality threshold</TableCell>
-                    <TableCell dense>
+                    <ReportCell>Quality threshold</ReportCell>
+                    <ReportCell>
                         {dataRow.expectedRelationship === 'Dropout rate'
                             ? ''
                             : '±'}
                         {dataRow.qualityThreshold}
-                    </TableCell>
+                    </ReportCell>
                 </TableRow>
                 <TableRow>
-                    <TableCell dense>Overall score</TableCell>
-                    <TableCell dense>{dataRow.overallScore}%</TableCell>
+                    <ReportCell>Overall score</ReportCell>
+                    <ReportCell>{dataRow.overallScore}%</ReportCell>
                 </TableRow>
                 <TableRow>
-                    <TableCell dense>
+                    <ReportCell>
                         Number of Region with divergent score
-                    </TableCell>
-                    <TableCell dense>
+                    </ReportCell>
+                    <ReportCell>
                         {dataRow.divergentSubOrgUnits?.number}
-                    </TableCell>
+                    </ReportCell>
                 </TableRow>
                 <TableRow>
-                    <TableCell dense>
+                    <ReportCell>
                         Percent of Region with divergent score
-                    </TableCell>
-                    <TableCell dense>
+                    </ReportCell>
+                    <ReportCell>
                         {dataRow.divergentSubOrgUnits?.percentage}%
-                    </TableCell>
+                    </ReportCell>
                 </TableRow>
                 <TableRow>
-                    <TableCell
-                        dense
+                    <ReportCell
                         colSpan="2"
                         /** Make this cell taller */
                         className={styles.section2eDivergentRegions}
                     >
                         {dataRow.divergentSubOrgUnits?.names}
-                    </TableCell>
+                    </ReportCell>
                 </TableRow>
             </TableBody>
-        </Table>
+        </ReportTable>
         {dataRow.chartInfo && (
             <Chart
                 sectionId={'section2e'}
@@ -304,13 +287,11 @@ Section2EBlock.propTypes = {
 
 const Section2E = ({ title, subtitle, subsectionData }) => (
     <>
-        <div className={styles.marginBottom4}>
-            <Table suppressZebraStriping className={tableStyles.reportTable}>
-                <TableHead>
-                    <SubSectionLayout title={title} subtitle={subtitle} />
-                </TableHead>
-            </Table>
-        </div>
+        <ReportTable className={styles.marginBottom4}>
+            <TableHead>
+                <SubSectionLayout title={title} subtitle={subtitle} />
+            </TableHead>
+        </ReportTable>
         {subsectionData.map((dataRow, index) => (
             <Section2EBlock
                 key={dataRow.title}
