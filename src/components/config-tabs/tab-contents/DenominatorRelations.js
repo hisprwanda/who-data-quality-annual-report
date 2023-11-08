@@ -86,9 +86,9 @@ export const DenominatorRelations = ({ toggleState, configurations }) => {
 
             const updatedConfigurations = updateDenominatorRelations({
                 configurations,
-                newDenominatorRelationInfo,
+                relation: newDenominatorRelationInfo,
                 updateType,
-                newDenominatorCode,
+                newCode:newDenominatorCode,
             })
             const response = await mutate({
                 configurations: updatedConfigurations,
@@ -104,7 +104,7 @@ export const DenominatorRelations = ({ toggleState, configurations }) => {
         } else if (updateType === 'update') {
             const updatedConfigurations = updateDenominatorRelations({
                 configurations,
-                newDenominatorRelationInfo,
+                relation:newDenominatorRelationInfo,
                 updateType,
                 newCode: null,
             })
@@ -127,6 +127,25 @@ export const DenominatorRelations = ({ toggleState, configurations }) => {
         setFilteredDenominators(
             filterDenominatorsByType(configurations.denominators, relation.type)
         )
+    }
+
+    // add a new denominator relation
+    const onAddRelation = () => {
+        setIsModalHidden(false)
+
+        // reset the newDenominatorRelationInfo
+        setNewDenominatorRelationInfo({
+            A: '',
+            B: '',
+            code: '',
+            criteria: 12,
+            name: '',
+            type: '',
+        })
+        setSelectedDenominatorA('')
+        setSelectedDenominatorB('')
+        setFilteredDenominators([])
+        setUpdateType('create')
     }
 
     // delete a denominator relation
@@ -236,8 +255,7 @@ export const DenominatorRelations = ({ toggleState, configurations }) => {
                                 <Button
                                     name="Primary button"
                                     onClick={() => {
-                                        setIsModalHidden(false)
-                                        setUpdateType('create')
+                                        onAddRelation()
                                     }}
                                     primary
                                     button
