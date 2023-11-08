@@ -1,5 +1,6 @@
 import PropTypes from 'prop-types'
 import React, { useEffect } from 'react'
+import { Chart } from '../Chart.js'
 import { calculateSection2 } from './section2Calculations.js'
 import { useFetchSectionTwoData } from './useFetchSectionTwoData.js'
 
@@ -88,45 +89,62 @@ Sections2a2b2c.propTypes = {
     title: PropTypes.string,
 }
 
-const Section2DBlock = ({ dataRow }) => (
-    <table>
-        <tbody>
-            <tr>
-                <th colSpan="2">{dataRow.name}</th>
-            </tr>
-            <tr>
-                <td>Expected trend</td>
-                <td>{dataRow.expectedTrend}</td>
-            </tr>
-            <tr>
-                <td>Compare region to</td>
-                <td>{dataRow.compareRegionTo}</td>
-            </tr>
-            <tr>
-                <td>Quality threshold</td>
-                <td>±{dataRow.qualityThreshold}%</td>
-            </tr>
-            <tr>
-                <td>Overall score</td>
-                <td>{dataRow.overallScore}%</td>
-            </tr>
-            <tr>
-                <td>Number of Region with divergent score</td>
-                <td>{dataRow.divergentSubOrgUnits?.number}</td>
-            </tr>
-            <tr>
-                <td>Percent of Region with divergent score</td>
-                <td>{dataRow.divergentSubOrgUnits?.percent}%</td>
-            </tr>
-            <tr>
-                <td colSpan="2">{dataRow.divergentSubOrgUnits?.names}</td>
-            </tr>
-        </tbody>
-    </table>
+const Section2DBlock = ({ dataRow, index }) => (
+    <>
+        <table>
+            <tbody>
+                <tr>
+                    <th colSpan="2">{dataRow.name}</th>
+                </tr>
+                <tr>
+                    <td>Expected trend</td>
+                    <td>{dataRow.expectedTrend}</td>
+                </tr>
+                <tr>
+                    <td>Compare region to</td>
+                    <td>{dataRow.compareRegionTo}</td>
+                </tr>
+                <tr>
+                    <td>Quality threshold</td>
+                    <td>±{dataRow.qualityThreshold}%</td>
+                </tr>
+                <tr>
+                    <td>Overall score</td>
+                    <td>{dataRow.overallScore}%</td>
+                </tr>
+                <tr>
+                    <td>Number of Region with divergent score</td>
+                    <td>{dataRow.divergentSubOrgUnits?.number}</td>
+                </tr>
+                <tr>
+                    <td>Percent of Region with divergent score</td>
+                    <td>{dataRow.divergentSubOrgUnits?.percent}%</td>
+                </tr>
+                <tr>
+                    <td colSpan="2">{dataRow.divergentSubOrgUnits?.names}</td>
+                </tr>
+            </tbody>
+        </table>
+        {dataRow?.chartInfo?.lineChartInfo && (
+            <Chart
+                sectionId={'section2d'}
+                chartId={`line2d_${index}`}
+                chartInfo={dataRow.chartInfo.lineChartInfo}
+            />
+        )}
+        {dataRow?.chartInfo?.scatterChartInfo && (
+            <Chart
+                sectionId={'section2d'}
+                chartId={`scatter2d_${index}`}
+                chartInfo={dataRow.chartInfo.scatterChartInfo}
+            />
+        )}
+    </>
 )
 
 Section2DBlock.propTypes = {
     dataRow: PropTypes.object,
+    index: PropTypes.number,
 }
 
 const Section2D = ({ title, subtitle, subsectionData }) => (
@@ -136,8 +154,12 @@ const Section2D = ({ title, subtitle, subsectionData }) => (
                 <SubSectionLayout title={title} subtitle={subtitle} />
             </tbody>
         </table>
-        {subsectionData.map((dataRow) => (
-            <Section2DBlock key={dataRow.name} dataRow={dataRow} />
+        {subsectionData.map((dataRow, index) => (
+            <Section2DBlock
+                key={dataRow.name}
+                dataRow={dataRow}
+                index={index}
+            />
         ))}
     </>
 )
@@ -148,52 +170,64 @@ Section2D.propTypes = {
     title: PropTypes.string,
 }
 
-const Section2EBlock = ({ dataRow }) => (
-    <table>
-        <tbody>
-            <tr>
-                <th colSpan="2">{dataRow.title}</th>
-            </tr>
-            <tr>
-                <td>Denominator A</td>
-                <td>{dataRow.A}</td>
-            </tr>
-            <tr>
-                <td>Denominator B</td>
-                <td>{dataRow.B}</td>
-            </tr>
-            <tr>
-                <td>Expected relationship</td>
-                <td>{dataRow.expectedRelationship}</td>
-            </tr>
-            <tr>
-                <td>Quality threshold</td>
-                <td>
-                    {dataRow.expectedRelationship === 'Dropout rate' ? '' : '±'}
-                    {dataRow.qualityThreshold}
-                </td>
-            </tr>
-            <tr>
-                <td>Overall score</td>
-                <td>{dataRow.overallScore}%</td>
-            </tr>
-            <tr>
-                <td>Number of Region with divergent score</td>
-                <td>{dataRow.divergentSubOrgUnits?.number}</td>
-            </tr>
-            <tr>
-                <td>Percent of Region with divergent score</td>
-                <td>{dataRow.divergentSubOrgUnits?.percentage}%</td>
-            </tr>
-            <tr>
-                <td colSpan="2">{dataRow.divergentSubOrgUnits?.names}</td>
-            </tr>
-        </tbody>
-    </table>
+const Section2EBlock = ({ dataRow, index }) => (
+    <>
+        <table>
+            <tbody>
+                <tr>
+                    <th colSpan="2">{dataRow.title}</th>
+                </tr>
+                <tr>
+                    <td>Denominator A</td>
+                    <td>{dataRow.A}</td>
+                </tr>
+                <tr>
+                    <td>Denominator B</td>
+                    <td>{dataRow.B}</td>
+                </tr>
+                <tr>
+                    <td>Expected relationship</td>
+                    <td>{dataRow.expectedRelationship}</td>
+                </tr>
+                <tr>
+                    <td>Quality threshold</td>
+                    <td>
+                        {dataRow.expectedRelationship === 'Dropout rate'
+                            ? ''
+                            : '±'}
+                        {dataRow.qualityThreshold}
+                    </td>
+                </tr>
+                <tr>
+                    <td>Overall score</td>
+                    <td>{dataRow.overallScore}%</td>
+                </tr>
+                <tr>
+                    <td>Number of Region with divergent score</td>
+                    <td>{dataRow.divergentSubOrgUnits?.number}</td>
+                </tr>
+                <tr>
+                    <td>Percent of Region with divergent score</td>
+                    <td>{dataRow.divergentSubOrgUnits?.percentage}%</td>
+                </tr>
+                <tr>
+                    <td colSpan="2">{dataRow.divergentSubOrgUnits?.names}</td>
+                </tr>
+            </tbody>
+        </table>
+        {dataRow.chartInfo && (
+            <Chart
+                sectionId={'section2e'}
+                chartId={`chart2e_${index}`}
+                chartInfo={dataRow.chartInfo}
+            />
+        )}
+    </>
 )
 
 Section2EBlock.propTypes = {
     dataRow: PropTypes.object,
+    index: PropTypes.number,
 }
 
 const Section2E = ({ title, subtitle, subsectionData }) => (
@@ -203,8 +237,12 @@ const Section2E = ({ title, subtitle, subsectionData }) => (
                 <SubSectionLayout title={title} subtitle={subtitle} />
             </tbody>
         </table>
-        {subsectionData.map((dataRow) => (
-            <Section2EBlock key={dataRow.title} dataRow={dataRow} />
+        {subsectionData.map((dataRow, index) => (
+            <Section2EBlock
+                key={dataRow.title}
+                dataRow={dataRow}
+                index={index}
+            />
         ))}
     </>
 )

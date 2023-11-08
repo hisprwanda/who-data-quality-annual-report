@@ -41,6 +41,7 @@ ErrorInfo.propTypes = { errorMessage: PropTypes.string }
 // and vice versa (it's a small optimization)
 const ConfigurationsContext = React.createContext()
 const SetConfigurationsContext = React.createContext()
+const RefetchConfigurationsContext = React.createContext()
 
 /**
  * This will fetch configurations once, then maintain it in state.
@@ -48,7 +49,7 @@ const SetConfigurationsContext = React.createContext()
  */
 export const ConfigurationsProvider = ({ children }) => {
     const [configurations, setConfigurations] = useState(null)
-    const { loading, error } = useSetUpConfigurations(setConfigurations)
+    const { loading, error, refetch } = useSetUpConfigurations(setConfigurations)
 
     if (loading) {
         return <LoadingSpinner />
@@ -69,7 +70,9 @@ export const ConfigurationsProvider = ({ children }) => {
     return (
         <ConfigurationsContext.Provider value={configurations}>
             <SetConfigurationsContext.Provider value={setConfigurations}>
-                {children}
+                <RefetchConfigurationsContext.Provider value={refetch}>
+                    {children}
+                </RefetchConfigurationsContext.Provider>
             </SetConfigurationsContext.Provider>
         </ConfigurationsContext.Provider>
     )
@@ -91,61 +94,31 @@ export const useConfigurations = () => {
     return configurations
 }
 
+/**
+ * NOTE THAT THIS IS A HOLD-OVER TO HANDLE THE CURRENT STATE MANAGEMENT,
+ * i.e. before refactoring to use the more optimized tools in this file like
+ * useConfigurationsDispatch().
+ *
+ * This app should move towards not using this at all and instead using the
+ * other tools in this file. At that point, this hook can be removed.
+ * See the handling in Numerator Relations for examples
+ */
+export const useRefetchConfigurations = () => {
+    const refetch = useContext(RefetchConfigurationsContext)
+
+    if (refetch === undefined) {
+        throw new Error(
+            'useConfigurations must be used inside of a ConfigurationsProvider'
+        )
+    }
+
+    return refetch
+}
+
 const UPDATE_CONFIGURATIONS_MUTATION = {
     resource: DATASTORE_ENDPOINT,
     type: 'update',
     data: ({ newConfigurations }) => newConfigurations,
-}
-
-/**
- * Returns updateConfigurations, which accepts a complete new configuration object,
- * updates the `configurations` state locally, and syncs the new configurations
- * with the server. It also handles errors with the network request
- */
-export const useUpdateConfigurations = () => {
-    const setConfigurations = useContext(SetConfigurationsContext)
-    const engine = useDataEngine()
-    const { show } = useAlert(
-        ({ errorMessage }) => 'Configurations update failed: ' + errorMessage,
-        { critical: true }
-    )
-
-    if (!setConfigurations) {
-        throw new Error(
-            'useUpdateConfigurations must be used inside of a ConfigurationsProvider'
-        )
-    }
-
-    const updateConfigurations = React.useCallback(
-        async (newConfigurations) => {
-            // update lastUpdate property in configurations
-            // todo: do here or in configurations reducer?
-            newConfigurations.lastUpdated = new Date().toISOString()
-            let configurationsBackup
-            // set local configurations object (optimistically)
-            // use a function as the arg to avoid needing a dependency on `configurations`
-            setConfigurations((prevConfigurations) => {
-                // save a backup in case the mutation fails
-                configurationsBackup = prevConfigurations
-                return newConfigurations
-            })
-            try {
-                // update the configurations on the server
-                await engine.mutate(UPDATE_CONFIGURATIONS_MUTATION, {
-                    variables: { newConfigurations },
-                })
-            } catch (err) {
-                // if it fails, roll back to previous configurations locally
-                setConfigurations(configurationsBackup)
-                // and alert the error
-                show({ errorMessage: err.details?.message || err.message })
-                console.error(err, { details: err.details })
-            }
-        },
-        [setConfigurations, engine, show]
-    )
-
-    return updateConfigurations
 }
 
 /**
