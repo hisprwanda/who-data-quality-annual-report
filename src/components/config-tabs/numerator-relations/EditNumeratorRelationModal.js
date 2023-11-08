@@ -51,7 +51,7 @@ export function EditNumeratorRelationModal({
         const numeratorsWithDataIds = configurations.numerators
             .filter((numerator) => numerator.dataID != null)
             // sort is okay because filter() creates a copy
-            .toSorted((a, b) => a.name.localeCompare(b.name))
+            .sort((a, b) => a.name.localeCompare(b.name))
         return numeratorsWithDataIds.map(({ name, code }) => ({
             label: name,
             value: code,
