@@ -1,13 +1,8 @@
-import {
-    Table,
-    TableCell,
-    TableCellHead,
-    TableRowHead,
-} from '@dhis2/ui'
+import { Table, TableCell, TableCellHead, TableRowHead } from '@dhis2/ui'
 import cx from 'classnames'
 import PropTypes from 'prop-types'
 import React from 'react'
-import styles from './reportTables.module.css'
+import styles from './ReportTable.module.css'
 
 // These are basically UI components with some config and styles to match the
 // look of the existing report.
