@@ -172,21 +172,20 @@ const getJsonObjectsFormatFromTableFormat = ({
         // adding thresholds where they are not
         if (calculatingFor == 'section1A') {
             rowData['threshold'] =
-                mappedConfigurations?.dataSets?.[currentDataSetId]?.threshold
+                mappedConfigurations.dataSets[currentDataSetId].threshold
         } else if (calculatingFor == 'section1B') {
             rowData['threshold'] =
-                mappedConfigurations?.dataSets?.[
+                mappedConfigurations.dataSets[
                     currentDataSetId
-                ]?.timelinessThreshold
+                ].timelinessThreshold
         } else if (calculatingFor == 'section1D') {
             const comparison =
-                mappedConfigurations?.dataSets?.[currentDataSetId]?.comparison
-            const trend =
-                mappedConfigurations?.dataSets?.[currentDataSetId]?.trend
+                mappedConfigurations.dataSets[currentDataSetId].comparison
+            const trend = mappedConfigurations.dataSets[currentDataSetId].trend
             rowData['threshold'] =
-                mappedConfigurations?.dataSets?.[
+                mappedConfigurations.dataSets[
                     currentDataSetId
-                ]?.consistencyThreshold
+                ].consistencyThreshold
             rowData['trend'] = trend
 
             if (comparison === 'th' && trend === 'constant') {
@@ -238,8 +237,8 @@ const getJsonObjectsFormatFromTableFormat = ({
 // Function to find the numerator
 const findNumerator = (numerators, dataElementID) => {
     return (
-        numerators?.[dataElementID] ||
-        Object.values(numerators ?? {}).find((item) => {
+        numerators[dataElementID] ||
+        Object.values(numerators).find((item) => {
             const parts = item.dataElementOperandID.split('.')
             return parts.length > 1 && parts[0] === dataElementID
         })
@@ -326,9 +325,9 @@ const getJsonObjectsFormatFromTableFormat_DataValues = ({
         const pe = rowData.pe
 
         const currentNumerator = findNumerator(
-            mappedConfigurations?.dataElementsAndIndicators,
+            mappedConfigurations.dataElementsAndIndicators,
             dx
-        ) ?? { dataSetID: [] } // initiate empty object to prevent errors if numerator is missing
+        )
 
         if (!restructuredData[dx]) {
             restructuredData[dx] = {}
@@ -351,7 +350,7 @@ const getJsonObjectsFormatFromTableFormat_DataValues = ({
         //TODO: most values here are not needed while working on count_of_data_values_by_org_unit_level, will find a suitable condition to ignore them
         //construct the object for each
         restructuredData[dx][pe].push({
-            threshold: currentNumerator?.missing, // get this from missing value calculate these above in rows
+            threshold: currentNumerator.missing, // get this from missing value calculate these above in rows
             expectedValues: parseFloat(expectedValues),
             actualValues: parseInt(rowData.value),
             overallScore: parseFloat(
@@ -359,7 +358,7 @@ const getJsonObjectsFormatFromTableFormat_DataValues = ({
             ),
             indicator_name: rowData.indicator_name,
             orgUnitLevelsOrGroups: rowData.orgUnitLevelsOrGroups,
-            correspondingDatasetIDs: currentNumerator?.dataSetID,
+            correspondingDatasetIDs: currentNumerator.dataSetID,
             ou: rowData.ou,
         })
     }
