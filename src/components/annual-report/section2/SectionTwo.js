@@ -1,6 +1,7 @@
 import PropTypes from 'prop-types'
 import React, { useEffect } from 'react'
 import { Chart } from '../Chart.js'
+import { NoDataInfoBox } from '../common/NoDataWarning.js'
 import { calculateSection2 } from './section2Calculations.js'
 import { useFetchSectionTwoData } from './useFetchSectionTwoData.js'
 
@@ -48,40 +49,55 @@ SubSectionLayout.propTypes = {
     title: PropTypes.string,
 }
 
-const Sections2a2b2c = ({ title, subtitle, subsectionData }) => (
-    <table>
-        <tbody>
-            <SubSectionLayout title={title} subtitle={subtitle} />
-            <tr>
-                <th rowSpan="2" width="200">
-                    Indicator
-                </th>
-                <th rowSpan="2" width="80">
-                    Threshold
-                </th>
-                <th rowSpan="2" width="80">
-                    Overall score (%)
-                </th>
-                <th colSpan="3">Region with divergent score</th>
-            </tr>
-            <tr>
-                <th width="110">Number</th>
-                <th width="110">Percent</th>
-                <th>Names</th>
-            </tr>
-            {subsectionData.map((dataRow) => (
-                <tr key={dataRow.indicator}>
-                    <td>{dataRow.indicator}</td>
-                    <td>{dataRow.threshold} SD</td>
-                    <td>{dataRow.overallScore}</td>
-                    <td>{dataRow.divergentScores?.number}</td>
-                    <td>{dataRow.divergentScores?.percentage}</td>
-                    <td>{dataRow.divergentScores?.names}</td>
+const Sections2a2b2c = ({ title, subtitle, subsectionData }) => {
+    if (subsectionData.length === 0) {
+        return (
+            <>
+                <table>
+                    <tbody>
+                        <SubSectionLayout title={title} subtitle={subtitle} />
+                    </tbody>
+                </table>
+                <NoDataInfoBox subsection={true} />
+            </>
+        )
+    }
+
+    return (
+        <table>
+            <tbody>
+                <SubSectionLayout title={title} subtitle={subtitle} />
+                <tr>
+                    <th rowSpan="2" width="200">
+                        Indicator
+                    </th>
+                    <th rowSpan="2" width="80">
+                        Threshold
+                    </th>
+                    <th rowSpan="2" width="80">
+                        Overall score (%)
+                    </th>
+                    <th colSpan="3">Region with divergent score</th>
                 </tr>
-            ))}
-        </tbody>
-    </table>
-)
+                <tr>
+                    <th width="110">Number</th>
+                    <th width="110">Percent</th>
+                    <th>Names</th>
+                </tr>
+                {subsectionData.map((dataRow) => (
+                    <tr key={dataRow.indicator}>
+                        <td>{dataRow.indicator}</td>
+                        <td>{dataRow.threshold} SD</td>
+                        <td>{dataRow.overallScore}</td>
+                        <td>{dataRow.divergentScores?.number}</td>
+                        <td>{dataRow.divergentScores?.percentage}</td>
+                        <td>{dataRow.divergentScores?.names}</td>
+                    </tr>
+                ))}
+            </tbody>
+        </table>
+    )
+}
 
 Sections2a2b2c.propTypes = {
     subsectionData: PropTypes.array,
@@ -147,22 +163,25 @@ Section2DBlock.propTypes = {
     index: PropTypes.number,
 }
 
-const Section2D = ({ title, subtitle, subsectionData }) => (
-    <>
-        <table>
-            <tbody>
-                <SubSectionLayout title={title} subtitle={subtitle} />
-            </tbody>
-        </table>
-        {subsectionData.map((dataRow, index) => (
-            <Section2DBlock
-                key={dataRow.name}
-                dataRow={dataRow}
-                index={index}
-            />
-        ))}
-    </>
-)
+const Section2D = ({ title, subtitle, subsectionData }) => {
+    return (
+        <>
+            <table>
+                <tbody>
+                    <SubSectionLayout title={title} subtitle={subtitle} />
+                </tbody>
+            </table>
+            {subsectionData.length === 0 && <NoDataInfoBox subsection={true} />}
+            {subsectionData.map((dataRow, index) => (
+                <Section2DBlock
+                    key={dataRow.name}
+                    dataRow={dataRow}
+                    index={index}
+                />
+            ))}
+        </>
+    )
+}
 
 Section2D.propTypes = {
     subsectionData: PropTypes.array,
@@ -237,6 +256,7 @@ const Section2E = ({ title, subtitle, subsectionData }) => (
                 <SubSectionLayout title={title} subtitle={subtitle} />
             </tbody>
         </table>
+        {subsectionData.length === 0 && <NoDataInfoBox subsection={true} />}
         {subsectionData.map((dataRow, index) => (
             <Section2EBlock
                 key={dataRow.title}
@@ -280,6 +300,25 @@ export const SectionTwo = ({ reportParameters }) => {
             periods: reportParameters.periods,
             overallOrgUnit: reportParameters.orgUnits[0],
         })
+        // if all subsections are empty, display overall empty message
+        const subsectionNames = [
+            'section2a',
+            'section2b',
+            'section2c',
+            'section2d',
+            'section2e',
+        ]
+        if (
+            subsectionNames
+                .map(
+                    (subsectionName) =>
+                        Object.keys(section2Data?.[subsectionName] ?? []).length
+                )
+                .every((subsectionLength) => subsectionLength === 0)
+        ) {
+            return <NoDataInfoBox subsection={false} />
+        }
+
         return (
             <>
                 <Sections2a2b2c
