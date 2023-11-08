@@ -1,4 +1,7 @@
-/* todo: use 'section container' for sections a-c? */
+/* Section 2a-c */
+.section2abcContainer {
+    margin-bottom: 24px;
+}
 
 /* Section 2d */
 .section2dHeader {
@@ -7,7 +10,7 @@
 
 .section2dBlock {
     display: flex;
-    margin-bottom: 24px;
+    margin-bottom: 36px;
     gap: 4px;
 }
 

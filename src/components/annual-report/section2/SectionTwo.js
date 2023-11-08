@@ -64,7 +64,7 @@ SubSectionLayout.propTypes = {
 }
 
 const Sections2a2b2c = ({ title, subtitle, subsectionData }) => (
-    <div className={tableStyles.tableContainer}>
+    <div className={styles.section2abcContainer}>
         <Table suppressZebraStriping className={tableStyles.reportTable}>
             <TableHead>
                 <SubSectionLayout title={title} subtitle={subtitle} />
