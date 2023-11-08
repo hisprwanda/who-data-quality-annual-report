@@ -1,4 +1,4 @@
-import { useAlert, useDataEngine, useDataQuery } from '@dhis2/app-runtime'
+import { useAlert, useDataEngine } from '@dhis2/app-runtime'
 import {
     Box,
     CenteredContent,
@@ -9,22 +9,10 @@ import {
 import PropTypes from 'prop-types'
 import React, { useState, useContext } from 'react'
 import { configurationsReducer } from './configurationsReducer.js'
-
-// todo:
-// 4. set up a datastore key if one isn't already with default config (RWDQA-50)
-
-// If in a dev environment, use a custom data store key if it's set.
-// Otherwise, use "configurations" (if none is set or in production)
-const DATASTORE_KEY =
-    (process.env.NODE_ENV === 'development' &&
-        process.env.REACT_APP_DHIS2_APP_DATASTORE_KEY) ||
-    'configurations'
-const DATASTORE_ENDPOINT = 'dataStore/who-dqa/' + DATASTORE_KEY
-const CONFIGURATIONS_QUERY = {
-    configurations: {
-        resource: DATASTORE_ENDPOINT,
-    },
-}
+import {
+    useSetUpConfigurations,
+    DATASTORE_ENDPOINT,
+} from './useSetUpConfigurations.js'
 
 const LoadingSpinner = () => (
     <Layer>
@@ -61,13 +49,7 @@ const RefetchConfigurationsContext = React.createContext()
  */
 export const ConfigurationsProvider = ({ children }) => {
     const [configurations, setConfigurations] = useState(null)
-    const { loading, error, refetch } = useDataQuery(CONFIGURATIONS_QUERY, {
-        onComplete: (data) => {
-            setConfigurations(data.configurations)
-        },
-        // todo: on error, check if the datastore key doesn't exist yet.
-        // if not, create one
-    })
+    const { loading, error, refetch } = useSetUpConfigurations(setConfigurations)
 
     if (loading) {
         return <LoadingSpinner />
