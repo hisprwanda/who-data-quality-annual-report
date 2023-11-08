@@ -13,8 +13,12 @@ import { configurationsReducer } from './configurationsReducer.js'
 // todo:
 // 4. set up a datastore key if one isn't already with default config (RWDQA-50)
 
+// If in a dev environment, use a custom data store key if it's set.
+// Otherwise, use "configurations" (if none is set or in production)
 const DATASTORE_KEY =
-    process.env.REACT_APP_DHIS2_APP_DATASTORE_KEY || 'configurations'
+    (process.env.NODE_ENV === 'development' &&
+        process.env.REACT_APP_DHIS2_APP_DATASTORE_KEY) ||
+    'configurations'
 const DATASTORE_ENDPOINT = 'dataStore/who-dqa/' + DATASTORE_KEY
 const CONFIGURATIONS_QUERY = {
     configurations: {
@@ -112,7 +116,7 @@ export const useConfigurations = () => {
  * NOTE THAT THIS IS A HOLD-OVER TO HANDLE THE CURRENT STATE MANAGEMENT,
  * i.e. before refactoring to use the more optimized tools in this file like
  * useConfigurationsDispatch().
- * 
+ *
  * This app should move towards not using this at all and instead using the
  * other tools in this file. At that point, this hook can be removed.
  * See the handling in Numerator Relations for examples

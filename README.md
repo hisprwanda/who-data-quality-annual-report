@@ -4,6 +4,10 @@ This project was bootstrapped with [DHIS2 Application Platform](https://github.c
 
 Follow this link to view [the proposed designs of the app in Figma](https://www.figma.com/proto/r5H9Zq1dAeJ0PXyKmMCJgG/Data-Quality-App---HISP-Rwanda?type=design&node-id=82-24&scaling=min-zoom&page-id=0%3A1&starting-point-node-id=1%3A3)
 
+## Data store
+
+During development, to avoid making changes that affect other developers, you can use a custom data store key. To do this, set the `REACT_APP_DHIS2_APP_DATASTORE_KEY` environment variable to the key of your choice, for example in an `.env.local` file. The default data store key is `configurations`, which will be used in production.
+
 ## Available Scripts
 
 In the project directory, you can run:
