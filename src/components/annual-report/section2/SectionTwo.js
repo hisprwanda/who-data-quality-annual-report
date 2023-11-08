@@ -11,6 +11,12 @@ import cx from 'classnames'
 import PropTypes from 'prop-types'
 import React, { useEffect } from 'react'
 import { Chart } from '../Chart.js'
+import {
+    ReportCell,
+    ReportCellHead,
+    ReportRowHead,
+    ReportTable,
+} from '../ReportTable.js'
 import tableStyles from '../reportTables.module.css'
 import { calculateSection2 } from './section2Calculations.js'
 import styles from './SectionTwo.module.css'
@@ -46,15 +52,11 @@ const sectionInformation = {
 
 const SubSectionLayout = ({ title, subtitle }) => (
     <>
-        <TableRowHead className={tableStyles.tableRowHead}>
-            <TableCellHead dense colSpan="999">
-                {title}
-            </TableCellHead>
-        </TableRowHead>
+        <ReportRowHead>
+            <ReportCellHead colSpan="6">{title}</ReportCellHead>
+        </ReportRowHead>
         <TableRow>
-            <TableCell dense colSpan="999">
-                {subtitle}
-            </TableCell>
+            <ReportCell colSpan="6">{subtitle}</ReportCell>
         </TableRow>
     </>
 )
@@ -66,52 +68,48 @@ SubSectionLayout.propTypes = {
 
 const Sections2a2b2c = ({ title, subtitle, subsectionData }) => (
     <div className={styles.section2abcContainer}>
-        <Table suppressZebraStriping className={tableStyles.reportTable}>
+        <ReportTable>
             <TableHead>
                 <SubSectionLayout title={title} subtitle={subtitle} />
-                <TableRowHead className={tableStyles.tableRowHead}>
-                    <TableCellHead dense rowSpan="2" width="200">
+                <ReportRowHead>
+                    <ReportCellHead rowSpan="2" width="200">
                         Indicator
-                    </TableCellHead>
-                    <TableCellHead dense rowSpan="2" width="80">
+                    </ReportCellHead>
+                    <ReportCellHead rowSpan="2" width="80">
                         Threshold
-                    </TableCellHead>
-                    <TableCellHead dense rowSpan="2" width="80">
+                    </ReportCellHead>
+                    <ReportCellHead rowSpan="2" width="80">
                         Overall score (%)
-                    </TableCellHead>
-                    <TableCellHead dense colSpan="3">
+                    </ReportCellHead>
+                    <ReportCellHead colSpan="3">
                         Region with divergent score
-                    </TableCellHead>
-                </TableRowHead>
-                <TableRowHead className={tableStyles.tableRowHead}>
-                    <TableCellHead dense width="110">
-                        Number
-                    </TableCellHead>
-                    <TableCellHead dense width="110">
-                        Percent
-                    </TableCellHead>
-                    <TableCellHead dense>Names</TableCellHead>
-                </TableRowHead>
+                    </ReportCellHead>
+                </ReportRowHead>
+                <ReportRowHead>
+                    <ReportCellHead width="110">Number</ReportCellHead>
+                    <ReportCellHead width="110">Percent</ReportCellHead>
+                    <ReportCellHead>Names</ReportCellHead>
+                </ReportRowHead>
             </TableHead>
             <TableBody>
                 {subsectionData.map((dataRow) => (
                     <TableRow key={dataRow.indicator}>
-                        <TableCell dense>{dataRow.indicator}</TableCell>
-                        <TableCell dense>{dataRow.threshold} SD</TableCell>
-                        <TableCell dense>{dataRow.overallScore}</TableCell>
-                        <TableCell dense>
+                        <ReportCell>{dataRow.indicator}</ReportCell>
+                        <ReportCell>{dataRow.threshold} SD</ReportCell>
+                        <ReportCell>{dataRow.overallScore}</ReportCell>
+                        <ReportCell>
                             {dataRow.divergentScores?.number}
-                        </TableCell>
-                        <TableCell dense>
+                        </ReportCell>
+                        <ReportCell>
                             {dataRow.divergentScores?.percentage}
-                        </TableCell>
-                        <TableCell dense>
+                        </ReportCell>
+                        <ReportCell>
                             {dataRow.divergentScores?.names}
-                        </TableCell>
+                        </ReportCell>
                     </TableRow>
                 ))}
             </TableBody>
-        </Table>
+        </ReportTable>
     </div>
 )
 
@@ -129,9 +127,7 @@ const Section2DBlock = ({ dataRow, index }) => (
         >
             <TableHead>
                 <TableRowHead className={tableStyles.tableRowHead}>
-                    <TableCellHead dense colSpan="2">
-                        {dataRow.name}
-                    </TableCellHead>
+                    <TableCellHead colSpan="2">{dataRow.name}</TableCellHead>
                 </TableRowHead>
             </TableHead>
             <TableBody>
