@@ -140,57 +140,6 @@ const UPDATE_CONFIGURATIONS_MUTATION = {
 }
 
 /**
- * Returns updateConfigurations, which accepts a complete new configuration object,
- * updates the `configurations` state locally, and syncs the new configurations
- * with the server. It also handles errors with the network request
- */
-export const useUpdateConfigurations = () => {
-    const setConfigurations = useContext(SetConfigurationsContext)
-    const engine = useDataEngine()
-    const { show } = useAlert(
-        ({ errorMessage }) => 'Configurations update failed: ' + errorMessage,
-        { critical: true }
-    )
-
-    if (!setConfigurations) {
-        throw new Error(
-            'useUpdateConfigurations must be used inside of a ConfigurationsProvider'
-        )
-    }
-
-    const updateConfigurations = React.useCallback(
-        async (newConfigurations) => {
-            // update lastUpdate property in configurations
-            // todo: do here or in configurations reducer?
-            newConfigurations.lastUpdated = new Date().toISOString()
-            let configurationsBackup
-            // set local configurations object (optimistically)
-            // use a function as the arg to avoid needing a dependency on `configurations`
-            setConfigurations((prevConfigurations) => {
-                // save a backup in case the mutation fails
-                configurationsBackup = prevConfigurations
-                return newConfigurations
-            })
-            try {
-                // update the configurations on the server
-                await engine.mutate(UPDATE_CONFIGURATIONS_MUTATION, {
-                    variables: { newConfigurations },
-                })
-            } catch (err) {
-                // if it fails, roll back to previous configurations locally
-                setConfigurations(configurationsBackup)
-                // and alert the error
-                show({ errorMessage: err.details?.message || err.message })
-                console.error(err, { details: err.details })
-            }
-        },
-        [setConfigurations, engine, show]
-    )
-
-    return updateConfigurations
-}
-
-/**
  * Returns a `dispatch` function, intended to a `data` parameter with the shape
  * { type, payload }.
  * type is an action type, which can be found in configurationsReducer.js
