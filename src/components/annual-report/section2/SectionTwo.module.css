@@ -37,6 +37,7 @@
     height: 450px;
     /* Width is set by grid template column */
 }
+/* todo: interpretations */
 
 /* Section 2e */
 .section2eGrid {
@@ -57,6 +58,7 @@
     height: 370px;
     /* Width is set by grid template column */
 }
+/* todo: interpretations */
 
 .section2eDivergentRegions {
     height: 73px !important; /* need to override original table cell height */

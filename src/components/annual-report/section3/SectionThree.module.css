@@ -1,0 +1,22 @@
+.marginBottom4 {
+    margin-bottom: 4px;
+}
+.section3Grid {
+    display: grid;
+    grid-template-columns: 1fr 560px;
+    grid-template-rows: auto auto;
+    grid-template-areas:
+        'table chart'
+        'interpretations interpretations';
+    gap: 4px;
+    margin-bottom: 36px;
+}
+.gridTable {
+    grid-area: table;
+}
+.section3Chart {
+    border: 1px solid var(--colors-grey400);
+    grid-area: chart;
+    height: 300px;
+    /* width is set by column template */
+}
