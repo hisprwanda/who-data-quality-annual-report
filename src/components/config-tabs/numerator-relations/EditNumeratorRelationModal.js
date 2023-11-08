@@ -127,6 +127,7 @@ export function EditNumeratorRelationModal({
                                             subscription={{ value: true }}
                                             parse={(value) => Number(value)}
                                             format={(value) => String(value)}
+                                            type="number"
                                         />
                                     </TableCell>
                                 </TableRow>
