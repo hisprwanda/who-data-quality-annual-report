@@ -21,6 +21,7 @@ import {
 } from '../../../utils/numeratorsMetadataData.js'
 import {
     createNewNumerator,
+    deleteNumerator,
     updateConfigurations,
 } from '../../../utils/updateConfigurations.js'
 import PeriodsModal from '../../Modals/PeriodsModal.js'
@@ -66,12 +67,12 @@ export const Numerators = ({ toggleState, configurations }) => {
             setNumerators((numerators) => [...numerators, newNumeratorInfo])
             setIsHiddenUpdateModal(true)
         } else if (updateType === 'update') {
-            const updatedConfigurations = updateConfigurations(
+            const updatedConfigurations = updateConfigurations({
                 configurations,
-                'numerators',
-                'update',
-                newNumeratorInfo
-            )
+                configurationType: 'numerators',
+                updateType: 'update',
+                configsUpdateInfo: newNumeratorInfo,
+            })
             const response = await mutate({
                 configurations: updatedConfigurations,
             })
@@ -91,15 +92,12 @@ export const Numerators = ({ toggleState, configurations }) => {
 
     const onDeleteNumerator = async (numeratorToDelete) => {
         // setIsHidden(false);    //TODO: uncomment after implementing warning modal
-        console.log('configurations in ondelete: ', configurations)
-
-        const updatedConfigurations = updateConfigurations(
+        const updatedConfigurations = deleteNumerator(
             configurations,
-            'numerators',
-            'delete',
             numeratorToDelete
         )
         setNumerators(updatedConfigurations.numerators)
+        // TODO: after implementing the global context, update groups' members on the UI also
         await mutate({ configurations: updatedConfigurations })
     }
 
