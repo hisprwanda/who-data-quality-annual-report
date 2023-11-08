@@ -1,43 +1,10 @@
-import { useDataQuery } from '@dhis2/app-runtime'
 import React from 'react'
 import ConfigTabs from '../components/config-tabs/ConfigTabs.js'
+import { useConfigurations } from '../utils/index.js'
 import styles from './Configurations.module.css'
 
-//TODO: use a global state or context api to share these settings accross components
-const readDataStoreQuery = {
-    dataStore: {
-        resource: 'dataStore/who-dqa/configurations',
-    },
-}
-
 export const Configurations = () => {
-    // A dynamic alert to communicate success or failure
-    // TODO: put this one in a reusable function
-    // const { show } = useAlert(
-    //     ({ message }) => message,
-    //     ({ status }) => {
-    //         if (status === 'success') {
-    //             return { success: true }
-    //         } else if (status === 'error') {
-    //             return { critical: true }
-    //         } else {
-    //             return {}
-    //         }
-    //     }
-    // )
-
-    // running the query
-    const { loading, error, data } = useDataQuery(readDataStoreQuery)
-
-    let configurations = null
-
-    if (data) {
-        configurations = data.dataStore
-    }
-
-    if (error) {
-        return <span>ERROR: {error.message}</span>
-    }
+    const configurations = useConfigurations()
 
     return (
         <div className={styles.configurationsContainer}>
@@ -54,14 +21,7 @@ export const Configurations = () => {
                 </div>
 
                 <div>
-                    {configurations ? (
-                        <ConfigTabs
-                            loading={loading}
-                            configurations={configurations}
-                        />
-                    ) : (
-                        ''
-                    )}
+                    <ConfigTabs configurations={configurations} />
                 </div>
             </div>
         </div>

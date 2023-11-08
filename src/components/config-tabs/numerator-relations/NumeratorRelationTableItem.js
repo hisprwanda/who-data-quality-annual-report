@@ -1,23 +1,101 @@
-import {
-    Button,
-    TableCell,
-    TableRow,
-    ButtonStrip,
-} from '@dhis2/ui'
+import { Button, TableCell, TableRow, ButtonStrip } from '@dhis2/ui'
 import PropTypes from 'prop-types'
-import React, { useState, useMemo } from 'react'
+import React, { useState, useMemo, useCallback } from 'react'
+import {
+    useConfigurationsDispatch,
+    DELETE_NUMERATOR_RELATION,
+    UPDATE_NUMERATOR_RELATION,
+} from '../../../utils/index.js'
 import {
     getNumeratorNameByCode,
     getRelationType,
 } from '../../../utils/numeratorsMetadataData.js'
+import { ConfirmationModal } from './ConfirmationModal.js'
 import { EditNumeratorRelationModal } from './EditNumeratorRelationModal.js'
+
+/** Manages the "update form" modal and datastore mutation */
+const EditRelationButton = ({ relation }) => {
+    const [editModalOpen, setEditModalOpen] = useState(false)
+    const dispatch = useConfigurationsDispatch()
+
+    const openModal = useCallback(() => setEditModalOpen(true), [])
+    const closeModal = useCallback(() => setEditModalOpen(false), [])
+
+    const updateRelation = useCallback(
+        (newRelationValues) => {
+            dispatch({
+                type: UPDATE_NUMERATOR_RELATION,
+                payload: {
+                    code: relation.code,
+                    updatedNumeratorRelation: newRelationValues,
+                },
+            })
+        },
+        [dispatch, relation.code]
+    )
+
+    return (
+        <>
+            <Button small onClick={openModal}>
+                Edit
+            </Button>
+            {editModalOpen && (
+                <EditNumeratorRelationModal
+                    numeratorRelationToEdit={relation}
+                    onSave={updateRelation}
+                    onClose={closeModal}
+                />
+            )}
+        </>
+    )
+}
+EditRelationButton.propTypes = {
+    relation: PropTypes.object,
+}
+
+/** Manages the "delete confirmation" modal and datastore mutation */
+const DeleteRelationButton = ({ relation }) => {
+    const [confirmationModalOpen, setConfirmationModalOpen] = useState(false)
+    const dispatch = useConfigurationsDispatch()
+
+    const openModal = useCallback(() => setConfirmationModalOpen(true), [])
+    const closeModal = useCallback(() => setConfirmationModalOpen(false), [])
+
+    const deleteRelation = useCallback(
+        () =>
+            dispatch({
+                type: DELETE_NUMERATOR_RELATION,
+                payload: { code: relation.code },
+            }),
+        [dispatch, relation.code]
+    )
+
+    return (
+        <>
+            <Button small destructive onClick={openModal}>
+                Delete
+            </Button>
+            {confirmationModalOpen && (
+                <ConfirmationModal
+                    title="Delete numerator relation"
+                    text={`Are you sure you want to delete ${relation.name}?`}
+                    action="Delete"
+                    destructive
+                    onClose={closeModal}
+                    onConfirm={deleteRelation}
+                />
+            )}
+        </>
+    )
+}
+DeleteRelationButton.propTypes = {
+    relation: PropTypes.object,
+}
 
 export function NumeratorRelationTableItem({
     configurations,
     numeratorRelation: relation,
 }) {
-    const [editModalOpen, setEditModalOpen] = useState(false)
-
     // some of these values are hard to memoize effectively:
     // they depend on the large configurations object
     const numeratorAName = useMemo(
@@ -44,28 +122,10 @@ export function NumeratorRelationTableItem({
             <TableCell>{relationType.description}</TableCell>
             <TableCell>
                 <ButtonStrip>
-                    <Button
-                        small
-                        onClick={() => setEditModalOpen(true)}
-                    >
-                        Edit
-                    </Button>
-                    <Button
-                        small
-                        destructive
-                        onClick={() => alert('todo: delete')}
-                    >
-                        Delete
-                    </Button>
+                    <EditRelationButton relation={relation} />
+                    <DeleteRelationButton relation={relation} />
                 </ButtonStrip>
             </TableCell>
-            {editModalOpen && (
-                <EditNumeratorRelationModal
-                    numeratorRelationToEdit={relation}
-                    configurations={configurations}
-                    onClose={() => setEditModalOpen(false)}
-                />
-            )}
         </TableRow>
     )
 }

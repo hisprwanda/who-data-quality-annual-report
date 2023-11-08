@@ -16,6 +16,7 @@ import {
 import PropTypes from 'prop-types'
 import React from 'react'
 import relationTypes from '../../../data/relationTypes.json'
+import { useConfigurations } from '../../../utils/index.js'
 
 const { Form, Field } = ReactFinalForm
 
@@ -44,9 +45,10 @@ const RELATION_TYPE_OPTIONS = relationTypes.map((type) => ({
  */
 export function EditNumeratorRelationModal({
     numeratorRelationToEdit,
-    configurations,
+    onSave,
     onClose,
 }) {
+    const configurations = useConfigurations()
     const numeratorOptions = React.useMemo(() => {
         const numeratorsWithDataIds = configurations.numerators
             .filter((numerator) => numerator.dataID != null)
@@ -60,9 +62,15 @@ export function EditNumeratorRelationModal({
 
     return (
         <Form
-            onSubmit={(...submitProps) => {
-                alert('todo')
-                console.log({ submitProps })
+            onSubmit={(values, form) => {
+                // todo: validate! 🥳
+                console.log('onSubmit', { values, form })
+                if (onSave) {
+                    onSave(values)
+                } else {
+                    alert('todo')
+                }
+                onClose()
             }}
             initialValues={numeratorRelationToEdit || DEFAULT_FORM_VALUES}
             // not subcribing to `values` prevents rerendering the entire form on every input change
@@ -71,8 +79,8 @@ export function EditNumeratorRelationModal({
             {({ handleSubmit }) => (
                 <Modal onClose={onClose} position="middle">
                     <ModalTitle>
-                        {numeratorRelationToEdit ? 'Edit ' : 'Create '}
-                        numerator relation
+                        {(numeratorRelationToEdit ? 'Edit' : 'Create') +
+                            ' numerator relation'}
                     </ModalTitle>
                     <ModalContent>
                         <Table>
@@ -161,7 +169,7 @@ export function EditNumeratorRelationModal({
     )
 }
 EditNumeratorRelationModal.propTypes = {
-    configurations: PropTypes.object,
     numeratorRelationToEdit: PropTypes.object,
     onClose: PropTypes.func,
+    onSave: PropTypes.func,
 }

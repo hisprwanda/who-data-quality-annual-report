@@ -12,40 +12,50 @@ import {
     TableFoot,
 } from '@dhis2/ui'
 import PropTypes from 'prop-types'
-import React, { useState } from 'react'
+import React, { useState, useCallback } from 'react'
+import {
+    useConfigurations,
+    useConfigurationsDispatch,
+    CREATE_NUMERATOR_RELATION,
+} from '../../../utils/index.js'
 import { EditNumeratorRelationModal } from './EditNumeratorRelationModal.js'
 import { NumeratorRelationTableItem } from './NumeratorRelationTableItem.js'
 
-const NumeratorRelationTableFoot = ({ configurations }) => {
+const AddNumeratorRelationButton = ({ configurations }) => {
     const [addNewModalOpen, setAddNewModalOpen] = useState(false)
+    const dispatch = useConfigurationsDispatch()
+
+    const openModal = useCallback(() => setAddNewModalOpen(true), [])
+    const closeModal = useCallback(() => setAddNewModalOpen(false), [])
+
+    const addNewNumeratorRelation = useCallback(
+        (newNumeratorRelation) =>
+            dispatch({
+                type: CREATE_NUMERATOR_RELATION,
+                payload: { newNumeratorRelation },
+            }),
+        [dispatch]
+    )
 
     return (
-        <TableFoot>
-            <TableRow>
-                <TableCell colSpan="8">
-                    <ButtonStrip end>
-                        <Button
-                            primary
-                            icon={<IconAdd16 />}
-                            onClick={() => setAddNewModalOpen(true)}
-                        >
-                            Add Numerator Relation
-                        </Button>
-                    </ButtonStrip>
-                </TableCell>
-            </TableRow>
+        <>
+            <Button primary icon={<IconAdd16 />} onClick={openModal}>
+                Add Numerator Relation
+            </Button>
             {addNewModalOpen && (
                 <EditNumeratorRelationModal
                     configurations={configurations}
-                    onClose={() => setAddNewModalOpen(false)}
+                    onSave={addNewNumeratorRelation}
+                    onClose={closeModal}
                 />
             )}
-        </TableFoot>
+        </>
     )
 }
-NumeratorRelationTableFoot.propTypes = { configurations: PropTypes.object }
+AddNumeratorRelationButton.propTypes = { configurations: PropTypes.object }
 
-export const NumeratorRelations = ({ configurations }) => {
+export const NumeratorRelations = () => {
+    const configurations = useConfigurations()
     const relations = configurations.numeratorRelations
 
     return (
@@ -80,12 +90,18 @@ export const NumeratorRelations = ({ configurations }) => {
                         </TableRow>
                     )}
                 </TableBody>
-                <NumeratorRelationTableFoot configurations={configurations} />
+                <TableFoot>
+                    <TableRow>
+                        <TableCell colSpan="8">
+                            <ButtonStrip end>
+                                <AddNumeratorRelationButton
+                                    configurations={configurations}
+                                />
+                            </ButtonStrip>
+                        </TableCell>
+                    </TableRow>
+                </TableFoot>
             </Table>
         </div>
     )
-}
-
-NumeratorRelations.propTypes = {
-    configurations: PropTypes.object,
 }
