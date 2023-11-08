@@ -1,0 +1,36 @@
+/* todo: use 'section container' for sections a-c? */
+
+/* Section 2d */
+.section2dHeader {
+    margin-bottom: 4px;
+}
+
+.section2dBlock {
+    display: flex;
+    margin-bottom: 24px;
+    gap: 4px;
+}
+
+.section2dBlockLeft {
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+    height: 450px;
+    gap: 4px;
+}
+
+.chart {
+    /* I chose 'solid' here because I think it looks better */
+    border: 1px solid var(--colors-grey400);
+}
+
+.section2dLineChart {
+    composes: chart;
+    flex-grow: 1;
+}
+
+.section2dScatterChart {
+    composes: chart;
+    width: 560px; /* same as old app */
+    height: 450px;
+}

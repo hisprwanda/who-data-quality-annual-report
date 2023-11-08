@@ -10,8 +10,9 @@ import {
 import PropTypes from 'prop-types'
 import React, { useEffect } from 'react'
 import { Chart } from '../Chart.js'
-import styles from '../reportTables.module.css'
+import tableStyles from '../reportTables.module.css'
 import { calculateSection2 } from './section2Calculations.js'
+import styles from './SectionTwo.module.css'
 import { useFetchSectionTwoData } from './useFetchSectionTwoData.js'
 
 const sectionInformation = {
@@ -44,7 +45,7 @@ const sectionInformation = {
 
 const SubSectionLayout = ({ title, subtitle }) => (
     <>
-        <TableRowHead className={styles.tableRowHead}>
+        <TableRowHead className={tableStyles.tableRowHead}>
             <TableCellHead dense colSpan="999">
                 {title}
             </TableCellHead>
@@ -63,11 +64,11 @@ SubSectionLayout.propTypes = {
 }
 
 const Sections2a2b2c = ({ title, subtitle, subsectionData }) => (
-    <div className={styles.tableContainer}>
-        <Table suppressZebraStriping className={styles.reportTable}>
+    <div className={tableStyles.tableContainer}>
+        <Table suppressZebraStriping className={tableStyles.reportTable}>
             <TableHead>
                 <SubSectionLayout title={title} subtitle={subtitle} />
-                <TableRowHead className={styles.tableRowHead}>
+                <TableRowHead className={tableStyles.tableRowHead}>
                     <TableCellHead dense rowSpan="2" width="200">
                         Indicator
                     </TableCellHead>
@@ -81,7 +82,7 @@ const Sections2a2b2c = ({ title, subtitle, subsectionData }) => (
                         Region with divergent score
                     </TableCellHead>
                 </TableRowHead>
-                <TableRowHead className={styles.tableRowHead}>
+                <TableRowHead className={tableStyles.tableRowHead}>
                     <TableCellHead dense width="110">
                         Number
                     </TableCellHead>
@@ -120,56 +121,78 @@ Sections2a2b2c.propTypes = {
 }
 
 const Section2DBlock = ({ dataRow, index }) => (
-    <>
-        <table>
-            <tbody>
-                <tr>
-                    <th colSpan="2">{dataRow.name}</th>
-                </tr>
-                <tr>
-                    <td>Expected trend</td>
-                    <td>{dataRow.expectedTrend}</td>
-                </tr>
-                <tr>
-                    <td>Compare region to</td>
-                    <td>{dataRow.compareRegionTo}</td>
-                </tr>
-                <tr>
-                    <td>Quality threshold</td>
-                    <td>±{dataRow.qualityThreshold}%</td>
-                </tr>
-                <tr>
-                    <td>Overall score</td>
-                    <td>{dataRow.overallScore}%</td>
-                </tr>
-                <tr>
-                    <td>Number of Region with divergent score</td>
-                    <td>{dataRow.divergentSubOrgUnits?.number}</td>
-                </tr>
-                <tr>
-                    <td>Percent of Region with divergent score</td>
-                    <td>{dataRow.divergentSubOrgUnits?.percent}%</td>
-                </tr>
-                <tr>
-                    <td colSpan="2">{dataRow.divergentSubOrgUnits?.names}</td>
-                </tr>
-            </tbody>
-        </table>
-        {dataRow?.chartInfo?.lineChartInfo && (
-            <Chart
-                sectionId={'section2d'}
-                chartId={`line2d_${index}`}
-                chartInfo={dataRow.chartInfo.lineChartInfo}
-            />
-        )}
+    <div className={styles.section2dBlock}>
+        <div className={styles.section2dBlockLeft}>
+            <Table suppressZebraStriping className={tableStyles.reportTable}>
+                <TableHead>
+                    <TableRowHead className={tableStyles.tableRowHead}>
+                        <TableCellHead dense colSpan="2">
+                            {dataRow.name}
+                        </TableCellHead>
+                    </TableRowHead>
+                </TableHead>
+                <TableBody>
+                    <TableRow>
+                        <TableCell dense>Expected trend</TableCell>
+                        <TableCell dense>{dataRow.expectedTrend}</TableCell>
+                    </TableRow>
+                    <TableRow>
+                        <TableCell dense>Compare region to</TableCell>
+                        <TableCell dense>{dataRow.compareRegionTo}</TableCell>
+                    </TableRow>
+                    <TableRow>
+                        <TableCell dense>Quality threshold</TableCell>
+                        <TableCell dense>
+                            ±{dataRow.qualityThreshold}%
+                        </TableCell>
+                    </TableRow>
+                    <TableRow>
+                        <TableCell dense>Overall score</TableCell>
+                        <TableCell dense>{dataRow.overallScore}%</TableCell>
+                    </TableRow>
+                    <TableRow>
+                        <TableCell dense>
+                            Number of Region with divergent score
+                        </TableCell>
+                        <TableCell dense>
+                            {dataRow.divergentSubOrgUnits?.number}
+                        </TableCell>
+                    </TableRow>
+                    <TableRow>
+                        <TableCell dense>
+                            Percent of Region with divergent score
+                        </TableCell>
+                        <TableCell dense>
+                            {dataRow.divergentSubOrgUnits?.percent}%
+                        </TableCell>
+                    </TableRow>
+                    <TableRow>
+                        <TableCell dense colSpan="2">
+                            {dataRow.divergentSubOrgUnits?.names}
+                        </TableCell>
+                    </TableRow>
+                </TableBody>
+            </Table>
+            {dataRow?.chartInfo?.lineChartInfo && (
+                // <div className={cx(styles.chart, styles.section2dLineChart)}>
+                <Chart
+                    sectionId={'section2d'}
+                    chartId={`line2d_${index}`}
+                    chartInfo={dataRow.chartInfo.lineChartInfo}
+                    className={styles.section2dLineChart}
+                />
+                // </div>
+            )}
+        </div>
         {dataRow?.chartInfo?.scatterChartInfo && (
             <Chart
                 sectionId={'section2d'}
                 chartId={`scatter2d_${index}`}
                 chartInfo={dataRow.chartInfo.scatterChartInfo}
+                className={styles.section2dScatterChart}
             />
         )}
-    </>
+    </div>
 )
 
 Section2DBlock.propTypes = {
@@ -179,11 +202,13 @@ Section2DBlock.propTypes = {
 
 const Section2D = ({ title, subtitle, subsectionData }) => (
     <>
-        <table>
-            <tbody>
-                <SubSectionLayout title={title} subtitle={subtitle} />
-            </tbody>
-        </table>
+        <div className={styles.section2dHeader}>
+            <Table suppressZebraStriping className={tableStyles.reportTable}>
+                <TableHead>
+                    <SubSectionLayout title={title} subtitle={subtitle} />
+                </TableHead>
+            </Table>
+        </div>
         {subsectionData.map((dataRow, index) => (
             <Section2DBlock
                 key={dataRow.name}
