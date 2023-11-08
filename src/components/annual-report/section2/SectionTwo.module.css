@@ -4,7 +4,7 @@
 }
 
 /* Section 2d */
-.section2dHeader {
+.marginBottom4 {
     margin-bottom: 4px;
 }
 
@@ -36,4 +36,20 @@
     composes: chart;
     width: 560px; /* same as old app */
     height: 450px;
+}
+
+/* Section 2e */
+.section2eBlock {
+    composes: section2dBlock;
+    height: 370px;
+}
+
+.section2eChart {
+    composes: chart;
+    height: 370px;
+    width: 560px;
+}
+
+.section2eDivergentRegions {
+    height: 73px !important; /* need to override original table cell height */
 }

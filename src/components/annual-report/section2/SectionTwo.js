@@ -202,7 +202,7 @@ Section2DBlock.propTypes = {
 
 const Section2D = ({ title, subtitle, subsectionData }) => (
     <>
-        <div className={styles.section2dHeader}>
+        <div className={styles.marginBottom4}>
             <Table suppressZebraStriping className={tableStyles.reportTable}>
                 <TableHead>
                     <SubSectionLayout title={title} subtitle={subtitle} />
@@ -226,58 +226,82 @@ Section2D.propTypes = {
 }
 
 const Section2EBlock = ({ dataRow, index }) => (
-    <>
-        <table>
-            <tbody>
-                <tr>
-                    <th colSpan="2">{dataRow.title}</th>
-                </tr>
-                <tr>
-                    <td>Denominator A</td>
-                    <td>{dataRow.A}</td>
-                </tr>
-                <tr>
-                    <td>Denominator B</td>
-                    <td>{dataRow.B}</td>
-                </tr>
-                <tr>
-                    <td>Expected relationship</td>
-                    <td>{dataRow.expectedRelationship}</td>
-                </tr>
-                <tr>
-                    <td>Quality threshold</td>
-                    <td>
-                        {dataRow.expectedRelationship === 'Dropout rate'
-                            ? ''
-                            : '±'}
-                        {dataRow.qualityThreshold}
-                    </td>
-                </tr>
-                <tr>
-                    <td>Overall score</td>
-                    <td>{dataRow.overallScore}%</td>
-                </tr>
-                <tr>
-                    <td>Number of Region with divergent score</td>
-                    <td>{dataRow.divergentSubOrgUnits?.number}</td>
-                </tr>
-                <tr>
-                    <td>Percent of Region with divergent score</td>
-                    <td>{dataRow.divergentSubOrgUnits?.percentage}%</td>
-                </tr>
-                <tr>
-                    <td colSpan="2">{dataRow.divergentSubOrgUnits?.names}</td>
-                </tr>
-            </tbody>
-        </table>
+    <div className={styles.section2eBlock}>
+        <div className={styles.section2dBlockLeft}>
+            <Table suppressZebraStriping className={tableStyles.reportTable}>
+                <TableHead>
+                    <TableRowHead className={tableStyles.tableRowHead}>
+                        <TableCellHead dense colSpan="2">
+                            {dataRow.title}
+                        </TableCellHead>
+                    </TableRowHead>
+                </TableHead>
+                <TableBody>
+                    <TableRow>
+                        <TableCell dense>Denominator A</TableCell>
+                        <TableCell dense>{dataRow.A}</TableCell>
+                    </TableRow>
+                    <TableRow>
+                        <TableCell dense>Denominator B</TableCell>
+                        <TableCell dense>{dataRow.B}</TableCell>
+                    </TableRow>
+                    <TableRow>
+                        <TableCell dense>Expected relationship</TableCell>
+                        <TableCell dense>
+                            {dataRow.expectedRelationship}
+                        </TableCell>
+                    </TableRow>
+                    <TableRow>
+                        <TableCell dense>Quality threshold</TableCell>
+                        <TableCell dense>
+                            {dataRow.expectedRelationship === 'Dropout rate'
+                                ? ''
+                                : '±'}
+                            {dataRow.qualityThreshold}
+                        </TableCell>
+                    </TableRow>
+                    <TableRow>
+                        <TableCell dense>Overall score</TableCell>
+                        <TableCell dense>{dataRow.overallScore}%</TableCell>
+                    </TableRow>
+                    <TableRow>
+                        <TableCell dense>
+                            Number of Region with divergent score
+                        </TableCell>
+                        <TableCell dense>
+                            {dataRow.divergentSubOrgUnits?.number}
+                        </TableCell>
+                    </TableRow>
+                    <TableRow>
+                        <TableCell dense>
+                            Percent of Region with divergent score
+                        </TableCell>
+                        <TableCell dense>
+                            {dataRow.divergentSubOrgUnits?.percentage}%
+                        </TableCell>
+                    </TableRow>
+                    <TableRow>
+                        <TableCell
+                            dense
+                            colSpan="2"
+                            /** Make this cell taller */
+                            className={styles.section2eDivergentRegions}
+                        >
+                            {dataRow.divergentSubOrgUnits?.names}
+                        </TableCell>
+                    </TableRow>
+                </TableBody>
+            </Table>
+        </div>
         {dataRow.chartInfo && (
             <Chart
                 sectionId={'section2e'}
                 chartId={`chart2e_${index}`}
                 chartInfo={dataRow.chartInfo}
+                className={styles.section2eChart}
             />
         )}
-    </>
+    </div>
 )
 
 Section2EBlock.propTypes = {
@@ -287,11 +311,13 @@ Section2EBlock.propTypes = {
 
 const Section2E = ({ title, subtitle, subsectionData }) => (
     <>
-        <table>
-            <tbody>
-                <SubSectionLayout title={title} subtitle={subtitle} />
-            </tbody>
-        </table>
+        <div className={styles.marginBottom4}>
+            <Table suppressZebraStriping className={tableStyles.reportTable}>
+                <TableHead>
+                    <SubSectionLayout title={title} subtitle={subtitle} />
+                </TableHead>
+            </Table>
+        </div>
         {subsectionData.map((dataRow, index) => (
             <Section2EBlock
                 key={dataRow.title}

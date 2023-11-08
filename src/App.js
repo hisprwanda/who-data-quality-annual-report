@@ -9,7 +9,6 @@ import { ConfigurationsProvider } from './utils/index.js'
 const App = () => (
     <ConfigurationsProvider>
         <CssVariables colors />
-
         <div className={classes.container}>
             <HashRouter>
                 <MenuBar />
