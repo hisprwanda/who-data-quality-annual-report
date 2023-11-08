@@ -48,9 +48,10 @@ export function EditNumeratorRelationModal({
     onClose,
 }) {
     const numeratorOptions = React.useMemo(() => {
-        const numeratorsWithDataIds = configurations.numerators.filter(
-            (numerator) => numerator.dataID != null
-        )
+        const numeratorsWithDataIds = configurations.numerators
+            .filter((numerator) => numerator.dataID != null)
+            // sort is okay because filter() creates a copy
+            .toSorted((a, b) => a.name.localeCompare(b.name))
         return numeratorsWithDataIds.map(({ name, code }) => ({
             label: name,
             value: code,
