@@ -105,7 +105,7 @@ Sections2a2b2c.propTypes = {
     title: PropTypes.string,
 }
 
-const Section2DBlock = ({ dataRow }) => (
+const Section2DBlock = ({ dataRow, index }) => (
     <>
         <table>
             <tbody>
@@ -141,64 +141,26 @@ const Section2DBlock = ({ dataRow }) => (
                 </tr>
             </tbody>
         </table>
-        <Chart
-            sectionId={'section2d'}
-            chartId={'chart1'}
-            chartInfo={{
-                type: 'line',
-                xPointLabel: 'Albendazole 1 dose at ANC',
-                x: ['2019', '2020', '2021', '2022'],
-                y: [65822, 247661, 326583, 368306],
-            }}
-        />
-        <Chart
-            sectionId={'section2d'}
-            chartId={'chart2'}
-            chartInfo={{
-                type: 'scatter',
-                slope: 1.9,
-                threshold: 33,
-                xAxisTitle: 'Average of 3 previous periods',
-                lineLabel: 'Current=Average',
-                yAxisTitle: '2022',
-                xPointLabel: 'Average',
-                values: [
-                    {
-                        name: 'Region A',
-                        x: 35845.7,
-                        y: 60539,
-                        divergent: false,
-                        invalid: false,
-                    },
-                    {
-                        name: 'Region B',
-                        x: 47031.3,
-                        y: 75453,
-                        divergent: false,
-                        invalid: false,
-                    },
-                    {
-                        name: 'Region C',
-                        x: 58226,
-                        y: 137034,
-                        divergent: false,
-                        invalid: false,
-                    },
-                    {
-                        name: 'Region D',
-                        x: 69649,
-                        y: 124386,
-                        divergent: false,
-                        invalid: false,
-                    },
-                ],
-            }}
-        />
+        {dataRow?.chartInfo?.lineChartInfo && (
+            <Chart
+                sectionId={'section2d'}
+                chartId={`line2d_${index}`}
+                chartInfo={dataRow.chartInfo.lineChartInfo}
+            />
+        )}
+        {dataRow?.chartInfo?.scatterChartInfo && (
+            <Chart
+                sectionId={'section2d'}
+                chartId={`scatter2d_${index}`}
+                chartInfo={dataRow.chartInfo.scatterChartInfo}
+            />
+        )}
     </>
 )
 
 Section2DBlock.propTypes = {
     dataRow: PropTypes.object,
+    index: PropTypes.number,
 }
 
 const Section2D = ({ title, subtitle, subsectionData }) => {
@@ -210,8 +172,12 @@ const Section2D = ({ title, subtitle, subsectionData }) => {
                 </tbody>
             </table>
             {subsectionData.length === 0 && <NoDataInfoBox subsection={true} />}
-            {subsectionData.map((dataRow) => (
-                <Section2DBlock key={dataRow.name} dataRow={dataRow} />
+            {subsectionData.map((dataRow, index) => (
+                <Section2DBlock
+                    key={dataRow.name}
+                    dataRow={dataRow}
+                    index={index}
+                />
             ))}
         </>
     )
@@ -223,7 +189,7 @@ Section2D.propTypes = {
     title: PropTypes.string,
 }
 
-const Section2EBlock = ({ dataRow }) => (
+const Section2EBlock = ({ dataRow, index }) => (
     <>
         <table>
             <tbody>
@@ -268,63 +234,19 @@ const Section2EBlock = ({ dataRow }) => (
                 </tr>
             </tbody>
         </table>
-        <Chart
-            sectionId={'section2e'}
-            chartId={'chart1'}
-            chartInfo={{
-                disableTopThresholdLine: true,
-                type: 'scatter',
-                slope: 1,
-                threshold: 30,
-                xAxisTitle: 'Penta 1 given < 1',
-                xPointLabel: 'Penta 1 given < 1',
-                lineLabel: 'National',
-                yAxisTitle: 'ANC 1 Visits',
-                values: [
-                    {
-                        name: 'Region A',
-                        x: 63373,
-                        y: 72003,
-                        divergent: true,
-                        invalid: false,
-                    },
-                ],
-            }}
-        />
-        <Chart
-            sectionId={'section2e'}
-            chartId={'chart2'}
-            chartInfo={{
-                type: 'column',
-                values: [
-                    {
-                        name: 'Region A',
-                        value: 80.83,
-                        invalid: false,
-                    },
-                    {
-                        name: 'Region B',
-                        value: 78.93,
-                        invalid: false,
-                    },
-                    {
-                        name: 'Region C',
-                        value: 79.99,
-                        invalid: false,
-                    },
-                    {
-                        name: 'Region D',
-                        value: -10,
-                        invalid: false,
-                    },
-                ],
-            }}
-        />
+        {dataRow.chartInfo && (
+            <Chart
+                sectionId={'section2e'}
+                chartId={`chart2e_${index}`}
+                chartInfo={dataRow.chartInfo}
+            />
+        )}
     </>
 )
 
 Section2EBlock.propTypes = {
     dataRow: PropTypes.object,
+    index: PropTypes.number,
 }
 
 const Section2E = ({ title, subtitle, subsectionData }) => (
@@ -335,8 +257,12 @@ const Section2E = ({ title, subtitle, subsectionData }) => (
             </tbody>
         </table>
         {subsectionData.length === 0 && <NoDataInfoBox subsection={true} />}
-        {subsectionData.map((dataRow) => (
-            <Section2EBlock key={dataRow.title} dataRow={dataRow} />
+        {subsectionData.map((dataRow, index) => (
+            <Section2EBlock
+                key={dataRow.title}
+                dataRow={dataRow}
+                index={index}
+            />
         ))}
     </>
 )

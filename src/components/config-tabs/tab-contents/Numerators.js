@@ -111,7 +111,7 @@ export const Numerators = ({ toggleState, configurations }) => {
 
     useEffect(() => {
         setNumerators(configurations.numerators)
-    }, [])
+    }, [configurations])
 
     return (
         <div

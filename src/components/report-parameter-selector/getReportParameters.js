@@ -5,13 +5,13 @@ export const getReportParameters = ({
     orgUnitID,
     orgUnitLevel,
     boundaryOrgUnitLevel,
-    configuration,
+    configurations,
     periods,
 }) => {
     if (
         !orgUnitID ||
         !groupID ||
-        !configuration ||
+        !configurations ||
         !orgUnitLevel ||
         periods.length === 0 ||
         !boundaryOrgUnitLevel
@@ -20,7 +20,7 @@ export const getReportParameters = ({
     }
 
     const mappedConfiguration = getConfigObjectsForAnalytics(
-        configuration,
+        configurations,
         groupID
     )
 
