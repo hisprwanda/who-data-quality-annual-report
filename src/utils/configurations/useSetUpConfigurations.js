@@ -36,9 +36,7 @@ export const useSetUpConfigurations = (setConfigurations) => {
                 .catch((err) => {
                     // if the fetch failed, we might need to set up the data store
                     const { details } = err
-                    const needToSetUpDatastore =
-                        details?.httpStatusCode === 404 &&
-                        /Key .* not found in namespace/.test(details?.message)
+                    const needToSetUpDatastore = details?.httpStatusCode === 404
                     if (needToSetUpDatastore) {
                         console.log('Setting up data store key', DATASTORE_KEY)
                         return (
