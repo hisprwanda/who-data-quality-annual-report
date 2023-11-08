@@ -134,6 +134,7 @@ export const SectionOne = ({ reportParameters }) => {
             periodsIDs: reportParameters.periods.map((p) => p.id),
             overallOrgUnit: reportParameters.orgUnits[0],
         })
+
         return (
             <>
                 {/* section one content. this needs to be improved */}
@@ -175,30 +176,29 @@ export const SectionOne = ({ reportParameters }) => {
                                         (dataset, key) => (
                                             <TableRow key={key}>
                                                 <TableCell>
-                                                    {dataset?.dataset_name}
+                                                    {dataset.dataset_name}
                                                 </TableCell>
                                                 <TableCell>
-                                                    {dataset?.threshold}%
+                                                    {dataset.threshold}%
                                                 </TableCell>
                                                 <TableCell>
-                                                    {dataset?.score}%
+                                                    {dataset.score}%
                                                 </TableCell>
                                                 <TableCell>
                                                     {
-                                                        dataset?.divergentRegionsCount
+                                                        dataset.divergentRegionsCount
                                                     }
                                                 </TableCell>
                                                 <TableCell>
                                                     {
-                                                        dataset?.divergentRegionsPercent
+                                                        dataset.divergentRegionsPercent
                                                     }
                                                     %
                                                 </TableCell>
                                                 <TableCell>
-                                                    {(
-                                                        dataset?.orgUnitLevelsOrGroups ??
-                                                        []
-                                                    ).join(', ')}
+                                                    {dataset.orgUnitLevelsOrGroups.join(
+                                                        ', '
+                                                    )}
                                                 </TableCell>
                                             </TableRow>
                                         )
@@ -237,30 +237,29 @@ export const SectionOne = ({ reportParameters }) => {
                                         (dataset, key) => (
                                             <TableRow key={key}>
                                                 <TableCell>
-                                                    {dataset?.dataset_name}
+                                                    {dataset.dataset_name}
                                                 </TableCell>
                                                 <TableCell>
-                                                    {dataset?.threshold}%
+                                                    {dataset.threshold}%
                                                 </TableCell>
                                                 <TableCell>
-                                                    {dataset?.score}%
+                                                    {dataset.score}%
                                                 </TableCell>
                                                 <TableCell>
                                                     {
-                                                        dataset?.divergentRegionsCount
+                                                        dataset.divergentRegionsCount
                                                     }
                                                 </TableCell>
                                                 <TableCell>
                                                     {
-                                                        dataset?.divergentRegionsPercent
+                                                        dataset.divergentRegionsPercent
                                                     }
                                                     %
                                                 </TableCell>
                                                 <TableCell>
-                                                    {(
-                                                        dataset?.orgUnitLevelsOrGroups ??
-                                                        []
-                                                    ).join(', ')}
+                                                    {dataset.orgUnitLevelsOrGroups.join(
+                                                        ', '
+                                                    )}
                                                 </TableCell>
                                             </TableRow>
                                         )
@@ -308,36 +307,35 @@ export const SectionOne = ({ reportParameters }) => {
                                         (dataset, key) => (
                                             <TableRow key={key}>
                                                 <TableCell>
-                                                    {dataset?.indicator_name}
+                                                    {dataset.indicator_name}
                                                 </TableCell>
                                                 <TableCell>
-                                                    {dataset?.threshold}%
+                                                    {dataset.threshold}%
                                                 </TableCell>
                                                 <TableCell>
-                                                    {dataset?.expectedValues}
+                                                    {dataset.expectedValues}
                                                 </TableCell>
                                                 <TableCell>
-                                                    {dataset?.actualValues}
+                                                    {dataset.actualValues}
                                                 </TableCell>
                                                 <TableCell>
-                                                    {dataset?.overallScore}
+                                                    {dataset.overallScore}
                                                 </TableCell>
                                                 <TableCell>
                                                     {
-                                                        dataset?.divergentRegionsCount
+                                                        dataset.divergentRegionsCount
                                                     }
                                                 </TableCell>
                                                 <TableCell>
                                                     {
-                                                        dataset?.divergentRegionsPercent
+                                                        dataset.divergentRegionsPercent
                                                     }
                                                     %
                                                 </TableCell>
                                                 <TableCell>
-                                                    {(
-                                                        dataset?.orgUnitLevelsOrGroups ??
-                                                        []
-                                                    ).join(', ')}
+                                                    {dataset.orgUnitLevelsOrGroups.join(
+                                                        ', '
+                                                    )}
                                                 </TableCell>
                                             </TableRow>
                                         )
@@ -386,39 +384,36 @@ export const SectionOne = ({ reportParameters }) => {
                                         (dataset, key) => (
                                             <TableRow key={key}>
                                                 <TableCell>
-                                                    {dataset?.dataset_name}
+                                                    {dataset.dataset_name}
                                                 </TableCell>
                                                 <TableCell>
-                                                    {dataset?.trend?.[0]?.toUpperCase() +
-                                                        dataset?.trend?.slice(
-                                                            1
-                                                        )}
+                                                    {dataset.trend[0].toUpperCase() +
+                                                        dataset.trend.slice(1)}
                                                 </TableCell>
                                                 <TableCell>
-                                                    {dataset?.comparison}
+                                                    {dataset.comparison}
                                                 </TableCell>
                                                 <TableCell>
-                                                    ± {dataset?.threshold}%
+                                                    ± {dataset.threshold}%
                                                 </TableCell>
                                                 <TableCell>
-                                                    {dataset?.score}%
+                                                    {dataset.score}%
                                                 </TableCell>
                                                 <TableCell>
                                                     {
-                                                        dataset?.divergentRegionsCount
+                                                        dataset.divergentRegionsCount
                                                     }
                                                 </TableCell>
                                                 <TableCell>
                                                     {
-                                                        dataset?.divergentRegionsPercent
+                                                        dataset.divergentRegionsPercent
                                                     }
                                                     %
                                                 </TableCell>
                                                 <TableCell>
-                                                    {(
-                                                        dataset?.orgUnitLevelsOrGroups ??
-                                                        []
-                                                    ).join(', ')}
+                                                    {dataset.orgUnitLevelsOrGroups.join(
+                                                        ', '
+                                                    )}
                                                 </TableCell>
                                             </TableRow>
                                         )

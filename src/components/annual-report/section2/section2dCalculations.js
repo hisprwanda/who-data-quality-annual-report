@@ -115,11 +115,6 @@ const calculateSection2d = ({
     for (const dx in overallResponse) {
         // retrieve info for dx
         const dxInfo = mappedConfiguration?.dataElementsAndIndicators?.[dx]
-        // skip if dx is missing from configuration
-        if (!dxInfo) {
-            continue
-        }
-
         if (!overallResponse[dx]?.[overallOrgUnit]?.[currentPeriodID]) {
             // skip if current period data is missing
             continue
