@@ -155,10 +155,10 @@ export const SectionFour = ({ reportParameters }) => {
 
     if (data) {
         const section4Data = calculateSection4({
-            section4Response: data,
-            mappedConfiguration: reportParameters.mappedConfiguration,
-            currentPeriod: reportParameters.periods[0],
-            overallOrgUnit: reportParameters.orgUnits[0],
+            section4Response: data.response,
+            mappedConfiguration: data.parameters?.mappedConfiguration,
+            currentPeriod: data.parameters?.periods?.[0],
+            overallOrgUnit: data.parameters?.orgUnits?.[0],
         })
 
         return (

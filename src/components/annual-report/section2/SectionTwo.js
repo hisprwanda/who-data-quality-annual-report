@@ -295,10 +295,10 @@ export const SectionTwo = ({ reportParameters }) => {
 
     if (data) {
         const section2Data = calculateSection2({
-            section2Response: data,
-            mappedConfiguration: reportParameters.mappedConfiguration,
-            periods: reportParameters.periods,
-            overallOrgUnit: reportParameters.orgUnits[0],
+            section2Response: data.response,
+            mappedConfiguration: data.parameters?.mappedConfiguration,
+            periods: data.parameters?.periods,
+            overallOrgUnit: data.parameters?.orgUnits?.[0],
         })
         // if all subsections are empty, display overall empty message
         const subsectionNames = [

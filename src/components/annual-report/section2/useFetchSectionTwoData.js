@@ -239,11 +239,16 @@ export const useFetchSectionTwoData = () => {
                     ])
 
                 setData({
-                    ...section2dData,
-                    ...section2eData,
-                    [SUBPERIODS_RESPONSE_NAME]: dataBySubPeriod.map(
-                        (resp) => resp[SUBPERIODS_RESPONSE_NAME]
-                    ),
+                    response: {
+                        ...section2dData,
+                        ...section2eData,
+                        [SUBPERIODS_RESPONSE_NAME]: dataBySubPeriod.map(
+                            (resp) => resp[SUBPERIODS_RESPONSE_NAME]
+                        ),
+                    },
+                    parameters: {
+                        ...variables,
+                    },
                 })
             } catch (e) {
                 console.error(e)

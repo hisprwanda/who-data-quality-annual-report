@@ -109,11 +109,17 @@ export const useFetchSectionFourData = () => {
                 ])
 
                 setData({
-                    ...overallData,
-                    [BY_LEVEL_RESPONSE_NAME]: dataByLevel.map(
-                        (resp) => resp?.[BY_LEVEL_RESPONSE_NAME]
-                    ),
-                    [DENOMINATOR_RELATIONS_MAP]: byLevelRequestDenomRelations,
+                    response: {
+                        ...overallData,
+                        [BY_LEVEL_RESPONSE_NAME]: dataByLevel.map(
+                            (resp) => resp?.[BY_LEVEL_RESPONSE_NAME]
+                        ),
+                        [DENOMINATOR_RELATIONS_MAP]:
+                            byLevelRequestDenomRelations,
+                    },
+                    parameters: {
+                        ...variables,
+                    },
                 })
             } catch (e) {
                 console.error(e)

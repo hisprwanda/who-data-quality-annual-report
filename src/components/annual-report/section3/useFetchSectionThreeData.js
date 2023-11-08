@@ -106,12 +106,17 @@ export const useFetchSectionThreeData = () => {
                 ])
 
                 setData({
-                    ...overallData,
-                    [BY_LEVEL_RESPONSE_NAME]: dataByLevel.map(
-                        (resp) => resp?.[BY_LEVEL_RESPONSE_NAME]
-                    ),
-                    [EXTERNAL_RELATIONS_INDICES_WITH_BY_LEVEL_DATA]:
-                        byLevelRequestIndices,
+                    response: {
+                        ...overallData,
+                        [BY_LEVEL_RESPONSE_NAME]: dataByLevel.map(
+                            (resp) => resp?.[BY_LEVEL_RESPONSE_NAME]
+                        ),
+                        [EXTERNAL_RELATIONS_INDICES_WITH_BY_LEVEL_DATA]:
+                            byLevelRequestIndices,
+                    },
+                    parameters: {
+                        ...variables,
+                    },
                 })
             } catch (e) {
                 console.error(e)
