@@ -1,6 +1,6 @@
 import { useDataEngine } from '@dhis2/app-runtime'
 import { useState, useEffect, useCallback } from 'react'
-import defaultConfigurations from './defaultConfigurations.json'
+import defaultConfigurations from '../../data/metadata.json'
 
 // If in a dev environment, use a custom data store key if it's set.
 // Otherwise, use "configurations" (if none is set or in production)
