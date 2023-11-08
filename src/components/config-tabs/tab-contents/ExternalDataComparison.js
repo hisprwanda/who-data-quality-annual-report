@@ -1,5 +1,6 @@
 import {
     Button,
+    ButtonStrip,
     Table,
     TableBody,
     TableCell,
@@ -10,6 +11,13 @@ import {
     IconDelete16,
     IconEdit16,
     IconAdd16,
+    Input,
+    Modal,
+    ModalActions,
+    ModalContent,
+    ModalTitle,
+    SingleSelect,
+    SingleSelectOption,
 } from '@dhis2/ui'
 import PropTypes from 'prop-types'
 import React, { useState, useEffect } from 'react'
@@ -18,6 +26,23 @@ import { getNumeratorDataElement } from '../../../utils/numeratorsMetadataData.j
 
 export const ExternalDataComparison = ({ toggleState, configurations }) => {
     const [relations, setRelations] = useState(null)
+    const [toggleStateModal, setToggleStateModal] = useState(1)
+    const [isModalHidden, setIsModalHidden] = useState(true)
+    const [newExternalDataInfo, setNewExternalDataInfo] = useState({
+        type: '',
+        dataID: '',
+        lowLevel: '',
+    })
+
+
+    const toggleTabModal = (index) => {
+        setToggleStateModal(index)
+    }
+
+    const onModalClose = () => {
+        setIsModalHidden(true)
+    }
+
 
     useEffect(() => {
         setRelations(configurations.externalRelations)
@@ -87,7 +112,7 @@ export const ExternalDataComparison = ({ toggleState, configurations }) => {
                                         <Button
                                             name="Primary button"
                                             onClick={() =>
-                                                window.alert('It works!')
+                                                setIsModalHidden(false)
                                             }
                                             basic
                                             button
@@ -100,7 +125,7 @@ export const ExternalDataComparison = ({ toggleState, configurations }) => {
                                         <Button
                                             name="Primary button"
                                             onClick={() =>
-                                                window.alert('It works!')
+                                                console.log('deleting...')
                                             }
                                             destructive
                                             button
@@ -130,7 +155,7 @@ export const ExternalDataComparison = ({ toggleState, configurations }) => {
                             <TableCell>
                                 <Button
                                     name="Primary button"
-                                    onClick={() => window.alert('It works!')}
+                                    onClick={() => setIsModalHidden(false)}
                                     primary
                                     button
                                     value="default"
@@ -144,6 +169,263 @@ export const ExternalDataComparison = ({ toggleState, configurations }) => {
                     </TableBody>
                 </Table>
             </div>
+
+
+            <Modal
+                onClose={onModalClose}
+                hide={isModalHidden}
+                position="middle"
+                large
+            >
+                <ModalTitle>External Data Comparison</ModalTitle>
+                <ModalContent>
+                    <Table>
+                        <TableBody>
+                            <TableRow>
+                                <TableCell>
+                                    <p>Name</p>
+                                </TableCell>
+                                <TableCell>
+                                <Input
+                                        label="Name"
+                                        name="name"
+                                        value=''
+                                        onChange=''
+                                        required
+                                        className="input"
+                                    />
+                                </TableCell>
+                            </TableRow>
+                            <TableRow>
+                                <TableCell>
+                                    <p>Survey/external indicator</p>
+                                </TableCell>
+                                <TableCell>
+                                    <div className="denominatorSelection">
+                                        <div className="dataElementsIndicatorToggle bloc-tabs-modal">
+                                            <button
+                                                className={
+                                                    toggleStateModal === 1
+                                                        ? 'tabs-modal active-tabs-modal'
+                                                        : 'tabs-modal'
+                                                }
+                                                onClick={() =>
+                                                    toggleTabModal(1)
+                                                }
+                                            >
+                                                Data element
+                                            </button>
+                                            <button
+                                                className={
+                                                    toggleStateModal === 2
+                                                        ? 'tabs-modal active-tabs-modal'
+                                                        : 'tabs-modal'
+                                                }
+                                                onClick={() =>
+                                                    toggleTabModal(2)
+                                                }
+                                            >
+                                                Indicator
+                                            </button>
+                                        </div>
+                                        <div className="content-tabs-modal">
+                                            <div
+                                                className={
+                                                    toggleStateModal === 1
+                                                        ? 'content-modal  active-content-modal'
+                                                        : 'content-modal'
+                                                }
+                                            >
+                                                <div className="dataElementsSelector">
+                                                    <SingleSelect
+                                                        className="select"
+                                                        onChange={(value) => {
+                                                            
+                                                            setNewExternalDataInfo(
+                                                                {
+                                                                    ...newExternalDataInfo,
+                                                                    dataID: '',
+                                                                }
+                                                            ) //resets the previous value for new data elements to be refetched
+                                                            elementsRefetch({
+                                                                groupID:
+                                                                    value.selected,
+                                                            }) // fetch data elements only after a data element group has been selected
+                                                        }}
+                                                        placeholder="Data element group"
+                                                        selected=''
+                                                    >
+                                                        <SingleSelectOption  label='' value='' />
+                                                    </SingleSelect>
+                                                    <SingleSelect
+                                                        className="select"
+                                                        onChange=''
+                                                        placeholder="Select data element"
+                                                        disabled=''
+                                                        selected={
+                                                            newExternalDataInfo.dataID
+                                                        }
+                                                    >
+                                                        <SingleSelectOption  label='' value='' />
+                                                    </SingleSelect>
+                                                </div>
+                                            </div>
+
+                                            <div
+                                                className={
+                                                    toggleStateModal === 2
+                                                        ? 'content-modal  active-content-modal'
+                                                        : 'content-modal'
+                                                }
+                                            >
+                                                <div className="dataElementsSelector">
+                                                    <SingleSelect
+                                                        className="select"
+                                                        onChange={() =>
+                                                            console.log(
+                                                                'selected'
+                                                            )
+                                                        }
+                                                        placeholder="Select indicator group"
+                                                    >
+                                                        <SingleSelectOption
+                                                            label="Group one"
+                                                            value="1"
+                                                        />
+                                                        <SingleSelectOption
+                                                            label="Group two"
+                                                            value="2"
+                                                        />
+                                                        <SingleSelectOption
+                                                            label="Group three"
+                                                            value="3"
+                                                        />
+                                                    </SingleSelect>
+                                                    <SingleSelect
+                                                        className="select"
+                                                        onChange={() =>
+                                                            console.log(
+                                                                'selected'
+                                                            )
+                                                        }
+                                                        placeholder="Select data element"
+                                                    >
+                                                        <SingleSelectOption
+                                                            label="Group one"
+                                                            value="1"
+                                                        />
+                                                        <SingleSelectOption
+                                                            label="Group two"
+                                                            value="2"
+                                                        />
+                                                        <SingleSelectOption
+                                                            label="Group three"
+                                                            value="3"
+                                                        />
+                                                    </SingleSelect>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </TableCell>
+                            </TableRow>
+                            <TableRow>
+                                <TableCell>
+                                    <p>Routine data numerator</p>
+                                </TableCell>
+                                <TableCell>
+                                    <SingleSelect
+                                        className="select"
+                                        onChange={(value) =>
+                                            setNewExternalDataInfo({
+                                                ...newExternalDataInfo,
+                                                lowLevel: value.selected,
+                                            })
+                                        }
+                                        placeholder="Select Numerator"
+                                        selected={newExternalDataInfo.lowLevel.toString()}
+                                    >
+                                        
+                                    </SingleSelect>
+                                </TableCell>
+                            </TableRow>
+                            <TableRow>
+                                <TableCell>
+                                    <p>Routine data denominator</p>
+                                </TableCell>
+                                <TableCell>
+                                    <SingleSelect
+                                        className="select"
+                                        onChange={(value) =>
+                                            setNewExternalDataInfo({
+                                                ...newExternalDataInfo,
+                                                lowLevel: value.selected,
+                                            })
+                                        }
+                                        placeholder="Select Denominator"
+                                        selected={newExternalDataInfo.lowLevel.toString()}
+                                    >
+                                        
+                                    </SingleSelect>
+                                </TableCell>
+                            </TableRow>
+                            <TableRow>
+                                <TableCell>
+                                    <p>Threshold (+/- %)</p>
+                                </TableCell>
+                                <TableCell>
+                                <Input
+                                        label="Name"
+                                        name="name"
+                                        value='10'
+                                        onChange=''
+                                        required
+                                        className="input"
+                                    />
+                                </TableCell>
+                            </TableRow>
+                            <TableRow>
+                                <TableCell>
+                                    <p>Survel level</p>
+                                </TableCell>
+                                <TableCell>
+                                    <SingleSelect
+                                        className="select"
+                                        onChange={(value) =>
+                                            setNewExternalDataInfo({
+                                                ...newExternalDataInfo,
+                                                lowLevel: value.selected,
+                                            })
+                                        }
+                                        placeholder="Select organisation unit level"
+                                        selected={newExternalDataInfo.lowLevel.toString()}
+                                    >
+                                        
+                                    </SingleSelect>
+                                </TableCell>
+                            </TableRow>
+                        </TableBody>
+                    </Table>
+                    <p><strong>Threshold</strong> denotes the % difference between external and routine data that is accepted.</p>
+                </ModalContent>
+                <ModalActions>
+                    <ButtonStrip end>
+                        <Button secondary onClick={onModalClose}>
+                            {' '}
+                            Cancel{' '}
+                        </Button>
+                        <Button
+                            primary
+                            onClick={() =>
+                                onSaveDenominator(newExternalDataInfo)
+                            }
+                        >
+                            {' '}
+                            Save{' '}
+                        </Button>
+                    </ButtonStrip>
+                </ModalActions>
+            </Modal>
         </div>
     )
 }
