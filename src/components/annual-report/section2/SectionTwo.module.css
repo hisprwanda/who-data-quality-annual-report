@@ -8,46 +8,54 @@
     margin-bottom: 4px;
 }
 
-.section2dBlock {
-    display: flex;
+.section2dGrid {
+    display: grid;
+    grid-template-columns: 1fr 560px;
+    /* Scatter plot on the right will set height */
+    grid-template-rows: auto 1fr auto;
+    grid-template-areas:
+        'table scatterPlot'
+        'lineChart scatterPlot'
+        'interpretations interpretations';
+    gap: 4px;
     margin-bottom: 36px;
-    gap: 4px;
 }
-
-.section2dBlockLeft {
-    flex-grow: 1;
-    display: flex;
-    flex-direction: column;
-    height: 450px;
-    gap: 4px;
+.section2dTable {
+    grid-area: table;
 }
-
 .chart {
     /* I chose 'solid' here because I think it looks better */
     border: 1px solid var(--colors-grey400);
 }
-
 .section2dLineChart {
     composes: chart;
-    flex-grow: 1;
+    grid-area: lineChart;
 }
-
 .section2dScatterChart {
     composes: chart;
-    width: 560px; /* same as old app */
+    grid-area: scatterPlot;
     height: 450px;
+    /* Width is set by grid template column */
 }
 
 /* Section 2e */
-.section2eBlock {
-    composes: section2dBlock;
-    height: 370px;
+.section2eGrid {
+    display: grid;
+    grid-template-columns: 1fr 560px;
+    grid-template-areas:
+        'table chart'
+        'interpretations interpretations';
+    gap: 4px;
+    margin-bottom: 36px;
 }
-
+.section2eTable {
+    grid-area: table;
+}
 .section2eChart {
     composes: chart;
+    grid-area: chart;
     height: 370px;
-    width: 560px;
+    /* Width is set by grid template column */
 }
 
 .section2eDivergentRegions {

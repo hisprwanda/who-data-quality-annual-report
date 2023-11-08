@@ -7,6 +7,7 @@ import {
     TableRow,
     TableRowHead,
 } from '@dhis2/ui'
+import cx from 'classnames'
 import PropTypes from 'prop-types'
 import React, { useEffect } from 'react'
 import { Chart } from '../Chart.js'
@@ -121,69 +122,66 @@ Sections2a2b2c.propTypes = {
 }
 
 const Section2DBlock = ({ dataRow, index }) => (
-    <div className={styles.section2dBlock}>
-        <div className={styles.section2dBlockLeft}>
-            <Table suppressZebraStriping className={tableStyles.reportTable}>
-                <TableHead>
-                    <TableRowHead className={tableStyles.tableRowHead}>
-                        <TableCellHead dense colSpan="2">
-                            {dataRow.name}
-                        </TableCellHead>
-                    </TableRowHead>
-                </TableHead>
-                <TableBody>
-                    <TableRow>
-                        <TableCell dense>Expected trend</TableCell>
-                        <TableCell dense>{dataRow.expectedTrend}</TableCell>
-                    </TableRow>
-                    <TableRow>
-                        <TableCell dense>Compare region to</TableCell>
-                        <TableCell dense>{dataRow.compareRegionTo}</TableCell>
-                    </TableRow>
-                    <TableRow>
-                        <TableCell dense>Quality threshold</TableCell>
-                        <TableCell dense>
-                            ±{dataRow.qualityThreshold}%
-                        </TableCell>
-                    </TableRow>
-                    <TableRow>
-                        <TableCell dense>Overall score</TableCell>
-                        <TableCell dense>{dataRow.overallScore}%</TableCell>
-                    </TableRow>
-                    <TableRow>
-                        <TableCell dense>
-                            Number of Region with divergent score
-                        </TableCell>
-                        <TableCell dense>
-                            {dataRow.divergentSubOrgUnits?.number}
-                        </TableCell>
-                    </TableRow>
-                    <TableRow>
-                        <TableCell dense>
-                            Percent of Region with divergent score
-                        </TableCell>
-                        <TableCell dense>
-                            {dataRow.divergentSubOrgUnits?.percent}%
-                        </TableCell>
-                    </TableRow>
-                    <TableRow>
-                        <TableCell dense colSpan="2">
-                            {dataRow.divergentSubOrgUnits?.names}
-                        </TableCell>
-                    </TableRow>
-                </TableBody>
-            </Table>
-            {dataRow?.chartInfo?.lineChartInfo && (
-                // <div className={cx(styles.chart, styles.section2dLineChart)}>
-                <Chart
-                    sectionId={'section2d'}
-                    chartId={`line2d_${index}`}
-                    chartInfo={dataRow.chartInfo.lineChartInfo}
-                    className={styles.section2dLineChart}
-                />
-                // </div>
-            )}
-        </div>
+    <div className={styles.section2dGrid}>
+        <Table
+            suppressZebraStriping
+            className={cx(tableStyles.reportTable, styles.section2dTable)}
+        >
+            <TableHead>
+                <TableRowHead className={tableStyles.tableRowHead}>
+                    <TableCellHead dense colSpan="2">
+                        {dataRow.name}
+                    </TableCellHead>
+                </TableRowHead>
+            </TableHead>
+            <TableBody>
+                <TableRow>
+                    <TableCell dense>Expected trend</TableCell>
+                    <TableCell dense>{dataRow.expectedTrend}</TableCell>
+                </TableRow>
+                <TableRow>
+                    <TableCell dense>Compare region to</TableCell>
+                    <TableCell dense>{dataRow.compareRegionTo}</TableCell>
+                </TableRow>
+                <TableRow>
+                    <TableCell dense>Quality threshold</TableCell>
+                    <TableCell dense>±{dataRow.qualityThreshold}%</TableCell>
+                </TableRow>
+                <TableRow>
+                    <TableCell dense>Overall score</TableCell>
+                    <TableCell dense>{dataRow.overallScore}%</TableCell>
+                </TableRow>
+                <TableRow>
+                    <TableCell dense>
+                        Number of Region with divergent score
+                    </TableCell>
+                    <TableCell dense>
+                        {dataRow.divergentSubOrgUnits?.number}
+                    </TableCell>
+                </TableRow>
+                <TableRow>
+                    <TableCell dense>
+                        Percent of Region with divergent score
+                    </TableCell>
+                    <TableCell dense>
+                        {dataRow.divergentSubOrgUnits?.percent}%
+                    </TableCell>
+                </TableRow>
+                <TableRow>
+                    <TableCell dense colSpan="2">
+                        {dataRow.divergentSubOrgUnits?.names}
+                    </TableCell>
+                </TableRow>
+            </TableBody>
+        </Table>
+        {dataRow?.chartInfo?.lineChartInfo && (
+            <Chart
+                sectionId={'section2d'}
+                chartId={`line2d_${index}`}
+                chartInfo={dataRow.chartInfo.lineChartInfo}
+                className={styles.section2dLineChart}
+            />
+        )}
         {dataRow?.chartInfo?.scatterChartInfo && (
             <Chart
                 sectionId={'section2d'}
@@ -226,73 +224,72 @@ Section2D.propTypes = {
 }
 
 const Section2EBlock = ({ dataRow, index }) => (
-    <div className={styles.section2eBlock}>
-        <div className={styles.section2dBlockLeft}>
-            <Table suppressZebraStriping className={tableStyles.reportTable}>
-                <TableHead>
-                    <TableRowHead className={tableStyles.tableRowHead}>
-                        <TableCellHead dense colSpan="2">
-                            {dataRow.title}
-                        </TableCellHead>
-                    </TableRowHead>
-                </TableHead>
-                <TableBody>
-                    <TableRow>
-                        <TableCell dense>Denominator A</TableCell>
-                        <TableCell dense>{dataRow.A}</TableCell>
-                    </TableRow>
-                    <TableRow>
-                        <TableCell dense>Denominator B</TableCell>
-                        <TableCell dense>{dataRow.B}</TableCell>
-                    </TableRow>
-                    <TableRow>
-                        <TableCell dense>Expected relationship</TableCell>
-                        <TableCell dense>
-                            {dataRow.expectedRelationship}
-                        </TableCell>
-                    </TableRow>
-                    <TableRow>
-                        <TableCell dense>Quality threshold</TableCell>
-                        <TableCell dense>
-                            {dataRow.expectedRelationship === 'Dropout rate'
-                                ? ''
-                                : '±'}
-                            {dataRow.qualityThreshold}
-                        </TableCell>
-                    </TableRow>
-                    <TableRow>
-                        <TableCell dense>Overall score</TableCell>
-                        <TableCell dense>{dataRow.overallScore}%</TableCell>
-                    </TableRow>
-                    <TableRow>
-                        <TableCell dense>
-                            Number of Region with divergent score
-                        </TableCell>
-                        <TableCell dense>
-                            {dataRow.divergentSubOrgUnits?.number}
-                        </TableCell>
-                    </TableRow>
-                    <TableRow>
-                        <TableCell dense>
-                            Percent of Region with divergent score
-                        </TableCell>
-                        <TableCell dense>
-                            {dataRow.divergentSubOrgUnits?.percentage}%
-                        </TableCell>
-                    </TableRow>
-                    <TableRow>
-                        <TableCell
-                            dense
-                            colSpan="2"
-                            /** Make this cell taller */
-                            className={styles.section2eDivergentRegions}
-                        >
-                            {dataRow.divergentSubOrgUnits?.names}
-                        </TableCell>
-                    </TableRow>
-                </TableBody>
-            </Table>
-        </div>
+    <div className={styles.section2eGrid}>
+        <Table
+            suppressZebraStriping
+            className={cx(tableStyles.reportTable, styles.section2eTable)}
+        >
+            <TableHead>
+                <TableRowHead className={tableStyles.tableRowHead}>
+                    <TableCellHead dense colSpan="2">
+                        {dataRow.title}
+                    </TableCellHead>
+                </TableRowHead>
+            </TableHead>
+            <TableBody>
+                <TableRow>
+                    <TableCell dense>Denominator A</TableCell>
+                    <TableCell dense>{dataRow.A}</TableCell>
+                </TableRow>
+                <TableRow>
+                    <TableCell dense>Denominator B</TableCell>
+                    <TableCell dense>{dataRow.B}</TableCell>
+                </TableRow>
+                <TableRow>
+                    <TableCell dense>Expected relationship</TableCell>
+                    <TableCell dense>{dataRow.expectedRelationship}</TableCell>
+                </TableRow>
+                <TableRow>
+                    <TableCell dense>Quality threshold</TableCell>
+                    <TableCell dense>
+                        {dataRow.expectedRelationship === 'Dropout rate'
+                            ? ''
+                            : '±'}
+                        {dataRow.qualityThreshold}
+                    </TableCell>
+                </TableRow>
+                <TableRow>
+                    <TableCell dense>Overall score</TableCell>
+                    <TableCell dense>{dataRow.overallScore}%</TableCell>
+                </TableRow>
+                <TableRow>
+                    <TableCell dense>
+                        Number of Region with divergent score
+                    </TableCell>
+                    <TableCell dense>
+                        {dataRow.divergentSubOrgUnits?.number}
+                    </TableCell>
+                </TableRow>
+                <TableRow>
+                    <TableCell dense>
+                        Percent of Region with divergent score
+                    </TableCell>
+                    <TableCell dense>
+                        {dataRow.divergentSubOrgUnits?.percentage}%
+                    </TableCell>
+                </TableRow>
+                <TableRow>
+                    <TableCell
+                        dense
+                        colSpan="2"
+                        /** Make this cell taller */
+                        className={styles.section2eDivergentRegions}
+                    >
+                        {dataRow.divergentSubOrgUnits?.names}
+                    </TableCell>
+                </TableRow>
+            </TableBody>
+        </Table>
         {dataRow.chartInfo && (
             <Chart
                 sectionId={'section2e'}
