@@ -1,11 +1,8 @@
-import {
-    TableBody,
-    TableHead,
-    TableRow,
-} from '@dhis2/ui'
+import { TableBody, TableHead, TableRow } from '@dhis2/ui'
 import PropTypes from 'prop-types'
 import React, { useEffect } from 'react'
 import { Chart } from '../Chart.js'
+import { NoDataInfoBox } from '../common/NoDataWarning.js'
 import {
     ReportCell,
     ReportCellHead,
@@ -60,53 +57,67 @@ SubSectionLayout.propTypes = {
     title: PropTypes.string,
 }
 
-const Sections2a2b2c = ({ title, subtitle, subsectionData }) => (
-    <div className={styles.section2abcContainer}>
-        <ReportTable>
-            <TableHead>
-                <SubSectionLayout title={title} subtitle={subtitle} />
-                <ReportRowHead>
-                    <ReportCellHead rowSpan="2" width="200">
-                        Indicator
-                    </ReportCellHead>
-                    <ReportCellHead rowSpan="2" width="80">
-                        Threshold
-                    </ReportCellHead>
-                    <ReportCellHead rowSpan="2" width="80">
-                        Overall score (%)
-                    </ReportCellHead>
-                    <ReportCellHead colSpan="3">
-                        Region with divergent score
-                    </ReportCellHead>
-                </ReportRowHead>
-                <ReportRowHead>
-                    <ReportCellHead width="110">Number</ReportCellHead>
-                    <ReportCellHead width="110">Percent</ReportCellHead>
-                    <ReportCellHead>Names</ReportCellHead>
-                </ReportRowHead>
-            </TableHead>
-            <TableBody>
-                {subsectionData.map((dataRow) => (
-                    <TableRow key={dataRow.indicator}>
-                        <ReportCell>{dataRow.indicator}</ReportCell>
-                        <ReportCell>{dataRow.threshold} SD</ReportCell>
-                        <ReportCell>{dataRow.overallScore}</ReportCell>
-                        <ReportCell>
-                            {dataRow.divergentScores?.number}
-                        </ReportCell>
-                        <ReportCell>
-                            {dataRow.divergentScores?.percentage}
-                        </ReportCell>
-                        <ReportCell>
-                            {dataRow.divergentScores?.names}
-                        </ReportCell>
-                    </TableRow>
-                ))}
-            </TableBody>
-        </ReportTable>
-    </div>
-)
+const Sections2a2b2c = ({ title, subtitle, subsectionData }) => {
+    if (subsectionData.length === 0) {
+        return (
+            <div className={styles.section2abcContainer}>
+                <ReportTable>
+                    <TableHead>
+                        <SubSectionLayout title={title} subtitle={subtitle} />
+                    </TableHead>
+                </ReportTable>
+                <NoDataInfoBox subsection={true} />
+            </div>
+        )
+    }
 
+    return (
+        <div className={styles.section2abcContainer}>
+            <ReportTable>
+                <TableHead>
+                    <SubSectionLayout title={title} subtitle={subtitle} />
+                    <ReportRowHead>
+                        <ReportCellHead rowSpan="2" width="200">
+                            Indicator
+                        </ReportCellHead>
+                        <ReportCellHead rowSpan="2" width="80">
+                            Threshold
+                        </ReportCellHead>
+                        <ReportCellHead rowSpan="2" width="80">
+                            Overall score (%)
+                        </ReportCellHead>
+                        <ReportCellHead colSpan="3">
+                            Region with divergent score
+                        </ReportCellHead>
+                    </ReportRowHead>
+                    <ReportRowHead>
+                        <ReportCellHead width="110">Number</ReportCellHead>
+                        <ReportCellHead width="110">Percent</ReportCellHead>
+                        <ReportCellHead>Names</ReportCellHead>
+                    </ReportRowHead>
+                </TableHead>
+                <TableBody>
+                    {subsectionData.map((dataRow) => (
+                        <TableRow key={dataRow.indicator}>
+                            <ReportCell>{dataRow.indicator}</ReportCell>
+                            <ReportCell>{dataRow.threshold} SD</ReportCell>
+                            <ReportCell>{dataRow.overallScore}</ReportCell>
+                            <ReportCell>
+                                {dataRow.divergentScores?.number}
+                            </ReportCell>
+                            <ReportCell>
+                                {dataRow.divergentScores?.percentage}
+                            </ReportCell>
+                            <ReportCell>
+                                {dataRow.divergentScores?.names}
+                            </ReportCell>
+                        </TableRow>
+                    ))}
+                </TableBody>
+            </ReportTable>
+        </div>
+    )
+}
 Sections2a2b2c.propTypes = {
     subsectionData: PropTypes.array,
     subtitle: PropTypes.string,
@@ -192,6 +203,7 @@ const Section2D = ({ title, subtitle, subsectionData }) => (
                 <SubSectionLayout title={title} subtitle={subtitle} />
             </TableHead>
         </ReportTable>
+        {subsectionData.length === 0 && <NoDataInfoBox subsection={true} />}
         {subsectionData.map((dataRow, index) => (
             <Section2DBlock
                 key={dataRow.name}
@@ -292,6 +304,7 @@ const Section2E = ({ title, subtitle, subsectionData }) => (
                 <SubSectionLayout title={title} subtitle={subtitle} />
             </TableHead>
         </ReportTable>
+        {subsectionData.length === 0 && <NoDataInfoBox subsection={true} />}
         {subsectionData.map((dataRow, index) => (
             <Section2EBlock
                 key={dataRow.title}
@@ -335,6 +348,25 @@ export const SectionTwo = ({ reportParameters }) => {
             periods: reportParameters.periods,
             overallOrgUnit: reportParameters.orgUnits[0],
         })
+        // if all subsections are empty, display overall empty message
+        const subsectionNames = [
+            'section2a',
+            'section2b',
+            'section2c',
+            'section2d',
+            'section2e',
+        ]
+        if (
+            subsectionNames
+                .map(
+                    (subsectionName) =>
+                        Object.keys(section2Data?.[subsectionName] ?? []).length
+                )
+                .every((subsectionLength) => subsectionLength === 0)
+        ) {
+            return <NoDataInfoBox subsection={false} />
+        }
+
         return (
             <>
                 <Sections2a2b2c

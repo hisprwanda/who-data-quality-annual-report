@@ -49,7 +49,8 @@ const RefetchConfigurationsContext = React.createContext()
  */
 export const ConfigurationsProvider = ({ children }) => {
     const [configurations, setConfigurations] = useState(null)
-    const { loading, error, refetch } = useSetUpConfigurations(setConfigurations)
+    const { loading, error, refetch } =
+        useSetUpConfigurations(setConfigurations)
 
     if (loading) {
         return <LoadingSpinner />

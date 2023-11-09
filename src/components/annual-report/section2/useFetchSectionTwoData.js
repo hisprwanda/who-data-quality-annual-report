@@ -32,7 +32,7 @@ const section2abcQuery = {
     },
 }
 
-const section2deQueries = {
+const section2dQueries = {
     [OVERALL_ORG_UNIT_SECTION_2D]: {
         resource: 'analytics.json',
         params: ({ dataElements, orgUnits, periods }) => ({
@@ -49,6 +49,9 @@ const section2deQueries = {
             },pe:${periods.join(';')}`,
         }),
     },
+}
+
+const section2eQueries = {
     [OVERALL_ORG_UNIT_SECTION_2E]: {
         resource: 'analytics.json',
         params: ({ numeratorRelationDEs, orgUnits, currentPeriod }) => ({
@@ -187,6 +190,7 @@ export const useFetchSectionTwoData = () => {
                 dePeriodTypes: validDataElementPeriodTypes,
                 currentPeriod: variables.currentPeriod,
             })
+
             const subPeriodRequests = Object.keys(subPeriodsByDE).map((de) =>
                 fetchDataBySubPeriod({
                     engine,
@@ -199,24 +203,44 @@ export const useFetchSectionTwoData = () => {
                 })
             )
             try {
-                const otherRequest = engine.query(section2deQueries, {
-                    variables: {
-                        dataElements: Object.keys(validDataElementPeriodTypes),
-                        numeratorRelationDEs,
-                        orgUnits: variables.orgUnits,
-                        orgUnitLevel: variables.orgUnitLevel,
-                        periods: variables.periods.map((p) => p.id),
-                        currentPeriod: variables.currentPeriod.id,
-                    },
-                })
+                const section2dRequest = !Object.keys(
+                    validDataElementPeriodTypes
+                ).length
+                    ? {}
+                    : engine.query(section2dQueries, {
+                          variables: {
+                              dataElements: Object.keys(
+                                  validDataElementPeriodTypes
+                              ),
+                              orgUnits: variables.orgUnits,
+                              orgUnitLevel: variables.orgUnitLevel,
+                              periods: variables.periods.map((p) => p.id),
+                              currentPeriod: variables.currentPeriod.id,
+                          },
+                      })
 
-                const [otherData, ...dataBySubPeriod] = await Promise.all([
-                    otherRequest,
-                    ...subPeriodRequests,
-                ])
+                const section2eRequest = !numeratorRelationDEs.length
+                    ? {}
+                    : engine.query(section2eQueries, {
+                          variables: {
+                              numeratorRelationDEs,
+                              orgUnits: variables.orgUnits,
+                              orgUnitLevel: variables.orgUnitLevel,
+                              periods: variables.periods.map((p) => p.id),
+                              currentPeriod: variables.currentPeriod.id,
+                          },
+                      })
+
+                const [section2dData, section2eData, ...dataBySubPeriod] =
+                    await Promise.all([
+                        section2dRequest,
+                        section2eRequest,
+                        ...subPeriodRequests,
+                    ])
 
                 setData({
-                    ...otherData,
+                    ...section2dData,
+                    ...section2eData,
                     [SUBPERIODS_RESPONSE_NAME]: dataBySubPeriod.map(
                         (resp) => resp[SUBPERIODS_RESPONSE_NAME]
                     ),

@@ -211,6 +211,13 @@ export const getSection2e = ({
     periods,
     overallOrgUnit,
 }) => {
+    // if there is no data for subsection, skip calculations and return empty array
+    if (
+        Object.keys(section2Response?.[OVERALL_ORG_UNIT_SECTION_2E] ?? {})
+            .length === 0
+    ) {
+        return { section2e: [] }
+    }
     const currentPeriodID = periods[0].id
 
     const formattedResponse2eOverall = convertAnalyticsResponseToObject({
