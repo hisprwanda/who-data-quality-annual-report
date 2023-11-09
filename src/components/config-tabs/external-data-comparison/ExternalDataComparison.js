@@ -23,7 +23,7 @@ export const ExternalDataComparison = ({ toggleState, configurations }) => {
 
     useEffect(() => {
         setRelations(configurations.externalRelations)
-    }, [])
+    }, [configurations])
 
     return (
         <div

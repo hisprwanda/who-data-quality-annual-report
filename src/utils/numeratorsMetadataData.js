@@ -85,7 +85,7 @@ export const getNumeratorsInGroup = (numerators, group, onDeleteNumerator) => {
     )
 }
 
-export const getNumeratorRelations = (numerators, code) => {
+export const getNumeratorNameByCode = (numerators, code) => {
     const numeratorObj = numerators.find((numerator) => numerator.code == code)
     if (numeratorObj) {
         return numeratorObj.name
