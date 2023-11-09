@@ -1,3 +1,4 @@
+import { useDataQuery } from '@dhis2/app-runtime'
 import {
     Modal,
     ModalTitle,
@@ -16,6 +17,7 @@ import {
     ButtonStrip,
 } from '@dhis2/ui'
 import React, { useState } from 'react'
+import { useConfigurations } from '../../../utils/index.js'
 const { Form, Field } = ReactFinalForm
 
 const DEFAULT_EXTERNAL_DATA_COMPARISON = {
@@ -28,11 +30,94 @@ const DEFAULT_EXTERNAL_DATA_COMPARISON = {
     level: '',
 }
 
+// TODO: these two queries should be moved to a shared file, they are also used in other config tabs (e.g. denominators)
+const componentQueries = {
+    DEGroups: {
+        resource: 'dataElementGroups',
+        params: {
+            paging: false,
+        },
+    },
+    DEs: {
+        resource: 'dataElementGroups',
+        params: {
+            fields: 'id,displayName,dataElements[id,displayName]',
+            paging: false,
+        },
+    },
+    ouLevels: {
+        resource: 'organisationUnitLevels',
+        params: {
+            fields: 'displayName,id,level',
+            paging: false,
+        },
+    },
+}
+
 const UpdateExternalDataComparisonModel = ({
     externalDataToUpdate,
     onSave,
     onClose,
 }) => {
+    const configurations = useConfigurations()
+
+    // filter numerators that have data IDs & sort alphabetically
+    const numeratorOptions = React.useMemo(() => {
+        const numeratorsWithDataIds = configurations.numerators
+            .filter((numerator) => numerator.dataID != null)
+            .sort((a, b) => a.name.localeCompare(b.name))
+        return numeratorsWithDataIds.map(({ name, code }) => ({
+            label: name,
+            value: code,
+        }))
+    }, [configurations.numerators])
+    // filter denominators that have data IDs & sort alphabetically
+
+    const denominatorOptions = React.useMemo(() => {
+        const denominatorsWithDataIds = configurations.denominators
+            .filter((denominator) => denominator.dataID != null)
+            .sort((a, b) => a.name.localeCompare(b.name))
+        return denominatorsWithDataIds.map(({ name, code }) => ({
+            label: name,
+            value: code,
+        }))
+    }, [configurations.denominators])
+
+    // store data element groups
+    let dataElementGroups = []
+    // store orgUnits
+    let orgUnitsLevels = []
+    // data elements to filter from
+    let dataElements = []
+
+    const { data } = useDataQuery(
+        componentQueries,
+        {
+            lazy: false,
+        }
+    )
+
+    if (data) {
+        dataElementGroups = data.DEGroups.dataElementGroups.map(
+            (group) => ({
+                label: group.displayName,
+                value: group.id,
+            })
+        )
+        orgUnitsLevels = data.ouLevels.organisationUnitLevels.map(
+            (level) => ({
+                label: level.displayName,
+                value: level.level.toString(),
+            })
+        )
+        dataElements = data.DEs.dataElementGroups.map((group) => ({
+            label: group.displayName,
+            value: group.id,
+        }))
+
+        console.log('data', data)
+    }
+
     const [toggleStateModal, setToggleStateModal] = useState(1)
 
     const toggleTabModal = (index) => {
@@ -109,10 +194,13 @@ const UpdateExternalDataComparisonModel = ({
                                                     <div className="dataElementsSelector">
                                                         <Field
                                                             name="group"
+                                                            
                                                             component={
                                                                 SingleSelectFieldFF
                                                             }
-                                                            options={[]}
+                                                            options={
+                                                                dataElementGroups
+                                                            }
                                                             placeholder="Select data element group"
                                                         />
                                                         <Field
@@ -192,7 +280,7 @@ const UpdateExternalDataComparisonModel = ({
                                         <Field
                                             name="numerator"
                                             component={SingleSelectFieldFF}
-                                            options={[]}
+                                            options={numeratorOptions}
                                             placeholder="Select Numerator"
                                         />
                                     </TableCell>
@@ -205,7 +293,7 @@ const UpdateExternalDataComparisonModel = ({
                                         <Field
                                             name="denominator"
                                             component={SingleSelectFieldFF}
-                                            options={[]}
+                                            options={denominatorOptions}
                                             placeholder="Select Denominator"
                                         />
                                     </TableCell>
@@ -229,7 +317,7 @@ const UpdateExternalDataComparisonModel = ({
                                         <Field
                                             name="level"
                                             component={SingleSelectFieldFF}
-                                            options={[]}
+                                            options={orgUnitsLevels}
                                             placeholder="Select organisation unit level"
                                         />
                                     </TableCell>

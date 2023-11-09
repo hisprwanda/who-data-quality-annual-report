@@ -1,5 +1,6 @@
 import {
     Button,
+    ButtonStrip,
     Table,
     TableBody,
     TableCell,
@@ -86,32 +87,36 @@ export const ExternalDataComparison = ({ toggleState, configurations }) => {
                                     <TableCell>{relation.criteria}%</TableCell>
                                     <TableCell>District</TableCell>
                                     <TableCell>
-                                        <Button
-                                            name="Primary button"
-                                            onClick={() =>
-                                                setUpdateModalOpen(true)
-                                            }
-                                            basic
-                                            button
-                                            value="default"
-                                            icon={<IconEdit16 />}
-                                        >
-                                            {' '}
-                                            Edit
-                                        </Button>
-                                        <Button
-                                            name="Primary button"
-                                            onClick={() =>
-                                                console.log('deleting...')
-                                            }
-                                            destructive
-                                            button
-                                            value="default"
-                                            icon={<IconDelete16 />}
-                                        >
-                                            {' '}
-                                            Delete
-                                        </Button>
+                                        <ButtonStrip>
+                                            <Button
+                                                small
+                                                name="Primary button"
+                                                onClick={() =>
+                                                    setUpdateModalOpen(true)
+                                                }
+                                                basic
+                                                button
+                                                value="default"
+                                                icon={<IconEdit16 />}
+                                            >
+                                                {' '}
+                                                Edit
+                                            </Button>
+                                            <Button
+                                                small
+                                                name="Primary button"
+                                                onClick={() =>
+                                                    console.log('deleting...')
+                                                }
+                                                destructive
+                                                button
+                                                value="default"
+                                                icon={<IconDelete16 />}
+                                            >
+                                                {' '}
+                                                Delete
+                                            </Button>
+                                        </ButtonStrip>
                                     </TableCell>
                                 </TableRow>
                             ))
