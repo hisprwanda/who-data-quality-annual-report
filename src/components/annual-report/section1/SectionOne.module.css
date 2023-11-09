@@ -1,0 +1,8 @@
+.subsection {
+    margin-bottom: 36px;
+}
+
+.section1Chart {
+    composes: subsection;
+    border: 1px solid var(--colors-grey400);
+}
