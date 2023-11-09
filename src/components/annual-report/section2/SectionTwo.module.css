@@ -12,11 +12,10 @@
     display: grid;
     grid-template-columns: 1fr 560px;
     /* Scatter plot on the right will set height */
-    grid-template-rows: auto 1fr auto;
+    grid-template-rows: auto 1fr;
     grid-template-areas:
         'table scatterPlot'
-        'lineChart scatterPlot'
-        'interpretations interpretations';
+        'lineChart scatterPlot';
     gap: 4px;
     margin-bottom: 36px;
 }
@@ -37,28 +36,19 @@
     height: 450px;
     /* Width is set by grid template column */
 }
-/* todo: interpretations */
 
 /* Section 2e */
 .section2eGrid {
     display: grid;
     grid-template-columns: 1fr 560px;
-    grid-template-areas:
-        'table chart'
-        'interpretations interpretations';
     gap: 4px;
     margin-bottom: 36px;
 }
-.section2eTable {
-    grid-area: table;
-}
 .section2eChart {
     composes: chart;
-    grid-area: chart;
     height: 370px;
     /* Width is set by grid template column */
 }
-/* todo: interpretations */
 
 .section2eDivergentRegions {
     height: 73px !important; /* need to override original table cell height */

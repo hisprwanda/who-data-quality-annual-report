@@ -222,7 +222,7 @@ Section2D.propTypes = {
 
 const Section2EBlock = ({ dataRow, index }) => (
     <div className={styles.section2eGrid}>
-        <ReportTable className={styles.section2eTable}>
+        <ReportTable>
             <TableHead>
                 <ReportRowHead>
                     <ReportCellHead colSpan="2">{dataRow.title}</ReportCellHead>
