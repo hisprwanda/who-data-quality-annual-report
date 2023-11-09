@@ -52,7 +52,7 @@ const Section3A = ({ title, subtitle, subsectionData }) => (
             .map((dataRow, index) => {
                 return (
                     <div className={styles.section3Grid} key={dataRow.name}>
-                        <ReportTable className={styles.gridTable}>
+                        <ReportTable>
                             <TableHead>
                                 <ReportRowHead>
                                     <ReportCellHead colSpan="2">
