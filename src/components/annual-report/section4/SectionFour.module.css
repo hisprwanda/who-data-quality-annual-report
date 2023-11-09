@@ -1,0 +1,19 @@
+.marginBottom4 {
+    margin-bottom: 4px;
+}
+
+.section4a {
+    margin-bottom: 36px;
+}
+
+.section4bGrid {
+    display: grid;
+    grid-template-columns: 1fr 560px;
+    margin-bottom: 36px;
+    gap: 4px;
+}
+
+.section4bChart {
+    border: 1px solid var(--colors-grey400);
+    height: 360px;
+}
