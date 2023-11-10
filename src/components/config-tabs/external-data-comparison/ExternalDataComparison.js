@@ -16,7 +16,7 @@ import PropTypes from 'prop-types'
 import React, { useState, useEffect } from 'react'
 import { getDenominatorRelations } from '../../../utils/denominatorsMetadataData.js'
 import { getNumeratorDataElement } from '../../../utils/numeratorsMetadataData.js'
-import UpdateExternalDataComparisonModel from './UpdateExternalDataComparisonModel.js'
+import {UpdateExternalDataComparisonModel} from './UpdateExternalDataComparisonModel.js'
 
 export const ExternalDataComparison = ({ toggleState, configurations }) => {
     const [relations, setRelations] = useState(null)

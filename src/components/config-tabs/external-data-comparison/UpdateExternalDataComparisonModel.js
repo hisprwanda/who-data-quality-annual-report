@@ -18,7 +18,7 @@ import {
 } from '@dhis2/ui'
 import React, { useState } from 'react'
 import { useConfigurations } from '../../../utils/index.js'
-const { Form, Field } = ReactFinalForm
+const { Form, Field, useField } = ReactFinalForm
 
 const DEFAULT_EXTERNAL_DATA_COMPARISON = {
     name: '',
@@ -27,10 +27,10 @@ const DEFAULT_EXTERNAL_DATA_COMPARISON = {
     externalData: '',
     numerator: '',
     denominator: '',
-    level: '',
+    level: '1',
 }
 
-// TODO: these two queries should be moved to a shared file, they are also used in other config tabs (e.g. denominators)
+// TODO: these queries should be moved to a shared file, they are also used in other config tabs (e.g. denominators)
 const componentQueries = {
     DEGroups: {
         resource: 'dataElementGroups',
@@ -54,12 +54,65 @@ const componentQueries = {
     },
 }
 
-const UpdateExternalDataComparisonModel = ({
+
+// Extract the field to it's own component
+const DataElementSelect = ({dataElementsToFilter}) => {
+    // use `useField` from ReactFinalForm to get a field's state --
+    // input.value will be the value of the field we're looking for
+    const { input } = useField(
+        // name of the field you want to spy on
+        'dataElementGroup',
+        // use a config object subscribe to just the input value
+        // to avoid unnecessary rerenders
+        { subscription: { value: true } }
+    )
+    const selectedDataElementGroup = input.value
+
+    // Filter out the data element options based on the selected group
+    // Use useMemo() from react to avoid having to do this calculation
+    // on every rerender, only when the dataElementGroup changes
+    const dataElementOptions = React.useMemo(() => {
+        const groupElements = dataElementsToFilter.filter(
+            (group) => group.id === selectedDataElementGroup
+        )
+
+        // if no elements are found, return an empty array
+        if (groupElements.length === 0) {
+            return []
+        }
+        // update the data elements options based on the selected group
+        const filteredDataElementOptions = groupElements[0].dataElements.map((group) => ({
+            label: group.displayName,
+            value: group.id,
+        }))
+
+        return filteredDataElementOptions
+        // this array tells this memoized function to only run when
+        // selectedDataElementGroup changes
+    }, [selectedDataElementGroup])
+
+
+    return (
+        <Field
+            name="dataElement"
+            component={SingleSelectFieldFF}
+            // provide our options here:
+            options={dataElementOptions}
+            placeholder="Select data element"
+        />
+    )
+}
+// In your form, add the <DataElementSelect /> where you need it
+
+
+export const UpdateExternalDataComparisonModel = ({
     externalDataToUpdate,
     onSave,
     onClose,
 }) => {
     const configurations = useConfigurations()
+
+    const [toggleStateModal, setToggleStateModal] = useState(1)
 
     // filter numerators that have data IDs & sort alphabetically
     const numeratorOptions = React.useMemo(() => {
@@ -88,7 +141,7 @@ const UpdateExternalDataComparisonModel = ({
     // store orgUnits
     let orgUnitsLevels = []
     // data elements to filter from
-    let dataElements = []
+    let dataElementsToFilter = []
 
     const { data } = useDataQuery(
         componentQueries,
@@ -110,15 +163,11 @@ const UpdateExternalDataComparisonModel = ({
                 value: level.level.toString(),
             })
         )
-        dataElements = data.DEs.dataElementGroups.map((group) => ({
-            label: group.displayName,
-            value: group.id,
-        }))
-
-        console.log('data', data)
+        
+        // data groups containing data elements to filter from
+        dataElementsToFilter = data.DEs.dataElementGroups
     }
-
-    const [toggleStateModal, setToggleStateModal] = useState(1)
+    
 
     const toggleTabModal = (index) => {
         setToggleStateModal(index)
@@ -193,24 +242,18 @@ const UpdateExternalDataComparisonModel = ({
                                                 >
                                                     <div className="dataElementsSelector">
                                                         <Field
-                                                            name="group"
-                                                            
-                                                            component={
-                                                                SingleSelectFieldFF
-                                                            }
-                                                            options={
-                                                                dataElementGroups
-                                                            }
+                                                            name="dataElementGroup"
+                                                            component={ SingleSelectFieldFF }
+                                                            options={ dataElementGroups }
                                                             placeholder="Select data element group"
                                                         />
-                                                        <Field
-                                                            name="externalData"
-                                                            component={
-                                                                SingleSelectFieldFF
-                                                            }
-                                                            options={[]}
-                                                            placeholder="Select data element"
-                                                        />
+
+                                                            <DataElementSelect 
+                                                                dataElementsToFilter = { dataElementsToFilter }
+                                                            />
+                                                   
+
+
                                                     </div>
                                                 </div>
 
