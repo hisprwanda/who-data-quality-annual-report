@@ -274,7 +274,8 @@ Section2E.propTypes = {
 }
 
 export const SectionTwo = ({ reportParameters }) => {
-    const { loading, data, error, refetch } = useFetchSectionTwoData()
+    const { loading, error, refetch } = useFetchSectionTwoData()
+    const [section2Data, setSection2Data] = React.useState()
 
     useEffect(() => {
         const variables = {
@@ -282,7 +283,16 @@ export const SectionTwo = ({ reportParameters }) => {
             currentPeriod: reportParameters.periods[0],
         }
 
-        refetch({ variables })
+        refetch({ variables }).then((data) => {
+            console.log({ data })
+            const newSection2Data = calculateSection2({
+                section2Response: data,
+                mappedConfiguration: reportParameters.mappedConfiguration,
+                periods: reportParameters.periods,
+                overallOrgUnit: reportParameters.orgUnits[0],
+            })
+            setSection2Data(newSection2Data)
+        })
     }, [refetch, reportParameters]) // should include refetch, which needs to be made stable
 
     if (loading) {
@@ -293,13 +303,7 @@ export const SectionTwo = ({ reportParameters }) => {
         return <span>error</span>
     }
 
-    if (data) {
-        const section2Data = calculateSection2({
-            section2Response: data,
-            mappedConfiguration: reportParameters.mappedConfiguration,
-            periods: reportParameters.periods,
-            overallOrgUnit: reportParameters.orgUnits[0],
-        })
+    if (section2Data) {
         // if all subsections are empty, display overall empty message
         const subsectionNames = [
             'section2a',

@@ -238,18 +238,23 @@ export const useFetchSectionTwoData = () => {
                         ...subPeriodRequests,
                     ])
 
-                setData({
+                const newData = {
                     ...section2dData,
                     ...section2eData,
                     [SUBPERIODS_RESPONSE_NAME]: dataBySubPeriod.map(
                         (resp) => resp[SUBPERIODS_RESPONSE_NAME]
                     ),
-                })
+                }
+                setData(newData)
+                setLoading(false)
+                return newData
             } catch (e) {
                 console.error(e)
                 setError(e)
-            } finally {
                 setLoading(false)
+                // rejected promises don't crash the app and can be
+                // useful to catch
+                throw new Error(e)
             }
         },
         [engine]
