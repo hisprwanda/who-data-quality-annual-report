@@ -12,13 +12,47 @@ import {
 } from '@dhis2/ui'
 import { Chip } from '@dhis2/ui-core'
 // import PropTypes from 'prop-types'
-import React /* useState, useEffect */ from 'react'
+import React, { useCallback, useState } from 'react'
 import { useConfigurations } from '../../../utils/index.js'
 import {
     getNumeratorDataElement,
     getNumeratorDataset,
     getNumeratorMemberGroups,
 } from '../../../utils/numeratorsMetadataData.js'
+import { EditNumeratorModal } from './EditNumeratorModal.js'
+
+const AddNewNumeratorButton = () => {
+    const [addNewModalOpen, setAddNewModalOpen] = useState(false)
+    // const dispatch = useConfigurationsDispatch()
+
+    const openModal = useCallback(() => setAddNewModalOpen(true), [])
+    const closeModal = useCallback(() => setAddNewModalOpen(false), [])
+
+    const addNewNumeratorRelation = useCallback(
+        (newNumerator) => alert(JSON.stringify(newNumerator, null, 2)),
+        // dispatch({
+        //     type: CREATE_NUMERATOR_RELATION,
+        //     payload: { newNumeratorRelation },
+        // }),
+        [
+            /* dispatch */
+        ]
+    )
+
+    return (
+        <>
+            <Button primary icon={<IconAdd16 />} onClick={openModal}>
+                Add numerator
+            </Button>
+            {addNewModalOpen && (
+                <EditNumeratorModal
+                    onSave={addNewNumeratorRelation}
+                    onClose={closeModal}
+                />
+            )}
+        </>
+    )
+}
 
 export const Numerators = () => {
     const configurations = useConfigurations()
@@ -118,13 +152,7 @@ export const Numerators = () => {
                     <TableRow>
                         <TableCell colSpan="99">
                             <ButtonStrip end>
-                                <Button
-                                    onClick={() => console.log('todo')}
-                                    icon={<IconAdd16 />}
-                                    primary
-                                >
-                                    Add new numerator
-                                </Button>
+                                <AddNewNumeratorButton />
                             </ButtonStrip>
                         </TableCell>
                     </TableRow>
