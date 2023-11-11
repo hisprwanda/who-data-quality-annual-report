@@ -134,12 +134,24 @@ export const DenominatorRelations = ({ toggleState }) => {
     // while in editing mode
     const onEditRelation = (relation) => {
         openModal()
-        setNewDenominatorRelationInfo(relation)
-        setSelectedDenominatorA(relation.A)
-        setSelectedDenominatorB(relation.B)
-        setFilteredDenominators(
-            filterDenominatorsByType(configurations.denominators, relation.type)
+        // get the filtered relations first and then only set A and B if A and B are in those filtered relations
+        const filteredDenominators = filterDenominatorsByType(
+            configurations.denominators,
+            relation.type
         )
+        setFilteredDenominators(filteredDenominators)
+        setNewDenominatorRelationInfo(relation)
+        setSelectedDenominatorA(
+            filteredDenominators.find(
+                (denominator) => denominator.code === relation.A
+            )
+        )
+        setSelectedDenominatorB(
+            filteredDenominators.find(
+                (denominator) => denominator.code === relation.B
+            )
+        )
+
     }
 
     // while in adding mode
