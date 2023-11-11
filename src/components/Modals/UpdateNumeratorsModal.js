@@ -16,11 +16,11 @@ import {
 import PropTypes from 'prop-types'
 import React, { useState, useEffect } from 'react'
 import '../Modals/edit_modal_styles.css'
+import { getNextAvailableCode } from '../../utils/getNextAvailableCode.js'
 import {
     filterSelectedMetadata,
     getNumeratorMemberGroups,
 } from '../../utils/numeratorsMetadataData.js'
-import { generateNumeratorCode } from '../../utils/utils.js'
 
 const dataElementGroupsQuery = {
     elements: {
@@ -158,12 +158,12 @@ const UpdateNumeratorsModal = ({
         }
     }, [dataSetsData])
 
-    const newCode = generateNumeratorCode(configurations.numerators)
+    const newNumeratorCode = getNextAvailableCode(configurations.numerators, 'C')
 
     const handleGroupSelection = (selectedG) => {
         setNumerator({
             ...numerator,
-            code: newCode,
+            code: newNumeratorCode,
             groups: selectedG.selected,
         })
     }
@@ -171,7 +171,7 @@ const UpdateNumeratorsModal = ({
     const handleDataSetsSelection = (selectedD) => {
         setNumerator({
             ...numerator,
-            code: newCode,
+            code: newNumeratorCode,
             dataSetID: selectedD.selected,
         })
     }

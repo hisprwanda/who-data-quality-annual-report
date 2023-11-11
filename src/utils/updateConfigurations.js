@@ -108,95 +108,6 @@ export const createNewDenominator = (configurations, newDenominatorInfo) => {
     return configurationsToSave
 }
 
-// create new denominator relation
-export const updateDenominatorRelations = ({
-    configurations,
-    relation,
-    updateType,
-    newCode,
-}) => {
-
-    const metaDataVersion = configurations.metaDataVersion
-    const numerators = configurations.numerators
-    const coreIndicators = configurations.coreIndicators
-    const dataSets = configurations.dataSets
-    const denominatorRelations = configurations.denominatorRelations
-    const denominators = configurations.denominators
-    const externalRelations = configurations.externalRelations
-    const numeratorRelations = configurations.numeratorRelations
-    const groups = configurations.groups
-    
-    // construct a numerator object
-    const newDenominatorRelation = {
-        A: relation.A,
-        B: relation.B,
-        code: newCode,
-        name: relation.name,
-        criteria: relation.criteria,
-        type: relation.type,
-    }
-
-
-
-    let configurationsToSave = {}
-
-    switch (updateType) {
-        case 'update':
-            configurationsToSave = {
-                metaDataVersion,
-                numerators,
-                coreIndicators,
-                dataSets,
-                denominators,
-                denominatorRelations: updateDenominatorRelation(
-                    denominatorRelations,
-                    relation
-                ),
-                externalRelations,
-                numeratorRelations,
-                groups,
-            }
-            break
-        case 'create':
-            configurationsToSave = {
-                metaDataVersion,
-                numerators,
-                coreIndicators,
-                dataSets,
-                denominators,
-                denominatorRelations: [
-                    ...denominatorRelations,
-                    newDenominatorRelation,
-                ],
-                externalRelations,
-                numeratorRelations,
-                groups,
-            }
-            break
-        case 'delete':
-            configurationsToSave = {
-                metaDataVersion,
-                numerators,
-                coreIndicators,
-                dataSets,
-                denominators,
-                denominatorRelations: deleteDenominatorRelation(
-                    denominatorRelations,
-                    relation.code
-                ),
-                externalRelations,
-                numeratorRelations,
-                groups,
-            }
-            break
-
-        default:
-            break
-    }
-
-    return configurationsToSave
-}
-
 // TODO: update this method to handle all types of configurations update and if succeed delete the other update methods
 export const updateConfigurations = ({
     configurations,
@@ -296,26 +207,6 @@ const updateNumerator = (numerators, updatedNumerator) => {
     return numerators
 }
 
-const updateDenominatorRelation = (
-    denominatorRelations,
-    updatedDenominatorRelation
-) => {
-    const currentDenominatorRelation = denominatorRelations.find(
-        (denominatorRelation) =>
-            denominatorRelation.code === updatedDenominatorRelation.code
-    )
-    if (currentDenominatorRelation) {
-        //update the numerator with new values
-        currentDenominatorRelation.A = updatedDenominatorRelation.A
-        currentDenominatorRelation.B = updatedDenominatorRelation.B
-        currentDenominatorRelation.name = updatedDenominatorRelation.name
-        currentDenominatorRelation.criteria =
-            updatedDenominatorRelation.criteria
-        currentDenominatorRelation.type = updatedDenominatorRelation.type
-    }
-    return denominatorRelations
-}
-
 const updateNumeratorParameters = (numerators, updatedNumerators) => {
     //   const numerator = numerators.find(numerator => numerator.code === updatedNumerator.code);
     // if (numerator) {
@@ -396,14 +287,4 @@ const updateOneGroup = (groups, groupUpdateInfo, updateType) => {
         default:
             break
     }
-}
-
-const deleteDenominatorRelation = (
-    denominatorRelations,
-    denominatorRelationCode
-) => {
-    return denominatorRelations.filter(
-        (denominatorRelation) =>
-            denominatorRelation.code !== denominatorRelationCode
-    )
 }

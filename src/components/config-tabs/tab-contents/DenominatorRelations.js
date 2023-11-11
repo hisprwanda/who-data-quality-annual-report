@@ -1,4 +1,3 @@
-import { useDataMutation } from '@dhis2/app-runtime'
 import {
     Button,
     Table,
@@ -8,7 +7,6 @@ import {
     TableHead,
     TableRow,
     TableRowHead,
-    IconDelete16,
     IconEdit16,
     IconAdd16,
     Modal,
@@ -21,43 +19,81 @@ import {
     Input,
 } from '@dhis2/ui'
 import PropTypes from 'prop-types'
-import React, { useState, useEffect } from 'react'
+import React, { useState, useCallback } from 'react'
 import denominatorTypes from '../../../data/denominatorTypes.json'
 import {
     getDenominatorRelations,
     filterDenominatorsByType,
 } from '../../../utils/denominatorsMetadataData.js'
-import { updateDenominatorRelations } from '../../../utils/updateConfigurations.js'
-import { generateDenominatorRelationCode } from '../../../utils/utils.js'
+import {
+    CREATE_DENOMINATOR_RELATION,
+    DELETE_DENOMINATOR_RELATION,
+    UPDATE_DENOMINATOR_RELATION,
+    useConfigurations,
+    useConfigurationsDispatch,
+} from '../../../utils/index.js'
+import { ConfirmationModal } from '../numerator-relations/ConfirmationModal.js'
 
-//TODO: move these configuration mutations to a separate file of dhis2 queries
-const updateConfigurationsMutation = {
-    resource: 'dataStore/who-dqa/configurations',
-    type: 'update',
-    data: ({ configurations }) => ({
-        ...configurations,
-        lastUpdated: new Date().toJSON(),
-    }),
+/** Manages the "delete confirmation" modal and datastore mutation */
+const DeleteRelationButton = ({ relation }) => {
+    const [confirmationModalOpen, setConfirmationModalOpen] = useState(false)
+    const dispatch = useConfigurationsDispatch()
+
+    const openModal = useCallback(() => setConfirmationModalOpen(true), [])
+    const closeModal = useCallback(() => setConfirmationModalOpen(false), [])
+
+    const deleteRelation = useCallback(
+        () =>
+            dispatch({
+                type: DELETE_DENOMINATOR_RELATION,
+                payload: { code: relation.code },
+            }),
+        [dispatch, relation.code]
+    )
+
+    return (
+        <>
+            <Button small destructive onClick={openModal}>
+                Delete
+            </Button>
+            {confirmationModalOpen && (
+                <ConfirmationModal
+                    title="Delete denominator relation"
+                    text={`Are you sure you want to delete ${relation.name}?`}
+                    action="Delete"
+                    destructive
+                    onClose={closeModal}
+                    onConfirm={deleteRelation}
+                />
+            )}
+        </>
+    )
+}
+DeleteRelationButton.propTypes = {
+    relation: PropTypes.object,
 }
 
-export const DenominatorRelations = ({ toggleState, configurations }) => {
-    const [mutate] = useDataMutation(updateConfigurationsMutation)
-    const [relations, setRelations] = useState(null)
-    const [isModalHidden, setIsModalHidden] = useState(true)
+export const DenominatorRelations = ({ toggleState }) => {
+    const configurations = useConfigurations()
+    const relations = configurations.denominatorRelations
+    const dispatch = useConfigurationsDispatch()
+
+    const [isModalOpen, setIsModalOpen] = useState(false)
     const [newDenominatorRelationInfo, setNewDenominatorRelationInfo] =
         useState({
             A: '',
             B: '',
             code: '',
-            criteria: 12,
+            criteria: 10,
             name: '',
             type: '',
         })
     const [selectedDenominatorA, setSelectedDenominatorA] = useState('')
     const [selectedDenominatorB, setSelectedDenominatorB] = useState('')
     const [filteredDenominators, setFilteredDenominators] = useState([])
-    const [isLoading, setIsLoading] = useState(false)
     const [updateType, setUpdateType] = useState('')
+    const openModal = useCallback(() => setIsModalOpen(true), [])
+    const closeModal = useCallback(() => setIsModalOpen(false), [])
 
     const handleDenominatorTypeChange = (type) => {
         // reset the selected denominators
@@ -74,53 +110,30 @@ export const DenominatorRelations = ({ toggleState, configurations }) => {
         })
     }
 
-    const onSaveDenominatorUpdates = async (updateType) => {
-        //show a loader while updating
-        setIsLoading(true)
-
+    // TODO: will put the edit and add denominators in different components to avoid if conditions below
+    const onSaveDenominatorUpdates = useCallback((updateType) => {
         if (updateType === 'create') {
-            // generate and set the new denominator code for create only
-            const newDenominatorCode = generateDenominatorRelationCode(
-                configurations.denominatorRelations
-            )
-
-            const updatedConfigurations = updateDenominatorRelations({
-                configurations,
-                relation: newDenominatorRelationInfo,
-                updateType,
-                newCode:newDenominatorCode,
-            })
-            const response = await mutate({
-                configurations: updatedConfigurations,
-            })
-
-            console.log(updatedConfigurations)
-            if (response) {
-                //stop the loader after updating
-                setRelations([...relations, newDenominatorRelationInfo])
-                setIsLoading(false)
-            }
-            setIsModalHidden(true)
+            dispatch({
+                type: CREATE_DENOMINATOR_RELATION,
+                payload: { newDenominatorRelationInfo },
+            }),
+                [dispatch]
         } else if (updateType === 'update') {
-            const updatedConfigurations = updateDenominatorRelations({
-                configurations,
-                relation:newDenominatorRelationInfo,
-                updateType,
-                newCode: null,
-            })
-            const response = await mutate({
-                configurations: updatedConfigurations,
-            })
-            if (response) {
-                //stop the loader after updating
-                setIsLoading(false)
-            }
-            setIsModalHidden(true)
+            dispatch({
+                type: UPDATE_DENOMINATOR_RELATION,
+                payload: {
+                    code: newDenominatorRelationInfo.code,
+                    updatedDenominatorRelation: newDenominatorRelationInfo,
+                },
+            })[(dispatch, newDenominatorRelationInfo.code)]
         }
-    }
 
+        closeModal()
+    })
+
+    // while in editing mode
     const onEditRelation = (relation) => {
-        setIsModalHidden(false)
+        openModal()
         setNewDenominatorRelationInfo(relation)
         setSelectedDenominatorA(relation.A)
         setSelectedDenominatorB(relation.B)
@@ -129,16 +142,16 @@ export const DenominatorRelations = ({ toggleState, configurations }) => {
         )
     }
 
-    // add a new denominator relation
+    // while in adding mode
     const onAddRelation = () => {
-        setIsModalHidden(false)
+        openModal()
 
         // reset the newDenominatorRelationInfo
         setNewDenominatorRelationInfo({
             A: '',
             B: '',
             code: '',
-            criteria: 12,
+            criteria: 10,
             name: '',
             type: '',
         })
@@ -147,26 +160,6 @@ export const DenominatorRelations = ({ toggleState, configurations }) => {
         setFilteredDenominators([])
         setUpdateType('create')
     }
-
-    // delete a denominator relation
-    const onDelete = async (relation) => {
-        const updatedConfigurations = updateDenominatorRelations({
-            configurations,
-            relation,
-            updateType: 'delete',
-            newCode: null,
-        })
-        const response = await mutate({ configurations: updatedConfigurations })
-        if (response) {
-            setRelations(
-                relations.filter((item) => item.code !== relation.code)
-            )
-        }
-    }
-
-    useEffect(() => {
-        setRelations(configurations.denominatorRelations)
-    }, [configurations])
 
     return (
         <div
@@ -210,31 +203,26 @@ export const DenominatorRelations = ({ toggleState, configurations }) => {
                                     </TableCell>
                                     <TableCell>{relation.criteria}%</TableCell>
                                     <TableCell>
-                                        <Button
-                                            name="Primary button"
-                                            onClick={() => {
-                                                onEditRelation(relation)
-                                                setUpdateType('update')
-                                            }}
-                                            basic
-                                            button
-                                            value="default"
-                                            icon={<IconEdit16 />}
-                                        >
-                                            {' '}
-                                            Edit
-                                        </Button>
-                                        <Button
-                                            name="Primary button"
-                                            onClick={() => onDelete(relation)}
-                                            destructive
-                                            button
-                                            value="default"
-                                            icon={<IconDelete16 />}
-                                        >
-                                            {' '}
-                                            Delete
-                                        </Button>
+                                        <ButtonStrip>
+                                            <Button
+                                                name="Primary button"
+                                                small
+                                                onClick={() => {
+                                                    onEditRelation(relation)
+                                                    setUpdateType('update')
+                                                }}
+                                                basic
+                                                button
+                                                value="default"
+                                                icon={<IconEdit16 />}
+                                            >
+                                                {' '}
+                                                Edit
+                                            </Button>
+                                            <DeleteRelationButton
+                                                relation={relation}
+                                            />
+                                        </ButtonStrip>
                                     </TableCell>
                                 </TableRow>
                             ))
@@ -270,203 +258,217 @@ export const DenominatorRelations = ({ toggleState, configurations }) => {
                     </TableBody>
                 </Table>
 
-                {/* TODO: Implement modal reuse */}
-                <Modal
-                    onClose={() => setIsModalHidden(true)}
-                    hide={isModalHidden}
-                    position="middle"
-                >
-                    <ModalTitle>Denominator relations mapping</ModalTitle>
-                    <ModalContent>
-                        <Table>
-                            <TableBody>
-                                <TableRow>
-                                    <TableCell>
-                                        <p>Name</p>
-                                    </TableCell>
-                                    <TableCell>
-                                        <Input
-                                            label="Name"
-                                            name="name"
-                                            value={
-                                                newDenominatorRelationInfo.name
-                                            }
-                                            onChange={(e) =>
-                                                setNewDenominatorRelationInfo({
-                                                    ...newDenominatorRelationInfo,
-                                                    name: e.value,
-                                                })
-                                            }
-                                            requiredrequired
-                                            className="input"
-                                        />
-                                    </TableCell>
-                                </TableRow>
-                                <TableRow>
-                                    <TableCell>
-                                        <p>Type</p>
-                                    </TableCell>
-                                    <TableCell>
-                                        <SingleSelect
-                                            className="select"
-                                            onChange={(e) =>
-                                                handleDenominatorTypeChange(
-                                                    e.selected
-                                                )
-                                            }
-                                            placeholder="Select relation type"
-                                            selected={
-                                                newDenominatorRelationInfo.type
-                                            }
-                                        >
-                                            {denominatorTypes
-                                                ? denominatorTypes.map(
-                                                      (type, key) => (
-                                                          <SingleSelectOption
-                                                              label={type.label}
-                                                              value={type.value}
-                                                              key={key}
-                                                          />
+                {/* TODO: Implement modal reuse as Kai did in Numerator relations*/}
+                {isModalOpen && (
+                    <Modal onClose={closeModal} position="middle">
+                        <ModalTitle>Denominator relations mapping</ModalTitle>
+                        <ModalContent>
+                            <Table>
+                                <TableBody>
+                                    <TableRow>
+                                        <TableCell>
+                                            <p>Name</p>
+                                        </TableCell>
+                                        <TableCell>
+                                            <Input
+                                                label="Name"
+                                                name="name"
+                                                value={
+                                                    newDenominatorRelationInfo.name
+                                                }
+                                                onChange={(e) =>
+                                                    setNewDenominatorRelationInfo(
+                                                        {
+                                                            ...newDenominatorRelationInfo,
+                                                            name: e.value,
+                                                        }
+                                                    )
+                                                }
+                                                requiredrequired
+                                                className="input"
+                                            />
+                                        </TableCell>
+                                    </TableRow>
+                                    <TableRow>
+                                        <TableCell>
+                                            <p>Type</p>
+                                        </TableCell>
+                                        <TableCell>
+                                            <SingleSelect
+                                                className="select"
+                                                onChange={(e) =>
+                                                    handleDenominatorTypeChange(
+                                                        e.selected
+                                                    )
+                                                }
+                                                placeholder="Select relation type"
+                                                selected={
+                                                    newDenominatorRelationInfo.type
+                                                }
+                                            >
+                                                {denominatorTypes
+                                                    ? denominatorTypes.map(
+                                                          (type, key) => (
+                                                              <SingleSelectOption
+                                                                  label={
+                                                                      type.label
+                                                                  }
+                                                                  value={
+                                                                      type.value
+                                                                  }
+                                                                  key={key}
+                                                              />
+                                                          )
                                                       )
-                                                  )
-                                                : ''}
-                                        </SingleSelect>
-                                    </TableCell>
-                                </TableRow>
-                                <TableRow>
-                                    <TableCell>
-                                        <p>Denominator A</p>
-                                    </TableCell>
-                                    <TableCell>
-                                        <SingleSelect
-                                            className="select"
-                                            onChange={(e) => {
-                                                setNewDenominatorRelationInfo({
-                                                    ...newDenominatorRelationInfo,
-                                                    A: e.selected,
-                                                })
-                                                setSelectedDenominatorA(
-                                                    e.selected
-                                                )
-                                            }}
-                                            placeholder="Select denominator A"
-                                            selected={selectedDenominatorA}
-                                        >
-                                            {filteredDenominators
-                                                ? filteredDenominators.map(
-                                                      (denominator, key) => (
-                                                          <SingleSelectOption
-                                                              label={
-                                                                  denominator.name
-                                                              }
-                                                              value={
-                                                                  denominator.code
-                                                              }
-                                                              key={key}
-                                                          />
+                                                    : ''}
+                                            </SingleSelect>
+                                        </TableCell>
+                                    </TableRow>
+                                    <TableRow>
+                                        <TableCell>
+                                            <p>Denominator A</p>
+                                        </TableCell>
+                                        <TableCell>
+                                            <SingleSelect
+                                                className="select"
+                                                onChange={(e) => {
+                                                    setNewDenominatorRelationInfo(
+                                                        {
+                                                            ...newDenominatorRelationInfo,
+                                                            A: e.selected,
+                                                        }
+                                                    )
+                                                    setSelectedDenominatorA(
+                                                        e.selected
+                                                    )
+                                                }}
+                                                placeholder="Select denominator A"
+                                                selected={selectedDenominatorA}
+                                            >
+                                                {filteredDenominators
+                                                    ? filteredDenominators.map(
+                                                          (
+                                                              denominator,
+                                                              key
+                                                          ) => (
+                                                              <SingleSelectOption
+                                                                  label={
+                                                                      denominator.name
+                                                                  }
+                                                                  value={
+                                                                      denominator.code
+                                                                  }
+                                                                  key={key}
+                                                              />
+                                                          )
                                                       )
-                                                  )
-                                                : ''}
-                                        </SingleSelect>
-                                    </TableCell>
-                                </TableRow>
-                                <TableRow>
-                                    <TableCell>
-                                        <p>Denominator B</p>
-                                    </TableCell>
-                                    <TableCell>
-                                        <SingleSelect
-                                            className="select"
-                                            onChange={(e) => {
-                                                setNewDenominatorRelationInfo({
-                                                    ...newDenominatorRelationInfo,
-                                                    B: e.selected,
-                                                })
-                                                setSelectedDenominatorB(
-                                                    e.selected
-                                                )
-                                            }}
-                                            placeholder="Select denominator B"
-                                            selected={selectedDenominatorB}
-                                        >
-                                            {filteredDenominators
-                                                ? filteredDenominators.map(
-                                                      (denominator, key) => (
-                                                          <SingleSelectOption
-                                                              label={
-                                                                  denominator.name
-                                                              }
-                                                              value={
-                                                                  denominator.code
-                                                              }
-                                                              key={key}
-                                                          />
+                                                    : ''}
+                                            </SingleSelect>
+                                        </TableCell>
+                                    </TableRow>
+                                    <TableRow>
+                                        <TableCell>
+                                            <p>Denominator B</p>
+                                        </TableCell>
+                                        <TableCell>
+                                            <SingleSelect
+                                                className="select"
+                                                onChange={(e) => {
+                                                    setNewDenominatorRelationInfo(
+                                                        {
+                                                            ...newDenominatorRelationInfo,
+                                                            B: e.selected,
+                                                        }
+                                                    )
+                                                    setSelectedDenominatorB(
+                                                        e.selected
+                                                    )
+                                                }}
+                                                placeholder="Select denominator B"
+                                                selected={selectedDenominatorB}
+                                            >
+                                                {filteredDenominators
+                                                    ? filteredDenominators.map(
+                                                          (
+                                                              denominator,
+                                                              key
+                                                          ) => (
+                                                              <SingleSelectOption
+                                                                  label={
+                                                                      denominator.name
+                                                                  }
+                                                                  value={
+                                                                      denominator.code
+                                                                  }
+                                                                  key={key}
+                                                              />
+                                                          )
                                                       )
-                                                  )
-                                                : ''}
-                                        </SingleSelect>
-                                    </TableCell>
-                                </TableRow>
-                                <TableRow>
-                                    <TableCell>
-                                        <p>Threshold (+/-) %</p>
-                                    </TableCell>
-                                    <TableCell>
-                                        <Input
-                                            label="Name"
-                                            name="name"
-                                            required
-                                            className="input"
-                                            type="number"
-                                            value={
-                                                newDenominatorRelationInfo.criteria
-                                            }
-                                            onChange={(e) =>
-                                                setNewDenominatorRelationInfo({
-                                                    ...newDenominatorRelationInfo,
-                                                    criteria: e.value,
-                                                })
-                                            }
-                                        />
-                                    </TableCell>
-                                </TableRow>
-                            </TableBody>
-                        </Table>
-                        <p>
-                            Threshold denotes the % difference from national
-                            figure that is accepted for a sub-national unit.
-                        </p>
-                    </ModalContent>
-                    <ModalActions>
-                        <ButtonStrip end>
-                            <Button
-                                secondary
-                                onClick={() => setIsModalHidden(true)}
-                            >
-                                {' '}
-                                Cancel{' '}
-                            </Button>
-                            <Button
-                                loading={isLoading}
-                                primary
-                                onClick={() =>
-                                    onSaveDenominatorUpdates(updateType)
-                                }
-                            >
-                                {' '}
-                                {updateType === 'create'
-                                    ? 'Create'
-                                    : 'Update'}{' '}
-                            </Button>
-                        </ButtonStrip>
-                    </ModalActions>
-                </Modal>
+                                                    : ''}
+                                            </SingleSelect>
+                                        </TableCell>
+                                    </TableRow>
+                                    <TableRow>
+                                        <TableCell>
+                                            <p>Threshold (+/-) %</p>
+                                        </TableCell>
+                                        <TableCell>
+                                            <Input
+                                                label="Name"
+                                                name="name"
+                                                required
+                                                className="input"
+                                                type="number"
+                                                value={
+                                                    newDenominatorRelationInfo.criteria
+                                                }
+                                                onChange={(e) =>
+                                                    setNewDenominatorRelationInfo(
+                                                        {
+                                                            ...newDenominatorRelationInfo,
+                                                            criteria: e.value,
+                                                        }
+                                                    )
+                                                }
+                                            />
+                                        </TableCell>
+                                    </TableRow>
+                                </TableBody>
+                            </Table>
+                            <p>
+                                Threshold denotes the % difference from national
+                                figure that is accepted for a sub-national unit.
+                            </p>
+                        </ModalContent>
+                        <ModalActions>
+                            <ButtonStrip end>
+                                <Button secondary onClick={closeModal}>
+                                    {' '}
+                                    Cancel{' '}
+                                </Button>
+                                <Button
+                                    primary
+                                    onClick={() =>
+                                        onSaveDenominatorUpdates(
+                                            updateType,
+                                            newDenominatorRelationInfo
+                                        )
+                                    }
+                                >
+                                    {' '}
+                                    {updateType === 'create'
+                                        ? 'Create'
+                                        : 'Update'}{' '}
+                                </Button>
+                            </ButtonStrip>
+                        </ModalActions>
+                    </Modal>
+                )}
             </div>
         </div>
     )
 }
 
 DenominatorRelations.propTypes = {
-    configurations: PropTypes.object,
     toggleState: PropTypes.string,
 }
