@@ -19,6 +19,7 @@ import {
 import PropTypes from 'prop-types'
 import React from 'react'
 import { useConfigurations } from '../../../utils/index.js'
+import { DataMappingFormSection } from './DataMappingForm.js'
 
 const { Form, Field } = ReactFinalForm
 
@@ -53,23 +54,15 @@ const DEFAULT_NUMERATOR_VALUES = {
  */
 export function EditNumeratorModal({ numeratorToEdit, onSave, onClose }) {
     const configurations = useConfigurations()
-    // const numeratorOptions = React.useMemo(() => {
-    //     const numeratorsWithDataIds = configurations.numerators
-    //         .filter((numerator) => numerator.dataID != null)
-    //         // sort is okay because filter() creates a copy
-    //         .sort((a, b) => a.name.localeCompare(b.name))
-    //     return numeratorsWithDataIds.map(({ name, code }) => ({
-    //         label: name,
-    //         value: code,
-    //     }))
-    // }, [configurations.numerators])
 
     const numeratorGroupOptions = React.useMemo(
         () =>
-            configurations.groups.map(({ displayName, code }) => ({
-                label: displayName,
-                value: code,
-            })),
+            configurations.groups
+                .map(({ displayName, code }) => ({
+                    label: displayName,
+                    value: code,
+                }))
+                .sort((a, b) => a.label.localeCompare(b.label)),
         [configurations.groups]
     )
 
@@ -141,6 +134,8 @@ export function EditNumeratorModal({ numeratorToEdit, onSave, onClose }) {
                                 </TableRow>
                             </TableBody>
                         </Table>
+
+                        <DataMappingFormSection />
                     </ModalContent>
                     <ModalActions>
                         <ButtonStrip end>
