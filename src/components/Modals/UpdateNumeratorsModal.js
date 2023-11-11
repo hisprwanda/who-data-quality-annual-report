@@ -72,7 +72,6 @@ const UpdateNumeratorsModal = ({
     const [toggleStateModal, setToggleStateModal] = useState(1)
     const [selectedElementGroup, setSelectedElementGroup] = useState('')
     const [selectedElement, setSelectedElement] = useState('')
-    const [selectedElements, setSelectedElements] = useState([])
     const [selectedOperands, setSelectedOperands] = useState([])
     const [filteredSelectedElements, setFilteredSelectedElements] = useState([])
     const [mappedDataElementGroups, setMappedDataElementGroups] = useState([])
@@ -89,34 +88,28 @@ const UpdateNumeratorsModal = ({
     })
 
     // run the data element groups querry
-    const {
-        loading: lementGroupsLoading,
-        error: elementGroupsError,
-        data: datalementGroupsData,
-        refetch: lementGroupsRefetch,
-    } = useDataQuery(dataElementGroupsQuery, {
-        lazy: false,
-    })
+    const { data: datalementGroupsData } = useDataQuery(
+        dataElementGroupsQuery,
+        {
+            lazy: false,
+        }
+    )
 
     // run the data elements querry
-    const {
-        loading: elementsLoading,
-        error: elementsError,
-        data: dataElementsData,
-        refetch: elementsRefetch,
-    } = useDataQuery(dataElementsQuery, {
-        lazy: true,
-    })
+    const { data: dataElementsData, refetch: elementsRefetch } = useDataQuery(
+        dataElementsQuery,
+        {
+            lazy: true,
+        }
+    )
 
     // run the datasets querry
-    const {
-        loading: dataSetsLoading,
-        error: dataSetsError,
-        data: dataSetsData,
-        refetch: dataSetsRefetch,
-    } = useDataQuery(dataSetsQuery, {
-        lazy: true,
-    })
+    const { data: dataSetsData, refetch: dataSetsRefetch } = useDataQuery(
+        dataSetsQuery,
+        {
+            lazy: true,
+        }
+    )
 
     // TODO this action is duplicated in other components, do it once and save it globaly
     useEffect(() => {
@@ -164,21 +157,6 @@ const UpdateNumeratorsModal = ({
             )
         }
     }, [dataSetsData])
-
-    // TODO: remove these styles from here
-    const boxStyles = {
-        border: '1px solid rgb(160, 173, 186)',
-        borderRadius: '3px',
-        marginBottom: '2px',
-        minHeight: '40px',
-        cursor: 'pointer',
-        color: '#6c7787',
-        display: 'flex',
-        alignItems: 'center',
-        fontSize: '14px',
-        lineHeight: '16px',
-        paddingLeft: '11px',
-    }
 
     const newCode = generateNumeratorCode(configurations.numerators)
 
@@ -237,10 +215,8 @@ const UpdateNumeratorsModal = ({
     }, [isHidden])
 
     useEffect(() => {
-        setFilteredSelectedElements(
-            filterSelectedMetadata(dataElements, selectedElements)
-        )
-    }, [selectedElements])
+        setFilteredSelectedElements(filterSelectedMetadata(dataElements, []))
+    }, [])
 
     useEffect(() => {
         if (filteredSelectedElements[0] && numerator.name) {
@@ -616,6 +592,7 @@ const UpdateNumeratorsModal = ({
 UpdateNumeratorsModal.propTypes = {
     configurations: PropTypes.object,
     isHidden: PropTypes.bool,
+    isLoading: PropTypes.bool,
     numeratorToEdit: PropTypes.object,
     updateType: PropTypes.string,
     onClose: PropTypes.func,
