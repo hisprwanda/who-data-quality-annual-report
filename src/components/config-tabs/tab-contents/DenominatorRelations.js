@@ -166,7 +166,7 @@ export const DenominatorRelations = ({ toggleState, configurations }) => {
 
     useEffect(() => {
         setRelations(configurations.denominatorRelations)
-    }, [])
+    }, [configurations])
 
     return (
         <div
