@@ -37,11 +37,11 @@ const RELATION_TYPE_OPTIONS = relationTypes.map((type) => ({
  * If `numeratorRelationToEdit`, is provided, this will behave in "update" mode:
  * - the fields will be prefilled with the values of that relation
  * - some text in the modal will refer to editing/updating
- * - the data store mutation will be an "update" action on that relation (todo)
+ * - the data store mutation will be an "update" action on that relation
  * Otherwise, this will behave in "add new" mode:
  * - the fields will be empty
  * - text in the modal will refer to creating/adding new
- * - the data store mutation will create a new numeratorRelation object (todo)
+ * - the data store mutation will create a new numeratorRelation object
  */
 export function EditNumeratorRelationModal({
     numeratorRelationToEdit,
