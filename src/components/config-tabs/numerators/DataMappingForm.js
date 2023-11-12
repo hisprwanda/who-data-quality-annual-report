@@ -6,13 +6,18 @@ import {
     SingleSelectFieldFF,
     ReactFinalForm,
 } from '@dhis2/ui'
+import PropTypes from 'prop-types'
 import React, { useState, useCallback, useEffect, useMemo } from 'react'
 import styles from './DataMappingForm.module.css'
 
 const { Field, useField } = ReactFinalForm
 
+// Data item types
+const DATA_ELEMENT = 'dataElement'
+const INDICATOR = 'indicator'
+
 const DATA_ELEMENT_GROUPS_QUERY = {
-    deGroupsResponse: {
+    reponse: {
         resource: 'dataElementGroups',
         params: { paging: false },
     },
@@ -26,12 +31,10 @@ const DataElementGroupSelect = () => {
         () =>
             !data
                 ? []
-                : data.deGroupsResponse.dataElementGroups.map(
-                      ({ id, displayName }) => ({
-                          label: displayName,
-                          value: id,
-                      })
-                  ),
+                : data.reponse.dataElementGroups.map(({ id, displayName }) => ({
+                      label: displayName,
+                      value: id,
+                  })),
         [data]
     )
 
@@ -83,7 +86,7 @@ const DataElementSelect = () => {
         if (dataElementGroupID) {
             refetch({ id: dataElementGroupID })
             // Clear the selection in this field
-            onChange('')
+            onChange(undefined)
         }
     }, [dataElementGroupID, refetch, onChange])
 
@@ -120,9 +123,96 @@ const DataElementSelect = () => {
     )
 }
 
-// Data item types
-const DATA_ELEMENT = 'dataElement'
-const INDICATOR = 'indicator'
+const DATA_SETS_FROM_DATA_ELEMENT_QUERY = {
+    response: {
+        resource: 'dataElements',
+        id: ({ id }) => id,
+        params: {
+            fields:
+                'dataSets[displayName,id,periodType],' +
+                'dataSetElements[dataSet[displayName,id,periodType]',
+        },
+    },
+}
+const getSelectOptionsFromDataElement = (response) => {
+    // if the data element response has a `dataSets` property, use that
+    if (response.dataSets) {
+        return response.dataSets.map(({ id, displayName }) => ({
+            label: displayName,
+            value: id,
+        }))
+    }
+
+    // otherwise, assemble a list of data sets based on dataSetElements
+    const dataSetMap = new Map()
+    response.dataSetElements.forEach(({ dataSet: { id, displayName } }) => {
+        // set in a map to avoid duplicates
+        dataSetMap.set(id, displayName)
+    })
+    const selectOptions = []
+    dataSetMap.forEach((displayName, id) => {
+        selectOptions.push({ label: displayName, value: id })
+    })
+    selectOptions.sort((a, b) => a.label.localeCompare(b.label))
+    return selectOptions
+}
+
+const DataSetSelect = ({ dataItemType }) => {
+    dataItemType // todo
+
+    // todo: get data element from operand
+    // need info: dataItemType, (dataElementType), dataElement/indicator
+    const { loading, error, data, refetch } = useDataQuery(
+        DATA_SETS_FROM_DATA_ELEMENT_QUERY,
+        {
+            lazy: true,
+        }
+    )
+    const {
+        input: { value: dataID },
+    } = useField('dataID', { subscription: { value: true } })
+    const {
+        input: { onChange },
+    } = useField('dataSetID', { subscription: {} })
+
+    useEffect(() => {
+        if (dataID) {
+            refetch({ id: dataID })
+            // Clear the selection in this field
+            onChange(undefined)
+        }
+    }, [dataID, refetch, onChange])
+
+    const dataSetOptions = useMemo(() => {
+        if (!data) {
+            return []
+        }
+        return getSelectOptionsFromDataElement(data.response)
+        // todo: "Predictor value"? see "Data quality" DE group
+    }, [data])
+
+    if (loading) {
+        return 'loading' // todo
+    }
+    if (error) {
+        return 'error' // todo
+    }
+
+    return (
+        <div className={styles.formRow}>
+            <Field
+                name="dataSetID"
+                component={MultiSelectFieldFF}
+                options={dataSetOptions}
+                label={'Data sets for completeness'}
+                placeholder={'Select data sets'}
+            />
+        </div>
+    )
+}
+DataSetSelect.propTypes = {
+    dataItemType: PropTypes.oneOf([DATA_ELEMENT, INDICATOR]),
+}
 
 export const DataMappingFormSection = () => {
     const [dataItemType, setDataItemType] = useState(DATA_ELEMENT)
@@ -158,19 +248,7 @@ export const DataMappingFormSection = () => {
             )}
             {dataItemType === INDICATOR && <p>Indicator form</p>}
 
-            <div className={styles.formRow}>
-                <Field
-                    name="dataSetID"
-                    component={MultiSelectFieldFF}
-                    options={[
-                        // todo
-                        { label: 'A', value: 'A' },
-                        { label: 'B', value: 'B' },
-                    ]}
-                    label={'Data sets for completeness'}
-                    placeholder={'Select one more data sets'}
-                />
-            </div>
+            <DataSetSelect dataItemType={dataItemType} />
 
             <div className={styles.formRow}>
                 <Field
