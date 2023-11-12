@@ -108,7 +108,7 @@ export const NumeratorParameters = ({
         )
         setOutlierOptions(makeOutlierOptions())
         setDatasets(configurations.dataSets)
-    }, [])
+    }, [configurations])
 
     return (
         <div

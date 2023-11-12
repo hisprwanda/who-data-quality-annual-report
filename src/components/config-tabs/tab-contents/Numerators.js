@@ -113,9 +113,9 @@ export const Numerators = ({ toggleState, configurations }) => {
         setNumeratorToEdit(numerator)
     }
 
-    // useEffect(() => {
-    //     setNumerators(configurations.numerators)
-    //   }, [])
+    useEffect(() => {
+        setNumerators(configurations.numerators)
+    }, [configurations])
 
     return (
         <div

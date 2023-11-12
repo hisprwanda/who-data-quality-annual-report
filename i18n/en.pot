@@ -5,8 +5,8 @@ msgstr ""
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1)\n"
-"POT-Creation-Date: 2023-11-02T09:47:40.459Z\n"
-"PO-Revision-Date: 2023-11-02T09:47:40.459Z\n"
+"POT-Creation-Date: 2023-11-06T19:45:41.092Z\n"
+"PO-Revision-Date: 2023-11-06T19:45:41.092Z\n"
 
 msgid "Select period(s)"
 msgstr "Select period(s)"
@@ -17,11 +17,41 @@ msgstr "Cancel"
 msgid "Save"
 msgstr "Save"
 
+msgid "There is no data for this {{sectionType}}"
+msgstr "There is no data for this {{sectionType}}"
+
+msgid "subsection"
+msgstr "subsection"
+
+msgid "section"
+msgstr "section"
+
 msgid "No data to display"
 msgstr "No data to display"
 
+msgid "% Completeness"
+msgstr "% Completeness"
+
+msgid "Reporting completeness over time"
+msgstr "Reporting completeness over time"
+
+msgid "Dropout rate (%)"
+msgstr "Dropout rate (%)"
+
+msgid "<b>{{name}}</b><br/>{{value}}% dropout"
+msgstr "<b>{{name}}</b><br/>{{value}}% dropout"
+
+msgid "Org units"
+msgstr "Org units"
+
+msgid "<b>{{name}}</b><br/>{{yLabel}}: {{y}}<br/>{{xLabel}}: {{x}}"
+msgstr "<b>{{name}}</b><br/>{{yLabel}}: {{y}}<br/>{{xLabel}}: {{x}}"
+
 msgid "Chart not available"
 msgstr "Chart not available"
+
+msgid "<b>{{name}}</b><br/>Survey: {{survey}}%<br/>Routine: {{routine}}%"
+msgstr "<b>{{name}}</b><br/>Survey: {{survey}}%<br/>Routine: {{routine}}%"
 
 msgid "Routine"
 msgstr "Routine"
@@ -29,8 +59,8 @@ msgstr "Routine"
 msgid "Survey"
 msgstr "Survey"
 
-msgid "Org units"
-msgstr "Org units"
+msgid "Survey: {{survey}}%<br/>Routine: {{routine}}%"
+msgstr "Survey: {{survey}}%<br/>Routine: {{routine}}%"
 
 msgid "Group"
 msgstr "Group"

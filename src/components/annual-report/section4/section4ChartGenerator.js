@@ -93,6 +93,7 @@ export const generateSection4Chart = (canvasId, chartInfo) => {
                         y: this.y,
                         xLabel: this.custom.xLabel,
                         x: this.x,
+                        nsSeparator: '-:-',
                     }
                 )
             },

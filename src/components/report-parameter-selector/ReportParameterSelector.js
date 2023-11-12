@@ -3,6 +3,7 @@ import i18n from '@dhis2/d2-i18n'
 import { Button, SelectorBar } from '@dhis2/ui'
 import PropTypes from 'prop-types'
 import React, { useMemo, useState } from 'react'
+import { useConfigurations } from '../../utils/index.js'
 import { getReportParameters } from './getReportParameters.js'
 import { GroupSelector } from './GroupSelector.js'
 import { OrgUnitSelector } from './OrgUnitSelector.js'
@@ -10,9 +11,6 @@ import { PeriodSelector } from './PeriodSelector.js'
 import styles from './ReportParameterSelector.module.css'
 
 const configQuery = {
-    configuration: {
-        resource: 'dataStore/who-dqa/configurations',
-    },
     me: {
         resource: 'me',
         params: {
@@ -31,13 +29,13 @@ const configQuery = {
 
 export const ReportParameterSelector = ({ setReportParameters }) => {
     const { loading, data, error } = useDataQuery(configQuery)
+    const configurations = useConfigurations()
 
     const [selectedGroup, setSelectedGroup] = useState(null)
     const [selectedOrgUnit, setSelectedOrgUnit] = useState({})
     const [selectedOrgUnitLevel, setSelectedOrgUnitLevel] = useState(null)
     const [selectedPeriods, setSelectedPeriods] = useState([])
 
-    const configuration = data?.configuration
     const reportGenerateEnabled =
         selectedGroup &&
         selectedOrgUnit.id &&
@@ -49,7 +47,7 @@ export const ReportParameterSelector = ({ setReportParameters }) => {
                 groupID: selectedGroup,
                 orgUnitID: selectedOrgUnit.id,
                 boundaryOrgUnitLevel: selectedOrgUnit.level,
-                configuration,
+                configurations,
                 orgUnitLevel: selectedOrgUnitLevel,
                 periods: selectedPeriods,
             }),
@@ -57,7 +55,7 @@ export const ReportParameterSelector = ({ setReportParameters }) => {
             selectedOrgUnit.id,
             selectedOrgUnit.level,
             selectedGroup,
-            configuration,
+            configurations,
             selectedOrgUnitLevel,
             selectedPeriods,
         ]
@@ -94,7 +92,7 @@ export const ReportParameterSelector = ({ setReportParameters }) => {
                 }
             >
                 <GroupSelector
-                    groups={configuration?.groups}
+                    groups={configurations?.groups}
                     selectedGroup={selectedGroup}
                     setSelectedGroup={setSelectedGroup}
                 />
