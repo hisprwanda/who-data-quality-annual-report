@@ -2,7 +2,6 @@ import PropTypes from 'prop-types'
 import React, { useEffect } from 'react'
 import { Chart } from '../Chart.js'
 import { NoDataInfoBox } from '../common/NoDataWarning.js'
-import { calculateSection2 } from './section2Calculations.js'
 import { useFetchSectionTwoData } from './useFetchSectionTwoData.js'
 
 const sectionInformation = {
@@ -274,7 +273,12 @@ Section2E.propTypes = {
 }
 
 export const SectionTwo = ({ reportParameters }) => {
-    const { loading, data, error, refetch } = useFetchSectionTwoData()
+    const {
+        loading,
+        error,
+        data: section2Data,
+        refetch,
+    } = useFetchSectionTwoData()
 
     useEffect(() => {
         const variables = {
@@ -283,7 +287,7 @@ export const SectionTwo = ({ reportParameters }) => {
         }
 
         refetch({ variables })
-    }, [refetch, reportParameters]) // should include refetch, which needs to be made stable
+    }, [refetch, reportParameters])
 
     if (loading) {
         return <span>loading</span>
@@ -293,13 +297,7 @@ export const SectionTwo = ({ reportParameters }) => {
         return <span>error</span>
     }
 
-    if (data) {
-        const section2Data = calculateSection2({
-            section2Response: data.response,
-            mappedConfiguration: data.parameters?.mappedConfiguration,
-            periods: data.parameters?.periods,
-            overallOrgUnit: data.parameters?.orgUnits?.[0],
-        })
+    if (section2Data) {
         // if all subsections are empty, display overall empty message
         const subsectionNames = [
             'section2a',

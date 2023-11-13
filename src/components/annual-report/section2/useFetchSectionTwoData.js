@@ -2,6 +2,7 @@ import { useDataEngine } from '@dhis2/app-runtime'
 import { generateFixedPeriods } from '@dhis2/multi-calendar-dates'
 import { useCallback, useState } from 'react'
 import { periodTypesMap } from './periodTypesMap.js'
+import { calculateSection2 } from './section2Calculations.js'
 
 export const SUBPERIODS_RESPONSE_NAME = 'data_detail_by_reporting_period'
 export const OVERALL_ORG_UNIT_SECTION_2D = 'data_over_all_org_units'
@@ -238,18 +239,21 @@ export const useFetchSectionTwoData = () => {
                         ...subPeriodRequests,
                     ])
 
-                setData({
-                    response: {
-                        ...section2dData,
-                        ...section2eData,
-                        [SUBPERIODS_RESPONSE_NAME]: dataBySubPeriod.map(
-                            (resp) => resp[SUBPERIODS_RESPONSE_NAME]
-                        ),
-                    },
-                    parameters: {
-                        ...variables,
-                    },
+                const consolidatedData = {
+                    ...section2dData,
+                    ...section2eData,
+                    [SUBPERIODS_RESPONSE_NAME]: dataBySubPeriod.map(
+                        (resp) => resp[SUBPERIODS_RESPONSE_NAME]
+                    ),
+                }
+
+                const calculatedSection2Data = calculateSection2({
+                    section2Response: consolidatedData,
+                    mappedConfiguration: variables.mappedConfiguration,
+                    periods: variables.periods,
+                    overallOrgUnit: variables.orgUnits[0],
                 })
+                setData(calculatedSection2Data)
             } catch (e) {
                 console.error(e)
                 setError(e)
