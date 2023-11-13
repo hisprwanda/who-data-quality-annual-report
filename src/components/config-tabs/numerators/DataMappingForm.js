@@ -1,4 +1,4 @@
-import { useDataQuery } from '@dhis2/app-runtime'
+import { useDataEngine, useDataQuery } from '@dhis2/app-runtime'
 import {
     // rename this to not clash with Field from RFF
     Field as FieldContainer,
@@ -7,8 +7,7 @@ import {
     RadioFieldFF,
     ReactFinalForm,
 } from '@dhis2/ui'
-import PropTypes from 'prop-types'
-import React, { useEffect, useMemo } from 'react'
+import React, { useState, useEffect, useMemo } from 'react'
 import styles from './DataMappingForm.module.css'
 
 const { Field, useField } = ReactFinalForm
@@ -80,11 +79,9 @@ const DATA_ELEMENT_GROUPS_QUERY = {
     },
 }
 const DataElementGroupSelect = () => {
-    // TODO: This maybe doesn't need to use FF;
-    // its value isn't saved in the final `numerator` object
     const { loading, error, data } = useDataQuery(DATA_ELEMENT_GROUPS_QUERY)
 
-    const dataElementGroupOptions = React.useMemo(
+    const dataElementGroupOptions = useMemo(
         () =>
             !data
                 ? []
@@ -117,49 +114,116 @@ const DataElementGroupSelect = () => {
     )
 }
 
-const DATA_ELEMENT_GROUP_QUERY = {
-    dataElementGroup: {
+const useEngineQuery = () => {
+    const engine = useDataEngine()
+    const [data, setData] = useState()
+    const [loading, setLoading] = useState()
+    const [error, setError] = useState()
+
+    const fetch = React.useCallback(
+        async (query, variables) => {
+            setLoading(true)
+            setError(false)
+            try {
+                const data = await engine.query(query, { variables })
+                setData(data)
+                setLoading(false)
+                return data
+            } catch (err) {
+                setError(err)
+                setLoading(false)
+                throw err // won't crash the app; can be useful to catch
+            }
+        },
+        [engine]
+    )
+
+    return { data, loading, error, fetch }
+}
+
+const DATA_ELEMENT_TOTALS_QUERY = {
+    response: {
         resource: 'dataElementGroups',
         id: ({ id }) => id,
         params: { fields: 'dataElements[displayName,id]' },
     },
 }
+const mapDataElementTotalsResponseToOptions = (data) => {
+    console.log({ data })
+    return data.response.dataElements
+        .map(({ id, displayName }) => ({
+            label: displayName,
+            value: id,
+        }))
+        .sort((a, b) => a.label.localeCompare(b.label))
+}
+
+const DATA_ELEMENT_DETAILS_QUERY = {
+    response: {
+        resource: 'dataElementOperands',
+        params: ({ id }) => ({
+            fields: 'displayName,id,dataElementId,optionComboId',
+            filter: `dataElement.dataElementGroups.id:eq:${id}`,
+            paging: false,
+        }),
+    },
+}
+const mapDataElementDetailsResponseToOptions = (data) => {
+    console.log({ data })
+    return data.response.dataElementOperands
+        .map(({ id, displayName }) => ({
+            label: displayName,
+            value: id,
+        }))
+        .sort((a, b) => a.label.localeCompare(b.label))
+}
+
 const DataElementSelect = () => {
-    const { loading, error, data, refetch } = useDataQuery(
-        DATA_ELEMENT_GROUP_QUERY,
-        {
-            lazy: true,
-        }
-    )
-    const {
-        input: { value: dataElementGroupID },
-    } = useField('dataElementGroupID', {
+    const { fetch, loading, error } = useEngineQuery()
+    const [options, setOptions] = useState([])
+
+    // Depends on 1. dataElementType and 2. dataElementGroupID
+    const dataElementTypeField = useField('dataElementType', {
         subscription: { value: true },
     })
-    const {
-        input: { onChange },
-    } = useField('dataID', { subscription: {} })
+    const dataElementGroupIDField = useField('dataElementGroupID', {
+        subscription: { value: true },
+    })
+    const dataElementType = dataElementTypeField.input.value
+    const dataElementGroupID = dataElementGroupIDField.input.value
+
+    // Get the onChange handler to be able to clear this field
+    const dataIDField = useField('dataID', { subscription: {} })
+    const onChange = dataIDField.input.onChange
 
     useEffect(() => {
-        if (dataElementGroupID) {
-            refetch({ id: dataElementGroupID })
-            // Clear the selection in this field
-            onChange(undefined)
-        }
-    }, [dataElementGroupID, refetch, onChange])
+        // Clear the selection in this field
+        onChange(undefined)
 
-    const dataElementOptions = useMemo(
-        () =>
-            !data
-                ? [] // todo: "Select a data element group"
-                : data.dataElementGroup.dataElements
-                      .map(({ id, displayName }) => ({
-                          label: displayName,
-                          value: id,
-                      }))
-                      .sort((a, b) => a.label.localeCompare(b.label)),
-        [data]
-    )
+        if (!dataElementGroupID) {
+            return
+        }
+
+        if (dataElementType === TOTALS) {
+            fetch(DATA_ELEMENT_TOTALS_QUERY, { id: dataElementGroupID }).then(
+                (data) => {
+                    const newOptions =
+                        mapDataElementTotalsResponseToOptions(data)
+                    setOptions(newOptions)
+                }
+            )
+        } else {
+            fetch(DATA_ELEMENT_DETAILS_QUERY, { id: dataElementGroupID }).then(
+                (data) => {
+                    const newOptions =
+                        mapDataElementDetailsResponseToOptions(data)
+                    setOptions(newOptions)
+                }
+            )
+        }
+
+        // rerun this if dataElementType or dataElementGroupID change
+    }, [dataElementType, dataElementGroupID, fetch, onChange])
 
     if (loading) {
         return 'loading' // todo
@@ -173,7 +237,7 @@ const DataElementSelect = () => {
             <Field
                 name="dataID"
                 component={SingleSelectFieldFF}
-                options={dataElementOptions}
+                options={options}
                 label={'Data element'}
                 placeholder={'Select data element'}
                 filterable
@@ -216,9 +280,7 @@ const getSelectOptionsFromDataElement = (response) => {
     return selectOptions
 }
 
-const DataSetSelect = ({ dataItemType }) => {
-    dataItemType // todo
-
+const DataSetSelect = () => {
     // todo: get data element from operand
     // need info: dataItemType, (dataElementType), dataElement/indicator
     const { loading, error, data, refetch } = useDataQuery(
@@ -268,9 +330,6 @@ const DataSetSelect = ({ dataItemType }) => {
             />
         </div>
     )
-}
-DataSetSelect.propTypes = {
-    dataItemType: PropTypes.oneOf([DATA_ELEMENT, INDICATOR]),
 }
 
 const VARIABLES_QUERY = {
@@ -335,6 +394,9 @@ const VariableSelect = () => {
 export const DataMappingFormSection = () => {
     const dataTypeField = useField('dataType', {
         subscription: { value: true },
+        // need to set the initial value here instead of on the <Field />
+        // so the components below can render
+        initialValue: DATA_ELEMENT,
     })
     const dataType = dataTypeField.input.value
 
@@ -351,7 +413,7 @@ export const DataMappingFormSection = () => {
             )}
             {dataType === INDICATOR && <p>Indicator form</p>}
 
-            <DataSetSelect dataType={dataType} />
+            <DataSetSelect />
 
             <VariableSelect />
         </div>
