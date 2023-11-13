@@ -101,7 +101,6 @@ export const useSectionOneData = () => {
                     periodsIDs: variables.periods,
                     overallOrgUnit: variables.orgUnits?.[0],
                 })
-                console.log(section1Data)
 
                 setData(section1Data)
             } catch (e) {

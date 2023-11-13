@@ -3,13 +3,13 @@ import { generateFixedPeriods } from '@dhis2/multi-calendar-dates'
 import { useCallback, useState } from 'react'
 import { periodTypesMap } from './periodTypesMap.js'
 import { calculateSection2 } from './section2Calculations.js'
-
-export const SUBPERIODS_RESPONSE_NAME = 'data_detail_by_reporting_period'
-export const OVERALL_ORG_UNIT_SECTION_2D = 'data_over_all_org_units'
-export const LEVEL_OR_GROUP_SECTION_2D = 'data_by_org_unit_level'
-export const OVERALL_ORG_UNIT_SECTION_2E =
-    'numerator_relations_over_all_org_units'
-export const LEVEL_OR_GROUP_SECTION_2E = 'numerator_relations_org_unit_level'
+import {
+    SUBPERIODS_RESPONSE_NAME,
+    OVERALL_ORG_UNIT_SECTION_2D,
+    LEVEL_OR_GROUP_SECTION_2D,
+    OVERALL_ORG_UNIT_SECTION_2E,
+    LEVEL_OR_GROUP_SECTION_2E,
+} from './section2DataNames.js'
 
 const dataSetInformation = {
     dataSets: {

@@ -1,10 +1,11 @@
 import { useDataEngine } from '@dhis2/app-runtime'
 import { useCallback, useState } from 'react'
-import { calculateSection4 } from './section4Calculations.js'
-
-export const OVERALL_RESPONSE_NAME = 'data_over_all_org_units'
-export const BY_LEVEL_RESPONSE_NAME = 'data_detail_by_level'
-export const DENOMINATOR_RELATIONS_MAP = 'denominatorRelationsMap'
+import {
+    calculateSection4,
+    OVERALL_RESPONSE_NAME,
+    BY_LEVEL_RESPONSE_NAME,
+    DENOMINATOR_RELATIONS_MAP,
+} from './section4Calculations.js'
 
 const section4ByLevel = {
     [BY_LEVEL_RESPONSE_NAME]: {
