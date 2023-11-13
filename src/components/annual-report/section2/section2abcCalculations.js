@@ -1,6 +1,6 @@
 import { getStats, getRoundedValue } from '../utils/mathService.js'
 import { convertAnalyticsResponseToObject } from '../utils/utils.js'
-import { SUBPERIODS_RESPONSE_NAME } from './useFetchSectionTwoData.js'
+import { SUBPERIODS_RESPONSE_NAME } from './useSectionTwoData.js'
 
 const MODIFIED_Z_OUTLIER = 3.5
 const DEFAULT_EXTREME_OUTLIER = 3

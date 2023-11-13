@@ -7,7 +7,7 @@ import {
     OVERALL_RESPONSE_NAME,
     BY_LEVEL_RESPONSE_NAME,
     EXTERNAL_RELATIONS_INDICES_WITH_BY_LEVEL_DATA,
-} from './useFetchSectionThreeData.js'
+} from './useSectionThreeData.js'
 
 const MULTIPLE_ORG_UNITS_CHART_TYPE = 'scatter'
 const SINGLE_ORG_UNITS_CHART_TYPE = 'bullet'

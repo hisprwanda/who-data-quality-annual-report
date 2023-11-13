@@ -1,11 +1,13 @@
 import { useDataEngine } from '@dhis2/app-runtime'
 import { useCallback, useState } from 'react'
+import { calculateSection3 } from './section3Calculations.js'
 
 export const OVERALL_RESPONSE_NAME = 'data_over_all_org_units'
 export const BY_LEVEL_RESPONSE_NAME = 'data_detail_by_level'
-export const DENOMINATOR_RELATIONS_MAP = 'denominatorRelationsMap'
+export const EXTERNAL_RELATIONS_INDICES_WITH_BY_LEVEL_DATA =
+    'externalRelationsResponsesIndices'
 
-const section4ByLevel = {
+const section3ByLevel = {
     [BY_LEVEL_RESPONSE_NAME]: {
         resource: 'analytics.json',
         params: ({ dataElements, orgUnits, orgUnitLevel, periods }) => ({
@@ -16,7 +18,7 @@ const section4ByLevel = {
     },
 }
 
-const section4Overall = {
+const section3Overall = {
     [OVERALL_RESPONSE_NAME]: {
         resource: 'analytics.json',
         params: ({ dataElements, orgUnits, periods }) => ({
@@ -28,13 +30,13 @@ const section4Overall = {
 }
 
 export const fetchDataByLevel = async ({ engine, variables }) => {
-    const dataBySubPeriod = await engine.query(section4ByLevel, {
+    const dataBySubPeriod = await engine.query(section3ByLevel, {
         variables,
     })
     return dataBySubPeriod
 }
 
-export const useFetchSectionFourData = () => {
+export const useSectionThreeData = () => {
     const [loading, setLoading] = useState(false)
     const [data, setData] = useState(null)
     const [error, setError] = useState(null)
@@ -43,12 +45,15 @@ export const useFetchSectionFourData = () => {
 
     const refetch = useCallback(
         async ({ variables = {} }) => {
-            const denominatorRelations =
-                variables?.mappedConfiguration?.denominatorRelations
-            const denominatorRelationDEs = denominatorRelations
+            const boundaryOrgUnitLevel = variables.boundaryOrgUnitLevel
+
+            const externalRelations =
+                variables?.mappedConfiguration?.externalRelations
+            const externalRelationsDEs = externalRelations
                 ? [
-                      ...denominatorRelations.map((rel) => rel.A.id),
-                      ...denominatorRelations.map((rel) => rel.B.id),
+                      ...externalRelations.map((rel) => rel.denominator),
+                      ...externalRelations.map((rel) => rel.numerator),
+                      ...externalRelations.map((rel) => rel.externalData),
                   ]
                 : []
 
@@ -57,70 +62,67 @@ export const useFetchSectionFourData = () => {
             // get data sets and check that each data element is associated with only one period type
 
             // we need to preserve information on index to tie response back to relevant denominator relation (some can be filtered out)
-            const byLevelRequestsWithIndices = denominatorRelations
+            const byLevelRequestsWithIndices = externalRelations
                 .map((rel, index) => {
-                    // UN type does not require details by subOrgUnit level, so these can be skipped
-                    if (rel.type === 'un') {
-                        return
+                    // if the relation's level is the same, or less the boundary organisation unit level, the byLevel request should be skipped
+                    if (!rel.level || rel.level <= boundaryOrgUnitLevel) {
+                        return null
                     }
 
-                    // the level will be the minimum of the lowest of the denominator levels and the selected level
-                    const denomMinLevel = Math.min(
-                        rel.A.lowLevel,
-                        rel.B.lowLevel,
-                        variables.orgUnitLevelNumber
-                    )
-                    // if the denominator relation level is less than the boundary org unit's level, it cannot be calculated
-                    if (denomMinLevel < variables.boundaryOrgUnitLevel) {
-                        return
-                    }
                     return {
                         request: fetchDataByLevel({
                             engine,
                             variables: {
-                                dataElements: [rel.A.id, rel.B.id],
+                                dataElements: [
+                                    rel.numerator,
+                                    rel.denominator,
+                                    rel.externalData,
+                                ],
                                 orgUnits: variables.orgUnits,
-                                orgUnitLevel: `LEVEL-${denomMinLevel}`,
-                                periods: [variables.currentPeriod?.id],
+                                orgUnitLevel: `LEVEL-${rel.level}`,
+                                periods: [variables?.currentPeriod.id],
                             },
                         }),
-                        relation: { index, ...rel, denomMinLevel },
+                        index,
                     }
                 })
                 .filter((req) => req) //filter out null requests
             const byLevelRequests = byLevelRequestsWithIndices.map(
                 (r) => r.request
             )
-            const byLevelRequestDenomRelations = byLevelRequestsWithIndices.map(
-                (r) => r.relation
+            const byLevelRequestIndices = byLevelRequestsWithIndices.map(
+                (r) => r.index
             )
             try {
-                const overallRequest = engine.query(section4Overall, {
+                const overallRequest = engine.query(section3Overall, {
                     variables: {
-                        dataElements: denominatorRelationDEs,
+                        dataElements: externalRelationsDEs,
                         orgUnits: variables.orgUnits,
                         periods: [variables.currentPeriod.id],
                     },
                 })
-
                 const [overallData, ...dataByLevel] = await Promise.all([
                     overallRequest,
                     ...byLevelRequests,
                 ])
 
-                setData({
-                    response: {
-                        ...overallData,
-                        [BY_LEVEL_RESPONSE_NAME]: dataByLevel.map(
-                            (resp) => resp?.[BY_LEVEL_RESPONSE_NAME]
-                        ),
-                        [DENOMINATOR_RELATIONS_MAP]:
-                            byLevelRequestDenomRelations,
-                    },
-                    parameters: {
-                        ...variables,
-                    },
+                const consolidatedData = {
+                    ...overallData,
+                    [BY_LEVEL_RESPONSE_NAME]: dataByLevel.map(
+                        (resp) => resp?.[BY_LEVEL_RESPONSE_NAME]
+                    ),
+                    [EXTERNAL_RELATIONS_INDICES_WITH_BY_LEVEL_DATA]:
+                        byLevelRequestIndices,
+                }
+
+                const section3Data = calculateSection3({
+                    section3Response: consolidatedData,
+                    mappedConfiguration: variables.mappedConfiguration,
+                    currentPeriod: variables.periods?.[0],
+                    overallOrgUnit: variables.orgUnits?.[0],
                 })
+
+                setData(section3Data)
             } catch (e) {
                 console.error(e)
                 setError(e)

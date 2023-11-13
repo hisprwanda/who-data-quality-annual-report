@@ -2,7 +2,7 @@ import PropTypes from 'prop-types'
 import React, { useEffect } from 'react'
 import { Chart } from '../Chart.js'
 import { NoDataInfoBox } from '../common/NoDataWarning.js'
-import { useFetchSectionTwoData } from './useFetchSectionTwoData.js'
+import { useSectionTwoData } from './useSectionTwoData.js'
 
 const sectionInformation = {
     section2a: {
@@ -273,12 +273,7 @@ Section2E.propTypes = {
 }
 
 export const SectionTwo = ({ reportParameters }) => {
-    const {
-        loading,
-        error,
-        data: section2Data,
-        refetch,
-    } = useFetchSectionTwoData()
+    const { loading, error, data: section2Data, refetch } = useSectionTwoData()
 
     useEffect(() => {
         const variables = {

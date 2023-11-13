@@ -1,8 +1,7 @@
 import PropTypes from 'prop-types'
 import React, { useEffect } from 'react'
 import { Chart } from '../Chart.js'
-import { calculateSection3 } from './section3Calculations.js'
-import { useFetchSectionThreeData } from './useFetchSectionThreeData.js'
+import { useSectionThreeData } from './useSectionThreeData.js'
 
 const isNotMissing = (val) => val !== undefined && val !== null
 
@@ -123,7 +122,12 @@ Section3A.propTypes = {
 }
 
 export const SectionThree = ({ reportParameters }) => {
-    const { loading, data, error, refetch } = useFetchSectionThreeData()
+    const {
+        loading,
+        data: section3Data,
+        error,
+        refetch,
+    } = useSectionThreeData()
 
     useEffect(() => {
         const variables = {
@@ -142,14 +146,7 @@ export const SectionThree = ({ reportParameters }) => {
         return <span>{error?.message}</span>
     }
 
-    if (data) {
-        const section3Data = calculateSection3({
-            section3Response: data.response,
-            mappedConfiguration: data.parameters?.mappedConfiguration,
-            currentPeriod: data.parameters?.periods?.[0],
-            overallOrgUnit: data.parameters?.orgUnits?.[0],
-        })
-
+    if (section3Data) {
         return (
             <Section3A
                 title={sectionInformation.section3a.title}

@@ -1,5 +1,6 @@
 import { useDataEngine } from '@dhis2/app-runtime'
 import { useCallback, useState } from 'react'
+import { calculateSection1 } from './section1Calculations.js'
 
 const reportQueries = {
     reporting_rate_over_all_org_units: {
@@ -76,7 +77,7 @@ const reportQueries = {
     },
 }
 
-export const useFetchSectionOneData = () => {
+export const useSectionOneData = () => {
     const [loading, setLoading] = useState(false)
     const [data, setData] = useState(null)
     const [error, setError] = useState(null)
@@ -91,15 +92,18 @@ export const useFetchSectionOneData = () => {
                 const overallData = await engine.query(reportQueries, {
                     variables,
                 })
+                const consolidatedData = { ...overallData }
 
-                setData({
-                    response: {
-                        ...overallData,
-                    },
-                    parameters: {
-                        ...variables,
-                    },
+                const section1Data = calculateSection1({
+                    reportQueryResponse: consolidatedData,
+                    mappedConfigurations: variables.mappedConfiguration,
+                    period: variables.currentPeriod,
+                    periodsIDs: variables.periods,
+                    overallOrgUnit: variables.orgUnits?.[0],
                 })
+                console.log(section1Data)
+
+                setData(section1Data)
             } catch (e) {
                 console.error(e)
                 setError(e)

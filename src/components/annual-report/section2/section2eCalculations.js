@@ -3,7 +3,7 @@ import { convertAnalyticsResponseToObject, getVal } from '../utils/utils.js'
 import {
     OVERALL_ORG_UNIT_SECTION_2E,
     LEVEL_OR_GROUP_SECTION_2E,
-} from './useFetchSectionTwoData.js'
+} from './useSectionTwoData.js'
 
 const RELATIONSHIP_NAMES = {
     eq: 'A ≈ B',

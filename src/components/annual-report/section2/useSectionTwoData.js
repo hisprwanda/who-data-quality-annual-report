@@ -155,7 +155,7 @@ const getSubPeriods = ({ dePeriodTypes, currentPeriod }) => {
     return deSubPeriods
 }
 
-export const useFetchSectionTwoData = () => {
+export const useSectionTwoData = () => {
     const [loading, setLoading] = useState(false)
     const [data, setData] = useState(null)
     const [error, setError] = useState(null)

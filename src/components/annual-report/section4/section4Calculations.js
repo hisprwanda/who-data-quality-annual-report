@@ -4,7 +4,7 @@ import {
     OVERALL_RESPONSE_NAME,
     BY_LEVEL_RESPONSE_NAME,
     DENOMINATOR_RELATIONS_MAP,
-} from './useFetchSectionFourData.js'
+} from './useSectionFourData.js'
 
 const getVal = ({ response, dx, ou, pe }) => {
     return response?.[dx]?.[ou]?.[pe]

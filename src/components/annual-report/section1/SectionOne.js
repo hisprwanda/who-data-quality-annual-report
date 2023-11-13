@@ -11,11 +11,10 @@ import {
 import PropTypes from 'prop-types'
 import React, { useEffect } from 'react'
 import { Chart } from '../Chart.js'
-import { calculateSection1 } from './section1Calculations.js'
-import { useFetchSectionOneData } from './useFetchSectionOneData.js'
+import { useSectionOneData } from './useSectionOneData.js'
 
 export const SectionOne = ({ reportParameters }) => {
-    const { data, loading, error, refetch } = useFetchSectionOneData()
+    const { data: section1Data, loading, error, refetch } = useSectionOneData()
 
     useEffect(() => {
         const variables = {
@@ -46,15 +45,7 @@ export const SectionOne = ({ reportParameters }) => {
         return <span>{error?.message}</span>
     }
 
-    if (data) {
-        const sectionData = calculateSection1({
-            reportQueryResponse: data.response,
-            mappedConfigurations: data.parameters?.mappedConfiguration,
-            period: data.parameters?.currentPeriod,
-            periodsIDs: data.parameters?.periods,
-            overallOrgUnit: data.parameters?.orgUnits?.[0],
-        })
-
+    if (section1Data) {
         return (
             <>
                 <div
@@ -81,7 +72,7 @@ export const SectionOne = ({ reportParameters }) => {
                             </TableRowHead>
                         </TableHead>
                         <TableBody>
-                            {sectionData.section1A.map((dataset, key) => (
+                            {section1Data.section1A.map((dataset, key) => (
                                 <TableRow key={key}>
                                     <TableCell>
                                         {dataset.dataset_name}
@@ -123,7 +114,7 @@ export const SectionOne = ({ reportParameters }) => {
                             </TableRowHead>
                         </TableHead>
                         <TableBody>
-                            {sectionData.section1B.map((dataset, key) => (
+                            {section1Data.section1B.map((dataset, key) => (
                                 <TableRow key={key}>
                                     <TableCell>
                                         {dataset.dataset_name}
@@ -170,7 +161,7 @@ export const SectionOne = ({ reportParameters }) => {
                             </TableRowHead>
                         </TableHead>
                         <TableBody>
-                            {sectionData.section1C.map((dataset, key) => (
+                            {section1Data.section1C.map((dataset, key) => (
                                 <TableRow key={key}>
                                     <TableCell>
                                         {dataset.indicator_name}
@@ -223,7 +214,7 @@ export const SectionOne = ({ reportParameters }) => {
                             </TableRowHead>
                         </TableHead>
                         <TableBody>
-                            {sectionData.section1D.map((dataset, key) => (
+                            {section1Data.section1D.map((dataset, key) => (
                                 <TableRow key={key}>
                                     <TableCell>
                                         {dataset.dataset_name}
@@ -256,7 +247,7 @@ export const SectionOne = ({ reportParameters }) => {
                 <Chart
                     sectionId={'section1'}
                     chartId={'chart1'}
-                    chartInfo={sectionData.chartInfo}
+                    chartInfo={section1Data.chartInfo}
                 />
             </>
         )
