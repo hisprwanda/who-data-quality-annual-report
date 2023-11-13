@@ -1,13 +1,14 @@
 import { useDataQuery } from '@dhis2/app-runtime'
 import {
+    // rename this to not clash with Field from RFF
     Field as FieldContainer,
-    Radio,
     MultiSelectFieldFF,
     SingleSelectFieldFF,
+    RadioFieldFF,
     ReactFinalForm,
 } from '@dhis2/ui'
 import PropTypes from 'prop-types'
-import React, { useState, useCallback, useEffect, useMemo } from 'react'
+import React, { useEffect, useMemo } from 'react'
 import styles from './DataMappingForm.module.css'
 
 const { Field, useField } = ReactFinalForm
@@ -15,6 +16,62 @@ const { Field, useField } = ReactFinalForm
 // Data item types
 const DATA_ELEMENT = 'dataElement'
 const INDICATOR = 'indicator'
+
+// Data element types
+const TOTALS = 'totals'
+const DETAILS = 'details'
+
+const DataElementTypeRadios = () => {
+    return (
+        <div className={styles.formRow}>
+            <FieldContainer label="Data element type">
+                <div className={styles.radiosContainer}>
+                    <Field
+                        name="dataElementType"
+                        type="radio"
+                        component={RadioFieldFF}
+                        value={TOTALS}
+                        label={'Totals'}
+                        initialValue={TOTALS}
+                    />
+                    <Field
+                        name="dataElementType"
+                        type="radio"
+                        component={RadioFieldFF}
+                        value={DETAILS}
+                        label={'Details'}
+                    />
+                </div>
+            </FieldContainer>
+        </div>
+    )
+}
+
+const DataTypeRadios = () => {
+    return (
+        <div className={styles.formRow}>
+            <FieldContainer label="Data type">
+                <div className={styles.radiosContainer}>
+                    <Field
+                        name="dataType"
+                        type="radio"
+                        component={RadioFieldFF}
+                        value={DATA_ELEMENT}
+                        label={'Data element'}
+                        initialValue={DATA_ELEMENT}
+                    />
+                    <Field
+                        name="dataType"
+                        type="radio"
+                        component={RadioFieldFF}
+                        value={INDICATOR}
+                        label={'Indicator'}
+                    />
+                </div>
+            </FieldContainer>
+        </div>
+    )
+}
 
 const DATA_ELEMENT_GROUPS_QUERY = {
     reponse: {
@@ -276,40 +333,25 @@ const VariableSelect = () => {
 }
 
 export const DataMappingFormSection = () => {
-    const [dataItemType, setDataItemType] = useState(DATA_ELEMENT)
-
-    const handleChange = useCallback(({ value }) => setDataItemType(value), [])
+    const dataTypeField = useField('dataType', {
+        subscription: { value: true },
+    })
+    const dataType = dataTypeField.input.value
 
     return (
         <div className={styles.mainContainer}>
-            <div className={styles.formRow}>
-                <FieldContainer label="Data mapping">
-                    <div className={styles.radiosContainer}>
-                        <Radio
-                            value={DATA_ELEMENT}
-                            label="Data element"
-                            checked={dataItemType === DATA_ELEMENT}
-                            onChange={handleChange}
-                        />
-                        <Radio
-                            value={INDICATOR}
-                            label="Indicator"
-                            checked={dataItemType === INDICATOR}
-                            onChange={handleChange}
-                        />
-                    </div>
-                </FieldContainer>
-            </div>
+            <DataTypeRadios />
 
-            {dataItemType === DATA_ELEMENT && (
+            {dataType === DATA_ELEMENT && (
                 <>
+                    <DataElementTypeRadios />
                     <DataElementGroupSelect />
                     <DataElementSelect />
                 </>
             )}
-            {dataItemType === INDICATOR && <p>Indicator form</p>}
+            {dataType === INDICATOR && <p>Indicator form</p>}
 
-            <DataSetSelect dataItemType={dataItemType} />
+            <DataSetSelect dataType={dataType} />
 
             <VariableSelect />
         </div>
