@@ -75,6 +75,8 @@ export function EditNumeratorModal({ numeratorToEdit, onSave, onClose }) {
                 // todo: make sure groups, dataItemType, dataElementType,
                 // and dataItemGroup don't end up in the final object
 
+                // todo: make sure to parse dataItem for dataID
+
                 // todo: validate! 🥳
                 console.log('onSubmit', { values, form })
                 if (onSave) {

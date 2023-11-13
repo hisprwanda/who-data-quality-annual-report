@@ -7,7 +7,7 @@ import {
     RadioFieldFF,
     ReactFinalForm,
 } from '@dhis2/ui'
-import React, { useState, useEffect, useMemo } from 'react'
+import React, { useCallback, useState, useEffect, useMemo } from 'react'
 import styles from './DataMappingForm.module.css'
 
 const { Field, useField } = ReactFinalForm
@@ -114,6 +114,11 @@ const DataElementGroupSelect = () => {
     )
 }
 
+/**
+ * This util is useful in a component where you might want to make different
+ * queries based on the context: you can choose the query at fetch time and
+ * the `error` and `loading` states are consolidated
+ */
 const useEngineQuery = () => {
     const engine = useDataEngine()
     const [data, setData] = useState()
@@ -149,7 +154,6 @@ const DATA_ELEMENT_TOTALS_QUERY = {
     },
 }
 const mapDataElementTotalsResponseToOptions = (data) => {
-    console.log({ data })
     return data.response.dataElements
         .map(({ id, displayName }) => ({
             label: displayName,
@@ -169,7 +173,6 @@ const DATA_ELEMENT_DETAILS_QUERY = {
     },
 }
 const mapDataElementDetailsResponseToOptions = (data) => {
-    console.log({ data })
     return data.response.dataElementOperands
         .map(({ id, displayName }) => ({
             label: displayName,
@@ -193,14 +196,15 @@ const DataElementSelect = () => {
     const dataElementGroupID = dataElementGroupIDField.input.value
 
     // Get the onChange handler to be able to clear this field
-    const dataIDField = useField('dataID', { subscription: {} })
-    const onChange = dataIDField.input.onChange
+    const dataItemField = useField('dataItem', { subscription: {} })
+    const onChange = dataItemField.input.onChange
 
     useEffect(() => {
         // Clear the selection in this field
         onChange(undefined)
 
         if (!dataElementGroupID) {
+            // todo: setOptions([])?
             return
         }
 
@@ -225,6 +229,24 @@ const DataElementSelect = () => {
         // rerun this if dataElementType or dataElementGroupID change
     }, [dataElementType, dataElementGroupID, fetch, onChange])
 
+    // Using `format` and `parse` here is a weird trick: we want to add
+    // `dataItem={ id, displayName }` to the form state so that it can be
+    // shared with "Variable for completeness", but the UI component can only
+    // handle strings as the `value` prop. So we pass it a string, and convert
+    // it back to an object on change
+    const format = useCallback((dataItem) => dataItem?.id, [])
+    // This could be optimized with a look-up object, but it's not a very
+    // high-traffic operation
+    const parse = useCallback(
+        (id) => {
+            const { label, value } = options.find(
+                (option) => option.value === id
+            )
+            return { id: value, displayName: label }
+        },
+        [options]
+    )
+
     if (loading) {
         return 'loading' // todo
     }
@@ -235,8 +257,10 @@ const DataElementSelect = () => {
     return (
         <div className={styles.formRow}>
             <Field
-                name="dataID"
+                name="dataItem"
                 component={SingleSelectFieldFF}
+                format={format}
+                parse={parse}
                 options={options}
                 label={'Data element'}
                 placeholder={'Select data element'}
@@ -288,21 +312,24 @@ const DataSetSelect = () => {
             lazy: true,
         }
     )
-    // Depends on dataID value (which handles both dataElementTypes)
-    const dataIDField = useField('dataID', { subscription: { value: true } })
-    const dataID = dataIDField.input.value
+    // Depends on dataItem value (which handles both dataElementTypes)
+    const dataItemField = useField('dataItem', {
+        subscription: { value: true },
+    })
+    const dataItem = dataItemField.input.value
 
     // Get the onChange handler to be able to clear this field
     const dataSetIDField = useField('dataSetID', { subscription: {} })
     const onChange = dataSetIDField.input.onChange
 
     useEffect(() => {
-        if (dataID) {
-            refetch({ id: dataID })
+        if (dataItem) {
+            console.log({ dataItem })
+            refetch({ id: dataItem.id })
         }
-        // Clear the selection in this field if dataID changes, even undefined
+        // Clear the selection in this field if dataItem changes, even undefined
         onChange(undefined)
-    }, [dataID, refetch, onChange])
+    }, [dataItem, refetch, onChange])
 
     const dataSetOptions = useMemo(() => {
         if (!data) {
@@ -343,33 +370,48 @@ const VARIABLES_QUERY = {
     },
 }
 const VariableSelect = () => {
-    const { loading, error, data, refetch } = useDataQuery(VARIABLES_QUERY, {
-        lazy: true,
+    const { fetch, loading, error } = useEngineQuery()
+    const [options, setOptions] = useState([])
+
+    // Depends on dataItem and dataElementType
+    const dataItemField = useField('dataItem', {
+        subscription: { value: true },
     })
-    const {
-        input: { value: dataID },
-    } = useField('dataID', { subscription: { value: true } })
-    const {
-        input: { onChange },
-    } = useField('dataElementOperandID', { subscription: {} })
+    const dataItem = dataItemField.input.value
+    const dataElementTypeField = useField('dataElementType', {
+        subscription: { value: true },
+    })
+    const dataElementType = dataElementTypeField.input.value
+
+    // Access onChange to be able to clear this field
+    const dataElementOperandIDField = useField('dataElementOperandID', {
+        subscription: {},
+    })
+    const onChange = dataElementOperandIDField.input.onChange
 
     useEffect(() => {
-        if (dataID) {
-            refetch({ id: dataID })
-        }
-        // Clear the selection in this field if dataID changes, even undefined
+        // Clear the selection in this field if dataItem changes, even undefined
         onChange(undefined)
-    }, [dataID, refetch, onChange])
 
-    const dataElementOperandOptions = useMemo(() => {
-        if (!data) {
-            return []
+        if (!dataItem) {
+            return
         }
-        return data.response.dataElementOperands.map(({ id, displayName }) => ({
-            label: displayName,
-            value: id,
-        }))
-    }, [data])
+
+        if (dataElementType === TOTALS) {
+            // Get the operands for this data element
+            fetch(VARIABLES_QUERY, { id: dataItem.id }).then((data) => {
+                const newOptions = data.response.dataElementOperands.map(
+                    ({ id, displayName }) => ({ label: displayName, value: id })
+                )
+                setOptions(newOptions)
+            })
+        } else {
+            const { displayName, id } = dataItem
+            setOptions([{ label: displayName, value: id }])
+            // there's only one option; go ahead and set it
+            onChange(id)
+        }
+    }, [dataItem, dataElementType, fetch, onChange])
 
     if (loading) {
         return 'loading' // todo
@@ -383,7 +425,7 @@ const VariableSelect = () => {
             <Field
                 name="dataElementOperandID"
                 component={SingleSelectFieldFF}
-                options={dataElementOperandOptions}
+                options={options}
                 label={'Variable for completeness'}
                 placeholder={'Select variable'}
             />
