@@ -54,6 +54,7 @@ const DataElementGroupSelect = () => {
                 options={dataElementGroupOptions}
                 label={'Data element group'}
                 placeholder={'Select data element group'}
+                filterable
             />
         </div>
     )
@@ -118,6 +119,7 @@ const DataElementSelect = () => {
                 options={dataElementOptions}
                 label={'Data element'}
                 placeholder={'Select data element'}
+                filterable
             />
         </div>
     )
@@ -178,9 +180,9 @@ const DataSetSelect = ({ dataItemType }) => {
     useEffect(() => {
         if (dataID) {
             refetch({ id: dataID })
-            // Clear the selection in this field
-            onChange(undefined)
         }
+        // Clear the selection in this field if dataID changes, even undefined
+        onChange(undefined)
     }, [dataID, refetch, onChange])
 
     const dataSetOptions = useMemo(() => {
@@ -212,6 +214,65 @@ const DataSetSelect = ({ dataItemType }) => {
 }
 DataSetSelect.propTypes = {
     dataItemType: PropTypes.oneOf([DATA_ELEMENT, INDICATOR]),
+}
+
+const VARIABLES_QUERY = {
+    response: {
+        resource: 'dataElementOperands',
+        params: ({ id }) => ({
+            fields: 'displayName,id',
+            filter: `dataElement.id:eq:${id}`,
+            paging: 'false',
+        }),
+    },
+}
+const VariableSelect = () => {
+    const { loading, error, data, refetch } = useDataQuery(VARIABLES_QUERY, {
+        lazy: true,
+    })
+    const {
+        input: { value: dataID },
+    } = useField('dataID', { subscription: { value: true } })
+    const {
+        input: { onChange },
+    } = useField('dataElementOperandID', { subscription: {} })
+
+    useEffect(() => {
+        if (dataID) {
+            refetch({ id: dataID })
+        }
+        // Clear the selection in this field if dataID changes, even undefined
+        onChange(undefined)
+    }, [dataID, refetch, onChange])
+
+    const dataElementOperandOptions = useMemo(() => {
+        if (!data) {
+            return []
+        }
+        return data.response.dataElementOperands.map(({ id, displayName }) => ({
+            label: displayName,
+            value: id,
+        }))
+    }, [data])
+
+    if (loading) {
+        return 'loading' // todo
+    }
+    if (error) {
+        return 'error' // todo
+    }
+
+    return (
+        <div className={styles.formRow}>
+            <Field
+                name="dataElementOperandID"
+                component={SingleSelectFieldFF}
+                options={dataElementOperandOptions}
+                label={'Variable for completeness'}
+                placeholder={'Select variable'}
+            />
+        </div>
+    )
 }
 
 export const DataMappingFormSection = () => {
@@ -250,19 +311,7 @@ export const DataMappingFormSection = () => {
 
             <DataSetSelect dataItemType={dataItemType} />
 
-            <div className={styles.formRow}>
-                <Field
-                    name="dataElementOperandID"
-                    component={SingleSelectFieldFF}
-                    options={[
-                        // todo
-                        { label: 'A', value: 'A' },
-                        { label: 'B', value: 'B' },
-                    ]}
-                    label={'Variable for completeness'}
-                    placeholder={'Select variable'}
-                />
-            </div>
+            <VariableSelect />
         </div>
     )
 }
