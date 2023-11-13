@@ -281,7 +281,6 @@ const getSelectOptionsFromDataElement = (response) => {
 }
 
 const DataSetSelect = () => {
-    // todo: get data element from operand
     // need info: dataItemType, (dataElementType), dataElement/indicator
     const { loading, error, data, refetch } = useDataQuery(
         DATA_SETS_FROM_DATA_ELEMENT_QUERY,
@@ -289,12 +288,13 @@ const DataSetSelect = () => {
             lazy: true,
         }
     )
-    const {
-        input: { value: dataID },
-    } = useField('dataID', { subscription: { value: true } })
-    const {
-        input: { onChange },
-    } = useField('dataSetID', { subscription: {} })
+    // Depends on dataID value (which handles both dataElementTypes)
+    const dataIDField = useField('dataID', { subscription: { value: true } })
+    const dataID = dataIDField.input.value
+
+    // Get the onChange handler to be able to clear this field
+    const dataSetIDField = useField('dataSetID', { subscription: {} })
+    const onChange = dataSetIDField.input.onChange
 
     useEffect(() => {
         if (dataID) {
@@ -309,7 +309,7 @@ const DataSetSelect = () => {
             return []
         }
         return getSelectOptionsFromDataElement(data.response)
-        // todo: "Predictor value"? see "Data quality" DE group
+        // todo: disable if empty -- see "Data quality" DE group
     }, [data])
 
     if (loading) {
