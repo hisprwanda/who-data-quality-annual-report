@@ -23,6 +23,16 @@ import { DataMappingFormSection } from './DataMappingForm.js'
 
 const { Form, Field } = ReactFinalForm
 
+// todo: add to numerator when created
+export const DEFAULT_QUALITY_PARAMETERS = {
+    // edited in quality parameters:
+    moderateOutlier: 2,
+    extremeOutlier: 3,
+    consistency: 33,
+    trend: 'constant',
+    comparison: 'ou',
+    missing: 90,
+}
 const DEFAULT_NUMERATOR_VALUES = {
     code: undefined,
     // edited in this form:
@@ -33,13 +43,6 @@ const DEFAULT_NUMERATOR_VALUES = {
     dataID: undefined,
     dataElementOperandID: undefined,
     dataSetID: [],
-    // edited in quality parameters:
-    moderateOutlier: 2,
-    extremeOutlier: 3,
-    consistency: 33,
-    trend: 'constant',
-    comparison: 'ou',
-    missing: 90,
 }
 
 /**
@@ -69,6 +72,9 @@ export function EditNumeratorModal({ numeratorToEdit, onSave, onClose }) {
     return (
         <Form
             onSubmit={(values, form) => {
+                // todo: make sure groups, dataItemType, dataElementType,
+                // and dataItemGroup don't end up in the final object
+
                 // todo: validate! 🥳
                 console.log('onSubmit', { values, form })
                 if (onSave) {
