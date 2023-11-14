@@ -112,7 +112,7 @@ export function EditNumeratorModal({ numeratorToEdit, onSave, onClose }) {
                                             name="definition"
                                             component={TextAreaFieldFF}
                                             placeholder="Numerator definition"
-                                            rows="2"
+                                            rows={2}
                                         />
                                     </TableCell>
                                 </TableRow>
