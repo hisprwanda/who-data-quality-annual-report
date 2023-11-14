@@ -14,6 +14,7 @@ import {
     getNumeratorMemberGroups,
 } from '../../../utils/numeratorsMetadataData.js'
 import { ConfirmationModal } from '../ConfirmationModal.js'
+import styles from './NumeratorTableItem.module.css'
 // import { EditNumeratorModal } from './EditNumeratorModal.js'
 
 const ClearNumeratorButton = ({ numerator }) => {
@@ -39,7 +40,12 @@ const ClearNumeratorButton = ({ numerator }) => {
 
     return (
         <>
-            <Button small onClick={openModal} disabled={!isClearEnabled}>
+            <Button
+                small
+                onClick={openModal}
+                disabled={!isClearEnabled}
+                className={styles.clearOrDeleteButton}
+            >
                 Clear
             </Button>
             {confirmationModalOpen && (
@@ -76,7 +82,12 @@ const DeleteNumeratorButton = ({ numerator }) => {
 
     return (
         <>
-            <Button small destructive onClick={openModal}>
+            <Button
+                small
+                destructive
+                onClick={openModal}
+                className={styles.clearOrDeleteButton}
+            >
                 Delete
             </Button>
             {confirmationModalOpen && (
