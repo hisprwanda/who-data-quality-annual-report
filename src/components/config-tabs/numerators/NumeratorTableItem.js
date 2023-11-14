@@ -3,6 +3,7 @@ import { Chip } from '@dhis2/ui-core'
 import PropTypes from 'prop-types'
 import React, { useMemo, useCallback, useState } from 'react'
 import {
+    CLEAR_NUMERATOR_DATA_MAPPING,
     DELETE_NUMERATOR,
     useConfigurations,
     useConfigurationsDispatch,
@@ -14,6 +15,48 @@ import {
 } from '../../../utils/numeratorsMetadataData.js'
 import { ConfirmationModal } from '../ConfirmationModal.js'
 // import { EditNumeratorModal } from './EditNumeratorModal.js'
+
+const ClearNumeratorButton = ({ numerator }) => {
+    const [confirmationModalOpen, setConfirmationModalOpen] = useState(false)
+    const dispatch = useConfigurationsDispatch()
+
+    const openModal = useCallback(() => setConfirmationModalOpen(true), [])
+    const closeModal = useCallback(() => setConfirmationModalOpen(false), [])
+
+    const clearNumerator = useCallback(
+        () =>
+            dispatch({
+                type: CLEAR_NUMERATOR_DATA_MAPPING,
+                payload: { code: numerator.code },
+            }),
+        [dispatch, numerator.code]
+    )
+
+    const isClearEnabled = useMemo(
+        () => numerator.dataID || numerator.dataSetID?.length,
+        [numerator]
+    )
+
+    return (
+        <>
+            <Button small onClick={openModal} disabled={!isClearEnabled}>
+                Clear
+            </Button>
+            {confirmationModalOpen && (
+                <ConfirmationModal
+                    title="Clear numerator data mapping"
+                    text={`Are you sure you want to clear the data mappings for ${numerator.name}?`}
+                    action="Clear"
+                    onClose={closeModal}
+                    onConfirm={clearNumerator}
+                />
+            )}
+        </>
+    )
+}
+ClearNumeratorButton.propTypes = {
+    numerator: PropTypes.object,
+}
 
 const DeleteNumeratorButton = ({ numerator }) => {
     const [confirmationModalOpen, setConfirmationModalOpen] = useState(false)
@@ -57,11 +100,6 @@ DeleteNumeratorButton.propTypes = {
 export const NumeratorTableItem = ({ numerator }) => {
     const configurations = useConfigurations()
 
-    const isClearEnabled = useMemo(
-        () => numerator.dataID || numerator.dataSetID?.length,
-        [numerator]
-    )
-
     return (
         <TableRow>
             <TableCell>
@@ -92,13 +130,7 @@ export const NumeratorTableItem = ({ numerator }) => {
                     {numerator.custom ? (
                         <DeleteNumeratorButton numerator={numerator} />
                     ) : (
-                        <Button
-                            small
-                            onClick={() => alert('todo: clear')}
-                            disabled={!isClearEnabled}
-                        >
-                            Clear
-                        </Button>
+                        <ClearNumeratorButton numerator={numerator} />
                     )}
                 </ButtonStrip>
             </TableCell>

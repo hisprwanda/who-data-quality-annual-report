@@ -94,8 +94,31 @@ export function configurationsReducer(configurations, { type, payload }) {
         }
 
         case CLEAR_NUMERATOR_DATA_MAPPING: {
-            console.log('todo: clear numerator data mapping')
-            return configurations
+            const { code } = payload
+
+            const prevNumerators = configurations.numerators
+            const targetIndex = prevNumerators.findIndex(
+                (numerator) => numerator.code === code
+            )
+            const updatedNumerator = {
+                ...prevNumerators[targetIndex],
+                dataID: null,
+                dataSetID: [],
+                dataElementOperandID: null,
+            }
+
+            const newConfigurations = {
+                ...configurations,
+                numerators: [
+                    ...prevNumerators.slice(0, targetIndex),
+                    updatedNumerator,
+                    ...prevNumerators.slice(targetIndex + 1),
+                ],
+                lastUpdated: getISOTimestamp(),
+            }
+
+            console.log({ updatedNumerator, newConfigurations })
+            return newConfigurations
         }
 
         case DELETE_NUMERATOR: {
@@ -137,6 +160,7 @@ export function configurationsReducer(configurations, { type, payload }) {
         }
 
         // Numerator relations
+
         case CREATE_NUMERATOR_RELATION: {
             const prevNumeratorRelations = configurations.numeratorRelations
             const nextAvailableCode = getNextAvailableCode(
