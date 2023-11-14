@@ -16,21 +16,22 @@ import {
     SingleSelectOption,
     ButtonStrip,
 } from '@dhis2/ui'
+import PropTypes from 'prop-types'
 import React, { useState } from 'react'
 import { useConfigurations } from '../../../utils/index.js'
 const { Form, Field, useField } = ReactFinalForm
 
-const DEFAULT_EXTERNAL_DATA_COMPARISON = {
+const DEFAULT_FORM_VALUES = {
     name: '',
     criteria: '',
     dataType: 'dataElements',
     externalData: '',
     numerator: '',
     denominator: '',
-    level: '1',
+    level: '',
 }
 
-// TODO: these queries should be moved to a shared file, they are also used in other config tabs (e.g. denominators)
+// TODO: queries to be moved to a shared file, they are also used in other config tabs (e.g. denominators)
 const componentQueries = {
     DEGroups: {
         resource: 'dataElementGroups',
@@ -54,9 +55,8 @@ const componentQueries = {
     },
 }
 
-
 // Extract the field to it's own component
-const DataElementSelect = ({dataElementsToFilter}) => {
+const DataElementSelect = ({ dataElementsToFilter }) => {
     // use `useField` from ReactFinalForm to get a field's state --
     // input.value will be the value of the field we're looking for
     const { input } = useField(
@@ -81,16 +81,17 @@ const DataElementSelect = ({dataElementsToFilter}) => {
             return []
         }
         // update the data elements options based on the selected group
-        const filteredDataElementOptions = groupElements[0].dataElements.map((group) => ({
-            label: group.displayName,
-            value: group.id,
-        }))
+        const filteredDataElementOptions = groupElements[0].dataElements.map(
+            (group) => ({
+                label: group.displayName,
+                value: group.id,
+            })
+        )
 
         return filteredDataElementOptions
         // this array tells this memoized function to only run when
         // selectedDataElementGroup changes
-    }, [selectedDataElementGroup])
-
+    }, [dataElementsToFilter, selectedDataElementGroup])
 
     return (
         <Field
@@ -102,11 +103,12 @@ const DataElementSelect = ({dataElementsToFilter}) => {
         />
     )
 }
-// In your form, add the <DataElementSelect /> where you need it
+DataElementSelect.propTypes = {
+    dataElementsToFilter: PropTypes.array,
+}
 
-
-export const UpdateExternalDataComparisonModel = ({
-    externalDataToUpdate,
+export const EditExternalDataComparisonModel = ({
+    externalRelationToEdit,
     onSave,
     onClose,
 }) => {
@@ -143,31 +145,23 @@ export const UpdateExternalDataComparisonModel = ({
     // data elements to filter from
     let dataElementsToFilter = []
 
-    const { data } = useDataQuery(
-        componentQueries,
-        {
-            lazy: false,
-        }
-    )
+    const { data } = useDataQuery(componentQueries, {
+        lazy: false,
+    })
 
     if (data) {
-        dataElementGroups = data.DEGroups.dataElementGroups.map(
-            (group) => ({
-                label: group.displayName,
-                value: group.id,
-            })
-        )
-        orgUnitsLevels = data.ouLevels.organisationUnitLevels.map(
-            (level) => ({
-                label: level.displayName,
-                value: level.level.toString(),
-            })
-        )
-        
+        dataElementGroups = data.DEGroups.dataElementGroups.map((group) => ({
+            label: group.displayName,
+            value: group.id,
+        }))
+        orgUnitsLevels = data.ouLevels.organisationUnitLevels.map((level) => ({
+            label: level.displayName,
+            value: level.level.toString(),
+        }))
+
         // data groups containing data elements to filter from
         dataElementsToFilter = data.DEs.dataElementGroups
     }
-    
 
     const toggleTabModal = (index) => {
         setToggleStateModal(index)
@@ -177,10 +171,14 @@ export const UpdateExternalDataComparisonModel = ({
         <Form
             onSubmit={(values, form) => {
                 console.log('submitting2...', { values, form })
+                // if (onSave) {
+                //     onSave(values)
+                // } else {
+                //     alert('todo')
+                // }
+                // onClose()
             }}
-            initialValues={
-                externalDataToUpdate || DEFAULT_EXTERNAL_DATA_COMPARISON
-            }
+            initialValues={externalRelationToEdit || DEFAULT_FORM_VALUES}
             subscription={{ submitting: true }}
         >
             {({ handleSubmit }) => (
@@ -243,17 +241,20 @@ export const UpdateExternalDataComparisonModel = ({
                                                     <div className="dataElementsSelector">
                                                         <Field
                                                             name="dataElementGroup"
-                                                            component={ SingleSelectFieldFF }
-                                                            options={ dataElementGroups }
+                                                            component={
+                                                                SingleSelectFieldFF
+                                                            }
+                                                            options={
+                                                                dataElementGroups
+                                                            }
                                                             placeholder="Select data element group"
                                                         />
 
-                                                            <DataElementSelect 
-                                                                dataElementsToFilter = { dataElementsToFilter }
-                                                            />
-                                                   
-
-
+                                                        <DataElementSelect
+                                                            dataElementsToFilter={
+                                                                dataElementsToFilter
+                                                            }
+                                                        />
                                                     </div>
                                                 </div>
 
@@ -396,4 +397,8 @@ export const UpdateExternalDataComparisonModel = ({
     )
 }
 
-export default UpdateExternalDataComparisonModel
+EditExternalDataComparisonModel.propTypes = {
+    externalRelationToEdit: PropTypes.object,
+    onClose: PropTypes.func,
+    onSave: PropTypes.func,
+}

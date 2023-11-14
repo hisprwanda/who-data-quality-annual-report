@@ -8,30 +8,58 @@ import {
     TableHead,
     TableRow,
     TableRowHead,
-    IconDelete16,
-    IconEdit16,
+    TableFoot,
     IconAdd16,
 } from '@dhis2/ui'
 import PropTypes from 'prop-types'
-import React, { useState, useEffect } from 'react'
-import { getDenominatorRelations } from '../../../utils/denominatorsMetadataData.js'
-import { getNumeratorDataElement } from '../../../utils/numeratorsMetadataData.js'
-import {UpdateExternalDataComparisonModel} from './UpdateExternalDataComparisonModel.js'
+import React, { useState, useCallback } from 'react'
+import {
+    useConfigurations,
+    useConfigurationsDispatch,
+    CREATE_EXTERNAL_RELATION,
+} from '../../../utils/index.js'
+import { EditExternalDataComparisonModel } from './EditExternalDataComparisonModel.js'
+import { ExternalDataComparisonTableItem } from './ExternalDataComparisonTableItem.js'
 
-export const ExternalDataComparison = ({ toggleState, configurations }) => {
-    const [relations, setRelations] = useState(null)
-    const [updateModalOpen, setUpdateModalOpen] = useState(false)
+const AddExternalRelationButton = ({ configurations }) => {
+    const [addNewModalOpen, setAddNewModalOpen] = useState(false)
+    const dispatch = useConfigurationsDispatch()
 
-    useEffect(() => {
-        setRelations(configurations.externalRelations)
-    }, [configurations])
+    const openModal = useCallback(() => setAddNewModalOpen(true), [])
+    const closeModal = useCallback(() => setAddNewModalOpen(false), [])
+
+    const addExternalRelation = useCallback(
+        (newExternalRelation) =>
+            dispatch({
+                type: CREATE_EXTERNAL_RELATION,
+                payload: { newExternalRelation },
+            }),
+        [dispatch]
+    )
 
     return (
-        <div
-            className={
-                toggleState === 7 ? 'content  active-content' : 'content'
-            }
-        >
+        <>
+            <Button primary icon={<IconAdd16 />} onClick={openModal}>
+                Add External Relation
+            </Button>
+            {addNewModalOpen && (
+                <EditExternalDataComparisonModel
+                    configurations={configurations}
+                    onSave={addExternalRelation}
+                    onClose={closeModal}
+                />
+            )}
+        </>
+    )
+}
+AddExternalRelationButton.propTypes = { configurations: PropTypes.object }
+
+export const ExternalDataComparison = () => {
+    const configurations = useConfigurations()
+    const externalRelations = configurations.externalRelations
+
+    return (
+        <div>
             <p>
                 {`Please identify external (survey) data that can be used for
                 comparison with routine data, e.g. ANC coverage, immunisation
@@ -62,107 +90,36 @@ export const ExternalDataComparison = ({ toggleState, configurations }) => {
                         </TableRowHead>
                     </TableHead>
                     <TableBody>
-                        {relations ? (
-                            relations.map((relation, key) => (
-                                <TableRow key={key}>
-                                    <TableCell>{relation.name}</TableCell>
-                                    <TableCell>
-                                        {getNumeratorDataElement(
-                                            configurations,
-                                            relation.externalData
-                                        )}
-                                    </TableCell>
-                                    <TableCell>
-                                        {getDenominatorRelations(
-                                            configurations.numerators,
-                                            relation.numerator
-                                        )}
-                                    </TableCell>
-                                    <TableCell>
-                                        {getDenominatorRelations(
-                                            configurations.denominators,
-                                            relation.denominator
-                                        )}
-                                    </TableCell>
-                                    <TableCell>{relation.criteria}%</TableCell>
-                                    <TableCell>District</TableCell>
-                                    <TableCell>
-                                        <ButtonStrip>
-                                            <Button
-                                                small
-                                                name="Primary button"
-                                                onClick={() =>
-                                                    setUpdateModalOpen(true)
-                                                }
-                                                basic
-                                                button
-                                                value="default"
-                                                icon={<IconEdit16 />}
-                                            >
-                                                {' '}
-                                                Edit
-                                            </Button>
-                                            <Button
-                                                small
-                                                name="Primary button"
-                                                onClick={() =>
-                                                    console.log('deleting...')
-                                                }
-                                                destructive
-                                                button
-                                                value="default"
-                                                icon={<IconDelete16 />}
-                                            >
-                                                {' '}
-                                                Delete
-                                            </Button>
-                                        </ButtonStrip>
-                                    </TableCell>
-                                </TableRow>
+                        {externalRelations ? (
+                            externalRelations.map((externalRelation) => (
+                                <ExternalDataComparisonTableItem
+                                    externalRelation={externalRelation}
+                                    configurations={configurations}
+                                    key={externalRelation.code}
+                                />
                             ))
                         ) : (
                             <TableRow>
-                                <TableCell></TableCell>
+                                <TableCell>
+                                    {' '}
+                                    No external relations found.
+                                </TableCell>
                             </TableRow>
                         )}
-                        {/* Add button */}
-
+                    </TableBody>
+                    <TableFoot>
                         <TableRow>
-                            <TableCell></TableCell>
-                            <TableCell></TableCell>
-                            <TableCell></TableCell>
-                            <TableCell></TableCell>
-                            <TableCell></TableCell>
-                            <TableCell></TableCell>
-                            <TableCell>
-                                <Button
-                                    name="Primary button"
-                                    onClick={() => setUpdateModalOpen(true)}
-                                    primary
-                                    button
-                                    value="default"
-                                    icon={<IconAdd16 />}
-                                >
-                                    {' '}
-                                    Add Comparison
-                                </Button>
+                            <TableCell colSpan="7">
+                                <ButtonStrip end>
+                                    <AddExternalRelationButton
+                                        configurations={configurations}
+                                    />
+                                </ButtonStrip>
                             </TableCell>
                         </TableRow>
-                    </TableBody>
+                    </TableFoot>
                 </Table>
             </div>
-            {updateModalOpen && (
-                <UpdateExternalDataComparisonModel
-                    externalDataToUpdate={[]}
-                    onSave={() => console.log('saving...')}
-                    onClose={() => setUpdateModalOpen(false)}
-                />
-            )}
         </div>
     )
-}
-
-ExternalDataComparison.propTypes = {
-    configurations: PropTypes.object,
-    toggleState: PropTypes.string,
 }
