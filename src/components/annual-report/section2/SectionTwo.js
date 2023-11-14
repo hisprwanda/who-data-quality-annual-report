@@ -279,6 +279,9 @@ export const SectionTwo = ({ reportParameters }) => {
         const variables = {
             ...reportParameters,
             currentPeriod: reportParameters.periods[0],
+            dataSets: Object.keys(
+                reportParameters.mappedConfiguration.dataSets
+            ),
         }
 
         refetch({ variables })

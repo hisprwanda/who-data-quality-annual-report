@@ -25,10 +25,6 @@ export const getReportParameters = ({
     )
 
     const reportParameters = {
-        dataSets: Object.keys(mappedConfiguration.dataSets),
-        dataElements: Object.keys(
-            mappedConfiguration.dataElementsAndIndicators
-        ),
         orgUnits: [orgUnitID],
         orgUnitLevel: `LEVEL-${orgUnitLevel}`,
         orgUnitLevelNumber: orgUnitLevel,
@@ -38,5 +34,6 @@ export const getReportParameters = ({
         periods,
         mappedConfiguration,
     }
+
     return reportParameters
 }
