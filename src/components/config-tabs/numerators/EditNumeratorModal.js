@@ -66,7 +66,7 @@ export function EditNumeratorModal({ numeratorToEdit, onSave, onClose }) {
                     definition: values.definition,
                     core: values.core,
                     dataID: values.dataItem.id, // note different structure here
-                    dataSetId: values.dataSetID,
+                    dataSetID: values.dataSetID,
                     dataElementOperandID: values.dataElementOperandID,
                 }
 
