@@ -23,23 +23,11 @@ import { DataMappingFormSection } from './DataMappingForm.js'
 
 const { Form, Field } = ReactFinalForm
 
-// todo: add to numerator when created
-export const DEFAULT_QUALITY_PARAMETERS = {
-    // edited in quality parameters:
-    moderateOutlier: 2,
-    extremeOutlier: 3,
-    consistency: 33,
-    trend: 'constant',
-    comparison: 'ou',
-    missing: 90,
-}
 const DEFAULT_NUMERATOR_VALUES = {
-    code: undefined,
     // edited in this form:
     name: undefined,
     definition: undefined,
     core: false,
-    custom: true,
     dataID: undefined,
     dataElementOperandID: undefined,
     dataSetID: [],
@@ -72,15 +60,23 @@ export function EditNumeratorModal({ numeratorToEdit, onSave, onClose }) {
     return (
         <Form
             onSubmit={(values, form) => {
-                // todo: make sure groups, dataItemType, dataElementType,
-                // and dataItemGroup don't end up in the final object
-
-                // todo: make sure to parse dataItem for dataID
+                // Pick data from values -- some values are just for the form
+                const newNumeratorData = {
+                    name: values.name,
+                    definition: values.definition,
+                    core: values.core,
+                    dataID: values.dataItem.id, // note different structure here
+                    dataSetId: values.dataSetID,
+                    dataElementOperandID: values.dataElementOperandID,
+                }
 
                 // todo: validate! 🥳
                 console.log('onSubmit', { values, form })
                 if (onSave) {
-                    onSave(values)
+                    onSave({
+                        newNumeratorData,
+                        groupsContainingNumerator: values.groups,
+                    })
                 } else {
                     alert('todo')
                 }
@@ -105,16 +101,17 @@ export function EditNumeratorModal({ numeratorToEdit, onSave, onClose }) {
                                             name="name"
                                             component={InputFieldFF}
                                             placeholder="Numerator name"
+                                            autoComplete="off"
                                         />
                                     </TableCell>
                                 </TableRow>
                                 <TableRow>
-                                    <TableCell>Desription</TableCell>
+                                    <TableCell>Definition</TableCell>
                                     <TableCell>
                                         <Field
-                                            name="description"
+                                            name="definition"
                                             component={TextAreaFieldFF}
-                                            placeholder="Numerator description"
+                                            placeholder="Numerator definition"
                                             rows="2"
                                         />
                                     </TableCell>

@@ -13,7 +13,12 @@ import {
 import { Chip } from '@dhis2/ui-core'
 // import PropTypes from 'prop-types'
 import React, { useCallback, useState } from 'react'
-import { useConfigurations } from '../../../utils/index.js'
+import {
+    CREATE_NUMERATOR,
+    DELETE_NUMERATOR,
+    useConfigurations,
+    useConfigurationsDispatch,
+} from '../../../utils/index.js'
 import {
     getNumeratorDataElement,
     getNumeratorDataset,
@@ -23,20 +28,22 @@ import { EditNumeratorModal } from './EditNumeratorModal.js'
 
 const AddNewNumeratorButton = () => {
     const [addNewModalOpen, setAddNewModalOpen] = useState(false)
-    // const dispatch = useConfigurationsDispatch()
+    const dispatch = useConfigurationsDispatch()
 
     const openModal = useCallback(() => setAddNewModalOpen(true), [])
     const closeModal = useCallback(() => setAddNewModalOpen(false), [])
 
     const addNewNumeratorRelation = useCallback(
-        (newNumerator) => alert(JSON.stringify(newNumerator, null, 2)),
-        // dispatch({
-        //     type: CREATE_NUMERATOR_RELATION,
-        //     payload: { newNumeratorRelation },
-        // }),
-        [
-            /* dispatch */
-        ]
+        ({ newNumeratorData, groupsContainingNumerator }) => {
+            dispatch({
+                type: CREATE_NUMERATOR,
+                payload: {
+                    newNumeratorData,
+                    groupsContainingNumerator,
+                },
+            })
+        },
+        [dispatch]
     )
 
     return (
@@ -57,6 +64,9 @@ const AddNewNumeratorButton = () => {
 export const Numerators = () => {
     const configurations = useConfigurations()
     const { numerators } = configurations
+
+    // todo: move to delete button when that's abstracted
+    const dispatch = useConfigurationsDispatch()
 
     // FIXME: this is running every time a tab is switched find why and fix
     const isDisabled = (dataID, dataSetID) => {
@@ -132,19 +142,43 @@ export const Numerators = () => {
                                         >
                                             Edit
                                         </Button>
-
-                                        <Button
-                                            small
-                                            onClick={() =>
-                                                alert('todo: clear or delete')
-                                            }
-                                            disabled={isDisabled(
-                                                numerator.dataID,
-                                                numerator.dataSetID
-                                            )}
-                                        >
-                                            Clear
-                                        </Button>
+                                        {numerator.custom ? (
+                                            <Button
+                                                small
+                                                destructive
+                                                onClick={() => {
+                                                    if (
+                                                        confirm(
+                                                            'Delete ' +
+                                                                numerator.name +
+                                                                '?'
+                                                        )
+                                                    ) {
+                                                        dispatch({
+                                                            type: DELETE_NUMERATOR,
+                                                            payload: {
+                                                                code: numerator.code,
+                                                            },
+                                                        })
+                                                    }
+                                                }}
+                                            >
+                                                Delete
+                                            </Button>
+                                        ) : (
+                                            <Button
+                                                small
+                                                onClick={() =>
+                                                    alert('todo: clear')
+                                                }
+                                                disabled={isDisabled(
+                                                    numerator.dataID,
+                                                    numerator.dataSetID
+                                                )}
+                                            >
+                                                Clear
+                                            </Button>
+                                        )}
                                     </ButtonStrip>
                                 </TableCell>
                             </TableRow>
