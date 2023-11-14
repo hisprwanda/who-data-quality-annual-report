@@ -7,12 +7,9 @@ import {
     DELETE_NUMERATOR,
     useConfigurations,
     useConfigurationsDispatch,
+    useMetadataNames,
 } from '../../../utils/index.js'
-import {
-    getNumeratorDataElement,
-    getNumeratorDataset,
-    getNumeratorMemberGroups,
-} from '../../../utils/numeratorsMetadataData.js'
+import { getNumeratorMemberGroups } from '../../../utils/numeratorsMetadataData.js'
 import { ConfirmationModal } from '../ConfirmationModal.js'
 import styles from './NumeratorTableItem.module.css'
 // import { EditNumeratorModal } from './EditNumeratorModal.js'
@@ -110,29 +107,40 @@ DeleteNumeratorButton.propTypes = {
 
 export const NumeratorTableItem = ({ numerator }) => {
     const configurations = useConfigurations()
+    const metadataNames = useMetadataNames()
+
+    const groupsContainingNumerator = React.useMemo(
+        () => getNumeratorMemberGroups(configurations, numerator.code),
+        [configurations, numerator]
+    )
+
+    const dataSetNames = React.useMemo(() => {
+        const { dataSetID } = numerator
+        if (!dataSetID) {
+            return
+        }
+        if (Array.isArray(dataSetID)) {
+            return dataSetID
+                .map((id) => metadataNames.get(id))
+                .filter((e) => e)
+                .join(', ')
+        }
+        return metadataNames.get(dataSetID)
+    }, [metadataNames, numerator])
 
     return (
         <TableRow>
             <TableCell>
-                {getNumeratorMemberGroups(configurations, numerator.code).map(
-                    (group, key) => (
-                        <Chip key={key} dense>
-                            {group.displayName}
-                        </Chip>
-                    )
-                )}
+                {groupsContainingNumerator.map((group) => (
+                    <Chip key={group.code} dense>
+                        {group.displayName}
+                    </Chip>
+                ))}
             </TableCell>
             <TableCell>{numerator.name}</TableCell>
             <TableCell>{numerator.core ? '✔️' : ''}</TableCell>
-            <TableCell>
-                {getNumeratorDataElement(
-                    configurations.numerators,
-                    numerator.dataID
-                )}
-            </TableCell>
-            <TableCell>
-                {getNumeratorDataset(configurations, numerator.dataSetID)}
-            </TableCell>
+            <TableCell>{metadataNames.get(numerator.dataID)}</TableCell>
+            <TableCell>{dataSetNames}</TableCell>
             <TableCell>
                 <ButtonStrip end>
                     <Button small onClick={() => alert('todo: edit')}>
