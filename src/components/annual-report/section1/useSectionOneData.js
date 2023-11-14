@@ -108,12 +108,7 @@ export const useSectionOneData = () => {
                     )[0]
             )
             try {
-                const defaultCOCResponse = await engine.query(defaultCOCQuery)
-                const defaultCOC =
-                    defaultCOCResponse.defaultCategoryCombo?.categoryCombos?.[0]
-                        ?.categoryOptionCombos?.[0]?.id
-
-                const overallData = await engine.query(reportQueries, {
+                const overallDataQuery = engine.query(reportQueries, {
                     variables: {
                         ...variables,
                         dataSets: Object.keys(
@@ -122,6 +117,15 @@ export const useSectionOneData = () => {
                         dataElements,
                     },
                 })
+
+                const [defaultCOCResponse, overallData] = await Promise.all([
+                    engine.query(defaultCOCQuery),
+                    overallDataQuery,
+                ])
+                const defaultCOC =
+                    defaultCOCResponse.defaultCategoryCombo?.categoryCombos?.[0]
+                        ?.categoryOptionCombos?.[0]?.id
+
                 const consolidatedData = { ...overallData }
 
                 const section1Data = calculateSection1({
@@ -132,7 +136,6 @@ export const useSectionOneData = () => {
                     overallOrgUnit: variables.orgUnits?.[0],
                     defaultCOC,
                 })
-
                 setData(section1Data)
             } catch (e) {
                 console.error(e)

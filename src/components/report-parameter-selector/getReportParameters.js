@@ -34,6 +34,5 @@ export const getReportParameters = ({
         periods,
         mappedConfiguration,
     }
-
     return reportParameters
 }
