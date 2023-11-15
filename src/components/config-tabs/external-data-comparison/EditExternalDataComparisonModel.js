@@ -23,7 +23,7 @@ const { Form, Field, useField } = ReactFinalForm
 
 const DEFAULT_FORM_VALUES = {
     name: '',
-    criteria: '',
+    criteria: '10',
     dataType: 'dataElements',
     externalData: '',
     numerator: '',
@@ -43,6 +43,19 @@ const componentQueries = {
         resource: 'dataElementGroups',
         params: {
             fields: 'id,displayName,dataElements[id,displayName]',
+            paging: false,
+        },
+    },
+    indicatorGroups: {
+        resource: 'indicatorGroups',
+        params: {
+            paging: false,
+        },
+    },
+    indicators: {
+        resource: 'indicators',
+        params: {
+            fields: 'id,displayName,indicatorGroups[id,displayName]',
             paging: false,
         },
     },
@@ -107,6 +120,44 @@ DataElementSelect.propTypes = {
     dataElementsToFilter: PropTypes.array,
 }
 
+// Extract the field to it's own component
+const IndicatorSelect = ({ indicatorsToFilter }) => {
+    const { input } = useField(
+        'indicatorGroups',
+        { subscription: { value: true } }
+    )
+    const selectedIndicatorGroup = input.value
+
+    const indicatorOptions =  React.useMemo(() => {
+        const filteredIndicatorOptions = []
+
+        indicatorsToFilter.forEach((indicator) => {
+            indicator.indicatorGroups.forEach((group) => {
+                if (group.id === selectedIndicatorGroup) {
+                    filteredIndicatorOptions.push({
+                        label: indicator.displayName,
+                        value: indicator.id,
+                    })
+                }
+            })
+        })
+
+    return filteredIndicatorOptions
+    }, [indicatorsToFilter, selectedIndicatorGroup])
+    return (
+        <Field
+            name="indicator"
+            component={SingleSelectFieldFF}
+            // provide our options here:
+            options={indicatorOptions}
+            placeholder="Select indicator"
+        />
+    )
+}
+IndicatorSelect.propTypes = {
+    dataElementsToFilter: PropTypes.array,
+}
+
 export const EditExternalDataComparisonModel = ({
     externalRelationToEdit,
     onSave,
@@ -145,6 +196,12 @@ export const EditExternalDataComparisonModel = ({
     // data elements to filter from
     let dataElementsToFilter = []
 
+    // store indicator groups
+    let indicatorGroups = []
+
+    // store indicators to filter from
+    let indicatorsToFilter = []
+
     const { data } = useDataQuery(componentQueries, {
         lazy: false,
     })
@@ -161,22 +218,39 @@ export const EditExternalDataComparisonModel = ({
 
         // data groups containing data elements to filter from
         dataElementsToFilter = data.DEs.dataElementGroups
+
+        // indicator groups
+        indicatorGroups = data.indicatorGroups.indicatorGroups.map((group) => ({
+            label: group.displayName,
+            value: group.id,
+        }))
+
+        indicatorsToFilter = data.indicators.indicators;
     }
 
     const toggleTabModal = (index) => {
         setToggleStateModal(index)
+
+        // update DEFAULT_FORM_VALUES' dataType field based on the tab selected 
+        // index ==1 ==> dataElements index== 2 => indicators) 
+        if (index === 1) {
+            DEFAULT_FORM_VALUES.dataType = 'dataElements'
+        } else {
+            DEFAULT_FORM_VALUES.dataType = 'indicators'
+        }
+        
     }
 
     return (
         <Form
             onSubmit={(values, form) => {
                 console.log('submitting2...', { values, form })
-                // if (onSave) {
-                //     onSave(values)
-                // } else {
-                //     alert('todo')
-                // }
-                // onClose()
+                if (onSave) {
+                    onSave(values)
+                } else {
+                    alert('todo')
+                }
+                onClose()
             }}
             initialValues={externalRelationToEdit || DEFAULT_FORM_VALUES}
             subscription={{ submitting: true }}
@@ -266,50 +340,19 @@ export const EditExternalDataComparisonModel = ({
                                                     }
                                                 >
                                                     <div className="dataElementsSelector">
-                                                        <SingleSelect
-                                                            className="select"
-                                                            onChange={() =>
-                                                                console.log(
-                                                                    'selected'
-                                                                )
+                                                        <Field
+                                                            name="indicatorGroups"
+                                                            component={
+                                                                SingleSelectFieldFF
+                                                            }
+                                                            options={
+                                                                indicatorGroups
                                                             }
                                                             placeholder="Select indicator group"
-                                                        >
-                                                            <SingleSelectOption
-                                                                label="Group one"
-                                                                value="1"
-                                                            />
-                                                            <SingleSelectOption
-                                                                label="Group two"
-                                                                value="2"
-                                                            />
-                                                            <SingleSelectOption
-                                                                label="Group three"
-                                                                value="3"
-                                                            />
-                                                        </SingleSelect>
-                                                        <SingleSelect
-                                                            className="select"
-                                                            onChange={() =>
-                                                                console.log(
-                                                                    'selected'
-                                                                )
-                                                            }
-                                                            placeholder="Select data element"
-                                                        >
-                                                            <SingleSelectOption
-                                                                label="Group one"
-                                                                value="1"
-                                                            />
-                                                            <SingleSelectOption
-                                                                label="Group two"
-                                                                value="2"
-                                                            />
-                                                            <SingleSelectOption
-                                                                label="Group three"
-                                                                value="3"
-                                                            />
-                                                        </SingleSelect>
+                                                        />
+                                                       <IndicatorSelect 
+                                                            indicatorsToFilter={ indicatorsToFilter }
+                                                        />
                                                     </div>
                                                 </div>
                                             </div>
@@ -348,7 +391,7 @@ export const EditExternalDataComparisonModel = ({
                                     </TableCell>
                                     <TableCell>
                                         <Field
-                                            name="threshold"
+                                            name="criteria"
                                             component={InputFieldFF}
                                         />
                                     </TableCell>
