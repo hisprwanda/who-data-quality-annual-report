@@ -141,8 +141,6 @@ const DeleteNumeratorButton = ({ numerator }) => {
     // Check to see if this numerator is used in any other metadata like
     // numerator relations or external relations -- if so, it can't be deleted
     const validateDeletion = useCallback(() => {
-        console.log({ configurations })
-
         const associatedNumeratorRelations = []
         configurations.numeratorRelations.forEach((relation) => {
             const { A, B, name } = relation

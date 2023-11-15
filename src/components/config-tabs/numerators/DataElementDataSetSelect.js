@@ -64,7 +64,6 @@ export const DataSetSelect = () => {
 
     useEffect(() => {
         if (dataItem) {
-            console.log({ dataItem })
             refetch({ id: dataItem.id })
         }
         // Clear the selection in this field if dataItem changes, even undefined

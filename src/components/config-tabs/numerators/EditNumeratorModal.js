@@ -75,9 +75,8 @@ export function EditNumeratorModal({ numeratorDataToEdit, onSave, onClose }) {
 
     return (
         <Form
-            onSubmit={(values, form) => {
+            onSubmit={(values) => {
                 // todo: validate! 🥳
-                console.log('onSubmit', { values, form })
 
                 // Pick data from values
                 // (some values like dataElementType are just for the form)
