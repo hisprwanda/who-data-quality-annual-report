@@ -83,7 +83,7 @@ const Sections2a2b2c = ({ title, subtitle, subsectionData }) => {
                             Threshold
                         </ReportCellHead>
                         <ReportCellHead rowSpan="2" width="80">
-                            Overall score (%)
+                            Overall score
                         </ReportCellHead>
                         <ReportCellHead colSpan="3">
                             Region with divergent score
@@ -105,7 +105,7 @@ const Sections2a2b2c = ({ title, subtitle, subsectionData }) => {
                                 {dataRow.divergentScores?.number}
                             </ReportCell>
                             <ReportCell>
-                                {dataRow.divergentScores?.percentage}
+                                {dataRow.divergentScores?.percentage}%
                             </ReportCell>
                             <ReportCell>
                                 {dataRow.divergentScores?.names}
@@ -142,7 +142,7 @@ const Section2DBlock = ({ dataRow, index }) => (
                 </TableRow>
                 <TableRow>
                     <ReportCell>Quality threshold</ReportCell>
-                    <ReportCell>±{dataRow.qualityThreshold}%</ReportCell>
+                    <ReportCell>± {dataRow.qualityThreshold}%</ReportCell>
                 </TableRow>
                 <TableRow>
                     <ReportCell>Overall score</ReportCell>
