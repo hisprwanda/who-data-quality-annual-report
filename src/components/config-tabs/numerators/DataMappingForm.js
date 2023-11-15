@@ -4,7 +4,6 @@ import {
     RadioFieldFF,
     ReactFinalForm,
 } from '@dhis2/ui'
-import PropTypes from 'prop-types'
 import React from 'react'
 import { DATA_ELEMENT, INDICATOR } from './constants.js'
 import { DataSetSelect } from './DataElementDataSetSelect.js'
@@ -14,8 +13,10 @@ import { DataElementTypeRadios } from './DataElementTypeRadios.js'
 import { VariableSelect } from './DataElementVariableSelect.js'
 import styles from './DataMappingForm.module.css'
 
-const { Field, useField } = ReactFinalForm
+const { Field } = ReactFinalForm
 
+// todo: add this with the indicator item form
+// eslint-disable-next-line no-unused-vars
 const DataTypeRadios = () => {
     return (
         <div className={styles.formRow}>
@@ -42,29 +43,24 @@ const DataTypeRadios = () => {
     )
 }
 
-export const DataMappingFormSection = ({ required }) => {
-    const dataTypeField = useField('dataType', {
-        subscription: { value: true },
-        // need to set the initial value here instead of on the <Field />
-        // so the components below can render
-        initialValue: DATA_ELEMENT,
-    })
-    const dataType = dataTypeField.input.value
-
-    console.log('todo', { required })
+export const DataMappingFormSection = () => {
+    // todo: use this to show either data element/indicator form
+    // const dataTypeField = useField('dataType', {
+    //     subscription: { value: true },
+    //     // need to set the initial value here instead of on the <Field />
+    //     // so the components below can render
+    //     initialValue: DATA_ELEMENT,
+    // })
+    // const dataType = dataTypeField.input.value
 
     return (
         <div className={styles.mainContainer}>
-            <DataTypeRadios />
+            {/* currently hidden until Indicator form is implemented: */}
+            {/* <DataTypeRadios /> */}
 
-            {dataType === DATA_ELEMENT && (
-                <>
-                    <DataElementTypeRadios />
-                    <DataElementGroupSelect />
-                    <DataElementSelect />
-                </>
-            )}
-            {dataType === INDICATOR && <p>Indicator form</p>}
+            <DataElementTypeRadios />
+            <DataElementGroupSelect />
+            <DataElementSelect />
 
             <DataSetSelect />
 
@@ -72,4 +68,3 @@ export const DataMappingFormSection = ({ required }) => {
         </div>
     )
 }
-DataMappingFormSection.propTypes = { required: PropTypes.bool }
