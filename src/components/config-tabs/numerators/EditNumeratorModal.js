@@ -129,6 +129,11 @@ export function EditNumeratorModal({ numeratorDataToEdit, onSave, onClose }) {
                                             autoComplete="off"
                                             // a validator util from UI -- basically 'required'
                                             validate={hasValue}
+                                            // read-only if editing a built-in numerator
+                                            disabled={
+                                                numeratorDataToEdit &&
+                                                !numeratorDataToEdit.custom
+                                            }
                                         />
                                     </TableCell>
                                 </TableRow>
@@ -140,6 +145,10 @@ export function EditNumeratorModal({ numeratorDataToEdit, onSave, onClose }) {
                                             component={TextAreaFieldFF}
                                             placeholder="Numerator definition"
                                             rows={2}
+                                            disabled={
+                                                numeratorDataToEdit &&
+                                                !numeratorDataToEdit.custom
+                                            }
                                         />
                                     </TableCell>
                                 </TableRow>
