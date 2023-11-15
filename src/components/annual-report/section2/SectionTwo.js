@@ -9,9 +9,8 @@ import {
     ReportRowHead,
     ReportTable,
 } from '../ReportTable.js'
-import { calculateSection2 } from './section2Calculations.js'
 import styles from './SectionTwo.module.css'
-import { useFetchSectionTwoData } from './useFetchSectionTwoData.js'
+import { useSectionTwoData } from './useSectionTwoData.js'
 
 const sectionInformation = {
     section2a: {
@@ -322,7 +321,7 @@ Section2E.propTypes = {
 }
 
 export const SectionTwo = ({ reportParameters }) => {
-    const { loading, data, error, refetch } = useFetchSectionTwoData()
+    const { loading, error, data: section2Data, refetch } = useSectionTwoData()
 
     useEffect(() => {
         const variables = {
@@ -331,7 +330,7 @@ export const SectionTwo = ({ reportParameters }) => {
         }
 
         refetch({ variables })
-    }, [refetch, reportParameters]) // should include refetch, which needs to be made stable
+    }, [refetch, reportParameters])
 
     if (loading) {
         return <span>loading</span>
@@ -341,13 +340,7 @@ export const SectionTwo = ({ reportParameters }) => {
         return <span>error</span>
     }
 
-    if (data) {
-        const section2Data = calculateSection2({
-            section2Response: data,
-            mappedConfiguration: reportParameters.mappedConfiguration,
-            periods: reportParameters.periods,
-            overallOrgUnit: reportParameters.orgUnits[0],
-        })
+    if (section2Data) {
         // if all subsections are empty, display overall empty message
         const subsectionNames = [
             'section2a',

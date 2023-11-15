@@ -8,9 +8,8 @@ import {
     ReportRowHead,
     ReportTable,
 } from '../ReportTable.js'
-import { calculateSection4 } from './section4Calculations.js'
 import styles from './SectionFour.module.css'
-import { useFetchSectionFourData } from './useFetchSectionFourData.js'
+import { useSectionFourData } from './useSectionFourData.js'
 
 const sectionInformation = {
     section4a: {
@@ -152,7 +151,7 @@ Section4B.propTypes = {
 }
 
 export const SectionFour = ({ reportParameters }) => {
-    const { loading, data, error, refetch } = useFetchSectionFourData()
+    const { loading, data: section4Data, error, refetch } = useSectionFourData()
 
     useEffect(() => {
         const variables = {
@@ -170,14 +169,7 @@ export const SectionFour = ({ reportParameters }) => {
         return <span>error</span>
     }
 
-    if (data) {
-        const section4Data = calculateSection4({
-            section4Response: data,
-            mappedConfiguration: reportParameters.mappedConfiguration,
-            currentPeriod: reportParameters.periods[0],
-            overallOrgUnit: reportParameters.orgUnits[0],
-        })
-
+    if (section4Data) {
         return (
             <>
                 <Section4A

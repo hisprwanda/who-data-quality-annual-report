@@ -8,9 +8,8 @@ import {
     ReportRowHead,
     ReportTable,
 } from '../ReportTable.js'
-import { calculateSection3 } from './section3Calculations.js'
 import styles from './SectionThree.module.css'
-import { useFetchSectionThreeData } from './useFetchSectionThreeData.js'
+import { useSectionThreeData } from './useSectionThreeData.js'
 
 const isNotMissing = (val) => val !== undefined && val !== null
 
@@ -144,7 +143,12 @@ Section3A.propTypes = {
 }
 
 export const SectionThree = ({ reportParameters }) => {
-    const { loading, data, error, refetch } = useFetchSectionThreeData()
+    const {
+        loading,
+        data: section3Data,
+        error,
+        refetch,
+    } = useSectionThreeData()
 
     useEffect(() => {
         const variables = {
@@ -163,14 +167,7 @@ export const SectionThree = ({ reportParameters }) => {
         return <span>{error?.message}</span>
     }
 
-    if (data) {
-        const section3Data = calculateSection3({
-            section3Response: data,
-            mappedConfiguration: reportParameters.mappedConfiguration,
-            currentPeriod: reportParameters.periods[0],
-            overallOrgUnit: reportParameters.orgUnits[0],
-        })
-
+    if (section3Data) {
         return (
             <Section3A
                 title={sectionInformation.section3a.title}
