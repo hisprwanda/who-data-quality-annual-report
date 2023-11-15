@@ -144,12 +144,12 @@ export const DenominatorRelations = ({ toggleState }) => {
         setSelectedDenominatorA(
             filteredDenominators.find(
                 (denominator) => denominator.code === relation.A
-            )
+            )?.code
         )
         setSelectedDenominatorB(
             filteredDenominators.find(
                 (denominator) => denominator.code === relation.B
-            )
+            )?.code
         )
 
     }
