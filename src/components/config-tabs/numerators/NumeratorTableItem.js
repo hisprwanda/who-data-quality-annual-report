@@ -5,14 +5,74 @@ import React, { useMemo, useCallback, useState } from 'react'
 import {
     CLEAR_NUMERATOR_DATA_MAPPING,
     DELETE_NUMERATOR,
+    UPDATE_NUMERATOR,
     useConfigurations,
     useConfigurationsDispatch,
     useMetadataNames,
 } from '../../../utils/index.js'
 import { getNumeratorMemberGroups } from '../../../utils/numeratorsMetadataData.js'
 import { ConfirmationModal } from '../ConfirmationModal.js'
+import { EditNumeratorModal } from './EditNumeratorModal.js'
 import styles from './NumeratorTableItem.module.css'
-// import { EditNumeratorModal } from './EditNumeratorModal.js'
+
+/** Manages the "update form" modal and datastore mutation */
+const EditNumeratorButton = ({ numerator, groupsContainingNumerator }) => {
+    const [editModalOpen, setEditModalOpen] = useState(false)
+    const dispatch = useConfigurationsDispatch()
+
+    const openModal = useCallback(() => setEditModalOpen(true), [])
+    const closeModal = useCallback(() => setEditModalOpen(false), [])
+
+    const updateNumerator = useCallback(
+        ({ newNumeratorData, groupsContainingNumerator }) => {
+            // todo: dispatch
+            console.log({
+                type: UPDATE_NUMERATOR,
+                payload: {
+                    code: numerator.code,
+                    updatedNumeratorData: newNumeratorData,
+                    groupsContainingNumerator,
+                },
+                dispatch,
+            })
+        },
+        [dispatch, numerator.code]
+    )
+
+    // not all fields are needed for form initial values
+    const numeratorDataForForm = useMemo(
+        () => ({
+            name: numerator.name,
+            definition: numerator.definition,
+            core: numerator.core,
+            groups: groupsContainingNumerator.map((group) => group.code),
+            // if not custom, some fields will be read-only
+            custom: numerator.custom,
+            // used to print: "This numerator is currently mapped to <dataItem>"
+            dataID: numerator.dataID,
+        }),
+        [numerator, groupsContainingNumerator]
+    )
+
+    return (
+        <>
+            <Button small onClick={openModal}>
+                Edit
+            </Button>
+            {editModalOpen && (
+                <EditNumeratorModal
+                    numeratorDataToEdit={numeratorDataForForm}
+                    onSave={updateNumerator}
+                    onClose={closeModal}
+                />
+            )}
+        </>
+    )
+}
+EditNumeratorButton.propTypes = {
+    groupsContainingNumerator: PropTypes.array,
+    numerator: PropTypes.object,
+}
 
 const ClearNumeratorButton = ({ numerator }) => {
     const [confirmationModalOpen, setConfirmationModalOpen] = useState(false)
@@ -130,22 +190,23 @@ export const NumeratorTableItem = ({ numerator }) => {
 
     return (
         <TableRow>
-            <TableCell>
+            <TableCell dense>
                 {groupsContainingNumerator.map((group) => (
                     <Chip key={group.code} dense>
                         {group.displayName}
                     </Chip>
                 ))}
             </TableCell>
-            <TableCell>{numerator.name}</TableCell>
-            <TableCell>{numerator.core ? '✔️' : ''}</TableCell>
-            <TableCell>{metadataNames.get(numerator.dataID)}</TableCell>
-            <TableCell>{dataSetNames}</TableCell>
-            <TableCell>
+            <TableCell dense>{numerator.name}</TableCell>
+            <TableCell dense>{numerator.core ? '✔️' : ''}</TableCell>
+            <TableCell dense>{metadataNames.get(numerator.dataID)}</TableCell>
+            <TableCell dense>{dataSetNames}</TableCell>
+            <TableCell dense>
                 <ButtonStrip end>
-                    <Button small onClick={() => alert('todo: edit')}>
-                        Edit
-                    </Button>
+                    <EditNumeratorButton
+                        numerator={numerator}
+                        groupsContainingNumerator={groupsContainingNumerator}
+                    />
                     {numerator.custom ? (
                         <DeleteNumeratorButton numerator={numerator} />
                     ) : (

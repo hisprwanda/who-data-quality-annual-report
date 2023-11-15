@@ -15,11 +15,13 @@ import {
     MultiSelectFieldFF,
     CheckboxFieldFF,
     ReactFinalForm,
+    hasValue,
 } from '@dhis2/ui'
 import PropTypes from 'prop-types'
 import React from 'react'
-import { useConfigurations } from '../../../utils/index.js'
+import { useConfigurations, useMetadataNames } from '../../../utils/index.js'
 import { DataMappingFormSection } from './DataMappingForm.js'
+import styles from './EditNumeratorModal.module.css'
 
 const { Form, Field } = ReactFinalForm
 
@@ -33,6 +35,20 @@ const DEFAULT_NUMERATOR_VALUES = {
     dataSetID: [],
 }
 
+const CurrentMappingInfo = ({ dataID }) => {
+    const metadataNames = useMetadataNames()
+    const dataItemName = metadataNames.get(dataID)
+
+    return (
+        <div
+            className={styles.currentMappingInfo}
+        >{`This numerator is currently mapped to "${dataItemName}"`}</div>
+    )
+}
+CurrentMappingInfo.propTypes = {
+    dataID: PropTypes.string,
+}
+
 /**
  * If `numeratorToEdit`, is provided, this will behave in "update" mode:
  * - the fields will be prefilled with the values of that relation
@@ -43,7 +59,7 @@ const DEFAULT_NUMERATOR_VALUES = {
  * - text in the modal will refer to creating/adding new
  * - the data store mutation will create a new numerator object
  */
-export function EditNumeratorModal({ numeratorToEdit, onSave, onClose }) {
+export function EditNumeratorModal({ numeratorDataToEdit, onSave, onClose }) {
     const configurations = useConfigurations()
 
     const numeratorGroupOptions = React.useMemo(
@@ -60,36 +76,45 @@ export function EditNumeratorModal({ numeratorToEdit, onSave, onClose }) {
     return (
         <Form
             onSubmit={(values, form) => {
-                // Pick data from values -- some values are just for the form
-                const newNumeratorData = {
+                // todo: validate! 🥳
+                console.log('onSubmit', { values, form })
+
+                // Pick data from values
+                // (some values like dataElementType are just for the form)
+                let newNumeratorData = {
                     name: values.name,
                     definition: values.definition,
                     core: values.core,
-                    dataID: values.dataItem.id, // note different structure here
-                    dataSetID: values.dataSetID,
-                    dataElementOperandID: values.dataElementOperandID,
                 }
+                if (values.dataItem?.id) {
+                    // add these separately so we don't set 'undefined' for a
+                    // numerator we're editing with a dataID already.
+                    // if dataID is set, the other two should be required
+                    newNumeratorData = {
+                        ...newNumeratorData,
+                        // note different structure: dataItem.id
+                        dataID: values.dataItem.id,
+                        dataSetID: values.dataSetID,
+                        dataElementOperandID: values.dataElementOperandID,
+                    }
+                }
+                // todo: data items required on creation, but not edit
 
-                // todo: validate! 🥳
-                console.log('onSubmit', { values, form })
-                if (onSave) {
-                    onSave({
-                        newNumeratorData,
-                        groupsContainingNumerator: values.groups,
-                    })
-                } else {
-                    alert('todo')
-                }
+                onSave({
+                    newNumeratorData,
+                    groupsContainingNumerator: values.groups,
+                })
                 onClose()
             }}
-            initialValues={numeratorToEdit || DEFAULT_NUMERATOR_VALUES}
+            initialValues={numeratorDataToEdit || DEFAULT_NUMERATOR_VALUES}
             // not subcribing to `values` prevents rerendering the entire form on every input change
             subscription={{ submitting: true }}
         >
             {({ handleSubmit }) => (
                 <Modal onClose={onClose} position="middle">
                     <ModalTitle>
-                        {(numeratorToEdit ? 'Edit' : 'Create') + ' numerator'}
+                        {(numeratorDataToEdit ? 'Edit' : 'Create') +
+                            ' numerator'}
                     </ModalTitle>
                     <ModalContent>
                         <Table>
@@ -102,6 +127,8 @@ export function EditNumeratorModal({ numeratorToEdit, onSave, onClose }) {
                                             component={InputFieldFF}
                                             placeholder="Numerator name"
                                             autoComplete="off"
+                                            // a validator util from UI -- basically 'required'
+                                            validate={hasValue}
                                         />
                                     </TableCell>
                                 </TableRow>
@@ -140,6 +167,12 @@ export function EditNumeratorModal({ numeratorToEdit, onSave, onClose }) {
                             </TableBody>
                         </Table>
 
+                        {numeratorDataToEdit?.dataID && (
+                            <CurrentMappingInfo
+                                dataID={numeratorDataToEdit.dataID}
+                            />
+                        )}
+
                         <DataMappingFormSection />
                     </ModalContent>
                     <ModalActions>
@@ -150,11 +183,9 @@ export function EditNumeratorModal({ numeratorToEdit, onSave, onClose }) {
                             <Button
                                 primary
                                 type="submit"
-                                onClick={() => {
-                                    handleSubmit()
-                                }}
+                                onClick={handleSubmit}
                             >
-                                {numeratorToEdit ? 'Save' : 'Create'}
+                                {numeratorDataToEdit ? 'Save' : 'Create'}
                             </Button>
                         </ButtonStrip>
                     </ModalActions>
@@ -164,7 +195,7 @@ export function EditNumeratorModal({ numeratorToEdit, onSave, onClose }) {
     )
 }
 EditNumeratorModal.propTypes = {
-    numeratorToEdit: PropTypes.object,
+    numeratorDataToEdit: PropTypes.object,
     onClose: PropTypes.func,
     onSave: PropTypes.func,
 }
