@@ -12,3 +12,7 @@
     height: 300px;
     /* width is set by column template */
 }
+
+.subsectionSubtitle {
+    font-style: italic;
+}

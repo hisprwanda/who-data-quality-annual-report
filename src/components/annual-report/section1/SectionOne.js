@@ -55,7 +55,10 @@ export const SectionOne = ({ reportParameters }) => {
                             </ReportCellHead>
                         </ReportRowHead>
                         <TableRow>
-                            <ReportCell colSpan="6">
+                            <ReportCell
+                                colSpan="6"
+                                className={styles.subsectionSubtitle}
+                            >
                                 The percentage of expected reports that have
                                 been entered and completed.
                             </ReportCell>
@@ -110,7 +113,10 @@ export const SectionOne = ({ reportParameters }) => {
                             </ReportCellHead>
                         </ReportRowHead>
                         <TableRow>
-                            <ReportCell colSpan="6">
+                            <ReportCell
+                                colSpan="6"
+                                className={styles.subsectionSubtitle}
+                            >
                                 The percentage of expected reports that have
                                 been entered and completed on time.
                             </ReportCell>
@@ -165,7 +171,10 @@ export const SectionOne = ({ reportParameters }) => {
                             </ReportCellHead>
                         </ReportRowHead>
                         <TableRow>
-                            <ReportCell colSpan="8">
+                            <ReportCell
+                                colSpan="8"
+                                className={styles.subsectionSubtitle}
+                            >
                                 Reports where values are not missing. If zeros
                                 are not stored, zeros are counted as missing.
                             </ReportCell>
@@ -230,7 +239,10 @@ export const SectionOne = ({ reportParameters }) => {
                             </ReportCellHead>
                         </ReportRowHead>
                         <TableRow>
-                            <ReportCell colSpan="8">
+                            <ReportCell
+                                colSpan="8"
+                                className={styles.subsectionSubtitle}
+                            >
                                 Completeness of datasets in 2022 compared to
                                 previous 3 years.
                             </ReportCell>

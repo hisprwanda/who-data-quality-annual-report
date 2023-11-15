@@ -53,3 +53,7 @@
 .section2eDivergentRegions {
     height: 73px !important; /* need to override original table cell height */
 }
+
+.subsectionSubtitle {
+    font-style: italic;
+}

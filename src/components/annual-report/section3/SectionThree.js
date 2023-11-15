@@ -28,7 +28,9 @@ const SubSectionLayout = ({ title, subtitle }) => (
         </ReportRowHead>
         {subtitle && (
             <TableRow>
-                <ReportCell colSpan="6">{subtitle}</ReportCell>
+                <ReportCell colSpan="6" className={styles.subsectionSubtitle}>
+                    {subtitle}
+                </ReportCell>
             </TableRow>
         )}
     </>
