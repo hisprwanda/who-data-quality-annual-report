@@ -1,3 +1,4 @@
+import { useAlert } from '@dhis2/app-runtime'
 import { Button, TableCell, TableRow, ButtonStrip } from '@dhis2/ui'
 import { Chip } from '@dhis2/ui-core'
 import PropTypes from 'prop-types'
@@ -121,6 +122,8 @@ ClearNumeratorButton.propTypes = {
 
 const DeleteNumeratorButton = ({ numerator }) => {
     const [confirmationModalOpen, setConfirmationModalOpen] = useState(false)
+    const configurations = useConfigurations()
+    const { show } = useAlert(({ message }) => message, { critical: true })
     const dispatch = useConfigurationsDispatch()
 
     const openModal = useCallback(() => setConfirmationModalOpen(true), [])
@@ -135,12 +138,66 @@ const DeleteNumeratorButton = ({ numerator }) => {
         [dispatch, numerator.code]
     )
 
+    // Check to see if this numerator is used in any other metadata like
+    // numerator relations or external relations -- if so, it can't be deleted
+    const validateDeletion = useCallback(() => {
+        console.log({ configurations })
+
+        const associatedNumeratorRelations = []
+        configurations.numeratorRelations.forEach((relation) => {
+            const { A, B, name } = relation
+            if (A === numerator.code || B === numerator.code) {
+                associatedNumeratorRelations.push(name)
+            }
+        })
+
+        const associatedExternalRelations = []
+        configurations.externalRelations.forEach((relation) => {
+            if (relation.numerator === numerator.code) {
+                associatedExternalRelations.push(relation.name)
+            }
+        })
+
+        if (
+            associatedNumeratorRelations.length === 0 &&
+            associatedExternalRelations.length === 0
+        ) {
+            // then no problem; this deletion is valid
+            return true
+        }
+
+        // Otherwise, warn the user
+        const numRelsText =
+            associatedNumeratorRelations.length > 0
+                ? '\nNumerator relations: ' +
+                  associatedNumeratorRelations.join(', ') +
+                  '.'
+                : ''
+        const extRelsText =
+            associatedExternalRelations.length > 0
+                ? '\nExternal relations: ' +
+                  associatedExternalRelations.join(', ') +
+                  '.'
+                : ''
+        const message =
+            `Can't delete the numerator "${numerator.name}" because it's ` +
+            `associated with the following metadata.` +
+            numRelsText +
+            extRelsText
+        show({ message })
+        return false
+    }, [configurations, numerator, show])
+
     return (
         <>
             <Button
                 small
                 destructive
-                onClick={openModal}
+                onClick={() => {
+                    if (validateDeletion()) {
+                        openModal()
+                    }
+                }}
                 className={styles.clearOrDeleteButton}
             >
                 Delete
@@ -148,7 +205,6 @@ const DeleteNumeratorButton = ({ numerator }) => {
             {confirmationModalOpen && (
                 <ConfirmationModal
                     title="Delete numerator"
-                    // todo: additional warning text if this also removes numerator and external relations
                     text={`Are you sure you want to delete ${numerator.name}?`}
                     action="Delete"
                     destructive
