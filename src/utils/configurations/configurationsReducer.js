@@ -54,7 +54,6 @@ export function configurationsReducer(configurations, { type, payload }) {
             let newConfigurations = {
                 ...configurations,
                 numerators: [...prevNumerators, newNumerator],
-                lastUpdated: getISOTimestamp(),
             }
 
             // 2. Add to core indicators if core=true
@@ -85,12 +84,75 @@ export function configurationsReducer(configurations, { type, payload }) {
                 }
             }
 
+            newConfigurations = {
+                ...newConfigurations,
+                lastUpdated: getISOTimestamp(),
+            }
+
             return newConfigurations
         }
 
         case UPDATE_NUMERATOR: {
-            console.log('todo: update numerator')
-            return configurations
+            // updatedNumeratorData shouldn't contain `code` or `custom`
+            // or other data that shouldn't be editable
+            const { code, updatedNumeratorData, groupsContainingNumerator } =
+                payload
+
+            // 1. Update the numerator & the numerators array
+            const prevNumerators = configurations.numerators
+            const targetIndex = prevNumerators.findIndex(
+                (numerator) => numerator.code === code
+            )
+            const prevNumerator = prevNumerators[targetIndex]
+            const updatedNumerator = {
+                ...prevNumerator,
+                ...updatedNumeratorData,
+            }
+            const newNumerators = [
+                ...prevNumerators.slice(0, targetIndex),
+                updatedNumerator,
+                ...prevNumerators.slice(targetIndex + 1),
+            ]
+            let newConfigurations = {
+                ...configurations,
+                numerators: newNumerators,
+            }
+
+            // 2. Update core indicators, if it has changed
+            if (updatedNumeratorData.core !== prevNumerator.core) {
+                const prevCoreIndicators = configurations.coreIndicators
+                const newCoreIndicators = updatedNumerator.core
+                    ? [...prevCoreIndicators, code]
+                    : prevCoreIndicators.filter((id) => id !== code)
+                newConfigurations = {
+                    ...newConfigurations,
+                    coreIndicators: newCoreIndicators,
+                }
+            }
+
+            // 3. Update group memberships
+            const groupMemberships = new Set(groupsContainingNumerator)
+            const newGroups = configurations.groups.map((group) => {
+                if (!groupMemberships.has(group.code)) {
+                    // make sure this group excludes this numerator
+                    const newMembers = group.members.filter((id) => id !== code)
+                    return { ...group, members: newMembers }
+                }
+                // else, make sure this group includes this numerator
+                if (!group.members.includes(code)) {
+                    return { ...group, members: [...group.members, code] }
+                }
+                return group
+            })
+
+            newConfigurations = {
+                ...newConfigurations,
+                groups: newGroups,
+                lastUpdated: getISOTimestamp(),
+            }
+
+            console.log('todo: remove', { configurations, newConfigurations })
+            return newConfigurations
         }
 
         case CLEAR_NUMERATOR_DATA_MAPPING: {

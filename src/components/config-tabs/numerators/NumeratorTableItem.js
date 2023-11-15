@@ -25,15 +25,13 @@ const EditNumeratorButton = ({ numerator, groupsContainingNumerator }) => {
 
     const updateNumerator = useCallback(
         ({ newNumeratorData, groupsContainingNumerator }) => {
-            // todo: dispatch
-            console.log({
+            dispatch({
                 type: UPDATE_NUMERATOR,
                 payload: {
                     code: numerator.code,
                     updatedNumeratorData: newNumeratorData,
                     groupsContainingNumerator,
                 },
-                dispatch,
             })
         },
         [dispatch, numerator.code]
