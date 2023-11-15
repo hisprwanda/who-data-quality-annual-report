@@ -9,6 +9,8 @@ import styles from './DataMappingForm.module.css'
 
 const { Field, useField } = ReactFinalForm
 
+// This query actually works for either a data element or a
+// data element operand ID
 const DATA_SETS_FROM_DATA_ELEMENT_QUERY = {
     response: {
         resource: 'dataElements',
@@ -74,15 +76,20 @@ export const DataSetSelect = () => {
             return []
         }
         return getSelectOptionsFromDataElement(data.response)
-        // todo: disable if empty -- see "Data quality" DE group
     }, [data])
 
-    if (loading) {
-        return 'loading' // todo
-    }
-    if (error) {
-        return 'error' // todo
-    }
+    const placeholderText = useMemo(() => {
+        if (loading) {
+            return 'Loading...'
+        }
+        if (error) {
+            return 'An error occurred'
+        }
+        if (!dataItem.id) {
+            return 'Select a data element first'
+        }
+        return 'Select data sets'
+    }, [dataItem.id, loading, error])
 
     return (
         <div className={styles.formRow}>
@@ -91,7 +98,10 @@ export const DataSetSelect = () => {
                 component={MultiSelectFieldFF}
                 options={dataSetOptions}
                 label={'Data sets for completeness'}
-                placeholder={'Select data sets'}
+                placeholder={placeholderText}
+                // sometimes data elements aren't associated with any data
+                // sets though 🤔
+                disabled={!dataSetOptions.length}
             />
         </div>
     )

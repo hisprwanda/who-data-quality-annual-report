@@ -1,5 +1,5 @@
 import { SingleSelectFieldFF, ReactFinalForm } from '@dhis2/ui'
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useMemo } from 'react'
 import { TOTALS } from './constants.js'
 import styles from './DataMappingForm.module.css'
 import { useEngineQuery } from './useEngineQuery.js'
@@ -60,12 +60,18 @@ export const VariableSelect = () => {
         }
     }, [dataItem, dataElementType, fetch, onChange])
 
-    if (loading) {
-        return 'loading' // todo
-    }
-    if (error) {
-        return 'error' // todo
-    }
+    const placeholderText = useMemo(() => {
+        if (loading) {
+            return 'Loading...'
+        }
+        if (error) {
+            return 'An error occurred'
+        }
+        if (!dataItem.id) {
+            return 'Select a data element first'
+        }
+        return 'Select variable'
+    }, [dataItem.id, loading, error])
 
     return (
         <div className={styles.formRow}>
@@ -74,7 +80,8 @@ export const VariableSelect = () => {
                 component={SingleSelectFieldFF}
                 options={options}
                 label={'Variable for completeness'}
-                placeholder={'Select variable'}
+                placeholder={placeholderText}
+                disabled={!options.length}
             />
         </div>
     )

@@ -26,13 +26,15 @@ export const DataElementGroupSelect = () => {
         [data]
     )
 
-    if (loading) {
-        return 'loading'
-    }
-    if (error) {
-        console.error(error)
-        return 'error'
-    }
+    const placeholderText = useMemo(() => {
+        if (loading) {
+            return 'Loading...'
+        }
+        if (error) {
+            return 'An error occurred'
+        }
+        return 'Select data element group'
+    }, [loading, error])
 
     return (
         <div className={styles.formRow}>
@@ -41,7 +43,7 @@ export const DataElementGroupSelect = () => {
                 component={SingleSelectFieldFF}
                 options={dataElementGroupOptions}
                 label={'Data element group'}
-                placeholder={'Select data element group'}
+                placeholder={placeholderText}
                 filterable
             />
         </div>

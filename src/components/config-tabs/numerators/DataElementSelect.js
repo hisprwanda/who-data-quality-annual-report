@@ -3,7 +3,7 @@ import {
     SingleSelectFieldFF,
     ReactFinalForm,
 } from '@dhis2/ui'
-import React, { useCallback, useState, useEffect } from 'react'
+import React, { useCallback, useState, useEffect, useMemo } from 'react'
 import { TOTALS } from './constants.js'
 import styles from './DataMappingForm.module.css'
 import { useEngineQuery } from './useEngineQuery.js'
@@ -111,12 +111,18 @@ export const DataElementSelect = () => {
         [options]
     )
 
-    if (loading) {
-        return 'loading' // todo
-    }
-    if (error) {
-        return 'error' // todo
-    }
+    const placeholderText = useMemo(() => {
+        if (loading) {
+            return 'Loading...'
+        }
+        if (error) {
+            return 'An error occurred'
+        }
+        if (!dataElementGroupID) {
+            return 'Select a data element group first'
+        }
+        return 'Select data element'
+    }, [dataElementGroupID, loading, error])
 
     return (
         <div className={styles.formRow}>
@@ -127,8 +133,9 @@ export const DataElementSelect = () => {
                 parse={parse}
                 options={options}
                 label={'Data element'}
-                placeholder={'Select data element'}
+                placeholder={placeholderText}
                 filterable
+                disabled={!options.length}
             />
         </div>
     )
