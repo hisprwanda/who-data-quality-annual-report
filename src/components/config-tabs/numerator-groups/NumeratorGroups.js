@@ -121,7 +121,7 @@ export const NumeratorGroups = ({ toggleState, configurations }) => {
     useEffect(() => {
         setGroups(configurations.groups)
         setNumerators(configurations.numerators)
-    }, [])
+    }, [configurations])
 
     return (
         <div

@@ -7,7 +7,7 @@ import { convertAnalyticsResponseToObject, getVal } from '../utils/utils.js'
 import {
     OVERALL_ORG_UNIT_SECTION_2D,
     LEVEL_OR_GROUP_SECTION_2D,
-} from './useFetchSectionTwoData.js'
+} from './section2DataNames.js'
 
 const get2dScore = ({
     ou,
@@ -28,23 +28,74 @@ const get2dScore = ({
         .map((val, index) => [comparisonPeriods.length - index - 1, val])
         .filter((point) => !isNaN(point[1]))
 
+    let referenceValue = undefined
     if (trend === 'constant') {
         const comparisonPeriodValues = comparisonPeriodPoints.map(
             (point) => point[1]
         )
-        return (currentPeriodValue / getMean(comparisonPeriodValues)) * 100
+        referenceValue = getMean(comparisonPeriodValues)
+    } else {
+        // else forecast
+        // negative forecast values are limited to zero
+        referenceValue = Math.max(
+            getForecastValue({
+                pointsArray: comparisonPeriodPoints,
+                forecastX: comparisonPeriods.length,
+            }),
+            0
+        )
     }
-    // else forecast
 
-    // negative forecast values are limited to zero
-    const forecastValue = Math.max(
-        getForecastValue({
-            pointsArray: comparisonPeriodPoints,
-            forecastX: comparisonPeriods.length,
+    return {
+        score: (currentPeriodValue / referenceValue) * 100,
+        current: currentPeriodValue,
+        reference: referenceValue,
+    }
+}
+
+const get2dLineChartInfo = ({ response, periods, name, ou, dx }) => {
+    const reversePeriods = [...periods]
+    reversePeriods.reverse()
+
+    return {
+        type: 'line',
+        xPointLabel: name,
+        x: reversePeriods,
+        y: reversePeriods.map((pe) => {
+            const yVal = getVal({ response, dx, ou, pe })
+            return yVal ? getRoundedValue(yVal, 2) : null
         }),
-        0
-    )
-    return (currentPeriodValue / forecastValue) * 100
+    }
+}
+
+const get2dScatterChartInfoBasic = ({
+    trend,
+    comparison,
+    overallScore,
+    overallOrgUnitName,
+    consistency,
+    comparisonPeriods,
+    currentPeriodID,
+}) => {
+    const xAxisTitle =
+        trend !== 'constant'
+            ? 'Forecasted value'
+            : `Average of ${comparisonPeriods.length} previous period${
+                  comparisonPeriods.length > 1 ? 's' : ''
+              }`
+    const xPointLabel = trend !== 'constant' ? 'Forecast' : 'Average'
+    const lineLabelNonOu = `Current = ${xPointLabel}`
+    const lineLabel = comparison === 'ou' ? overallOrgUnitName : lineLabelNonOu
+    return {
+        type: 'scatter',
+        slope: comparison === 'ou' ? overallScore / 100 : 1,
+        threshold: consistency,
+        xAxisTitle,
+        yAxisTitle: currentPeriodID,
+        xPointLabel,
+        lineLabel,
+        values: [],
+    }
 }
 
 const calculateSection2d = ({
@@ -73,7 +124,7 @@ const calculateSection2d = ({
         const comparison = dxInfo.comparison
 
         // calculate overall score
-        const overallScore = get2dScore({
+        const { score: overallScore } = get2dScore({
             ou: overallOrgUnit,
             dx,
             response: overallResponse,
@@ -82,11 +133,33 @@ const calculateSection2d = ({
             comparisonPeriods,
         })
 
+        const lineChartInfo = get2dLineChartInfo({
+            response: overallResponse,
+            periods: [currentPeriodID, ...comparisonPeriods],
+            name: metadata?.[dx]?.name,
+            ou: overallOrgUnit,
+            dx,
+        })
+        // not that orgUnitLevel name is hardcoded; we will need to bring that
+        const scatterChartInfo = get2dScatterChartInfoBasic({
+            trend,
+            comparison,
+            overallScore,
+            overallOrgUnitName: metadata?.[overallOrgUnit]?.name,
+            consistency,
+            comparisonPeriods,
+            currentPeriodID,
+        })
+
         // then get divergent subOrgUnits
         const divergentSubOrgUnits = []
 
         subOrgUnitIDs.forEach((subOrgUnit) => {
-            const subOrgUnitScore = get2dScore({
+            const {
+                score: subOrgUnitScore,
+                current,
+                reference,
+            } = get2dScore({
                 ou: subOrgUnit,
                 dx,
                 response: levelOrGroupResponse,
@@ -94,16 +167,22 @@ const calculateSection2d = ({
                 currentPeriodID,
                 comparisonPeriods,
             })
+            const orgUnitName = metadata?.[subOrgUnit]?.name
             const comparisonPoint = comparison === 'ou' ? overallScore : 100
-
-            // subOrgUnit is divergent if it is outside of range +/- consistency
-            if (
+            const isDivergent =
                 subOrgUnitScore < comparisonPoint * (1 - consistency / 100) ||
                 subOrgUnitScore > comparisonPoint * (1 + consistency / 100)
-            ) {
-                const orgUnitName = metadata?.[subOrgUnit]?.name
+            // subOrgUnit is divergent if it is outside of range +/- consistency
+            if (isDivergent) {
                 divergentSubOrgUnits.push(orgUnitName)
             }
+            scatterChartInfo.values.push({
+                name: orgUnitName,
+                x: getRoundedValue(reference, 2),
+                y: getRoundedValue(current, 2),
+                divergent: isDivergent,
+                invalid: isNaN(subOrgUnitScore),
+            })
         })
 
         results.section2d.push({
@@ -125,6 +204,10 @@ const calculateSection2d = ({
                 ),
                 names: divergentSubOrgUnits.sort().join(', '),
             },
+            chartInfo: {
+                scatterChartInfo,
+                lineChartInfo,
+            },
         })
     }
     return results
@@ -136,6 +219,14 @@ export const getSection2d = ({
     periods,
     overallOrgUnit,
 }) => {
+    // if there is no data for subsection, skip calculations and return empty array
+
+    if (
+        Object.keys(section2Response[OVERALL_ORG_UNIT_SECTION_2D] ?? {})
+            .length === 0
+    ) {
+        return { section2d: [] }
+    }
     const currentPeriodID = periods[0].id
     const comparisonPeriodsIDs = periods.slice(1).map((p) => p.id)
 

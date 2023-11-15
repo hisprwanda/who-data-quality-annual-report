@@ -155,7 +155,7 @@ export const Denominators = ({ toggleState, configurations }) => {
                     code: 'P' + (configurations.denominators.length + 1), //TODO: further checks are needed in case some denominators have been deleted or the code is taken
                 })
         }
-    }, [])
+    }, [configurations])
 
     // TODO these 2 use effects below are duplicated in other components, do it once and save it globaly
     useEffect(() => {

@@ -67,6 +67,7 @@ const generateBulletChartConfig = (canvasId, chartInfo) => {
                         name: this.custom.name,
                         survey: this.target,
                         routine: this.y,
+                        nsSeparator: '-:-',
                     }
                 )
             },
@@ -75,6 +76,8 @@ const generateBulletChartConfig = (canvasId, chartInfo) => {
 }
 
 const generateScatterChartConfig = (canvasId, chartInfo) => {
+    const categories = []
+
     const routineSeries = {
         name: i18n.t('Routine'),
         color: 'blue',
@@ -88,7 +91,9 @@ const generateScatterChartConfig = (canvasId, chartInfo) => {
 
     chartInfo.values
         .filter(({ invalid }) => !invalid)
-        .forEach(({ routine, survey, divergent }) => {
+        .forEach(({ name, routine, survey, divergent }) => {
+            categories.push(name)
+
             routineSeries.data.push({
                 y: routine,
                 custom: {
@@ -116,7 +121,7 @@ const generateScatterChartConfig = (canvasId, chartInfo) => {
             type: 'scatter',
         },
         xAxis: {
-            categories: chartInfo.values.map(({ name }) => name),
+            categories,
         },
         yAxis: {
             title: {
@@ -130,8 +135,15 @@ const generateScatterChartConfig = (canvasId, chartInfo) => {
             headerFormat: '<b>{point.key}</b><br/>',
             pointFormatter: function () {
                 return i18n.t('Survey: {{survey}}%<br/>Routine: {{routine}}%', {
-                    survey: this.custom.survey ?? this.y,
-                    routine: this.custom.routine ?? this.y,
+                    survey:
+                        this.custom.survey !== undefined
+                            ? this.custom.survey
+                            : this.y,
+                    routine:
+                        this.custom.routine !== undefined
+                            ? this.custom.routine
+                            : this.y,
+                    nsSeparator: '-:-',
                 })
             },
         },

@@ -3,7 +3,7 @@ import { convertAnalyticsResponseToObject, getVal } from '../utils/utils.js'
 import {
     OVERALL_ORG_UNIT_SECTION_2E,
     LEVEL_OR_GROUP_SECTION_2E,
-} from './useFetchSectionTwoData.js'
+} from './section2DataNames.js'
 
 const RELATIONSHIP_NAMES = {
     eq: 'A ≈ B',
@@ -41,6 +41,66 @@ const isDivergent2e = ({ type, score, overallScore, criteria }) => {
     return false
 }
 
+const typeToLabelMap = {
+    aGTb: 'A>B',
+    eq: 'A=B',
+}
+
+const getSection2EChartInfoBasic = ({
+    numeratorRelation,
+    overallScore,
+    overallOrgUnit,
+    metadata,
+}) => {
+    const { type, criteria, A, B } = numeratorRelation
+    if (type === 'do') {
+        return {
+            type: 'column',
+            values: [],
+        }
+    }
+    return {
+        type: 'scatter',
+        slope: type === 'level' ? overallScore / 100 : 1,
+        threshold: criteria,
+        xAxisTitle: metadata[B]?.name,
+        yAxisTitle: metadata[A]?.name,
+        xPointLabel: metadata[B]?.name,
+        lineLabel:
+            type === 'level'
+                ? metadata[overallOrgUnit]?.name
+                : typeToLabelMap[type],
+        disableTopThresholdLine: type === 'aGTb',
+        values: [],
+    }
+}
+
+const getChartInfoValue = ({
+    type,
+    A,
+    B,
+    subOrgUnitScore,
+    subOrgUnitName,
+    isDivergent,
+}) => {
+    const chartInfoValue = {
+        name: subOrgUnitName,
+        divergent: isDivergent,
+        invalid: isNaN(subOrgUnitScore),
+    }
+    if (type === 'do') {
+        return {
+            ...chartInfoValue,
+            value: getRoundedValue(subOrgUnitScore * 100, 2),
+        }
+    }
+    return {
+        ...chartInfoValue,
+        x: getRoundedValue(B, 2),
+        y: getRoundedValue(A, 2),
+    }
+}
+
 const calculateSection2e = ({
     overallResponse,
     levelOrGroupResponse,
@@ -71,34 +131,52 @@ const calculateSection2e = ({
             type: numeratorRelation.type,
         })
 
+        const chartInfo = getSection2EChartInfoBasic({
+            numeratorRelation,
+            overallScore,
+            overallOrgUnit,
+            metadata,
+        })
+
         const divergentSubOrgUnits = []
         for (const subOrgUnit of subOrgUnitIDs) {
-            const subOrgUnitName = metadata[subOrgUnit]
-            const subOrgUnitScore = get2eScore({
-                A: getVal({
-                    response: levelOrGroupResponse,
-                    ou: subOrgUnit,
-                    dx: numeratorRelation.A,
-                    pe: currentPeriod,
-                }),
-                B: getVal({
-                    response: levelOrGroupResponse,
-                    ou: subOrgUnit,
-                    dx: numeratorRelation.B,
-                    pe: currentPeriod,
-                }),
-                type: numeratorRelation.type,
+            const subOrgUnitName = metadata[subOrgUnit]?.name
+            const { type } = numeratorRelation
+            const A = getVal({
+                response: levelOrGroupResponse,
+                ou: subOrgUnit,
+                dx: numeratorRelation.A,
+                pe: currentPeriod,
             })
-            if (
-                isDivergent2e({
-                    score: subOrgUnitScore,
-                    type: numeratorRelation.type,
-                    criteria: numeratorRelation.criteria,
-                    overallScore,
-                })
-            ) {
+            const B = getVal({
+                response: levelOrGroupResponse,
+                ou: subOrgUnit,
+                dx: numeratorRelation.B,
+                pe: currentPeriod,
+            })
+            const subOrgUnitScore = get2eScore({
+                A,
+                B,
+                type,
+            })
+            const isDivergent = isDivergent2e({
+                score: subOrgUnitScore,
+                type,
+                criteria: numeratorRelation.criteria,
+                overallScore,
+            })
+            if (isDivergent) {
                 divergentSubOrgUnits.push(subOrgUnitName)
             }
+            const chartInfoValue = getChartInfoValue({
+                A,
+                B,
+                type,
+                subOrgUnitScore,
+                subOrgUnitName,
+                isDivergent,
+            })
+            chartInfo.values.push(chartInfoValue)
         }
 
         results.section2e.push({
@@ -120,6 +198,7 @@ const calculateSection2e = ({
                     1
                 ),
             },
+            chartInfo,
         })
     }
 
@@ -132,6 +211,13 @@ export const getSection2e = ({
     periods,
     overallOrgUnit,
 }) => {
+    // if there is no data for subsection, skip calculations and return empty array
+    if (
+        Object.keys(section2Response?.[OVERALL_ORG_UNIT_SECTION_2E] ?? {})
+            .length === 0
+    ) {
+        return { section2e: [] }
+    }
     const currentPeriodID = periods[0].id
 
     const formattedResponse2eOverall = convertAnalyticsResponseToObject({

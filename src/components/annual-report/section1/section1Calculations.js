@@ -1,3 +1,6 @@
+import { getForecastValue, getMean } from '../utils/mathService.js'
+import { convertAnalyticsResponseToObject, getVal } from '../utils/utils.js'
+
 // gets a list of retions in which the reporting rate score was lower than the threshold
 const getRegionsWithLowScore = (filterd_datasets, key) => {
     const dataset = filterd_datasets[key]
@@ -18,20 +21,16 @@ const getRegionsWithLowScoreForConsistencyOfDataset = ({
     overallDataset,
     regions,
     period,
+    periodsIDs,
 }) => {
     // calculate the boundaries (range) with this overall score and threshold
-    const leftBoundary =
-        Math.round(
-            overallDataset.score * (1 - overallDataset.threshold / 100) * 100
-        ) / 100
-    const rightBoundary =
-        Math.round(
-            overallDataset.score * (1 + overallDataset.threshold / 100) * 100
-        ) / 100
+    const { trend, comparisonFromConfig } = overallDataset
 
-    const years = Object.keys(
-        reporting_rate_by_org_unit_level_formatted[datasetID]
-    )
+    const comparisonBase =
+        comparisonFromConfig === 'ou' ? overallDataset.score : 1
+    const leftBoundary = comparisonBase * (1 - overallDataset.threshold / 100)
+    const rightBoundary = comparisonBase * (1 + overallDataset.threshold / 100)
+
     const currentDataset = reporting_rate_by_org_unit_level_formatted[datasetID]
 
     /* PROCEDURES  :
@@ -66,25 +65,43 @@ const getRegionsWithLowScoreForConsistencyOfDataset = ({
     */
     const regionsWithDivergentScore = []
     regions.forEach((region) => {
-        let regionScore = null
-        years.forEach((year) => {
-            if (year !== period) {
-                const score = parseFloat(
-                    currentDataset[year].find((item) => item.ou === region.id)
-                        .score
-                )
-                regionScore += score
-            }
-        })
-        // perform calculations to decide whether a region is between the boundaries
-        const chosenPeriodScore = parseFloat(
-            currentDataset[period].find((item) => item.ou === region.id).score
+        let reference = 0
+        const comparisonPeriods = periodsIDs.filter((pe) => pe !== period)
+
+        const points = comparisonPeriods
+            .map((year, index) => {
+                return [
+                    comparisonPeriods.length - index - 1,
+                    parseFloat(
+                        currentDataset?.[year]?.find(
+                            (item) => item.ou === region.id
+                        )?.score
+                    ),
+                ]
+            })
+            .filter((point) => !isNaN(point[1]))
+
+        if (trend === 'constant') {
+            // reference is average for 'constant' trend
+            const yearValues = points.map((point) => point[1])
+            reference = getMean(yearValues)
+        } else {
+            // otherwise the reference is the forecast value
+            reference = Math.max(
+                getForecastValue({
+                    pointsArray: points,
+                    forecastX: comparisonPeriods.length,
+                }),
+                0
+            )
+        }
+
+        const currentYearValue = parseFloat(
+            currentDataset?.[period]?.find((item) => item.ou === region.id)
+                ?.score
         )
 
-        // devide by number of the previous regions which is (years - 1)
-        // TODO: remember to cater for devide by zero or decide whether the user is allowed to choose 0 comparison years
-        const finalRegionScore =
-            (chosenPeriodScore / (regionScore / (years.length - 1))) * 100
+        const finalRegionScore = (currentYearValue / reference) * 100
         if (
             finalRegionScore < leftBoundary ||
             finalRegionScore > rightBoundary
@@ -185,6 +202,7 @@ const getJsonObjectsFormatFromTableFormat = ({
                     currentDataSetId
                 ].consistencyThreshold
             rowData['trend'] = trend
+            rowData.comparisonFromConfig = comparison
 
             if (comparison === 'th' && trend === 'constant') {
                 rowData['comparison'] = 'Current vs average'
@@ -222,6 +240,7 @@ const getJsonObjectsFormatFromTableFormat = ({
                 dataset_name: rowData.dataset_name,
                 trend: rowData.trend,
                 comparison: rowData.comparison,
+                comparisonFromConfig: rowData.comparisonFromConfig,
                 threshold: rowData.threshold,
                 score: rowData.value,
                 orgUnitLevelsOrGroups: rowData.orgUnitLevelsOrGroups,
@@ -253,29 +272,52 @@ const filterDataByProvidedPeriod = (dataToFilter, period) => {
     return filteredData
 }
 
-const filterDataByProvidedPeriodConsistency = (dataToFilter, period) => {
+const filterDataByProvidedPeriodConsistency = (
+    dataToFilter,
+    period,
+    periodsIDs
+) => {
     // Restructure the JSON object
     const restructuredObject = {}
 
     for (const datasetId in dataToFilter) {
         const dataset = dataToFilter[datasetId]
-        const years = Object.keys(dataset)
+        const trend = dataset?.[period]?.[0]?.trend ?? 'constant'
 
-        // Initialize the total score for different periods
-        let totalScore = 0
+        // Initialize the reference value for different periods
+        let reference = 0
 
-        // Loop through the years exclude the current one
-        years.forEach((year) => {
-            if (year !== period) {
-                const score = parseFloat(dataset[year][0].score)
-                totalScore += score
-            }
-        })
+        // get points for each year (index and value, filtering out null values (including current year))
+        const comparisonPeriods = periodsIDs.filter((pe) => pe !== period)
+        const points = comparisonPeriods
+            .map((year, index) => {
+                return [
+                    comparisonPeriods.length - index - 1,
+                    parseFloat(dataset[year]?.[0]?.score),
+                ]
+            })
+            .filter((point) => !isNaN(point[1]))
+
+        if (trend === 'constant') {
+            // reference is average for 'constant' trend
+            const yearValues = points.map((point) => point[1])
+            reference = getMean(yearValues)
+        } else {
+            // otherwise the reference is the forecast value
+            reference = Math.max(
+                getForecastValue({
+                    pointsArray: points,
+                    forecastX: comparisonPeriods.length,
+                }),
+                0
+            )
+        }
+
+        const currentYearValue = dataset?.[period]?.[0]?.score
 
         // the function to calculate the score using the previous chosen years
         // TODO: remember to cater for devide by zero or decide whether the user is allowed to choose 0 comparison years
-        const theScore =
-            (dataset[period][0].score / (totalScore / (years.length - 1))) * 100
+        const theScore = (currentYearValue / reference) * 100
 
         // Create the currentYear object
         const currentYear = [
@@ -573,6 +615,7 @@ const getConsistencyOfDatasetCompletenessData = ({
     mappedConfigurations,
     period,
     calculatingFor,
+    periodsIDs,
 }) => {
     const reporting_rate_over_all_org_units_formatted =
         getJsonObjectsFormatFromTableFormat({
@@ -591,7 +634,8 @@ const getConsistencyOfDatasetCompletenessData = ({
     // filtering data (overall) by provided period
     const filteredData_overall = filterDataByProvidedPeriodConsistency(
         reporting_rate_over_all_org_units_formatted,
-        period
+        period,
+        periodsIDs
     )
 
     // get available regions to calculate for
@@ -611,6 +655,7 @@ const getConsistencyOfDatasetCompletenessData = ({
                 overallDataset: dataset[0],
                 regions: regions,
                 period: period,
+                periodsIDs,
             })
 
         // Calculate "divergentRegionsCount" and "divergentRegionsPercent"
@@ -638,11 +683,47 @@ const getConsistencyOfDatasetCompletenessData = ({
     return flattenedData
 }
 
+// get chart info for section 1
+const getSection1dChartInfo = ({ allOrgUnitsData, periodsIDs, ou }) => {
+    // the periods are from most recent to oldest; we want to present data in the reverse
+    const periods = [...periodsIDs]
+    periods.reverse()
+
+    const chartInfo = {
+        x: periods,
+        values: [],
+    }
+
+    const formattedData = convertAnalyticsResponseToObject({
+        ...allOrgUnitsData,
+    })
+
+    for (const dx in formattedData) {
+        const points = periods.map(
+            (pe) => getVal({ response: formattedData, dx, ou, pe }) ?? null
+        )
+
+        // if all points are null: skip; otherwise, add
+        if (points.some((val) => val !== null)) {
+            chartInfo.values.push({
+                name: allOrgUnitsData.metaData?.items?.[dx]?.name ?? '',
+                points,
+            })
+        }
+    }
+
+    chartInfo.values.sort((a, b) => a.name.localeCompare(b.name))
+
+    return chartInfo
+}
+
 // function to structure analytics responses into different report sections as json objects using mapped configurations and chosen period
 export const calculateSection1 = ({
     reportQueryResponse,
     mappedConfigurations,
     period,
+    periodsIDs,
+    overallOrgUnit,
 }) => {
     if (!reportQueryResponse || !mappedConfigurations) {
         return {}
@@ -689,6 +770,13 @@ export const calculateSection1 = ({
             mappedConfigurations: mappedConfigurations,
             period: period,
             calculatingFor: 'section1D',
+            periodsIDs,
         }), // list of objects for Consistency of dataset completeness over time
+        chartInfo: getSection1dChartInfo({
+            allOrgUnitsData:
+                reportQueryResponse.reporting_rate_over_all_org_units,
+            periodsIDs,
+            ou: overallOrgUnit,
+        }),
     }
 }
