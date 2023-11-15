@@ -472,8 +472,6 @@ const getExpectedValues = ({ numerator, response, pe, ou }) => {
 }
 
 const getActualValue1C = ({ response, dx, co, pe, ou }) => {
-    // if the coc is undefined, assume that it is the system default COC
-
     return getValCO({ response, dx, co, ou, pe })
 }
 
