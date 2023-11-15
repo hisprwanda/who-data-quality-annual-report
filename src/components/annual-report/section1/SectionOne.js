@@ -205,7 +205,7 @@ export const SectionOne = ({ reportParameters }) => {
                                     {dataset.expectedValues}
                                 </ReportCell>
                                 <ReportCell>{dataset.actualValues}</ReportCell>
-                                <ReportCell>{dataset.overallScore}</ReportCell>
+                                <ReportCell>{dataset.overallScore}%</ReportCell>
                                 <ReportCell>
                                     {dataset.divergentRegionsCount}
                                 </ReportCell>

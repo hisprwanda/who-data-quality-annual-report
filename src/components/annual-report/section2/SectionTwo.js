@@ -100,7 +100,7 @@ const Sections2a2b2c = ({ title, subtitle, subsectionData }) => {
                         <TableRow key={dataRow.indicator}>
                             <ReportCell>{dataRow.indicator}</ReportCell>
                             <ReportCell>{dataRow.threshold} SD</ReportCell>
-                            <ReportCell>{dataRow.overallScore}</ReportCell>
+                            <ReportCell>{dataRow.overallScore}%</ReportCell>
                             <ReportCell>
                                 {dataRow.divergentScores?.number}
                             </ReportCell>
@@ -134,7 +134,10 @@ const Section2DBlock = ({ dataRow, index }) => (
             <TableBody>
                 <TableRow>
                     <ReportCell>Expected trend</ReportCell>
-                    <ReportCell>{dataRow.expectedTrend}</ReportCell>
+                    <ReportCell>
+                        {dataRow.expectedTrend[0].toUpperCase() +
+                            dataRow.expectedTrend.slice(1)}
+                    </ReportCell>
                 </TableRow>
                 <TableRow>
                     <ReportCell>Compare region to</ReportCell>
@@ -245,8 +248,7 @@ const Section2EBlock = ({ dataRow, index }) => (
                     <ReportCell>
                         {dataRow.expectedRelationship === 'Dropout rate'
                             ? ''
-                            : '±'}
-                        {dataRow.qualityThreshold}
+                            : `± ${dataRow.qualityThreshold}%`}
                     </ReportCell>
                 </TableRow>
                 <TableRow>
