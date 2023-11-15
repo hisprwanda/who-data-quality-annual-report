@@ -568,7 +568,11 @@ const calculateSection1C = ({
             expectedValues,
             actualValues,
             overallScore,
-            indicator_name: metadata[deOperand]?.name,
+            indicator_name: `${metadata[deOperand]?.name} ${
+                coOperand && coOperand !== defaultCOC
+                    ? '(' + metadata[coOperand]?.name + ')'
+                    : ''
+            }`,
             orgUnitLevelsOrGroups: divergentSubOrgUnits
                 .map((ouID) => metadata[ouID]?.name)
                 .sort(),
