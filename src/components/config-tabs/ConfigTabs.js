@@ -5,10 +5,10 @@ import styles from './ConfigTabs.module.css'
 import { DenominatorRelations } from './tab-contents/DenominatorRelations.js'
 import { Denominators } from './tab-contents/Denominators.js'
 import { ExternalDataComparison } from './tab-contents/ExternalDataComparison.js'
-import { NumeratorGroups } from './tab-contents/NumeratorGroups.js'
 import { NumeratorParameters } from './tab-contents/NumeratorParameters.js'
 import { NumeratorRelations } from './tab-contents/NumeratorRelations.js'
 import { Numerators } from './tab-contents/Numerators.js'
+import { NumeratorGroups } from './numerator-groups/NumeratorGroups.js'
 
 function Tabs({ loading, configurations, mappedNumerators }) {
     const [toggleState, setToggleState] = useState(1)

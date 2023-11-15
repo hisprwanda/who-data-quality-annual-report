@@ -11,11 +11,15 @@ import {
     IconAdd16,
     SingleSelect,
     SingleSelectOption,
+    ButtonStrip,
 } from '@dhis2/ui'
 import PropTypes from 'prop-types'
 import React, { useEffect, useState } from 'react'
 import { getNumeratorsInGroup } from '../../../utils/numeratorsMetadataData.js'
 import { updateConfigurations } from '../../../utils/updateConfigurations.js'
+// import ConfigTabs.module.css
+import styles from '../ConfigTabs.module.css'
+import { NumeratorGroupsTableItem } from './NumeratorGroupsTableItem.js'
 
 // TODO: move different queries to their own file when they become many
 const updateConfigurationsMutation = {
@@ -26,6 +30,27 @@ const updateConfigurationsMutation = {
         lastUpdated: new Date().toJSON(),
     }),
 }
+
+const AddGroupButton = () => {
+    return (
+        <div className="group">
+            <h2>Add a new group</h2>
+            <ButtonStrip end >
+                <Button
+                    name="Primary button"
+                    primary
+                    button
+                    value="default"
+                    icon={<IconAdd16 />}
+                >
+                    {' '}
+                    Create a New Group
+                </Button>
+            </ButtonStrip>
+        </div>
+    )
+}
+
 
 export const NumeratorGroups = ({ toggleState, configurations }) => {
     const [groups, setGroups] = useState(null)
@@ -108,7 +133,7 @@ export const NumeratorGroups = ({ toggleState, configurations }) => {
                 Add and remove numerators to/from groups, and to add new groups.
             </p>
             <hr />
-            <div className="groupsContainer">
+            <div className={styles.groupsContainer}>
                 {groups
                     ? groups.map((group, key) => (
                           <div key={key} className="group">
@@ -116,16 +141,22 @@ export const NumeratorGroups = ({ toggleState, configurations }) => {
                               <Table>
                                   <TableHead>
                                       <TableRowHead>
-                                          <TableCellHead>Data</TableCellHead>
-                                          <TableCellHead>Actions</TableCellHead>
+                                        <TableCellHead>Data</TableCellHead>
+                                        <TableCellHead className={styles.numeratoryGroupActions}>Actions </TableCellHead>
                                       </TableRowHead>
                                   </TableHead>
                                   <TableBody>
-                                      {getNumeratorsInGroup(
+                                      {/* {getNumeratorsInGroup(
                                           numerators,
                                           group,
                                           onDeleteNumerator
-                                      )}
+                                      )} */}
+                                      
+                                      <NumeratorGroupsTableItem 
+                                        numerators={numerators}
+                                        group={group}
+                                         />
+
 
                                       <TableRow>
                                           <TableCell>
@@ -159,34 +190,51 @@ export const NumeratorGroups = ({ toggleState, configurations }) => {
                                               </SingleSelect>
                                           </TableCell>
                                           <TableCell>
-                                              <Button
-                                                  name="Primary button"
-                                                  disabled={
-                                                      selectedNumerator != 'NA'
-                                                          ? false
-                                                          : true
-                                                  }
-                                                  onClick={() =>
-                                                      handleAddNumerator(
-                                                          selectedNumerator,
-                                                          group
-                                                      )
-                                                  }
-                                                  primary
-                                                  button
-                                                  value="default"
-                                                  icon={<IconAdd16 />}
-                                              >
-                                                  {' '}
-                                                  Add Numerators
-                                              </Button>
+                                            <ButtonStrip end >
+                                                <Button
+                                                    name="Primary button"
+                                                    small
+                                                    disabled={
+                                                        selectedNumerator != 'NA'
+                                                            ? false
+                                                            : true
+                                                    }
+                                                    onClick={() =>
+                                                        handleAddNumerator(
+                                                            selectedNumerator,
+                                                            group
+                                                        )
+                                                    }
+                                                    primary
+                                                    button
+                                                    value="default"
+                                                    icon={<IconAdd16 />}
+                                                >
+                                                    {' '}
+                                                    Add Numerators
+                                                </Button>
+                                                <Button small name="Primary button" destructive button value="default"
+                                                onClick={() =>
+                                                    console.log('delete group', group.code)
+                                                }
+
+                                                >
+                                                    {' '}
+                                                    Delete Group
+                                                </Button>
+                                            </ButtonStrip>
                                           </TableCell>
                                       </TableRow>
                                   </TableBody>
                               </Table>
                           </div>
                       ))
-                    : ''}
+                    : 
+                    <div className="group">
+                        <h2>No groups found</h2>
+                    </div>
+                    }
+                    <AddGroupButton />
             </div>
         </div>
     )
