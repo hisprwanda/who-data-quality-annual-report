@@ -1,1 +1,1 @@
-export { Numerators } from './NewNumerators.js'
+export { Numerators } from './Numerators.js'
