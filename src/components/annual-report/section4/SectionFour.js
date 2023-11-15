@@ -1,6 +1,14 @@
+import { TableBody, TableHead, TableRow } from '@dhis2/ui'
 import PropTypes from 'prop-types'
 import React, { useEffect } from 'react'
 import { Chart } from '../Chart.js'
+import {
+    ReportCell,
+    ReportCellHead,
+    ReportRowHead,
+    ReportTable,
+} from '../ReportTable.js'
+import styles from './SectionFour.module.css'
 import { useSectionFourData } from './useSectionFourData.js'
 
 const sectionInformation = {
@@ -15,13 +23,15 @@ const sectionInformation = {
 
 const SubSectionLayout = ({ title, subtitle }) => (
     <>
-        <tr>
-            <th colSpan="6">{title}</th>
-        </tr>
+        <ReportRowHead>
+            <ReportCellHead colSpan="6">{title}</ReportCellHead>
+        </ReportRowHead>
         {subtitle && (
-            <tr>
-                <th colSpan="6">{subtitle}</th>
-            </tr>
+            <TableRow>
+                <ReportCell colSpan="6" className={styles.subsectionSubtitle}>
+                    {subtitle}
+                </ReportCell>
+            </TableRow>
         )}
     </>
 )
@@ -32,24 +42,22 @@ SubSectionLayout.propTypes = {
 }
 
 const Section4A = ({ title, subtitle, subsectionData }) => (
-    <>
-        <table>
-            <thead>
-                <SubSectionLayout title={title} subtitle={subtitle} />
-            </thead>
+    <ReportTable className={styles.section4a}>
+        <TableHead>
+            <SubSectionLayout title={title} subtitle={subtitle} />
+        </TableHead>
 
-            <tbody>
-                {subsectionData
-                    .sort((a, b) => a.name.localeCompare(b.name))
-                    .map((dataRow) => (
-                        <tr key={dataRow.name}>
-                            <td>{dataRow.name}</td>
-                            <td>{dataRow.value}</td>
-                        </tr>
-                    ))}
-            </tbody>
-        </table>
-    </>
+        <TableBody>
+            {subsectionData
+                .sort((a, b) => a.name.localeCompare(b.name))
+                .map((dataRow) => (
+                    <TableRow key={dataRow.name}>
+                        <ReportCell>{dataRow.name}</ReportCell>
+                        <ReportCell>{dataRow.value}</ReportCell>
+                    </TableRow>
+                ))}
+        </TableBody>
+    </ReportTable>
 )
 
 Section4A.propTypes = {
@@ -60,68 +68,79 @@ Section4A.propTypes = {
 
 const Section4B = ({ title, subtitle, subsectionData }) => (
     <>
-        <table>
-            <thead>
+        <ReportTable className={styles.marginBottom4}>
+            <TableHead>
                 <SubSectionLayout title={title} subtitle={subtitle} />
-            </thead>
-        </table>
+            </TableHead>
+        </ReportTable>
         {subsectionData
             .sort((a, b) => a.name.localeCompare(b.name))
             .map((dataRow, index) => {
                 return (
-                    <React.Fragment key={dataRow.name}>
-                        <table>
-                            <thead>
-                                <tr>
-                                    <th>{dataRow.name}</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr>
-                                    <td>Denominator A</td>
-                                    <td>{dataRow.A}</td>
-                                </tr>
-                                <tr>
-                                    <td>Denominator B</td>
-                                    <td>{dataRow.B}</td>
-                                </tr>
-                                <tr>
-                                    <td>Quality threshold</td>
-                                    <td>±{dataRow.qualityThreshold}%</td>
-                                </tr>
-                                <tr>
-                                    <td>Overall score</td>
-                                    <td>{dataRow.overallScore}%</td>
-                                </tr>
-                                <tr>
-                                    <td># Region with poor score</td>
-                                    <td>
+                    <div className={styles.section4bGrid} key={dataRow.name}>
+                        <ReportTable>
+                            <TableHead>
+                                <ReportRowHead>
+                                    <ReportCellHead colSpan="2">
+                                        {dataRow.name}
+                                    </ReportCellHead>
+                                </ReportRowHead>
+                            </TableHead>
+                            <TableBody>
+                                <TableRow>
+                                    <ReportCell>Denominator A</ReportCell>
+                                    <ReportCell>{dataRow.A}</ReportCell>
+                                </TableRow>
+                                <TableRow>
+                                    <ReportCell>Denominator B</ReportCell>
+                                    <ReportCell>{dataRow.B}</ReportCell>
+                                </TableRow>
+                                <TableRow>
+                                    <ReportCell>Quality threshold</ReportCell>
+                                    <ReportCell>
+                                        ±{dataRow.qualityThreshold}%
+                                    </ReportCell>
+                                </TableRow>
+                                <TableRow>
+                                    <ReportCell>Overall score</ReportCell>
+                                    <ReportCell>
+                                        {dataRow.overallScore}%
+                                    </ReportCell>
+                                </TableRow>
+                                <TableRow>
+                                    <ReportCell>
+                                        # Region with poor score
+                                    </ReportCell>
+                                    <ReportCell>
                                         {dataRow.divergentSubOrgUnits?.number}
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td>% Region with poor score</td>
-                                    <td>
+                                    </ReportCell>
+                                </TableRow>
+                                <TableRow>
+                                    <ReportCell>
+                                        % Region with poor score
+                                    </ReportCell>
+                                    <ReportCell>
                                         {
                                             dataRow.divergentSubOrgUnits
                                                 ?.percentage
                                         }
                                         %
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td colSpan="2">
+                                    </ReportCell>
+                                </TableRow>
+                                <TableRow>
+                                    <ReportCell colSpan="2">
                                         {dataRow.divergentSubOrgUnits?.names}
-                                    </td>
-                                </tr>
-                            </tbody>
-                        </table>
+                                    </ReportCell>
+                                </TableRow>
+                            </TableBody>
+                        </ReportTable>
                         <Chart
                             sectionId={'section4'}
                             chartId={`chart${index}`}
                             chartInfo={dataRow.chartInfo}
+                            className={styles.section4bChart}
                         />
-                    </React.Fragment>
+                    </div>
                 )
             })}
     </>
