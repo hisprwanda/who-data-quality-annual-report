@@ -129,5 +129,5 @@ export const DenominatorRelations = ({ toggleState, configurations }) => {
 
 DenominatorRelations.propTypes = {
     configurations: PropTypes.object,
-    toggleState: PropTypes.func,
+    toggleState: PropTypes.number,
 }

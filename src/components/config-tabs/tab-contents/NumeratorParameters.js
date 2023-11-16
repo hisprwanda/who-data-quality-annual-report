@@ -517,5 +517,5 @@ export const NumeratorParameters = ({
 NumeratorParameters.propTypes = {
     configurations: PropTypes.object,
     mappedNumerators: PropTypes.object,
-    toggleState: PropTypes.string,
+    toggleState: PropTypes.number,
 }
