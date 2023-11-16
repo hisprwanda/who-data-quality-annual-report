@@ -1,6 +1,7 @@
-import { TableBody, TableHead, TableRow, CircularLoader } from '@dhis2/ui'
+import { TableBody, TableHead, TableRow } from '@dhis2/ui'
 import PropTypes from 'prop-types'
 import React, { useEffect } from 'react'
+import { LoadingSpinner } from '../../common/LoadingSpinner.js'
 import { Chart } from '../Chart.js'
 import {
     ReportCell,
@@ -24,19 +25,7 @@ export const SectionOne = ({ reportParameters }) => {
     }, [refetch, reportParameters])
 
     if (loading) {
-        return (
-            <div
-                style={{
-                    display: 'flex',
-                    justifyContent: 'center',
-                    marginTop: '50px',
-                }}
-            >
-                {' '}
-                {/* TODO: put styles external */}
-                <CircularLoader large />
-            </div>
-        )
+        return <LoadingSpinner noLayer={true} />
     }
 
     if (error) {

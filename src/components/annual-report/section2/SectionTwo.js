@@ -1,6 +1,7 @@
 import { TableBody, TableHead, TableRow } from '@dhis2/ui'
 import PropTypes from 'prop-types'
 import React, { useEffect } from 'react'
+import { LoadingSpinner } from '../../common/LoadingSpinner.js'
 import { Chart } from '../Chart.js'
 import { NoDataInfoBox } from '../common/NoDataWarning.js'
 import {
@@ -337,7 +338,7 @@ export const SectionTwo = ({ reportParameters }) => {
     }, [refetch, reportParameters])
 
     if (loading) {
-        return <span>loading</span>
+        return <LoadingSpinner noLayer={true} />
     }
 
     if (error) {

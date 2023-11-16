@@ -4,6 +4,7 @@ import { Button, SelectorBar } from '@dhis2/ui'
 import PropTypes from 'prop-types'
 import React, { useMemo, useState } from 'react'
 import { useConfigurations } from '../../utils/index.js'
+import { LoadingSpinner } from '../common/LoadingSpinner.js'
 import { getReportParameters } from './getReportParameters.js'
 import { GroupSelector } from './GroupSelector.js'
 import { OrgUnitSelector } from './OrgUnitSelector.js'
@@ -66,7 +67,7 @@ export const ReportParameterSelector = ({ setReportParameters }) => {
     }
 
     if (loading) {
-        return <span>Loading</span>
+        return <LoadingSpinner />
     }
 
     if (error) {
