@@ -1,8 +1,15 @@
+import { TableBody, TableHead, TableRow } from '@dhis2/ui'
 import PropTypes from 'prop-types'
 import React, { useEffect } from 'react'
 import { Chart } from '../Chart.js'
-import { calculateSection3 } from './section3Calculations.js'
-import { useFetchSectionThreeData } from './useFetchSectionThreeData.js'
+import {
+    ReportCell,
+    ReportCellHead,
+    ReportRowHead,
+    ReportTable,
+} from '../ReportTable.js'
+import styles from './SectionThree.module.css'
+import { useSectionThreeData } from './useSectionThreeData.js'
 
 const isNotMissing = (val) => val !== undefined && val !== null
 
@@ -16,13 +23,15 @@ const sectionInformation = {
 
 const SubSectionLayout = ({ title, subtitle }) => (
     <>
-        <tr>
-            <th colSpan="6">{title}</th>
-        </tr>
+        <ReportRowHead>
+            <ReportCellHead colSpan="6">{title}</ReportCellHead>
+        </ReportRowHead>
         {subtitle && (
-            <tr>
-                <th colSpan="6">{subtitle}</th>
-            </tr>
+            <TableRow>
+                <ReportCell colSpan="6" className={styles.subsectionSubtitle}>
+                    {subtitle}
+                </ReportCell>
+            </TableRow>
         )}
     </>
 )
@@ -34,55 +43,67 @@ SubSectionLayout.propTypes = {
 
 const Section3A = ({ title, subtitle, subsectionData }) => (
     <>
-        <table>
-            <thead>
+        <ReportTable className={styles.marginBottom4}>
+            <TableHead>
                 <SubSectionLayout title={title} subtitle={subtitle} />
-            </thead>
-        </table>
+            </TableHead>
+        </ReportTable>
         {subsectionData
             .sort((a, b) => a.name.localeCompare(b.name))
             .map((dataRow, index) => {
                 return (
-                    <React.Fragment key={dataRow.name}>
-                        <table>
-                            <thead>
-                                <tr>
-                                    <th>{dataRow.name}</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr>
-                                    <td>Survey value</td>
-                                    <td>{dataRow.surveyValue}%</td>
-                                </tr>
-                                <tr>
-                                    <td>Routine value</td>
-                                    <td>{dataRow.routineValue}%</td>
-                                </tr>
-                                <tr>
-                                    <td>Quality threshold</td>
-                                    <td>± {dataRow.qualityThreshold}%</td>
-                                </tr>
-                                <tr>
-                                    <td>Overall score</td>
-                                    <td>{dataRow.overallScore}%</td>
-                                </tr>
-                                <tr>
-                                    <td>
+                    <div className={styles.section3Grid} key={dataRow.name}>
+                        <ReportTable>
+                            <TableHead>
+                                <ReportRowHead>
+                                    <ReportCellHead colSpan="2">
+                                        {dataRow.name}
+                                    </ReportCellHead>
+                                </ReportRowHead>
+                            </TableHead>
+                            <TableBody>
+                                <TableRow>
+                                    <ReportCell>Survey value</ReportCell>
+                                    <ReportCell>
+                                        {dataRow.surveyValue}%
+                                    </ReportCell>
+                                </TableRow>
+                                <TableRow>
+                                    <ReportCell>Routine value</ReportCell>
+                                    <ReportCell>
+                                        {dataRow.routineValue}%
+                                    </ReportCell>
+                                </TableRow>
+                                <TableRow>
+                                    <ReportCell>Quality threshold</ReportCell>
+                                    <ReportCell>
+                                        ± {dataRow.qualityThreshold}%
+                                    </ReportCell>
+                                </TableRow>
+                                <TableRow>
+                                    <ReportCell>Overall score</ReportCell>
+                                    <ReportCell>
+                                        {dataRow.overallScore}%
+                                    </ReportCell>
+                                </TableRow>
+                                <TableRow>
+                                    <ReportCell>
                                         Number of Region with divergent score
-                                    </td>
-                                    <td>
+                                    </ReportCell>
+                                    <ReportCell>
                                         {isNotMissing(
                                             dataRow.divergentSubOrgUnits?.number
                                         )
                                             ? dataRow.divergentSubOrgUnits
                                                   ?.number
                                             : 'Not available'}
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td>% Region with poor score</td>
-                                    <td>
+                                    </ReportCell>
+                                </TableRow>
+                                <TableRow>
+                                    <ReportCell>
+                                        % Region with poor score
+                                    </ReportCell>
+                                    <ReportCell>
                                         {isNotMissing(
                                             dataRow.divergentSubOrgUnits
                                                 ?.percentage
@@ -90,27 +111,28 @@ const Section3A = ({ title, subtitle, subsectionData }) => (
                                             ? dataRow.divergentSubOrgUnits
                                                   ?.percentage + '%'
                                             : 'Not available'}
-                                    </td>
-                                </tr>
+                                    </ReportCell>
+                                </TableRow>
                                 {dataRow.divergentSubOrgUnits?.names?.length >
                                     0 && (
-                                    <tr>
-                                        <td colSpan="2">
+                                    <TableRow>
+                                        <ReportCell colSpan="2">
                                             {
                                                 dataRow.divergentSubOrgUnits
                                                     ?.names
                                             }
-                                        </td>
-                                    </tr>
+                                        </ReportCell>
+                                    </TableRow>
                                 )}
-                            </tbody>
-                        </table>
+                            </TableBody>
+                        </ReportTable>
                         <Chart
                             sectionId={'section3'}
                             chartId={`chart${index}`}
                             chartInfo={dataRow.chartInfo}
+                            className={styles.section3Chart}
                         />
-                    </React.Fragment>
+                    </div>
                 )
             })}
     </>
@@ -123,7 +145,12 @@ Section3A.propTypes = {
 }
 
 export const SectionThree = ({ reportParameters }) => {
-    const { loading, data, error, refetch } = useFetchSectionThreeData()
+    const {
+        loading,
+        data: section3Data,
+        error,
+        refetch,
+    } = useSectionThreeData()
 
     useEffect(() => {
         const variables = {
@@ -142,14 +169,7 @@ export const SectionThree = ({ reportParameters }) => {
         return <span>{error?.message}</span>
     }
 
-    if (data) {
-        const section3Data = calculateSection3({
-            section3Response: data,
-            mappedConfiguration: reportParameters.mappedConfiguration,
-            currentPeriod: reportParameters.periods[0],
-            overallOrgUnit: reportParameters.orgUnits[0],
-        })
-
+    if (section3Data) {
         return (
             <Section3A
                 title={sectionInformation.section3a.title}

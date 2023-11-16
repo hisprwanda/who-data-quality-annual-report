@@ -7,7 +7,7 @@ import { convertAnalyticsResponseToObject, getVal } from '../utils/utils.js'
 import {
     OVERALL_ORG_UNIT_SECTION_2D,
     LEVEL_OR_GROUP_SECTION_2D,
-} from './useFetchSectionTwoData.js'
+} from './section2DataNames.js'
 
 const get2dScore = ({
     ou,
