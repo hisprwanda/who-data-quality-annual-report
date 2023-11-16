@@ -49,7 +49,6 @@ export const DataMappingFormSection = () => {
     //     subscription: { value: true },
     //     // need to set the initial value here instead of on the <Field />
     //     // so the components below can render
-    //     initialValue: DATA_ELEMENT,
     // })
     // const dataType = dataTypeField.input.value
 
