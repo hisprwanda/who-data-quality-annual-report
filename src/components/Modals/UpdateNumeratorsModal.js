@@ -158,7 +158,10 @@ const UpdateNumeratorsModal = ({
         }
     }, [dataSetsData])
 
-    const newNumeratorCode = getNextAvailableCode(configurations.numerators, 'C')
+    const newNumeratorCode = getNextAvailableCode(
+        configurations.numerators,
+        'C'
+    )
 
     const handleGroupSelection = (selectedG) => {
         setNumerator({

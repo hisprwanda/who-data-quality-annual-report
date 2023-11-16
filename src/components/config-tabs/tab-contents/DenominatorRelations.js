@@ -151,7 +151,6 @@ export const DenominatorRelations = ({ toggleState }) => {
                 (denominator) => denominator.code === relation.B
             )?.code
         )
-
     }
 
     // while in adding mode
