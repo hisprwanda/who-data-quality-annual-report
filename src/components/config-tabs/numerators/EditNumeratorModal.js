@@ -10,7 +10,6 @@ import {
     ModalTitle,
     ButtonStrip,
     InputFieldFF,
-    // SingleSelectFieldFF,
     TextAreaFieldFF,
     MultiSelectFieldFF,
     CheckboxFieldFF,
@@ -30,9 +29,9 @@ const DEFAULT_NUMERATOR_VALUES = {
     name: undefined,
     definition: undefined,
     core: false,
-    dataID: undefined,
+    dataID: undefined, // todo: this and dataElementID don't actually get edited
+    dataSetID: [], // todo: -- they use dataItem and dataSets in form state instead
     dataElementOperandID: undefined,
-    dataSetID: [],
 }
 
 const CurrentMappingInfo = ({ dataID }) => {
@@ -77,6 +76,7 @@ export function EditNumeratorModal({ numeratorDataToEdit, onSave, onClose }) {
         <Form
             onSubmit={(values) => {
                 // todo: validate! 🥳
+                // todo: data items required on creation, but not edit
 
                 // Pick data from values
                 // (some values like dataElementType are just for the form)
@@ -91,17 +91,17 @@ export function EditNumeratorModal({ numeratorDataToEdit, onSave, onClose }) {
                     // if dataID is set, the other two should be required
                     newNumeratorData = {
                         ...newNumeratorData,
-                        // note different structure: dataItem.id
+                        // note different form state structure:
                         dataID: values.dataItem.id,
-                        dataSetID: values.dataSetID,
+                        dataSetID: values.dataSets.map(({ id }) => id),
                         dataElementOperandID: values.dataElementOperandID,
                     }
                 }
-                // todo: data items required on creation, but not edit
 
                 onSave({
                     newNumeratorData,
                     groupsContainingNumerator: values.groups,
+                    dataSetsContainingNumerator: values.dataSets,
                 })
                 onClose()
             }}

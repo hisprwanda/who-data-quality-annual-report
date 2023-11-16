@@ -1,10 +1,6 @@
 import { useDataQuery } from '@dhis2/app-runtime'
-import {
-    // rename this to not clash with Field from RFF
-    MultiSelectFieldFF,
-    ReactFinalForm,
-} from '@dhis2/ui'
-import React, { useEffect, useMemo } from 'react'
+import { MultiSelectFieldFF, ReactFinalForm } from '@dhis2/ui'
+import React, { useEffect, useMemo, useCallback } from 'react'
 import styles from './DataMappingForm.module.css'
 
 const { Field, useField } = ReactFinalForm
@@ -22,27 +18,39 @@ const DATA_SETS_FROM_DATA_ELEMENT_QUERY = {
         },
     },
 }
-const getSelectOptionsFromDataElement = (response) => {
+/**
+ * returns { selectOptions, dataSetLookup }, where selectOptions are
+ * { label, value } objects for a Select UI component, and dataSetLookup
+ * is a map of the dataSet objects keyed by ID (useful for the
+ * parse/format trick in the component below)
+ */
+const parseDataSetsResponse = (response) => {
     // if the data element response has a `dataSets` property, use that
+    const dataSetLookup = new Map()
     if (response.dataSets) {
-        return response.dataSets.map(({ id, displayName }) => ({
-            label: displayName,
-            value: id,
-        }))
+        const selectOptions = response.dataSets.map((dataSet) => {
+            // as a side-effect, populated the dataSetLookup
+            dataSetLookup.set(dataSet.id, dataSet)
+            return {
+                label: dataSet.displayName,
+                value: dataSet.id,
+            }
+        })
+        return { selectOptions, dataSetLookup }
     }
 
     // otherwise, assemble a list of data sets based on dataSetElements
-    const dataSetMap = new Map()
-    response.dataSetElements.forEach(({ dataSet: { id, displayName } }) => {
-        // set in a map to avoid duplicates
-        dataSetMap.set(id, displayName)
+    response.dataSetElements.forEach(({ dataSet }) => {
+        // set directly in the map to avoid duplicates
+        dataSetLookup.set(dataSet.id, dataSet)
     })
     const selectOptions = []
-    dataSetMap.forEach((displayName, id) => {
-        selectOptions.push({ label: displayName, value: id })
+    dataSetLookup.forEach((dataSet, id) => {
+        selectOptions.push({ label: dataSet.displayName, value: id })
     })
     selectOptions.sort((a, b) => a.label.localeCompare(b.label))
-    return selectOptions
+
+    return { selectOptions, dataSetLookup }
 }
 
 export const DataSetSelect = () => {
@@ -59,8 +67,8 @@ export const DataSetSelect = () => {
     const dataItem = dataItemField.input.value
 
     // Get the onChange handler to be able to clear this field
-    const dataSetIDField = useField('dataSetID', { subscription: {} })
-    const onChange = dataSetIDField.input.onChange
+    const dataSetsField = useField('dataSets', { subscription: {} })
+    const onChange = dataSetsField.input.onChange
 
     useEffect(() => {
         if (dataItem) {
@@ -70,12 +78,21 @@ export const DataSetSelect = () => {
         onChange(undefined)
     }, [dataItem, refetch, onChange])
 
-    const dataSetOptions = useMemo(() => {
+    const { selectOptions, dataSetLookup } = useMemo(() => {
         if (!data) {
-            return []
+            return { selectOptions: [], dataSetLookup: new Map() }
         }
-        return getSelectOptionsFromDataElement(data.response)
+        return parseDataSetsResponse(data.response)
     }, [data])
+
+    // Because we want the whole dataSet object in the form state, but the
+    // Select UI component can only handle strings as values, we use the
+    // 'format/parse' trick we also use in the DataElementSelect
+    const format = useCallback((dataSets) => dataSets?.map(({ id }) => id), [])
+    const parse = useCallback(
+        (dataSetIDs) => dataSetIDs.map((id) => dataSetLookup.get(id)),
+        [dataSetLookup]
+    )
 
     const placeholderText = useMemo(() => {
         if (loading) {
@@ -93,14 +110,16 @@ export const DataSetSelect = () => {
     return (
         <div className={styles.formRow}>
             <Field
-                name="dataSetID"
+                name="dataSets"
                 component={MultiSelectFieldFF}
-                options={dataSetOptions}
+                options={selectOptions}
+                format={format}
+                parse={parse}
                 label={'Data sets for completeness'}
                 placeholder={placeholderText}
                 // sometimes data elements aren't associated with any data
                 // sets though 🤔
-                disabled={!dataSetOptions.length}
+                disabled={!selectOptions?.length}
             />
         </div>
     )
