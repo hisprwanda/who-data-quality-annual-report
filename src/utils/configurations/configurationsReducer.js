@@ -151,7 +151,6 @@ export function configurationsReducer(configurations, { type, payload }) {
                 lastUpdated: getISOTimestamp(),
             }
 
-            console.log('todo: remove', { configurations, newConfigurations })
             return newConfigurations
         }
 
@@ -179,7 +178,6 @@ export function configurationsReducer(configurations, { type, payload }) {
                 lastUpdated: getISOTimestamp(),
             }
 
-            console.log({ updatedNumerator, newConfigurations })
             return newConfigurations
         }
 

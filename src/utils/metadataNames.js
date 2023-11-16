@@ -46,10 +46,6 @@ export const MetadataNamesProvider = ({ children }) => {
         // compile IDs from numerators, denominators, and external relations
         const dataItemIDs = new Set()
         const dataSetIDs = new Set()
-        console.log({
-            numerator:
-                configurations.numerators[configurations.numerators.length - 1],
-        })
         configurations.numerators.forEach(({ dataID, dataSetID }) => {
             if (dataID) {
                 dataItemIDs.add(dataID)
