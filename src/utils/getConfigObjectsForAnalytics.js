@@ -1,17 +1,3 @@
-// generate a new numerator code
-export const generateNumeratorCode = (numerators) => {
-    if (numerators.length == 0) {
-        return 'C' + '1'
-    }
-    const lastCode = numerators[numerators.length - 1].code
-    const lastNumber = parseInt(lastCode.slice(1))
-
-    const newCodeNumber = lastNumber + 1
-    const newCode = 'C' + newCodeNumber
-
-    return newCode
-}
-
 // TODO: setup the global context to get the stored configurations
 export const getConfigObjectsForAnalytics = (configurations, groupCode) => {
     // return an empty array if the groupcode is not provided

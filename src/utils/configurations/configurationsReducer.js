@@ -8,6 +8,9 @@ export const DELETE_NUMERATOR = 'DELETE_NUMERATOR'
 export const CREATE_NUMERATOR_RELATION = 'CREATE_NUMERATOR_RELATION'
 export const UPDATE_NUMERATOR_RELATION = 'UPDATE_NUMERATOR_RELATION'
 export const DELETE_NUMERATOR_RELATION = 'DELETE_NUMERATOR_RELATION'
+export const CREATE_DENOMINATOR_RELATION = 'CREATE_DENOMINATOR_RELATION'
+export const UPDATE_DENOMINATOR_RELATION = 'UPDATE_DENOMINATOR_RELATION'
+export const DELETE_DENOMINATOR_RELATION = 'DELETE_DENOMINATOR_RELATION'
 
 const DEFAULT_NUMERATOR_QUALITY_PARAMETERS = {
     moderateOutlier: 2,
@@ -339,6 +342,63 @@ export function configurationsReducer(configurations, { type, payload }) {
                 numeratorRelations: [
                     ...prevNumeratorRelations.slice(0, targetIndex),
                     ...prevNumeratorRelations.slice(targetIndex + 1),
+                ],
+                lastUpdated: getISOTimestamp(),
+            }
+            return newConfigurations
+        }
+
+        case CREATE_DENOMINATOR_RELATION: {
+            const prevDenominatorRelations = configurations.denominatorRelations
+            //TODO: the old app uses PR as the prefix for denominator relations, i think this should be changed to DR
+            const nextAvailableCode = getNextAvailableCode(
+                prevDenominatorRelations,
+                'PR'
+            )
+            const newDenominatorRelation = {
+                ...payload.newDenominatorRelationInfo,
+                code: nextAvailableCode,
+            }
+            const newConfigurations = {
+                ...configurations,
+                denominatorRelations: [
+                    ...prevDenominatorRelations,
+                    newDenominatorRelation,
+                ],
+                lastUpdated: getISOTimestamp(),
+            }
+            return newConfigurations
+        }
+
+        case UPDATE_DENOMINATOR_RELATION: {
+            const { updatedDenominatorRelation, code } = payload
+            const prevDenominatorRelations = configurations.denominatorRelations
+            const targetIndex = prevDenominatorRelations.findIndex(
+                (dr) => dr.code === code
+            )
+            const newConfigurations = {
+                ...configurations,
+                denominatorRelations: [
+                    ...prevDenominatorRelations.slice(0, targetIndex),
+                    updatedDenominatorRelation,
+                    ...prevDenominatorRelations.slice(targetIndex + 1),
+                ],
+                lastUpdated: getISOTimestamp(),
+            }
+            return newConfigurations
+        }
+
+        case DELETE_DENOMINATOR_RELATION: {
+            const { code } = payload
+            const prevDenominatorRelations = configurations.denominatorRelations
+            const targetIndex = prevDenominatorRelations.findIndex(
+                (nr) => nr.code === code
+            )
+            const newConfigurations = {
+                ...configurations,
+                denominatorRelations: [
+                    ...prevDenominatorRelations.slice(0, targetIndex),
+                    ...prevDenominatorRelations.slice(targetIndex + 1),
                 ],
                 lastUpdated: getISOTimestamp(),
             }
