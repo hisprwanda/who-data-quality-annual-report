@@ -242,9 +242,6 @@ export function configurationsReducer(configurations, { type, payload }) {
                 members: group.members.filter((id) => id !== code),
             }))
 
-            // todo: 4. Remove from numerator relations? See what old app does
-            // todo: 5. Remove from external relations? " "
-
             const newConfigurations = {
                 ...configurations,
                 numerators: newNumerators,
