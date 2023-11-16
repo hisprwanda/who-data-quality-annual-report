@@ -231,6 +231,12 @@ export const NumeratorTableItem = ({ numerator }) => {
         [configurations, numerator]
     )
 
+    const getDataSetName = useCallback(
+        (id) =>
+            configurations.dataSets.find((dataSet) => dataSet.id === id)?.name,
+        [configurations]
+    )
+
     const dataSetNames = React.useMemo(() => {
         const { dataSetID } = numerator
         if (!dataSetID) {
@@ -238,12 +244,12 @@ export const NumeratorTableItem = ({ numerator }) => {
         }
         if (Array.isArray(dataSetID)) {
             return dataSetID
-                .map((id) => metadataNames.get(id))
+                .map((id) => getDataSetName(id))
                 .filter((e) => e)
                 .join(', ')
         }
-        return metadataNames.get(dataSetID)
-    }, [metadataNames, numerator])
+        return getDataSetName(dataSetID)
+    }, [getDataSetName, numerator])
 
     return (
         <TableRow>

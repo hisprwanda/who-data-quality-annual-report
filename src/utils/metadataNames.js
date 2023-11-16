@@ -1,36 +1,29 @@
 import { useDataEngine } from '@dhis2/app-runtime'
 import PropTypes from 'prop-types'
-import React, { useState, useEffect, useContext } from 'react'
+import React, { useState, useEffect, useContext, useMemo } from 'react'
 import { useConfigurations } from './configurations/index.js'
 
 /**
  * This is a kinda unusual feature set to fetch the names of all the metadata
  * used in the app configurations. Returns a map of [id]: value pairs. Combines
- * data elements, indicators, and data sets in one object
+ * data elements and indicators into one object
  */
 
 const MetadataNamesContext = React.createContext(new Map())
 
-const METADATA_NAMES_QUERY = {
+const DATA_ITEM_NAMES_QUERY = {
     dataElements: {
         resource: 'dataElements',
-        params: ({ dataItemIDs }) => ({
-            filter: `id:in:[${dataItemIDs.join(',')}]`,
+        params: ({ dataItemIDsString }) => ({
+            filter: `id:in:[${dataItemIDsString}]`,
             // default fields are id, displayName
             paging: false,
         }),
     },
     indicators: {
         resource: 'indicators',
-        params: ({ dataItemIDs }) => ({
-            filter: `id:in:[${dataItemIDs.join(',')}]`,
-            paging: false,
-        }),
-    },
-    dataSets: {
-        resource: 'dataSets',
-        params: ({ dataSetIDs }) => ({
-            filter: `id:in:[${dataSetIDs.join(',')}]`,
+        params: ({ dataItemIDsString }) => ({
+            filter: `id:in:[${dataItemIDsString}]`,
             paging: false,
         }),
     },
@@ -42,47 +35,28 @@ export const MetadataNamesProvider = ({ children }) => {
     const configurations = useConfigurations()
     const engine = useDataEngine()
 
-    useEffect(() => {
+    // Calculate this is a string -- if the string hasn't changed, the request
+    // won't need to refetch
+    const dataItemIDsString = useMemo(() => {
         // compile IDs from numerators, denominators, and external relations
         const dataItemIDs = new Set()
-        const dataSetIDs = new Set()
-        configurations.numerators.forEach(({ dataID, dataSetID }) => {
-            if (dataID) {
-                dataItemIDs.add(dataID)
-            }
-            if (dataID === 'fbfJHSPpUQD') {
-                console.log({ dataID, dataSetID })
-            }
-            if (dataSetID?.length) {
-                // dataSetID could be a string or an array
-                if (Array.isArray(dataSetID)) {
-                    // console.log({ dataID, dataSetIDs })
-                    dataSetID.forEach((id) => dataSetIDs.add(id))
-                } else {
-                    dataSetIDs.add(dataSetID)
-                }
-            }
-        })
-        configurations.denominators.forEach(({ dataID }) => {
-            if (dataID) {
-                dataItemIDs.add(dataID)
-            }
-        })
-        configurations.externalRelations.forEach(({ externalData }) => {
-            if (externalData) {
-                dataItemIDs.add(externalData)
-            }
-        })
+        configurations.numerators.forEach(
+            ({ dataID }) => dataID && dataItemIDs.add(dataID)
+        )
+        configurations.denominators.forEach(
+            ({ dataID }) => dataID && dataItemIDs.add(dataID)
+        )
+        configurations.externalRelations.forEach(
+            ({ externalData }) => externalData && dataItemIDs.add(externalData)
+        )
+        // return as comma-separated values
+        return [...dataItemIDs].join(',')
+    }, [configurations])
 
+    useEffect(() => {
         // use IDs to fetch names
         engine
-            .query(METADATA_NAMES_QUERY, {
-                variables: {
-                    // convert sets to arrays
-                    dataItemIDs: [...dataItemIDs],
-                    dataSetIDs: [...dataSetIDs],
-                },
-            })
+            .query(DATA_ITEM_NAMES_QUERY, { variables: { dataItemIDsString } })
             .then((data) => {
                 // set up a map with all our new IDs and names
                 // (different object types are all in the same map)
@@ -91,15 +65,10 @@ export const MetadataNamesProvider = ({ children }) => {
                     newMetadataNames.set(id, displayName)
                 data.dataElements.dataElements.forEach(addToMap)
                 data.indicators.indicators.forEach(addToMap)
-                data.dataSets.dataSets.forEach(addToMap)
+                // data.dataSets.dataSets.forEach(addToMap)
                 setMetadataNames(newMetadataNames)
             })
-    }, [
-        configurations.numerators,
-        configurations.denominators,
-        configurations.externalRelations,
-        engine,
-    ])
+    }, [engine, dataItemIDsString])
 
     // designed to not block the UI while loading, since it's fairly non-essential
 
