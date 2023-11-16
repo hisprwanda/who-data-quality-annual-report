@@ -1,19 +1,5 @@
 import { CORE_GROUP_CODE } from '../components/report-parameter-selector/index.js'
 
-// generate a new numerator code
-export const generateNumeratorCode = (numerators) => {
-    if (numerators.length == 0) {
-        return 'C' + '1'
-    }
-    const lastCode = numerators[numerators.length - 1].code
-    const lastNumber = parseInt(lastCode.slice(1))
-
-    const newCodeNumber = lastNumber + 1
-    const newCode = 'C' + newCodeNumber
-
-    return newCode
-}
-
 const isInGroup = ({ numerator, groupCode, members }) => {
     if (groupCode === CORE_GROUP_CODE) {
         return numerator.core

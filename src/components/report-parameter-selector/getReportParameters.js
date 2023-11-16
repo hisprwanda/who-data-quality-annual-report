@@ -1,4 +1,4 @@
-import { getConfigObjectsForAnalytics } from '../../utils/utils.js'
+import { getConfigObjectsForAnalytics } from '../../utils/getConfigObjectsForAnalytics.js'
 
 export const getReportParameters = ({
     groupID,
