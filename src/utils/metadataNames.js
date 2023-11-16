@@ -9,7 +9,7 @@ import { useConfigurations } from './configurations/index.js'
  * data elements and indicators into one object
  */
 
-const MetadataNamesContext = React.createContext(new Map())
+const DataItemNames = React.createContext(new Map())
 
 const DATA_ITEM_NAMES_QUERY = {
     dataElements: {
@@ -30,8 +30,8 @@ const DATA_ITEM_NAMES_QUERY = {
 }
 
 const emptyMap = new Map() // save useState from remaking this every render
-export const MetadataNamesProvider = ({ children }) => {
-    const [metadataNames, setMetadataNames] = useState(emptyMap)
+export const DataItemNamesProvider = ({ children }) => {
+    const [dataItemNames, setDataItemNames] = useState(emptyMap)
     const configurations = useConfigurations()
     const engine = useDataEngine()
 
@@ -60,34 +60,33 @@ export const MetadataNamesProvider = ({ children }) => {
             .then((data) => {
                 // set up a map with all our new IDs and names
                 // (different object types are all in the same map)
-                const newMetadataNames = new Map()
+                const newDataItemNames = new Map()
                 const addToMap = ({ id, displayName }) =>
-                    newMetadataNames.set(id, displayName)
+                    newDataItemNames.set(id, displayName)
                 data.dataElements.dataElements.forEach(addToMap)
                 data.indicators.indicators.forEach(addToMap)
-                // data.dataSets.dataSets.forEach(addToMap)
-                setMetadataNames(newMetadataNames)
+                setDataItemNames(newDataItemNames)
             })
     }, [engine, dataItemIDsString])
 
     // designed to not block the UI while loading, since it's fairly non-essential
 
     return (
-        <MetadataNamesContext.Provider value={metadataNames}>
+        <DataItemNames.Provider value={dataItemNames}>
             {children}
-        </MetadataNamesContext.Provider>
+        </DataItemNames.Provider>
     )
 }
-MetadataNamesProvider.propTypes = { children: PropTypes.node }
+DataItemNamesProvider.propTypes = { children: PropTypes.node }
 
-export const useMetadataNames = () => {
-    const metadataNames = useContext(MetadataNamesContext)
+export const useDataItemNames = () => {
+    const dataItemNames = useContext(DataItemNames)
 
-    if (metadataNames === undefined) {
+    if (dataItemNames === undefined) {
         throw new Error(
-            'useMetadataNames must be used within a MetadataNamesProvider'
+            'useDataItemNames must be used within a DataItemNamesProvider'
         )
     }
 
-    return metadataNames
+    return dataItemNames
 }

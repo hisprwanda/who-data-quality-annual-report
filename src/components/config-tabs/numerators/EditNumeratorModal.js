@@ -18,7 +18,7 @@ import {
 } from '@dhis2/ui'
 import PropTypes from 'prop-types'
 import React from 'react'
-import { useConfigurations, useMetadataNames } from '../../../utils/index.js'
+import { useConfigurations, useDataItemNames } from '../../../utils/index.js'
 import { DataMappingFormSection } from './DataMappingForm.js'
 import styles from './EditNumeratorModal.module.css'
 
@@ -35,8 +35,8 @@ const DEFAULT_NUMERATOR_VALUES = {
 }
 
 const CurrentMappingInfo = ({ dataID }) => {
-    const metadataNames = useMetadataNames()
-    const dataItemName = metadataNames.get(dataID)
+    const dataItemNames = useDataItemNames()
+    const dataItemName = dataItemNames.get(dataID)
 
     return (
         <div

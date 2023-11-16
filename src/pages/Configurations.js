@@ -1,13 +1,13 @@
 import React from 'react'
 import ConfigTabs from '../components/config-tabs/ConfigTabs.js'
-import { MetadataNamesProvider, useConfigurations } from '../utils/index.js'
+import { DataItemNamesProvider, useConfigurations } from '../utils/index.js'
 import styles from './Configurations.module.css'
 
 export const Configurations = () => {
     const configurations = useConfigurations()
 
     return (
-        <MetadataNamesProvider>
+        <DataItemNamesProvider>
             <div className={styles.configurationsContainer}>
                 <div className={styles.subContainer}>
                     <div className={styles.descriptionText}>
@@ -27,6 +27,6 @@ export const Configurations = () => {
                     </div>
                 </div>
             </div>
-        </MetadataNamesProvider>
+        </DataItemNamesProvider>
     )
 }

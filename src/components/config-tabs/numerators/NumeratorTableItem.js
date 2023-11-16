@@ -9,7 +9,7 @@ import {
     UPDATE_NUMERATOR,
     useConfigurations,
     useConfigurationsDispatch,
-    useMetadataNames,
+    useDataItemNames,
 } from '../../../utils/index.js'
 import { getNumeratorMemberGroups } from '../../../utils/numeratorsMetadataData.js'
 import { ConfirmationModal } from '../ConfirmationModal.js'
@@ -224,7 +224,7 @@ DeleteNumeratorButton.propTypes = {
 
 export const NumeratorTableItem = ({ numerator }) => {
     const configurations = useConfigurations()
-    const metadataNames = useMetadataNames()
+    const dataItemNames = useDataItemNames()
 
     const groupsContainingNumerator = React.useMemo(
         () => getNumeratorMemberGroups(configurations, numerator.code),
@@ -262,7 +262,7 @@ export const NumeratorTableItem = ({ numerator }) => {
             </TableCell>
             <TableCell dense>{numerator.name}</TableCell>
             <TableCell dense>{numerator.core ? '✔️' : ''}</TableCell>
-            <TableCell dense>{metadataNames.get(numerator.dataID)}</TableCell>
+            <TableCell dense>{dataItemNames.get(numerator.dataID)}</TableCell>
             <TableCell dense>{dataSetNames}</TableCell>
             <TableCell dense>
                 <ButtonStrip end>
