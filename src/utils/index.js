@@ -1,3 +1,3 @@
 export * from './configurations/index.js'
 export { getNextAvailableCode } from './getNextAvailableCode.js'
-export { DataItemNamesProvider, useDataItemNames } from './metadataNames.js'
+export { DataItemNamesProvider, useDataItemNames } from './dataItemNames.js'
