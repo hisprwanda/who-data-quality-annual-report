@@ -25,13 +25,18 @@ const EditNumeratorButton = ({ numerator, groupsContainingNumerator }) => {
     const closeModal = useCallback(() => setEditModalOpen(false), [])
 
     const updateNumerator = useCallback(
-        ({ newNumeratorData, groupsContainingNumerator }) => {
+        ({
+            newNumeratorData,
+            groupsContainingNumerator,
+            dataSetsContainingNumerator,
+        }) => {
             dispatch({
                 type: UPDATE_NUMERATOR,
                 payload: {
                     code: numerator.code,
                     updatedNumeratorData: newNumeratorData,
                     groupsContainingNumerator,
+                    dataSetsContainingNumerator,
                 },
             })
         },
