@@ -1,16 +1,43 @@
-import React from 'react';
-import { getNumeratorsInGroup } from '../../../utils/numeratorsMetadataData';
-import { ButtonStrip, Button, IconSubtractCircle16,
+import {
+    ButtonStrip,
+    Button,
+    IconSubtractCircle16,
     TableCell,
-    TableRow
-} from '@dhis2/ui';
-
+    TableRow,
+} from '@dhis2/ui'
+import PropTypes from 'prop-types'
+import React, { useMemo, useCallback } from 'react'
+import {
+    UPDATE_NUMERATOR_GROUP,
+    useConfigurationsDispatch,
+} from '../../../utils/index.js'
+import { getNumeratorsInGroup } from '../../../utils/numeratorsMetadataData.js'
 
 export const NumeratorGroupsTableItem = ({ numerators, group }) => {
+    const dispatch = useConfigurationsDispatch()
 
-    // get numerators in group and display them in a table row with a delete button for each numerator
-    const numeratorsInGroup = getNumeratorsInGroup(numerators, group)
-    
+    const numeratorsInGroup = useMemo(
+        () => getNumeratorsInGroup(numerators, group),
+        [numerators, group]
+    )
+
+    const onRemoveNumerator = useCallback(
+        (group, numerator) => {
+            const newGroup = {
+                ...group,
+                members: group.members.filter(
+                    (member) => member !== numerator.code
+                ),
+            }
+
+            dispatch({
+                type: UPDATE_NUMERATOR_GROUP,
+                payload: { updatedGroup: newGroup, code: group.code },
+            })
+        },
+        [dispatch]
+    )
+
     return (
         <>
             {numeratorsInGroup.length > 0 ? (
@@ -19,25 +46,21 @@ export const NumeratorGroupsTableItem = ({ numerators, group }) => {
                         <TableCell>{numerator.name}</TableCell>
                         <TableCell>
                             <ButtonStrip end>
-                            <Button
-                                name="Primary button"
-                                small
-                                
-                                onClick={() =>
-                                    onDeleteNumerator(
-                                        group.code,
-                                        numerator.code
-                                    )
-                                }
-                                secondary
-                                basic
-                                button
-                                value="default"
-                                icon={<IconSubtractCircle16 />}
-                            >
-                                {' '}
-                                Remove
-                            </Button>
+                                <Button
+                                    name="Primary button"
+                                    small
+                                    onClick={() =>
+                                        onRemoveNumerator(group, numerator)
+                                    }
+                                    secondary
+                                    basic
+                                    button
+                                    value="default"
+                                    icon={<IconSubtractCircle16 />}
+                                >
+                                    {' '}
+                                    Remove
+                                </Button>
                             </ButtonStrip>
                         </TableCell>
                     </TableRow>
@@ -49,6 +72,10 @@ export const NumeratorGroupsTableItem = ({ numerators, group }) => {
                 </TableRow>
             )}
         </>
-    );
-};
+    )
+}
 
+NumeratorGroupsTableItem.propTypes = {
+    group: PropTypes.object,
+    numerators: PropTypes.array,
+}
