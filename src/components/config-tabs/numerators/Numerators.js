@@ -27,12 +27,17 @@ const AddNewNumeratorButton = () => {
     const closeModal = useCallback(() => setAddNewModalOpen(false), [])
 
     const addNewNumeratorRelation = useCallback(
-        ({ newNumeratorData, groupsContainingNumerator }) => {
+        ({
+            newNumeratorData,
+            groupsContainingNumerator,
+            dataSetsContainingNumerator,
+        }) => {
             dispatch({
                 type: CREATE_NUMERATOR,
                 payload: {
                     newNumeratorData,
                     groupsContainingNumerator,
+                    dataSetsContainingNumerator,
                 },
             })
         },

@@ -17,6 +17,13 @@ const DEFAULT_NUMERATOR_QUALITY_PARAMETERS = {
     comparison: 'ou',
     missing: 90,
 }
+const DEFAULT_DATASET_QUALITY_PARAMETERS = {
+    comparison: 'ou',
+    consistencyThreshold: 33,
+    threshold: 90,
+    timelinessThreshold: 75,
+    trend: 'constant',
+}
 
 const getISOTimestamp = () => new Date().toISOString()
 
@@ -39,7 +46,11 @@ export function configurationsReducer(configurations, { type, payload }) {
     switch (type) {
         // Numerators
         case CREATE_NUMERATOR: {
-            const { newNumeratorData, groupsContainingNumerator } = payload
+            const {
+                newNumeratorData,
+                groupsContainingNumerator,
+                dataSetsContainingNumerator,
+            } = payload
 
             // 1. Add to numerators list
             const prevNumerators = configurations.numerators
@@ -81,6 +92,32 @@ export function configurationsReducer(configurations, { type, payload }) {
                 newConfigurations = {
                     ...newConfigurations,
                     groups: newGroups,
+                }
+            }
+
+            // 4. See if we need to add any new dataSets
+            if (dataSetsContainingNumerator?.length) {
+                const prevDataSets = configurations.dataSets
+                const newDataSets = [...prevDataSets]
+                dataSetsContainingNumerator.forEach((dataSet) => {
+                    if (prevDataSets.find(({ id }) => id === dataSet.id)) {
+                        return
+                    }
+                    const newDataSet = {
+                        id: dataSet.id,
+                        // important: app needs to use `name` property
+                        name: dataSet.displayName,
+                        periodType: dataSet.periodType,
+                        ...DEFAULT_DATASET_QUALITY_PARAMETERS,
+                    }
+                    // if not there already, add this dataSet
+                    // (push is okay bc this is a new object)
+                    newDataSets.push(newDataSet)
+                })
+
+                newConfigurations = {
+                    ...newConfigurations,
+                    dataSets: newDataSets,
                 }
             }
 
