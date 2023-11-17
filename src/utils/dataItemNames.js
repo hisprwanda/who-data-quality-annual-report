@@ -6,7 +6,7 @@ import { useConfigurations } from './configurations/index.js'
 /**
  * This is a kinda unusual feature set to fetch the names of all the metadata
  * used in the app configurations. Returns a map of [id]: value pairs. Combines
- * data elements and indicators into one object
+ * data elements, data element operands, and indicators into one object
  */
 
 const DataItemNames = React.createContext(new Map())
@@ -17,6 +17,14 @@ const DATA_ITEM_NAMES_QUERY = {
         params: ({ dataItemIDsString }) => ({
             filter: `id:in:[${dataItemIDsString}]`,
             // default fields are id, displayName
+            paging: false,
+        }),
+    },
+    dataElementOperands: {
+        resource: 'dataElementOperands',
+        params: ({ dataItemIDsString }) => ({
+            filter: `id:in:[${dataItemIDsString}]`,
+            fields: 'id,displayName',
             paging: false,
         }),
     },
@@ -64,6 +72,7 @@ export const DataItemNamesProvider = ({ children }) => {
                 const addToMap = ({ id, displayName }) =>
                     newDataItemNames.set(id, displayName)
                 data.dataElements.dataElements.forEach(addToMap)
+                data.dataElementOperands.dataElementOperands.forEach(addToMap)
                 data.indicators.indicators.forEach(addToMap)
                 setDataItemNames(newDataItemNames)
             })
