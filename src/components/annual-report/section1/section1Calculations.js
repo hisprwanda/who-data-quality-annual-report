@@ -330,8 +330,8 @@ const getFacilityReportingData = ({
         const dataset_levels = filteredData_levels[key] // a corresponding dataset in the reporting rates by ou level
 
         // Calculate "divergentRegionsCount" and "divergentRegionsPercent"
-        const divergentRegionsCount = regionsWithLowScore.length
-        const totalRegionsCount = dataset_levels.length
+        const divergentRegionsCount = regionsWithLowScore?.length
+        const totalRegionsCount = dataset_levels?.length
 
         // in case no region was under the threshold, the divergent % will remain zero
         let divergentRegionsPercent = 0
@@ -404,8 +404,8 @@ const getConsistencyOfDatasetCompletenessData = ({
             })
 
         // Calculate "divergentRegionsCount" and "divergentRegionsPercent"
-        const divergentRegionsCount = regionsWithLowScore.length
-        const totalRegionsCount = regions.length
+        const divergentRegionsCount = regionsWithLowScore?.length
+        const totalRegionsCount = regions?.length
 
         // in case no region was under the threshold, the divergent % will remain zero
         let divergentRegionsPercent = 0
