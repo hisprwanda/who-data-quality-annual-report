@@ -10,7 +10,7 @@ import {
     getNumeratorNameByCode,
     getRelationType,
 } from '../../../utils/numeratorsMetadataData.js'
-import { ConfirmationModal } from './ConfirmationModal.js'
+import { ConfirmationModal } from '../ConfirmationModal.js'
 import { EditNumeratorRelationModal } from './EditNumeratorRelationModal.js'
 
 /** Manages the "update form" modal and datastore mutation */

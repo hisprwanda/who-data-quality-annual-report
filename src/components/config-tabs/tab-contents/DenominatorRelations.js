@@ -32,7 +32,7 @@ import {
     useConfigurations,
     useConfigurationsDispatch,
 } from '../../../utils/index.js'
-import { ConfirmationModal } from '../numerator-relations/ConfirmationModal.js'
+import { ConfirmationModal } from '../ConfirmationModal.js'
 
 /** Manages the "delete confirmation" modal and datastore mutation */
 const DeleteRelationButton = ({ relation }) => {
@@ -111,25 +111,27 @@ export const DenominatorRelations = ({ toggleState }) => {
     }
 
     // TODO: will put the edit and add denominators in different components to avoid if conditions below
-    const onSaveDenominatorUpdates = useCallback((updateType) => {
-        if (updateType === 'create') {
-            dispatch({
-                type: CREATE_DENOMINATOR_RELATION,
-                payload: { newDenominatorRelationInfo },
-            }),
-                [dispatch]
-        } else if (updateType === 'update') {
-            dispatch({
-                type: UPDATE_DENOMINATOR_RELATION,
-                payload: {
-                    code: newDenominatorRelationInfo.code,
-                    updatedDenominatorRelation: newDenominatorRelationInfo,
-                },
-            })[(dispatch, newDenominatorRelationInfo.code)]
-        }
+    const onSaveDenominatorUpdates = useCallback(
+        (updateType) => {
+            if (updateType === 'create') {
+                dispatch({
+                    type: CREATE_DENOMINATOR_RELATION,
+                    payload: { newDenominatorRelationInfo },
+                })
+            } else if (updateType === 'update') {
+                dispatch({
+                    type: UPDATE_DENOMINATOR_RELATION,
+                    payload: {
+                        code: newDenominatorRelationInfo.code,
+                        updatedDenominatorRelation: newDenominatorRelationInfo,
+                    },
+                })
+            }
 
-        closeModal()
-    })
+            closeModal()
+        },
+        [dispatch, newDenominatorRelationInfo, closeModal]
+    )
 
     // while in editing mode
     const onEditRelation = (relation) => {
@@ -481,5 +483,5 @@ export const DenominatorRelations = ({ toggleState }) => {
 }
 
 DenominatorRelations.propTypes = {
-    toggleState: PropTypes.string,
+    toggleState: PropTypes.number,
 }
