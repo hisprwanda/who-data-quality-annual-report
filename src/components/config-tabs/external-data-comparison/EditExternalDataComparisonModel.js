@@ -19,6 +19,7 @@ import {
 import PropTypes from 'prop-types'
 import React, { useState } from 'react'
 import { useConfigurations } from '../../../utils/index.js'
+import { DataMappingFormSection } from './DataMappingForm.js'
 const { Form, Field, useField } = ReactFinalForm
 
 const DEFAULT_FORM_VALUES = {
@@ -272,7 +273,9 @@ export const EditExternalDataComparisonModel = ({
                                         />
                                     </TableCell>
                                 </TableRow>
-                                <TableRow>
+
+                                <DataMappingFormSection />
+                                {/* <TableRow>
                                     <TableCell>
                                         <p>Survey/external indicator</p>
                                     </TableCell>
@@ -387,17 +390,6 @@ export const EditExternalDataComparisonModel = ({
                                 </TableRow>
                                 <TableRow>
                                     <TableCell>
-                                        <p>Threshold (+/- %)</p>
-                                    </TableCell>
-                                    <TableCell>
-                                        <Field
-                                            name="criteria"
-                                            component={InputFieldFF}
-                                        />
-                                    </TableCell>
-                                </TableRow>
-                                <TableRow>
-                                    <TableCell>
                                         <p>Survel level</p>
                                     </TableCell>
                                     <TableCell>
@@ -406,6 +398,17 @@ export const EditExternalDataComparisonModel = ({
                                             component={SingleSelectFieldFF}
                                             options={orgUnitsLevels}
                                             placeholder="Select organisation unit level"
+                                        />
+                                    </TableCell>
+                                </TableRow> */}
+                                <TableRow>
+                                    <TableCell>
+                                        <p>Threshold (+/- %)</p>
+                                    </TableCell>
+                                    <TableCell>
+                                        <Field
+                                            name="criteria"
+                                            component={InputFieldFF}
                                         />
                                     </TableCell>
                                 </TableRow>
