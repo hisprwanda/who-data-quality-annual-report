@@ -3,6 +3,7 @@ import React, { useState, useEffect, useMemo } from 'react'
 import { TOTALS } from './constants.js'
 import styles from './DataMappingForm.module.css'
 import { useEngineQuery } from './useEngineQuery.js'
+import { useDataMappingFieldValidator } from './useIsFieldRequired.js'
 
 const { Field, useField } = ReactFinalForm
 
@@ -19,6 +20,7 @@ export const VARIABLES_QUERY = {
 export const VariableSelect = () => {
     const { fetch, loading, error } = useEngineQuery()
     const [options, setOptions] = useState(null)
+    const validate = useDataMappingFieldValidator()
 
     // Depends on dataItem and dataElementType
     const dataItemField = useField('dataItem', {
@@ -78,6 +80,7 @@ export const VariableSelect = () => {
             <Field
                 name="dataElementOperandID"
                 component={SingleSelectFieldFF}
+                validate={validate}
                 options={options || []}
                 label={'Variable for completeness'}
                 placeholder={placeholderText}
