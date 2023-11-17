@@ -1,5 +1,13 @@
 export const getVal = ({ response, dx, ou, pe }) => {
-    return response?.[dx]?.[ou]?.[pe]
+    const val = response?.[dx]?.[ou]?.[pe]
+    if (typeof val !== 'object') {
+        return val
+    }
+    return undefined
+}
+
+export const getValCO = ({ response, dx, ou, pe, co }) => {
+    return response?.[dx]?.[ou]?.[pe]?.[co]
 }
 
 export const sortArrayAfterIndex1 = (unsortedArray) => {
@@ -29,6 +37,7 @@ export const convertAnalyticsResponseToObject = ({ headers, rows }) => {
         const dx = rowData.dx
         const pe = rowData.pe
         const ou = rowData.ou
+        const co = rowData.co
 
         if (!restructuredData[dx]) {
             restructuredData[dx] = {}
@@ -38,8 +47,20 @@ export const convertAnalyticsResponseToObject = ({ headers, rows }) => {
             restructuredData[dx][ou] = {}
         }
 
-        if (!restructuredData[dx][ou][pe] && !isNaN(Number(rowData.value))) {
-            restructuredData[dx][ou][pe] = Number(rowData.value)
+        if (!restructuredData[dx][ou][pe]) {
+            if (co) {
+                restructuredData[dx][ou][pe] = {}
+            } else {
+                restructuredData[dx][ou][pe] = undefined // must be undefined to prevent calculation errors with null
+            }
+        }
+
+        if (!isNaN(Number(rowData.value))) {
+            if (co) {
+                restructuredData[dx][ou][pe][co] = Number(rowData.value)
+            } else {
+                restructuredData[dx][ou][pe] = Number(rowData.value)
+            }
         }
     }
     return restructuredData

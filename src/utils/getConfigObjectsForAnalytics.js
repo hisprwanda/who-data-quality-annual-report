@@ -23,7 +23,8 @@ export const getConfigObjectsForAnalytics = (configurations, groupCode) => {
                 isInGroup({ numerator, groupCode, members }) &&
                 numerator.dataID &&
                 numerator.dataSetID &&
-                numerator.dataSetID.length
+                numerator.dataSetID.length &&
+                numerator.dataElementOperandID
             )
         })
         // and convert numerator dataSetID to an array of IDs if not already the case (backwards compatibility)
