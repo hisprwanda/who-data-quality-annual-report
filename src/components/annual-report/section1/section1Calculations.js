@@ -517,15 +517,15 @@ const calculateSection1C = ({
         //  get overall values
         const numerator = mappedConfigurations.dataElementsAndIndicators[de]
         const threshold = numerator.missing
-        const [deOperand = de, coOperand = defaultCOC] =
+        const [deID = de, cocID = defaultCOC] =
             numerator.dataElementOperandID?.split('.')
 
         const actualValues = getActualValue1C({
             response: overall_counts,
             pe: period,
             ou: overallOrgUnit,
-            dx: deOperand,
-            co: coOperand,
+            dx: deID,
+            co: cocID,
         })
         const expectedValues = getExpectedValues({
             response: overall_expected_reports,
@@ -545,8 +545,8 @@ const calculateSection1C = ({
                 response: by_level_counts,
                 pe: period,
                 ou: subOrgUnit,
-                dx: deOperand,
-                co: coOperand,
+                dx: deID,
+                co: cocID,
             })
             const expectedSubOrgUnit = getExpectedValues({
                 response: by_level_expected_reports,
@@ -566,9 +566,9 @@ const calculateSection1C = ({
             expectedValues,
             actualValues,
             overallScore,
-            indicator_name: `${metadata[deOperand]?.name} ${
-                coOperand && coOperand !== defaultCOC
-                    ? '(' + metadata[coOperand]?.name + ')'
+            indicator_name: `${metadata[deID]?.name} ${
+                cocID && cocID !== defaultCOC
+                    ? '(' + metadata[cocID]?.name + ')'
                     : ''
             }`,
             orgUnitLevelsOrGroups: divergentSubOrgUnits
