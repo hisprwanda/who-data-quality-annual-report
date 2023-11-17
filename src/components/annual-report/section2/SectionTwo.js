@@ -1,7 +1,15 @@
+import { TableBody, TableHead, TableRow } from '@dhis2/ui'
 import PropTypes from 'prop-types'
 import React, { useEffect } from 'react'
 import { Chart } from '../Chart.js'
 import { NoDataInfoBox } from '../common/NoDataWarning.js'
+import {
+    ReportCell,
+    ReportCellHead,
+    ReportRowHead,
+    ReportTable,
+} from '../ReportTable.js'
+import styles from './SectionTwo.module.css'
 import { useSectionTwoData } from './useSectionTwoData.js'
 
 const sectionInformation = {
@@ -11,7 +19,7 @@ const sectionInformation = {
             'Extreme outliers, using the standard method. Threshold denotes the number of standard deviations from the mean. Region are counted as divergent if they have one or more extreme outliers for an indicator.',
     },
     section2b: {
-        title: '2a: Moderate outliers',
+        title: '2b: Moderate outliers',
         subtitle:
             'Moderate outliers, using the standard method. Threshold denotes the number of standard deviations from the mean. Region are counted as divergent if they have two or more moderate outliers for an indicator.',
     },
@@ -34,12 +42,14 @@ const sectionInformation = {
 
 const SubSectionLayout = ({ title, subtitle }) => (
     <>
-        <tr>
-            <th colSpan="6">{title}</th>
-        </tr>
-        <tr>
-            <th colSpan="6">{subtitle}</th>
-        </tr>
+        <ReportRowHead>
+            <ReportCellHead colSpan="6">{title}</ReportCellHead>
+        </ReportRowHead>
+        <TableRow>
+            <ReportCell colSpan="6" className={styles.subsectionSubtitle}>
+                {subtitle}
+            </ReportCell>
+        </TableRow>
     </>
 )
 
@@ -51,53 +61,64 @@ SubSectionLayout.propTypes = {
 const Sections2a2b2c = ({ title, subtitle, subsectionData }) => {
     if (subsectionData.length === 0) {
         return (
-            <>
-                <table>
-                    <tbody>
+            <div className={styles.section2abcContainer}>
+                <ReportTable>
+                    <TableHead>
                         <SubSectionLayout title={title} subtitle={subtitle} />
-                    </tbody>
-                </table>
+                    </TableHead>
+                </ReportTable>
                 <NoDataInfoBox subsection={true} />
-            </>
+            </div>
         )
     }
 
     return (
-        <table>
-            <tbody>
-                <SubSectionLayout title={title} subtitle={subtitle} />
-                <tr>
-                    <th rowSpan="2" width="200">
-                        Indicator
-                    </th>
-                    <th rowSpan="2" width="80">
-                        Threshold
-                    </th>
-                    <th rowSpan="2" width="80">
-                        Overall score (%)
-                    </th>
-                    <th colSpan="3">Region with divergent score</th>
-                </tr>
-                <tr>
-                    <th width="110">Number</th>
-                    <th width="110">Percent</th>
-                    <th>Names</th>
-                </tr>
-                {subsectionData.map((dataRow) => (
-                    <tr key={dataRow.indicator}>
-                        <td>{dataRow.indicator}</td>
-                        <td>{dataRow.threshold} SD</td>
-                        <td>{dataRow.overallScore}</td>
-                        <td>{dataRow.divergentScores?.number}</td>
-                        <td>{dataRow.divergentScores?.percentage}</td>
-                        <td>{dataRow.divergentScores?.names}</td>
-                    </tr>
-                ))}
-            </tbody>
-        </table>
+        <div className={styles.section2abcContainer}>
+            <ReportTable>
+                <TableHead>
+                    <SubSectionLayout title={title} subtitle={subtitle} />
+                    <ReportRowHead>
+                        <ReportCellHead rowSpan="2" width="200">
+                            Indicator
+                        </ReportCellHead>
+                        <ReportCellHead rowSpan="2" width="80">
+                            Threshold
+                        </ReportCellHead>
+                        <ReportCellHead rowSpan="2" width="80">
+                            Overall score
+                        </ReportCellHead>
+                        <ReportCellHead colSpan="3">
+                            Region with divergent score
+                        </ReportCellHead>
+                    </ReportRowHead>
+                    <ReportRowHead>
+                        <ReportCellHead width="110">Number</ReportCellHead>
+                        <ReportCellHead width="110">Percent</ReportCellHead>
+                        <ReportCellHead>Names</ReportCellHead>
+                    </ReportRowHead>
+                </TableHead>
+                <TableBody>
+                    {subsectionData.map((dataRow) => (
+                        <TableRow key={dataRow.indicator}>
+                            <ReportCell>{dataRow.indicator}</ReportCell>
+                            <ReportCell>{dataRow.threshold} SD</ReportCell>
+                            <ReportCell>{dataRow.overallScore}%</ReportCell>
+                            <ReportCell>
+                                {dataRow.divergentScores?.number}
+                            </ReportCell>
+                            <ReportCell>
+                                {dataRow.divergentScores?.percentage}%
+                            </ReportCell>
+                            <ReportCell>
+                                {dataRow.divergentScores?.names}
+                            </ReportCell>
+                        </TableRow>
+                    ))}
+                </TableBody>
+            </ReportTable>
+        </div>
     )
 }
-
 Sections2a2b2c.propTypes = {
     subsectionData: PropTypes.array,
     subtitle: PropTypes.string,
@@ -105,46 +126,62 @@ Sections2a2b2c.propTypes = {
 }
 
 const Section2DBlock = ({ dataRow, index }) => (
-    <>
-        <table>
-            <tbody>
-                <tr>
-                    <th colSpan="2">{dataRow.name}</th>
-                </tr>
-                <tr>
-                    <td>Expected trend</td>
-                    <td>{dataRow.expectedTrend}</td>
-                </tr>
-                <tr>
-                    <td>Compare region to</td>
-                    <td>{dataRow.compareRegionTo}</td>
-                </tr>
-                <tr>
-                    <td>Quality threshold</td>
-                    <td>±{dataRow.qualityThreshold}%</td>
-                </tr>
-                <tr>
-                    <td>Overall score</td>
-                    <td>{dataRow.overallScore}%</td>
-                </tr>
-                <tr>
-                    <td>Number of Region with divergent score</td>
-                    <td>{dataRow.divergentSubOrgUnits?.number}</td>
-                </tr>
-                <tr>
-                    <td>Percent of Region with divergent score</td>
-                    <td>{dataRow.divergentSubOrgUnits?.percent}%</td>
-                </tr>
-                <tr>
-                    <td colSpan="2">{dataRow.divergentSubOrgUnits?.names}</td>
-                </tr>
-            </tbody>
-        </table>
+    <div className={styles.section2dGrid}>
+        <ReportTable className={styles.section2dTable}>
+            <TableHead>
+                <ReportRowHead>
+                    <ReportCellHead colSpan="2">{dataRow.name}</ReportCellHead>
+                </ReportRowHead>
+            </TableHead>
+            <TableBody>
+                <TableRow>
+                    <ReportCell>Expected trend</ReportCell>
+                    <ReportCell>
+                        {dataRow.expectedTrend[0].toUpperCase() +
+                            dataRow.expectedTrend.slice(1)}
+                    </ReportCell>
+                </TableRow>
+                <TableRow>
+                    <ReportCell>Compare region to</ReportCell>
+                    <ReportCell>{dataRow.compareRegionTo}</ReportCell>
+                </TableRow>
+                <TableRow>
+                    <ReportCell>Quality threshold</ReportCell>
+                    <ReportCell>± {dataRow.qualityThreshold}%</ReportCell>
+                </TableRow>
+                <TableRow>
+                    <ReportCell>Overall score</ReportCell>
+                    <ReportCell>{dataRow.overallScore}%</ReportCell>
+                </TableRow>
+                <TableRow>
+                    <ReportCell>
+                        Number of Region with divergent score
+                    </ReportCell>
+                    <ReportCell>
+                        {dataRow.divergentSubOrgUnits?.number}
+                    </ReportCell>
+                </TableRow>
+                <TableRow>
+                    <ReportCell>
+                        Percent of Region with divergent score
+                    </ReportCell>
+                    <ReportCell>
+                        {dataRow.divergentSubOrgUnits?.percent}%
+                    </ReportCell>
+                </TableRow>
+                <TableRow>
+                    <ReportCell colSpan="2">
+                        {dataRow.divergentSubOrgUnits?.names}
+                    </ReportCell>
+                </TableRow>
+            </TableBody>
+        </ReportTable>
         {dataRow?.chartInfo?.lineChartInfo && (
             <Chart
                 sectionId={'section2d'}
                 chartId={`line2d_${index}`}
                 chartInfo={dataRow.chartInfo.lineChartInfo}
+                className={styles.section2dLineChart}
             />
         )}
         {dataRow?.chartInfo?.scatterChartInfo && (
@@ -152,9 +189,10 @@ const Section2DBlock = ({ dataRow, index }) => (
                 sectionId={'section2d'}
                 chartId={`scatter2d_${index}`}
                 chartInfo={dataRow.chartInfo.scatterChartInfo}
+                className={styles.section2dScatterChart}
             />
         )}
-    </>
+    </div>
 )
 
 Section2DBlock.propTypes = {
@@ -162,25 +200,23 @@ Section2DBlock.propTypes = {
     index: PropTypes.number,
 }
 
-const Section2D = ({ title, subtitle, subsectionData }) => {
-    return (
-        <>
-            <table>
-                <tbody>
-                    <SubSectionLayout title={title} subtitle={subtitle} />
-                </tbody>
-            </table>
-            {subsectionData.length === 0 && <NoDataInfoBox subsection={true} />}
-            {subsectionData.map((dataRow, index) => (
-                <Section2DBlock
-                    key={dataRow.name}
-                    dataRow={dataRow}
-                    index={index}
-                />
-            ))}
-        </>
-    )
-}
+const Section2D = ({ title, subtitle, subsectionData }) => (
+    <>
+        <ReportTable className={styles.marginBottom4}>
+            <TableHead>
+                <SubSectionLayout title={title} subtitle={subtitle} />
+            </TableHead>
+        </ReportTable>
+        {subsectionData.length === 0 && <NoDataInfoBox subsection={true} />}
+        {subsectionData.map((dataRow, index) => (
+            <Section2DBlock
+                key={dataRow.name}
+                dataRow={dataRow}
+                index={index}
+            />
+        ))}
+    </>
+)
 
 Section2D.propTypes = {
     subsectionData: PropTypes.array,
@@ -189,58 +225,74 @@ Section2D.propTypes = {
 }
 
 const Section2EBlock = ({ dataRow, index }) => (
-    <>
-        <table>
-            <tbody>
-                <tr>
-                    <th colSpan="2">{dataRow.title}</th>
-                </tr>
-                <tr>
-                    <td>Denominator A</td>
-                    <td>{dataRow.A}</td>
-                </tr>
-                <tr>
-                    <td>Denominator B</td>
-                    <td>{dataRow.B}</td>
-                </tr>
-                <tr>
-                    <td>Expected relationship</td>
-                    <td>{dataRow.expectedRelationship}</td>
-                </tr>
-                <tr>
-                    <td>Quality threshold</td>
-                    <td>
+    <div className={styles.section2eGrid}>
+        <ReportTable>
+            <TableHead>
+                <ReportRowHead>
+                    <ReportCellHead colSpan="2">{dataRow.title}</ReportCellHead>
+                </ReportRowHead>
+            </TableHead>
+            <TableBody>
+                <TableRow>
+                    <ReportCell>Denominator A</ReportCell>
+                    <ReportCell>{dataRow.A}</ReportCell>
+                </TableRow>
+                <TableRow>
+                    <ReportCell>Denominator B</ReportCell>
+                    <ReportCell>{dataRow.B}</ReportCell>
+                </TableRow>
+                <TableRow>
+                    <ReportCell>Expected relationship</ReportCell>
+                    <ReportCell>{dataRow.expectedRelationship}</ReportCell>
+                </TableRow>
+                <TableRow>
+                    <ReportCell>Quality threshold</ReportCell>
+                    <ReportCell>
                         {dataRow.expectedRelationship === 'Dropout rate'
                             ? ''
-                            : '±'}
-                        {dataRow.qualityThreshold}
-                    </td>
-                </tr>
-                <tr>
-                    <td>Overall score</td>
-                    <td>{dataRow.overallScore}%</td>
-                </tr>
-                <tr>
-                    <td>Number of Region with divergent score</td>
-                    <td>{dataRow.divergentSubOrgUnits?.number}</td>
-                </tr>
-                <tr>
-                    <td>Percent of Region with divergent score</td>
-                    <td>{dataRow.divergentSubOrgUnits?.percentage}%</td>
-                </tr>
-                <tr>
-                    <td colSpan="2">{dataRow.divergentSubOrgUnits?.names}</td>
-                </tr>
-            </tbody>
-        </table>
+                            : `± ${dataRow.qualityThreshold}%`}
+                    </ReportCell>
+                </TableRow>
+                <TableRow>
+                    <ReportCell>Overall score</ReportCell>
+                    <ReportCell>{dataRow.overallScore}%</ReportCell>
+                </TableRow>
+                <TableRow>
+                    <ReportCell>
+                        Number of Region with divergent score
+                    </ReportCell>
+                    <ReportCell>
+                        {dataRow.divergentSubOrgUnits?.number}
+                    </ReportCell>
+                </TableRow>
+                <TableRow>
+                    <ReportCell>
+                        Percent of Region with divergent score
+                    </ReportCell>
+                    <ReportCell>
+                        {dataRow.divergentSubOrgUnits?.percentage}%
+                    </ReportCell>
+                </TableRow>
+                <TableRow>
+                    <ReportCell
+                        colSpan="2"
+                        /** Make this cell taller */
+                        className={styles.section2eDivergentRegions}
+                    >
+                        {dataRow.divergentSubOrgUnits?.names}
+                    </ReportCell>
+                </TableRow>
+            </TableBody>
+        </ReportTable>
         {dataRow.chartInfo && (
             <Chart
                 sectionId={'section2e'}
                 chartId={`chart2e_${index}`}
                 chartInfo={dataRow.chartInfo}
+                className={styles.section2eChart}
             />
         )}
-    </>
+    </div>
 )
 
 Section2EBlock.propTypes = {
@@ -250,11 +302,11 @@ Section2EBlock.propTypes = {
 
 const Section2E = ({ title, subtitle, subsectionData }) => (
     <>
-        <table>
-            <tbody>
+        <ReportTable className={styles.marginBottom4}>
+            <TableHead>
                 <SubSectionLayout title={title} subtitle={subtitle} />
-            </tbody>
-        </table>
+            </TableHead>
+        </ReportTable>
         {subsectionData.length === 0 && <NoDataInfoBox subsection={true} />}
         {subsectionData.map((dataRow, index) => (
             <Section2EBlock

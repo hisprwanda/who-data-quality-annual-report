@@ -1,0 +1,59 @@
+/* Section 2a-c */
+.section2abcContainer {
+    margin-bottom: 24px;
+}
+
+/* Section 2d */
+.marginBottom4 {
+    margin-bottom: 4px;
+}
+
+.section2dGrid {
+    display: grid;
+    grid-template-columns: 1fr 560px;
+    /* Scatter plot on the right will set height */
+    grid-template-rows: auto 1fr;
+    grid-template-areas:
+        'table scatterPlot'
+        'lineChart scatterPlot';
+    gap: 4px;
+    margin-bottom: 36px;
+}
+.section2dTable {
+    grid-area: table;
+}
+.chart {
+    /* I chose 'solid' here because I think it looks better */
+    border: 1px solid var(--colors-grey400);
+}
+.section2dLineChart {
+    composes: chart;
+    grid-area: lineChart;
+}
+.section2dScatterChart {
+    composes: chart;
+    grid-area: scatterPlot;
+    height: 450px;
+    /* Width is set by grid template column */
+}
+
+/* Section 2e */
+.section2eGrid {
+    display: grid;
+    grid-template-columns: 1fr 560px;
+    gap: 4px;
+    margin-bottom: 36px;
+}
+.section2eChart {
+    composes: chart;
+    height: 370px;
+    /* Width is set by grid template column */
+}
+
+.section2eDivergentRegions {
+    height: 73px !important; /* need to override original table cell height */
+}
+
+.subsectionSubtitle {
+    font-style: italic;
+}

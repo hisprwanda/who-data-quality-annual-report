@@ -4,6 +4,8 @@ import PropTypes from 'prop-types'
 import React, { useState } from 'react'
 import styles from './GroupSelector.module.css'
 
+export const CORE_GROUP_CODE = 'core'
+
 const MenuSelect = ({ values, selected, onChange }) => {
     return (
         <div className={styles.menuSelect}>
@@ -29,10 +31,13 @@ MenuSelect.propTypes = {
 }
 
 export const GroupSelector = ({ groups, selectedGroup, setSelectedGroup }) => {
-    const groupOptions = groups.map(({ code, name }) => ({
-        value: code,
-        label: name,
-    }))
+    const groupOptions = [
+        { value: CORE_GROUP_CODE, label: i18n.t('[Core]') },
+        ...groups.map(({ code, name }) => ({
+            value: code,
+            label: name,
+        })),
+    ]
     const [open, setOpen] = useState(false)
 
     const selectedLabel = groupOptions.find(
