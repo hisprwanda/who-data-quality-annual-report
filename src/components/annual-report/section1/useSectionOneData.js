@@ -7,7 +7,7 @@ const defaultCOCQuery = {
         resource: 'categoryCombos',
         params: {
             fields: 'id,categoryOptionCombos[id]',
-            filters: 'isDefault:eq:true',
+            filter: 'isDefault:eq:true',
             paging: false,
         },
     },
