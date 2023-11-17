@@ -47,7 +47,7 @@ const mapDataElementDetailsResponseToOptions = (data) => {
 
 export const DataElementSelect = () => {
     const { fetch, loading, error } = useEngineQuery()
-    const [options, setOptions] = useState([])
+    const [options, setOptions] = useState(null)
 
     // Depends on 1. dataElementType and 2. dataElementGroupID
     const dataElementTypeField = useField('dataElementType', {
@@ -131,11 +131,11 @@ export const DataElementSelect = () => {
                 component={SingleSelectFieldFF}
                 format={format}
                 parse={parse}
-                options={options}
+                options={options || []}
                 label={'Data element'}
                 placeholder={placeholderText}
                 filterable
-                disabled={!options.length}
+                disabled={loading || error || !options}
             />
         </div>
     )

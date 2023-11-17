@@ -17,12 +17,12 @@ export const DataElementGroupSelect = () => {
 
     const dataElementGroupOptions = useMemo(
         () =>
-            !data
-                ? []
-                : data.reponse.dataElementGroups.map(({ id, displayName }) => ({
+            data
+                ? data.reponse.dataElementGroups.map(({ id, displayName }) => ({
                       label: displayName,
                       value: id,
-                  })),
+                  }))
+                : null,
         [data]
     )
 
@@ -41,9 +41,10 @@ export const DataElementGroupSelect = () => {
             <Field
                 name="dataElementGroupID"
                 component={SingleSelectFieldFF}
-                options={dataElementGroupOptions}
+                options={dataElementGroupOptions || []}
                 label={'Data element group'}
                 placeholder={placeholderText}
+                disabled={loading || error || !dataElementGroupOptions}
                 filterable
             />
         </div>

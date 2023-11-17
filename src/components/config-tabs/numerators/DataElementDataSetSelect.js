@@ -80,7 +80,7 @@ export const DataSetSelect = () => {
 
     const { selectOptions, dataSetLookup } = useMemo(() => {
         if (!data) {
-            return { selectOptions: [], dataSetLookup: new Map() }
+            return { selectOptions: null, dataSetLookup: new Map() }
         }
         return parseDataSetsResponse(data.response)
     }, [data])
@@ -112,14 +112,14 @@ export const DataSetSelect = () => {
             <Field
                 name="dataSets"
                 component={MultiSelectFieldFF}
-                options={selectOptions}
+                options={selectOptions || []}
                 format={format}
                 parse={parse}
                 label={'Data sets for completeness'}
                 placeholder={placeholderText}
                 // sometimes data elements aren't associated with any data
                 // sets though 🤔
-                disabled={!selectOptions?.length}
+                disabled={loading || error || !selectOptions}
             />
         </div>
     )

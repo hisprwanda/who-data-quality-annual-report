@@ -18,7 +18,7 @@ export const VARIABLES_QUERY = {
 }
 export const VariableSelect = () => {
     const { fetch, loading, error } = useEngineQuery()
-    const [options, setOptions] = useState([])
+    const [options, setOptions] = useState(null)
 
     // Depends on dataItem and dataElementType
     const dataItemField = useField('dataItem', {
@@ -78,10 +78,10 @@ export const VariableSelect = () => {
             <Field
                 name="dataElementOperandID"
                 component={SingleSelectFieldFF}
-                options={options}
+                options={options || []}
                 label={'Variable for completeness'}
                 placeholder={placeholderText}
-                disabled={!options.length}
+                disabled={loading || error || !options}
             />
         </div>
     )
