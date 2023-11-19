@@ -26,8 +26,9 @@ export const getReportParameters = ({
 
     const reportParameters = {
         orgUnits: [orgUnitID],
-        orgUnitLevel: `LEVEL-${orgUnitLevel}`,
-        orgUnitLevelNumber: orgUnitLevel,
+        orgUnitLevel: `LEVEL-${orgUnitLevel.level}`,
+        orgUnitLevelNumber: orgUnitLevel.level,
+        orgUnitLevelName: orgUnitLevel.displayName,
         boundaryOrgUnitLevel,
         groupID: groupID,
         // note that `periods[0]` is the current period
