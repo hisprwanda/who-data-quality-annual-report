@@ -41,7 +41,12 @@ SubSectionLayout.propTypes = {
     title: PropTypes.string,
 }
 
-const Section3A = ({ title, subtitle, subsectionData }) => (
+const Section3A = ({
+    title,
+    subtitle,
+    subsectionData,
+    reportParameters: { orgUnitLevelName },
+}) => (
     <>
         <ReportTable className={styles.marginBottom4}>
             <TableHead>
@@ -88,7 +93,7 @@ const Section3A = ({ title, subtitle, subsectionData }) => (
                                 </TableRow>
                                 <TableRow>
                                     <ReportCell>
-                                        Number of Region with divergent score
+                                        {`Number of ${orgUnitLevelName}s with divergent score`}
                                     </ReportCell>
                                     <ReportCell>
                                         {isNotMissing(
@@ -101,7 +106,7 @@ const Section3A = ({ title, subtitle, subsectionData }) => (
                                 </TableRow>
                                 <TableRow>
                                     <ReportCell>
-                                        % Region with poor score
+                                        {`Percent of ${orgUnitLevelName}s with divergent score`}
                                     </ReportCell>
                                     <ReportCell>
                                         {isNotMissing(
@@ -139,6 +144,7 @@ const Section3A = ({ title, subtitle, subsectionData }) => (
 )
 
 Section3A.propTypes = {
+    reportParameters: PropTypes.object,
     subsectionData: PropTypes.array,
     subtitle: PropTypes.string,
     title: PropTypes.string,
@@ -174,6 +180,7 @@ export const SectionThree = ({ reportParameters }) => {
             <Section3A
                 title={sectionInformation.section3a.title}
                 subtitle={sectionInformation.section3a.subtitle}
+                reportParameters={reportParameters}
                 subsectionData={section3Data.section3a}
             />
         )
