@@ -1,5 +1,11 @@
 import { useAlert } from '@dhis2/app-runtime'
-import { Button, TableCell, TableRow, ButtonStrip } from '@dhis2/ui'
+import {
+    Button,
+    ButtonStrip,
+    IconCheckmark24,
+    TableCell,
+    TableRow,
+} from '@dhis2/ui'
 import { Chip } from '@dhis2/ui-core'
 import PropTypes from 'prop-types'
 import React, { useMemo, useCallback, useState } from 'react'
@@ -261,7 +267,7 @@ export const NumeratorTableItem = ({ numerator }) => {
                 ))}
             </TableCell>
             <TableCell dense>{numerator.name}</TableCell>
-            <TableCell dense>{numerator.core ? '✔️' : ''}</TableCell>
+            <TableCell dense>{numerator.core && <IconCheckmark24 />}</TableCell>
             <TableCell dense>{dataItemNames.get(numerator.dataID)}</TableCell>
             <TableCell dense>{dataSetNames}</TableCell>
             <TableCell dense>
