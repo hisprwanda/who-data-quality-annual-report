@@ -66,7 +66,12 @@ Section4A.propTypes = {
     title: PropTypes.string,
 }
 
-const Section4B = ({ title, subtitle, subsectionData }) => (
+const Section4B = ({
+    title,
+    subtitle,
+    subsectionData,
+    reportParameters: { orgUnitLevelName },
+}) => (
     <>
         <ReportTable className={styles.marginBottom4}>
             <TableHead>
@@ -109,7 +114,7 @@ const Section4B = ({ title, subtitle, subsectionData }) => (
                                 </TableRow>
                                 <TableRow>
                                     <ReportCell>
-                                        # Region with poor score
+                                        {`Numer of ${orgUnitLevelName}s with divergent score`}
                                     </ReportCell>
                                     <ReportCell>
                                         {dataRow.divergentSubOrgUnits?.number}
@@ -117,7 +122,7 @@ const Section4B = ({ title, subtitle, subsectionData }) => (
                                 </TableRow>
                                 <TableRow>
                                     <ReportCell>
-                                        % Region with poor score
+                                        {`Percent of ${orgUnitLevelName}s with divergent score`}
                                     </ReportCell>
                                     <ReportCell>
                                         {
@@ -147,6 +152,7 @@ const Section4B = ({ title, subtitle, subsectionData }) => (
 )
 
 Section4B.propTypes = {
+    reportParameters: PropTypes.object,
     subsectionData: PropTypes.array,
     subtitle: PropTypes.string,
     title: PropTypes.string,
@@ -183,6 +189,7 @@ export const SectionFour = ({ reportParameters }) => {
                     title={sectionInformation.section4b.title}
                     subtitle={sectionInformation.section4b.subtitle}
                     subsectionData={section4Data.section4b}
+                    reportParameters={reportParameters}
                 />
             </>
         )
