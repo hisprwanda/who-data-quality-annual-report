@@ -76,7 +76,7 @@ export const SectionOne = ({ reportParameters }) => {
                                     Overall score
                                 </ReportCellHead>
                                 <ReportCellHead colSpan="3">
-                                    Regions with divergent score
+                                    {`${reportParameters.orgUnitLevelName} with divergent score`}
                                 </ReportCellHead>
                             </ReportRowHead>
                             <ReportRowHead>
@@ -143,7 +143,7 @@ export const SectionOne = ({ reportParameters }) => {
                                     Overall score
                                 </ReportCellHead>
                                 <ReportCellHead colSpan="3">
-                                    Regions with divergent score
+                                    {`${reportParameters.orgUnitLevelName} with divergent score`}
                                 </ReportCellHead>
                             </ReportRowHead>
                             <ReportRowHead>
@@ -214,7 +214,7 @@ export const SectionOne = ({ reportParameters }) => {
                                     Overall Score
                                 </ReportCellHead>
                                 <ReportCellHead colSpan="3">
-                                    Regions with divergent score
+                                    {`${reportParameters.orgUnitLevelName} with divergent score`}
                                 </ReportCellHead>
                             </ReportRowHead>
                             <ReportRowHead>
@@ -277,8 +277,12 @@ export const SectionOne = ({ reportParameters }) => {
                                     colSpan="8"
                                     className={styles.subsectionSubtitle}
                                 >
-                                    Completeness of datasets in 2022 compared to
-                                    previous 3 years.
+                                    {`Completeness of datasets in ${
+                                        reportParameters.periods[0].name
+                                    } compared to
+                                    previous ${
+                                        reportParameters.periods.length - 1
+                                    } years.`}
                                 </ReportCell>
                             </TableRow>
                             <ReportRowHead>
@@ -298,7 +302,7 @@ export const SectionOne = ({ reportParameters }) => {
                                     Overall score
                                 </ReportCellHead>
                                 <ReportCellHead colSpan="3">
-                                    Regions with divergent score
+                                    {`${reportParameters.orgUnitLevelName} with divergent score`}
                                 </ReportCellHead>
                             </ReportRowHead>
                             <ReportRowHead>

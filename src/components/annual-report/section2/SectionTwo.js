@@ -15,23 +15,23 @@ import { useSectionTwoData } from './useSectionTwoData.js'
 const sectionInformation = {
     section2a: {
         title: '2a: Extreme outliers',
-        subtitle:
-            'Extreme outliers, using the standard method. Threshold denotes the number of standard deviations from the mean. Region are counted as divergent if they have one or more extreme outliers for an indicator.',
+        subtitle: ({ orgUnitLevelName }) =>
+            `Extreme outliers, using the standard method. Threshold denotes the number of standard deviations from the mean. ${orgUnitLevelName} are counted as divergent if they have one or more extreme outliers for an indicator.`,
     },
     section2b: {
         title: '2b: Moderate outliers',
-        subtitle:
-            'Moderate outliers, using the standard method. Threshold denotes the number of standard deviations from the mean. Region are counted as divergent if they have two or more moderate outliers for an indicator.',
+        subtitle: ({ orgUnitLevelName }) =>
+            `Moderate outliers, using the standard method. Threshold denotes the number of standard deviations from the mean. ${orgUnitLevelName} are counted as divergent if they have two or more moderate outliers for an indicator.`,
     },
     section2c: {
         title: '2c: Moderate outliers',
-        subtitle:
-            'Moderate outliers, based on median (modified Z score). Region are counted as divergent if they have two or more moderate outliers for an indicator.',
+        subtitle: ({ orgUnitLevelName }) =>
+            `Moderate outliers, based on median (modified Z score). ${orgUnitLevelName} are counted as divergent if they have two or more moderate outliers for an indicator.`,
     },
     section2d: {
         title: '2d: Consistency of indicator values over time',
-        subtitle:
-            'Difference between the current year and either the average of the 3 preceding years (if expected trend is constant), or the forecasted value.',
+        subtitle: ({ numReferenceYears }) =>
+            `Difference between the current year and either the average of the ${numReferenceYears} preceding years (if expected trend is constant), or the forecasted value.`,
     },
     section2e: {
         title: '2e: Consistency between related indicators',
@@ -58,13 +58,23 @@ SubSectionLayout.propTypes = {
     title: PropTypes.string,
 }
 
-const Sections2a2b2c = ({ title, subtitle, subsectionData }) => {
+const Sections2a2b2c = ({
+    title,
+    subtitle,
+    subsectionData,
+    reportParameters: { orgUnitLevelName },
+}) => {
+    const formattedSubtitle = subtitle({ orgUnitLevelName })
+
     if (subsectionData.length === 0) {
         return (
             <div className={styles.section2abcContainer}>
                 <ReportTable>
                     <TableHead>
-                        <SubSectionLayout title={title} subtitle={subtitle} />
+                        <SubSectionLayout
+                            title={title}
+                            subtitle={formattedSubtitle}
+                        />
                     </TableHead>
                 </ReportTable>
                 <NoDataInfoBox subsection={true} />
@@ -76,7 +86,10 @@ const Sections2a2b2c = ({ title, subtitle, subsectionData }) => {
         <div className={styles.section2abcContainer}>
             <ReportTable className={styles.marginBottom4}>
                 <TableHead>
-                    <SubSectionLayout title={title} subtitle={subtitle} />
+                    <SubSectionLayout
+                        title={title}
+                        subtitle={formattedSubtitle}
+                    />
                     <ReportRowHead>
                         <ReportCellHead rowSpan="2" width="200">
                             Indicator
@@ -88,7 +101,7 @@ const Sections2a2b2c = ({ title, subtitle, subsectionData }) => {
                             Overall score
                         </ReportCellHead>
                         <ReportCellHead colSpan="3">
-                            Region with divergent score
+                            {`${orgUnitLevelName} with divergent score`}
                         </ReportCellHead>
                     </ReportRowHead>
                     <ReportRowHead>
@@ -121,12 +134,17 @@ const Sections2a2b2c = ({ title, subtitle, subsectionData }) => {
     )
 }
 Sections2a2b2c.propTypes = {
+    reportParameters: PropTypes.object,
     subsectionData: PropTypes.array,
-    subtitle: PropTypes.string,
+    subtitle: PropTypes.func,
     title: PropTypes.string,
 }
 
-const Section2DBlock = ({ dataRow, index }) => (
+const Section2DBlock = ({
+    dataRow,
+    index,
+    reportParameters: { orgUnitLevelName },
+}) => (
     <div className={styles.section2dGrid}>
         <ReportTable className={styles.section2dTable}>
             <TableHead>
@@ -156,7 +174,7 @@ const Section2DBlock = ({ dataRow, index }) => (
                 </TableRow>
                 <TableRow>
                     <ReportCell>
-                        Number of Region with divergent score
+                        {`Number of ${orgUnitLevelName} with divergent score`}
                     </ReportCell>
                     <ReportCell>
                         {dataRow.divergentSubOrgUnits?.number}
@@ -164,7 +182,7 @@ const Section2DBlock = ({ dataRow, index }) => (
                 </TableRow>
                 <TableRow>
                     <ReportCell>
-                        Percent of Region with divergent score
+                        {`Percent of ${orgUnitLevelName} with divergent score`}
                     </ReportCell>
                     <ReportCell>
                         {dataRow.divergentSubOrgUnits?.percent}%
@@ -200,13 +218,19 @@ const Section2DBlock = ({ dataRow, index }) => (
 Section2DBlock.propTypes = {
     dataRow: PropTypes.object,
     index: PropTypes.number,
+    reportParameters: PropTypes.object,
 }
 
-const Section2D = ({ title, subtitle, subsectionData }) => (
+const Section2D = ({ title, subtitle, subsectionData, reportParameters }) => (
     <>
         <ReportTable className={styles.marginBottom4}>
             <TableHead>
-                <SubSectionLayout title={title} subtitle={subtitle} />
+                <SubSectionLayout
+                    title={title}
+                    subtitle={subtitle({
+                        numReferenceYears: reportParameters.periods.length - 1,
+                    })}
+                />
             </TableHead>
         </ReportTable>
         {subsectionData.length === 0 && <NoDataInfoBox subsection={true} />}
@@ -215,18 +239,24 @@ const Section2D = ({ title, subtitle, subsectionData }) => (
                 key={dataRow.name}
                 dataRow={dataRow}
                 index={index}
+                reportParameters={reportParameters}
             />
         ))}
     </>
 )
 
 Section2D.propTypes = {
+    reportParameters: PropTypes.object,
     subsectionData: PropTypes.array,
-    subtitle: PropTypes.string,
+    subtitle: PropTypes.func,
     title: PropTypes.string,
 }
 
-const Section2EBlock = ({ dataRow, index }) => (
+const Section2EBlock = ({
+    dataRow,
+    index,
+    reportParameters: { orgUnitLevelName },
+}) => (
     <div className={styles.section2eGrid}>
         <ReportTable>
             <TableHead>
@@ -261,7 +291,7 @@ const Section2EBlock = ({ dataRow, index }) => (
                 </TableRow>
                 <TableRow>
                     <ReportCell>
-                        Number of Region with divergent score
+                        {`Number of ${orgUnitLevelName} with divergent score`}
                     </ReportCell>
                     <ReportCell>
                         {dataRow.divergentSubOrgUnits?.number}
@@ -269,7 +299,7 @@ const Section2EBlock = ({ dataRow, index }) => (
                 </TableRow>
                 <TableRow>
                     <ReportCell>
-                        Percent of Region with divergent score
+                        {`Percent of ${orgUnitLevelName} with divergent score`}
                     </ReportCell>
                     <ReportCell>
                         {dataRow.divergentSubOrgUnits?.percentage}%
@@ -301,9 +331,10 @@ const Section2EBlock = ({ dataRow, index }) => (
 Section2EBlock.propTypes = {
     dataRow: PropTypes.object,
     index: PropTypes.number,
+    reportParameters: PropTypes.object,
 }
 
-const Section2E = ({ title, subtitle, subsectionData }) => (
+const Section2E = ({ title, subtitle, subsectionData, reportParameters }) => (
     <>
         <ReportTable className={styles.marginBottom4}>
             <TableHead>
@@ -316,12 +347,14 @@ const Section2E = ({ title, subtitle, subsectionData }) => (
                 key={dataRow.title}
                 dataRow={dataRow}
                 index={index}
+                reportParameters={reportParameters}
             />
         ))}
     </>
 )
 
 Section2E.propTypes = {
+    reportParameters: PropTypes.object,
     subsectionData: PropTypes.array,
     subtitle: PropTypes.string,
     title: PropTypes.string,
@@ -376,26 +409,31 @@ export const SectionTwo = ({ reportParameters }) => {
                     title={sectionInformation.section2a.title}
                     subtitle={sectionInformation.section2a.subtitle}
                     subsectionData={section2Data.section2a}
+                    reportParameters={reportParameters}
                 />
                 <Sections2a2b2c
                     title={sectionInformation.section2b.title}
                     subtitle={sectionInformation.section2b.subtitle}
                     subsectionData={section2Data.section2b}
+                    reportParameters={reportParameters}
                 />
                 <Sections2a2b2c
                     title={sectionInformation.section2c.title}
                     subtitle={sectionInformation.section2c.subtitle}
                     subsectionData={section2Data.section2c}
+                    reportParameters={reportParameters}
                 />
                 <Section2D
                     title={sectionInformation.section2d.title}
                     subtitle={sectionInformation.section2d.subtitle}
                     subsectionData={section2Data.section2d}
+                    reportParameters={reportParameters}
                 />
                 <Section2E
                     title={sectionInformation.section2e.title}
                     subtitle={sectionInformation.section2e.subtitle}
                     subsectionData={section2Data.section2e}
+                    reportParameters={reportParameters}
                 />
             </>
         )

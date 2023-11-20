@@ -49,6 +49,7 @@ export const ReportParameterSelector = ({ setReportParameters }) => {
                 boundaryOrgUnitLevel: selectedOrgUnit.level,
                 configurations,
                 orgUnitLevel: selectedOrgUnitLevel,
+                orgUnitLevels: data?.orgUnitLevels.organisationUnitLevels,
                 periods: selectedPeriods,
             }),
         [
@@ -58,6 +59,7 @@ export const ReportParameterSelector = ({ setReportParameters }) => {
             configurations,
             selectedOrgUnitLevel,
             selectedPeriods,
+            data,
         ]
     )
 
