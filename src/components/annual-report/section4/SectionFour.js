@@ -71,7 +71,7 @@ const Section4B = ({
     title,
     subtitle,
     subsectionData,
-    reportParameters: { orgUnitLevelName },
+    reportParameters: { orgUnitLevels },
 }) => (
     <>
         <ReportTable className={styles.marginBottom4}>
@@ -82,6 +82,10 @@ const Section4B = ({
         {subsectionData
             .sort((a, b) => a.name.localeCompare(b.name))
             .map((dataRow, index) => {
+                const orgUnitLevelName = orgUnitLevels.find(
+                    (orgUnitLevel) => orgUnitLevel.level === dataRow.level
+                ).displayName
+                
                 return (
                     <div className={styles.section4bGrid} key={dataRow.name}>
                         <ReportTable>
