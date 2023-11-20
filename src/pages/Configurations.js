@@ -1,4 +1,7 @@
+import i18n from '@dhis2/d2-i18n'
+import { Button } from '@dhis2/ui'
 import React from 'react'
+import { Link } from 'react-router-dom'
 import ConfigTabs from '../components/config-tabs/ConfigTabs.js'
 import { DataItemNamesProvider, useConfigurations } from '../utils/index.js'
 import styles from './Configurations.module.css'
@@ -7,26 +10,19 @@ export const Configurations = () => {
     const configurations = useConfigurations()
 
     return (
-        <DataItemNamesProvider>
-            <div className={styles.configurationsContainer}>
-                <div className={styles.subContainer}>
-                    <div className={styles.descriptionText}>
-                        <p>
-                            This module is used for configuring the WHO Data
-                            Quality Annual Report, and mapping the proposed data
-                            quality indicators to data elements and indicators
-                            in the DHIS 2 database. This configuration is used
-                            as the basis for the Annual Report, and the
-                            numerator and numerator group configuration is also
-                            used for the Dashboard.
-                        </p>
-                    </div>
-
-                    <div>
-                        <ConfigTabs configurations={configurations} />
-                    </div>
+        <>
+            <div className={styles.exitConfigurationsContainer}>
+                <div className={styles.exitConfigurationsButtonContainer}>
+                    <Link to="/">
+                        <Button small>{i18n.t('Exit configurations')}</Button>
+                    </Link>
                 </div>
             </div>
-        </DataItemNamesProvider>
+            <DataItemNamesProvider>
+                <div className={styles.configurationsContainer}>
+                    <ConfigTabs configurations={configurations} />
+                </div>
+            </DataItemNamesProvider>
+        </>
     )
 }
