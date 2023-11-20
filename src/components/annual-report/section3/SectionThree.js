@@ -2,6 +2,7 @@ import { TableBody, TableHead, TableRow } from '@dhis2/ui'
 import PropTypes from 'prop-types'
 import React, { useEffect } from 'react'
 import { Chart } from '../Chart.js'
+import { InterpretationsField } from '../common/index.js'
 import {
     ReportCell,
     ReportCellHead,
@@ -131,12 +132,15 @@ const Section3A = ({
                                 )}
                             </TableBody>
                         </ReportTable>
+
                         <Chart
                             sectionId={'section3'}
                             chartId={`chart${index}`}
                             chartInfo={dataRow.chartInfo}
                             className={styles.section3Chart}
                         />
+
+                        <InterpretationsField />
                     </div>
                 )
             })}

@@ -2,7 +2,7 @@ import { TableBody, TableHead, TableRow } from '@dhis2/ui'
 import PropTypes from 'prop-types'
 import React, { useEffect } from 'react'
 import { Chart } from '../Chart.js'
-import { NoDataInfoBox } from '../common/NoDataWarning.js'
+import { InterpretationsField, NoDataInfoBox } from '../common/index.js'
 import {
     ReportCell,
     ReportCellHead,
@@ -84,7 +84,7 @@ const Sections2a2b2c = ({
 
     return (
         <div className={styles.section2abcContainer}>
-            <ReportTable>
+            <ReportTable className={styles.marginBottom4}>
                 <TableHead>
                     <SubSectionLayout
                         title={title}
@@ -129,6 +129,7 @@ const Sections2a2b2c = ({
                     ))}
                 </TableBody>
             </ReportTable>
+            <InterpretationsField />
         </div>
     )
 }
@@ -210,6 +211,7 @@ const Section2DBlock = ({
                 className={styles.section2dScatterChart}
             />
         )}
+        <InterpretationsField />
     </div>
 )
 
@@ -322,6 +324,7 @@ const Section2EBlock = ({
                 className={styles.section2eChart}
             />
         )}
+        <InterpretationsField />
     </div>
 )
 

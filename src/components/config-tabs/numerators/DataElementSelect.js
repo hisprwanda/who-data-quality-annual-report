@@ -7,6 +7,7 @@ import React, { useCallback, useState, useEffect, useMemo } from 'react'
 import { TOTALS } from './constants.js'
 import styles from './DataMappingForm.module.css'
 import { useEngineQuery } from './useEngineQuery.js'
+import { useDataMappingFieldValidator } from './useIsFieldRequired.js'
 
 const { Field, useField } = ReactFinalForm
 
@@ -48,6 +49,7 @@ const mapDataElementDetailsResponseToOptions = (data) => {
 export const DataElementSelect = () => {
     const { fetch, loading, error } = useEngineQuery()
     const [options, setOptions] = useState(null)
+    const validate = useDataMappingFieldValidator()
 
     // Depends on 1. dataElementType and 2. dataElementGroupID
     const dataElementTypeField = useField('dataElementType', {
@@ -127,10 +129,13 @@ export const DataElementSelect = () => {
     return (
         <div className={styles.formRow}>
             <Field
+                // Final Form options
                 name="dataItem"
                 component={SingleSelectFieldFF}
                 format={format}
                 parse={parse}
+                validate={validate}
+                // DHIS2 UI options
                 options={options || []}
                 label={'Data element'}
                 placeholder={placeholderText}
