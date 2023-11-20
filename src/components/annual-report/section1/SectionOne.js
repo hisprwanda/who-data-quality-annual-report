@@ -74,7 +74,7 @@ export const SectionOne = ({ reportParameters }) => {
                                 Overall score
                             </ReportCellHead>
                             <ReportCellHead colSpan="3">
-                                {`${reportParameters.orgUnitLevelName}s with divergent score`}
+                                {`${reportParameters.orgUnitLevelName} with divergent score`}
                             </ReportCellHead>
                         </ReportRowHead>
                         <ReportRowHead>
@@ -132,7 +132,7 @@ export const SectionOne = ({ reportParameters }) => {
                                 Overall score
                             </ReportCellHead>
                             <ReportCellHead colSpan="3">
-                                {`${reportParameters.orgUnitLevelName}s with divergent score`}
+                                {`${reportParameters.orgUnitLevelName} with divergent score`}
                             </ReportCellHead>
                         </ReportRowHead>
                         <ReportRowHead>
@@ -191,7 +191,7 @@ export const SectionOne = ({ reportParameters }) => {
                                 Overall Score
                             </ReportCellHead>
                             <ReportCellHead colSpan="3">
-                                {`${reportParameters.orgUnitLevelName}s with divergent score`}
+                                {`${reportParameters.orgUnitLevelName} with divergent score`}
                             </ReportCellHead>
                         </ReportRowHead>
                         <ReportRowHead>
@@ -268,7 +268,7 @@ export const SectionOne = ({ reportParameters }) => {
                                 Overall score
                             </ReportCellHead>
                             <ReportCellHead colSpan="3">
-                                {`${reportParameters.orgUnitLevelName}s with divergent score`}
+                                {`${reportParameters.orgUnitLevelName} with divergent score`}
                             </ReportCellHead>
                         </ReportRowHead>
                         <ReportRowHead>

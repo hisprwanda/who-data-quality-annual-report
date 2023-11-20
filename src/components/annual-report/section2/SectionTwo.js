@@ -16,17 +16,17 @@ const sectionInformation = {
     section2a: {
         title: '2a: Extreme outliers',
         subtitle: ({ orgUnitLevelName }) =>
-            `Extreme outliers, using the standard method. Threshold denotes the number of standard deviations from the mean. ${orgUnitLevelName}s are counted as divergent if they have one or more extreme outliers for an indicator.`,
+            `Extreme outliers, using the standard method. Threshold denotes the number of standard deviations from the mean. ${orgUnitLevelName} are counted as divergent if they have one or more extreme outliers for an indicator.`,
     },
     section2b: {
         title: '2b: Moderate outliers',
         subtitle: ({ orgUnitLevelName }) =>
-            `Moderate outliers, using the standard method. Threshold denotes the number of standard deviations from the mean. ${orgUnitLevelName}s are counted as divergent if they have two or more moderate outliers for an indicator.`,
+            `Moderate outliers, using the standard method. Threshold denotes the number of standard deviations from the mean. ${orgUnitLevelName} are counted as divergent if they have two or more moderate outliers for an indicator.`,
     },
     section2c: {
         title: '2c: Moderate outliers',
         subtitle: ({ orgUnitLevelName }) =>
-            `Moderate outliers, based on median (modified Z score). ${orgUnitLevelName}s are counted as divergent if they have two or more moderate outliers for an indicator.`,
+            `Moderate outliers, based on median (modified Z score). ${orgUnitLevelName} are counted as divergent if they have two or more moderate outliers for an indicator.`,
     },
     section2d: {
         title: '2d: Consistency of indicator values over time',
@@ -101,7 +101,7 @@ const Sections2a2b2c = ({
                             Overall score
                         </ReportCellHead>
                         <ReportCellHead colSpan="3">
-                            {`${orgUnitLevelName}s with divergent score`}
+                            {`${orgUnitLevelName} with divergent score`}
                         </ReportCellHead>
                     </ReportRowHead>
                     <ReportRowHead>
@@ -173,7 +173,7 @@ const Section2DBlock = ({
                 </TableRow>
                 <TableRow>
                     <ReportCell>
-                        {`Number of ${orgUnitLevelName}s with divergent score`}
+                        {`Number of ${orgUnitLevelName} with divergent score`}
                     </ReportCell>
                     <ReportCell>
                         {dataRow.divergentSubOrgUnits?.number}
@@ -181,7 +181,7 @@ const Section2DBlock = ({
                 </TableRow>
                 <TableRow>
                     <ReportCell>
-                        {`Percent of ${orgUnitLevelName}s with divergent score`}
+                        {`Percent of ${orgUnitLevelName} with divergent score`}
                     </ReportCell>
                     <ReportCell>
                         {dataRow.divergentSubOrgUnits?.percent}%
@@ -289,7 +289,7 @@ const Section2EBlock = ({
                 </TableRow>
                 <TableRow>
                     <ReportCell>
-                        {`Number of ${orgUnitLevelName}s with divergent score`}
+                        {`Number of ${orgUnitLevelName} with divergent score`}
                     </ReportCell>
                     <ReportCell>
                         {dataRow.divergentSubOrgUnits?.number}
@@ -297,7 +297,7 @@ const Section2EBlock = ({
                 </TableRow>
                 <TableRow>
                     <ReportCell>
-                        {`Percent of ${orgUnitLevelName}s with divergent score`}
+                        {`Percent of ${orgUnitLevelName} with divergent score`}
                     </ReportCell>
                     <ReportCell>
                         {dataRow.divergentSubOrgUnits?.percentage}%

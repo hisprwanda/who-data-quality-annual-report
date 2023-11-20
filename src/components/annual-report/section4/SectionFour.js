@@ -114,7 +114,7 @@ const Section4B = ({
                                 </TableRow>
                                 <TableRow>
                                     <ReportCell>
-                                        {`Numer of ${orgUnitLevelName}s with divergent score`}
+                                        {`Number of ${orgUnitLevelName} with divergent score`}
                                     </ReportCell>
                                     <ReportCell>
                                         {dataRow.divergentSubOrgUnits?.number}
@@ -122,7 +122,7 @@ const Section4B = ({
                                 </TableRow>
                                 <TableRow>
                                     <ReportCell>
-                                        {`Percent of ${orgUnitLevelName}s with divergent score`}
+                                        {`Percent of ${orgUnitLevelName} with divergent score`}
                                     </ReportCell>
                                     <ReportCell>
                                         {
