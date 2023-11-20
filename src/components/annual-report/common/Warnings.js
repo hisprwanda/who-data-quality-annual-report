@@ -20,7 +20,7 @@ export const SectionError = ({ error }) => (
         error
         title={i18n.t('Something went wrong when retrieving data')}
     >
-        {JSON.stringify(error?.message)}
+        {error?.message}
     </NoticeBox>
 )
 
