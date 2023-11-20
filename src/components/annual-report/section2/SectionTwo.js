@@ -3,7 +3,11 @@ import PropTypes from 'prop-types'
 import React, { useEffect } from 'react'
 import { LoadingSpinner } from '../../common/LoadingSpinner.js'
 import { Chart } from '../Chart.js'
-import { InterpretationsField, NoDataInfoBox } from '../common/index.js'
+import {
+    InterpretationsField,
+    NoDataInfoBox,
+    SectionError,
+} from '../common/index.js'
 import {
     ReportCell,
     ReportCellHead,
@@ -348,7 +352,7 @@ export const SectionTwo = ({ reportParameters }) => {
     }
 
     if (error) {
-        return <span>error</span>
+        return <SectionError error={error} />
     }
 
     if (section2Data) {

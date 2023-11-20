@@ -1,6 +1,6 @@
 import { useDataQuery } from '@dhis2/app-runtime'
 import i18n from '@dhis2/d2-i18n'
-import { Button, SelectorBar } from '@dhis2/ui'
+import { Button, NoticeBox, SelectorBar } from '@dhis2/ui'
 import PropTypes from 'prop-types'
 import React, { useMemo, useState } from 'react'
 import { useConfigurations } from '../../utils/index.js'
@@ -72,7 +72,15 @@ export const ReportParameterSelector = ({ setReportParameters }) => {
 
     if (error) {
         console.error(error)
-        return <span>Error</span>
+        return (
+            <div className={styles.noticeBoxContainer}>
+                <NoticeBox error title="Report cannot be generated">
+                    The app failed to retrieve required information about
+                    organisation units. Without this information, the annual
+                    report cannot be generated.
+                </NoticeBox>
+            </div>
+        )
     }
 
     if (data) {

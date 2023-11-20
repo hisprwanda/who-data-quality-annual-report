@@ -14,3 +14,16 @@ export const NoDataInfoBox = ({ subsection }) => (
 NoDataInfoBox.propTypes = {
     subsection: PropTypes.bool,
 }
+
+export const SectionError = ({ error }) => (
+    <NoticeBox
+        error
+        title={i18n.t('Something went wrong when retrieving data')}
+    >
+        {JSON.stringify(error?.message)}
+    </NoticeBox>
+)
+
+SectionError.propTypes = {
+    error: PropTypes.object,
+}
