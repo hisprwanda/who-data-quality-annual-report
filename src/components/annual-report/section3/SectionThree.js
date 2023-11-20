@@ -46,7 +46,7 @@ const Section3A = ({
     title,
     subtitle,
     subsectionData,
-    reportParameters: { orgUnitLevels },
+    reportParameters: { orgUnitLevelNamesByLevel },
 }) => (
     <>
         <ReportTable className={styles.marginBottom4}>
@@ -57,10 +57,10 @@ const Section3A = ({
         {subsectionData
             .sort((a, b) => a.name.localeCompare(b.name))
             .map((dataRow, index) => {
-                const orgUnitLevelName = orgUnitLevels.find(
-                    (orgUnitLevel) => orgUnitLevel.level === dataRow.level
-                ).displayName
-                
+                const orgUnitLevelName = orgUnitLevelNamesByLevel.get(
+                    dataRow.level
+                )
+
                 return (
                     <div className={styles.section3Grid} key={dataRow.name}>
                         <ReportTable>
