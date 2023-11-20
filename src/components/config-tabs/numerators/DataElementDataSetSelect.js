@@ -2,6 +2,7 @@ import { useDataQuery } from '@dhis2/app-runtime'
 import { MultiSelectFieldFF, ReactFinalForm } from '@dhis2/ui'
 import React, { useEffect, useMemo, useCallback } from 'react'
 import styles from './DataMappingForm.module.css'
+import { useDataMappingFieldValidator } from './useIsFieldRequired.js'
 
 const { Field, useField } = ReactFinalForm
 
@@ -60,6 +61,8 @@ export const DataSetSelect = () => {
             lazy: true,
         }
     )
+    const validate = useDataMappingFieldValidator()
+
     // Depends on dataItem value (which handles both dataElementTypes)
     const dataItemField = useField('dataItem', {
         subscription: { value: true },
@@ -115,6 +118,7 @@ export const DataSetSelect = () => {
                 options={selectOptions || []}
                 format={format}
                 parse={parse}
+                validate={validate}
                 label={'Data sets for completeness'}
                 placeholder={placeholderText}
                 // sometimes data elements aren't associated with any data

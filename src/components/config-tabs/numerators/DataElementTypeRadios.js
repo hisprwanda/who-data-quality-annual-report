@@ -21,7 +21,6 @@ export const DataElementTypeRadios = () => {
                         component={RadioFieldFF}
                         value={TOTALS}
                         label={'Totals'}
-                        initialValue={TOTALS}
                     />
                     <Field
                         name="dataElementType"
