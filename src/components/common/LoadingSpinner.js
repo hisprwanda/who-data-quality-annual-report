@@ -2,15 +2,15 @@ import { CenteredContent, CircularLoader, Layer } from '@dhis2/ui'
 import PropTypes from 'prop-types'
 import React from 'react'
 
-export const LoadingSpinner = ({ noLayer, small }) => {
+export const LoadingSpinner = ({ noLayer }) => {
     return noLayer ? (
         <CenteredContent>
-            <CircularLoader small={small} />
+            <CircularLoader />
         </CenteredContent>
     ) : (
         <Layer>
             <CenteredContent>
-                <CircularLoader small={small} />
+                <CircularLoader />
             </CenteredContent>
         </Layer>
     )
@@ -18,5 +18,4 @@ export const LoadingSpinner = ({ noLayer, small }) => {
 
 LoadingSpinner.propTypes = {
     noLayer: PropTypes.bool,
-    small: PropTypes.bool,
 }
