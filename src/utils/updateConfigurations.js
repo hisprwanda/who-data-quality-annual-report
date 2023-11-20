@@ -108,6 +108,7 @@ export const createNewDenominator = (configurations, newDenominatorInfo) => {
     return configurationsToSave
 }
 
+// TODO: update this method to handle all types of configurations update and if succeed delete the other update methods
 export const updateConfigurations = ({
     configurations,
     configurationType,

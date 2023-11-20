@@ -3,7 +3,7 @@ import PropTypes from 'prop-types'
 import React, { useEffect } from 'react'
 import { LoadingSpinner } from '../../common/LoadingSpinner.js'
 import { Chart } from '../Chart.js'
-import { NoDataInfoBox } from '../common/NoDataWarning.js'
+import { InterpretationsField, NoDataInfoBox } from '../common/index.js'
 import {
     ReportCell,
     ReportCellHead,
@@ -75,7 +75,7 @@ const Sections2a2b2c = ({ title, subtitle, subsectionData }) => {
 
     return (
         <div className={styles.section2abcContainer}>
-            <ReportTable>
+            <ReportTable className={styles.marginBottom4}>
                 <TableHead>
                     <SubSectionLayout title={title} subtitle={subtitle} />
                     <ReportRowHead>
@@ -117,6 +117,7 @@ const Sections2a2b2c = ({ title, subtitle, subsectionData }) => {
                     ))}
                 </TableBody>
             </ReportTable>
+            <InterpretationsField />
         </div>
     )
 }
@@ -193,6 +194,7 @@ const Section2DBlock = ({ dataRow, index }) => (
                 className={styles.section2dScatterChart}
             />
         )}
+        <InterpretationsField />
     </div>
 )
 
@@ -293,6 +295,7 @@ const Section2EBlock = ({ dataRow, index }) => (
                 className={styles.section2eChart}
             />
         )}
+        <InterpretationsField />
     </div>
 )
 
@@ -332,6 +335,9 @@ export const SectionTwo = ({ reportParameters }) => {
         const variables = {
             ...reportParameters,
             currentPeriod: reportParameters.periods[0],
+            dataSets: Object.keys(
+                reportParameters.mappedConfiguration.dataSets
+            ),
         }
 
         refetch({ variables })

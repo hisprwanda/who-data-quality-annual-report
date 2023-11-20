@@ -21,3 +21,8 @@ export const getDenominatorRelations = (denominators, code) => {
         return denominatorObj.name
     }
 }
+
+// filter denominators by type but where denominator == type
+export const filterDenominatorsByType = (denominators, type) => {
+    return denominators.filter((denominator) => denominator.type == type)
+}

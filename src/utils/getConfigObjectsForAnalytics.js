@@ -1,33 +1,17 @@
-// generate a new numerator code
-export const generateNumeratorCode = (numerators) => {
-    if (numerators.length == 0) {
-        return 'C' + '1'
+import { CORE_GROUP_CODE } from '../components/report-parameter-selector/index.js'
+
+const isInGroup = ({ numerator, groupCode, members }) => {
+    if (groupCode === CORE_GROUP_CODE) {
+        return numerator.core
+    } else {
+        return members.includes(numerator.code)
     }
-    const lastCode = numerators[numerators.length - 1].code
-    const lastNumber = parseInt(lastCode.slice(1))
-
-    const newCodeNumber = lastNumber + 1
-    const newCode = 'C' + newCodeNumber
-
-    return newCode
 }
 
 // TODO: setup the global context to get the stored configurations
 export const getConfigObjectsForAnalytics = (configurations, groupCode) => {
-    // return an empty array if the groupcode is not provided
-    if (!groupCode) {
-        return {}
-    }
-
-    // Find the group with the given code
     const group = configurations.groups?.find((g) => g.code === groupCode)
-    if (!group) {
-        // Return an empty array if the group is not found
-        return {}
-    }
-
-    // Get members of the group
-    const members = group.members
+    const members = groupCode === CORE_GROUP_CODE || !group ? [] : group.members
 
     // Initialize a Set to store unique dataset IDs
     const uniqueDatasetIDs = new Set()
@@ -36,10 +20,11 @@ export const getConfigObjectsForAnalytics = (configurations, groupCode) => {
     const numeratorsInGroup = configurations.numerators
         .filter((numerator) => {
             return (
-                members.includes(numerator.code) &&
+                isInGroup({ numerator, groupCode, members }) &&
                 numerator.dataID &&
                 numerator.dataSetID &&
-                numerator.dataSetID.length
+                numerator.dataSetID.length &&
+                numerator.dataElementOperandID
             )
         })
         // and convert numerator dataSetID to an array of IDs if not already the case (backwards compatibility)

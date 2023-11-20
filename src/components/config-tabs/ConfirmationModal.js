@@ -9,9 +9,6 @@ import {
 import PropTypes from 'prop-types'
 import React from 'react'
 
-// todo: this could be shared with other components --
-// if so, move out of this dir
-
 export const ConfirmationModal = ({
     title,
     text,
@@ -31,7 +28,10 @@ export const ConfirmationModal = ({
                 <Button
                     destructive={destructive}
                     primary={!destructive}
-                    onClick={onConfirm}
+                    onClick={() => {
+                        onConfirm()
+                        onClose()
+                    }}
                 >
                     {action}
                 </Button>

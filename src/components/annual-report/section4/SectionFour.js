@@ -3,6 +3,7 @@ import PropTypes from 'prop-types'
 import React, { useEffect } from 'react'
 import { LoadingSpinner } from '../../common/LoadingSpinner.js'
 import { Chart } from '../Chart.js'
+import { InterpretationsField } from '../common/index.js'
 import {
     ReportCell,
     ReportCellHead,
@@ -135,12 +136,15 @@ const Section4B = ({ title, subtitle, subsectionData }) => (
                                 </TableRow>
                             </TableBody>
                         </ReportTable>
+
                         <Chart
                             sectionId={'section4'}
                             chartId={`chart${index}`}
                             chartInfo={dataRow.chartInfo}
                             className={styles.section4bChart}
                         />
+
+                        <InterpretationsField />
                     </div>
                 )
             })}
