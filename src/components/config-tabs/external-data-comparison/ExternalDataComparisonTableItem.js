@@ -5,11 +5,12 @@ import { getDenominatorRelations } from '../../../utils/denominatorsMetadataData
 import {
     DELETE_EXTERNAL_RELATION,
     UPDATE_EXTERNAL_RELATION,
+    useConfigurations,
     useConfigurationsDispatch,
+    useDataItemNames,
 } from '../../../utils/index.js'
-import { getNumeratorDataElement } from '../../../utils/numeratorsMetadataData.js'
-import { EditExternalDataComparisonModel } from './EditExternalDataComparisonModel.js'
 import { ConfirmationModal } from '../ConfirmationModal.js'
+import { EditExternalDataComparisonModel } from './EditExternalDataComparisonModel.js'
 
 /** Manages the "update form" modal and datastore mutation */
 const EditExternalRelationButton = ({ externalRelation }) => {
@@ -90,20 +91,9 @@ DeleteExternalRelationButton.propTypes = {
     externalRelation: PropTypes.object,
 }
 
-export function ExternalDataComparisonTableItem({
-    configurations,
-    externalRelation: externalRelation,
-}) {
-    // some of these values are hard to memoize effectively:
-    // they depend on the large configurations object
-    const externalIndicator = useMemo(
-        () =>
-            getNumeratorDataElement(
-                configurations,
-                externalRelation.externalData
-            ),
-        [configurations, externalRelation.externalData]
-    )
+export function ExternalDataComparisonTableItem({ externalRelation }) {
+    const configurations = useConfigurations()
+    const dataItemNames = useDataItemNames()
     const routineDataNumerator = useMemo(
         () =>
             getDenominatorRelations(
@@ -124,7 +114,9 @@ export function ExternalDataComparisonTableItem({
     return (
         <TableRow>
             <TableCell>{externalRelation.name}</TableCell>
-            <TableCell>{externalIndicator}</TableCell>
+            <TableCell>
+                {dataItemNames.get(externalRelation.externalData)}
+            </TableCell>
             <TableCell>{routineDataNumerator}</TableCell>
             <TableCell>{routineDataDenominator}</TableCell>
             <TableCell>{externalRelation.criteria}%</TableCell>
@@ -143,6 +135,5 @@ export function ExternalDataComparisonTableItem({
     )
 }
 ExternalDataComparisonTableItem.propTypes = {
-    configurations: PropTypes.object,
     externalRelation: PropTypes.object,
 }

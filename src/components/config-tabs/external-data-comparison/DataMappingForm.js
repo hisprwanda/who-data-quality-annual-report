@@ -2,31 +2,26 @@ import { useDataEngine, useDataQuery } from '@dhis2/app-runtime'
 import {
     // rename this to not clash with Field from RFF
     Field as FieldContainer,
-    MultiSelectFieldFF,
-    SingleSelectFieldFF,
-    RadioFieldFF,
     ReactFinalForm,
     TableRow,
     TableCell,
     Table,
     TableBody,
 } from '@dhis2/ui'
-import { Tab } from '@dhis2/ui-core'
-import React, { useCallback, useState, useEffect, useMemo } from 'react'
-import styles from './DataMappingForm.module.css'
-import { DataElementTypeRadios } from '../numerators/DataElementTypeRadios'
+import React from 'react'
 import { DataElementGroupSelect } from '../numerators/DataElementGroupsSelect'
 import { DataElementSelect } from '../numerators/DataElementSelect'
+import { DataElementTypeRadios } from '../numerators/DataElementTypeRadios'
+import styles from './DataMappingForm.module.css'
+import { DenominatorSelect } from './DenominatorSelect'
 import { NumeratorSelect } from './NumeratorSelect'
 import { OrgUnitLevelSelect } from './OrgUnitLevelSelect'
-import { DenominatorSelect } from './DenominatorSelect'
 
 const { Field, useField } = ReactFinalForm
 
 // Data item types
 const DATA_ELEMENT = 'dataElement'
 const INDICATOR = 'indicator'
-
 
 export const DataMappingFormSection = () => {
     const dataTypeField = useField('dataType', {
@@ -44,7 +39,7 @@ export const DataMappingFormSection = () => {
                 <TableBody>
                     <TableRow>
                         <TableCell>
-                            <p>Survey/external indicator</p>
+                            Survey/external indicator
                         </TableCell>
                         <TableCell>
                             <DataElementTypeRadios />
@@ -55,24 +50,24 @@ export const DataMappingFormSection = () => {
 
                     <TableRow>
                         <TableCell>
-                            <p>Routine data numerator</p>
+                            Routine data numerator
                         </TableCell>
                         <TableCell>
-                            <NumeratorSelect/>
+                            <NumeratorSelect />
                         </TableCell>
                     </TableRow>
                     <TableRow>
                         <TableCell>
-                            <p>Routine data denominator</p>
+                            Routine data denominator
                         </TableCell>
                         <TableCell>
-                            <DenominatorSelect/>
+                            <DenominatorSelect />
                         </TableCell>
                     </TableRow>
 
                     <TableRow>
                         <TableCell>
-                            <p>Survel level</p>
+                            Survel level
                         </TableCell>
                         <TableCell>
                             <OrgUnitLevelSelect />

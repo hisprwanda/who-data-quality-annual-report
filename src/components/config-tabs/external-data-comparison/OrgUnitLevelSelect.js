@@ -22,10 +22,12 @@ export const OrgUnitLevelSelect = () => {
     const dataElementGroupOptions = useMemo(
         () =>
             data
-                ? data.orgUnitLevels.organisationUnitLevels.map(({ level, displayName }) => ({
-                      label: displayName,
-                      value: level.toString(),
-                  }))
+                ? data.orgUnitLevels.organisationUnitLevels.map(
+                      ({ level, displayName }) => ({
+                          label: displayName,
+                          value: level.toString(),
+                      })
+                  )
                 : null,
         [data]
     )

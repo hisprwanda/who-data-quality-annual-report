@@ -33,7 +33,6 @@ export const EditExternalDataComparisonModel = ({
     onSave,
     onClose,
 }) => {
-
     return (
         <Form
             onSubmit={(values, form) => {
@@ -46,7 +45,10 @@ export const EditExternalDataComparisonModel = ({
                         denominator: values.denominator,
                         level: values.level,
                         externalData: values.dataItem.id,
-                        dataType: values.dataType === 'dataElement' ? 'dataElements' : 'indicators',
+                        dataType:
+                            values.dataType === 'dataElement'
+                                ? 'dataElements'
+                                : 'indicators',
                     })
                 } else {
                     alert('todo')
@@ -57,10 +59,10 @@ export const EditExternalDataComparisonModel = ({
             subscription={{ submitting: true }}
         >
             {({ handleSubmit }) => (
-                <Modal onClose={onClose} position="middle" >
-
+                <Modal onClose={onClose} position="middle">
                     <ModalTitle>
-                        {(externalRelationToEdit ? 'Edit' : 'Add') + ' external data relation'}
+                        {(externalRelationToEdit ? 'Edit' : 'Add') +
+                            ' external data relation'}
                     </ModalTitle>
                     <ModalContent>
                         <Table>
@@ -77,12 +79,12 @@ export const EditExternalDataComparisonModel = ({
                                         />
                                     </TableCell>
                                 </TableRow>
-                                </ TableBody>
-                                </Table>
+                            </TableBody>
+                        </Table>
 
-                                <DataMappingFormSection />
-                                
-                                <Table>
+                        <DataMappingFormSection />
+
+                        <Table>
                             <TableBody>
                                 <TableRow>
                                     <TableCell>
@@ -115,7 +117,7 @@ export const EditExternalDataComparisonModel = ({
                                     handleSubmit()
                                 }}
                             >
-                               {externalRelationToEdit ? 'Save' : 'Create'}
+                                {externalRelationToEdit ? 'Save' : 'Create'}
                             </Button>
                         </ButtonStrip>
                     </ModalActions>

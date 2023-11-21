@@ -11,7 +11,6 @@ import {
     TableFoot,
     IconAdd16,
 } from '@dhis2/ui'
-import PropTypes from 'prop-types'
 import React, { useState, useCallback } from 'react'
 import {
     useConfigurations,
@@ -51,7 +50,6 @@ const AddExternalRelationButton = () => {
         </>
     )
 }
-AddExternalRelationButton.propTypes = { configurations: PropTypes.object }
 
 export const ExternalDataComparison = () => {
     const configurations = useConfigurations()
@@ -110,8 +108,7 @@ export const ExternalDataComparison = () => {
                         <TableRow>
                             <TableCell colSpan="7">
                                 <ButtonStrip end>
-                                    <AddExternalRelationButton
-                                    />
+                                    <AddExternalRelationButton />
                                 </ButtonStrip>
                             </TableCell>
                         </TableRow>
