@@ -6,3 +6,13 @@
     width: 95%;
     margin: auto;
 }
+
+.exitConfigurationsContainer {
+    height: 48px;
+    width: 100%;
+    display: flex;
+}
+
+.exitConfigurationsButtonContainer {
+    margin: auto var(--spacers-dp8) auto auto;
+}

@@ -1,6 +1,8 @@
-import { TabBar, Tab } from '@dhis2/ui'
+import i18n from '@dhis2/d2-i18n'
+import { Button, TabBar, Tab } from '@dhis2/ui'
 import PropTypes from 'prop-types'
 import React, { useState } from 'react'
+import { Link } from 'react-router-dom'
 import { useRefetchConfigurations } from '../../utils/index.js'
 import { ConfigInfoScreen } from '../info-screen/InfoScreen.js'
 import styles from './ConfigTabs.module.css'
@@ -11,6 +13,16 @@ import { Denominators } from './tab-contents/Denominators.js'
 import { ExternalDataComparison } from './tab-contents/ExternalDataComparison.js'
 import { NumeratorGroups } from './tab-contents/NumeratorGroups.js'
 import { NumeratorParameters } from './tab-contents/NumeratorParameters.js'
+
+const ExitConfigurationsButton = () => (
+    <div className={styles.exitConfigurationsContainer}>
+        <div className={styles.exitConfigurationsButtonContainer}>
+            <Link to="/">
+                <Button small>{i18n.t('Exit configurations')}</Button>
+            </Link>
+        </div>
+    </div>
+)
 
 const configSections = [
     {
@@ -74,6 +86,7 @@ function Tabs({ configurations }) {
                         {section.label}
                     </Tab>
                 ))}
+                <ExitConfigurationsButton />
             </TabBar>
             {selectedSectionIndex !== null ? (
                 <div className={styles.subContainer}>

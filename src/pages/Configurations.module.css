@@ -2,14 +2,3 @@
     font-size: 14px;
     height: 100%;
 }
-
-.exitConfigurationsContainer {
-    height: 40px;
-    width: 100%;
-    background-color: 'blue';
-    display: flex;
-}
-
-.exitConfigurationsButtonContainer {
-    margin: auto var(--spacers-dp8) auto auto;
-}
