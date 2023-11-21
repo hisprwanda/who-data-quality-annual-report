@@ -1,2 +1,2 @@
 export { InterpretationsField } from './InterpretationsField.js'
-export { NoDataInfoBox } from './NoDataWarning.js'
+export { NoDataInfoBox, SectionError } from './Warnings.js'

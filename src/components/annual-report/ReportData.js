@@ -1,7 +1,7 @@
 import PropTypes from 'prop-types'
 import React from 'react'
 import { ReportInfoScreen } from '../info-screen/InfoScreen.js'
-import { NoDataInfoBox } from './common/NoDataWarning.js'
+import { NoDataInfoBox } from './common/Warnings.js'
 import styles from './ReportData.module.css'
 import { SectionOne } from './section1/SectionOne.js'
 import { SectionTwo } from './section2/SectionTwo.js'

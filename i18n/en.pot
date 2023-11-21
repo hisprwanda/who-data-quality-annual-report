@@ -5,8 +5,8 @@ msgstr ""
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1)\n"
-"POT-Creation-Date: 2023-11-20T20:08:03.059Z\n"
-"PO-Revision-Date: 2023-11-20T20:08:03.059Z\n"
+"POT-Creation-Date: 2023-11-20T14:51:32.002Z\n"
+"PO-Revision-Date: 2023-11-20T14:51:32.002Z\n"
 
 msgid "Select period(s)"
 msgstr "Select period(s)"
@@ -25,6 +25,9 @@ msgstr "subsection"
 
 msgid "section"
 msgstr "section"
+
+msgid "Something went wrong when retrieving data"
+msgstr "Something went wrong when retrieving data"
 
 msgid "No data to display"
 msgstr "No data to display"
@@ -92,6 +95,9 @@ msgstr ""
 
 msgid "This configuration is used as the basis for the Annual Report."
 msgstr "This configuration is used as the basis for the Annual Report."
+
+msgid "[Core]"
+msgstr "[Core]"
 
 msgid "[Core]"
 msgstr "[Core]"

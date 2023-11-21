@@ -8,3 +8,7 @@
 .generateReportButtonContainer {
     margin: auto 0 auto var(--spacers-dp8);
 }
+
+.noticeBoxContainer {
+    margin: var(--spacers-dp16);
+}
