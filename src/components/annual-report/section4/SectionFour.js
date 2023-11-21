@@ -1,8 +1,9 @@
 import { TableBody, TableHead, TableRow } from '@dhis2/ui'
 import PropTypes from 'prop-types'
 import React, { useEffect } from 'react'
+import { LoadingSpinner } from '../../loading-spinner/LoadingSpinner.js'
 import { Chart } from '../Chart.js'
-import { InterpretationsField } from '../common/index.js'
+import { InterpretationsField, SectionError } from '../common/index.js'
 import {
     ReportCell,
     ReportCellHead,
@@ -178,11 +179,11 @@ export const SectionFour = ({ reportParameters }) => {
     }, [refetch, reportParameters])
 
     if (loading) {
-        return <span>loading</span>
+        return <LoadingSpinner noLayer={true} />
     }
 
     if (error) {
-        return <span>error</span>
+        return <SectionError error={error} />
     }
 
     if (section4Data) {

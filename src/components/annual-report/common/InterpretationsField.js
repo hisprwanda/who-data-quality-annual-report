@@ -7,7 +7,7 @@ import styles from './InterpretationsField.module.css'
 /**
  * A reusable field to add after each report section. Has some print styles
  * * If there's no text, it'll be hidden during print
- * * If there is text, the textarea itself will be hidden and a styled div 
+ * * If there is text, the textarea itself will be hidden and a styled div
  * will be shown because it looks better than the textarea
  * * It expects to be added to `grid` layouts, which are used for side-by-side
  * table and chart layouts in the report
