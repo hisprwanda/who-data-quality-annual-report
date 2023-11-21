@@ -3,7 +3,7 @@ import i18n from '@dhis2/d2-i18n'
 import { Button, SelectorBar } from '@dhis2/ui'
 import PropTypes from 'prop-types'
 import React, { useMemo, useState } from 'react'
-import { Link } from 'react-router-dom'
+// import { Link } from 'react-router-dom'
 import { useConfigurations } from '../../utils/index.js'
 import { GenerateReportTooltip } from './GenerateReportButtonTooltip.js'
 import { getReportParameters } from './getReportParameters.js'
@@ -29,7 +29,59 @@ const configQuery = {
     },
 }
 
-export const ReportParameterSelector = ({ setReportParameters }) => {
+const updateHistory = (to) => {
+    window.history.pushState({}, '', to)
+    window.dispatchEvent(new PopStateEvent('popstate'))
+}
+
+export const Link = ({ to, children }) => (
+    <>
+        <span
+            onClick={() => {
+                updateHistory(to)
+            }}
+        >
+            {children}
+        </span>
+        <style>
+            {`
+        span * {
+            text-decoration: underline;
+            cursor: pointer;
+        }
+    `}
+        </style>
+    </>
+)
+
+Link.propTypes = {
+    children: PropTypes.node,
+    to: PropTypes.string,
+}
+
+const LinkButton = ({ isReportPage }) => {
+    if (!isReportPage) {
+        return (
+            <Link to="/">
+                <Button small>{i18n.t('Exit configurations')}</Button>
+            </Link>
+        )
+    }
+    return (
+        <Link to="/#/configurations">
+            <Button small>{i18n.t('Configurations')}</Button>
+        </Link>
+    )
+}
+
+LinkButton.propTypes = {
+    isReportPage: PropTypes.bool,
+}
+
+export const ReportParameterSelector = ({
+    setReportParameters,
+    isReportPage,
+}) => {
     const { loading, data, error } = useDataQuery(configQuery)
     const configurations = useConfigurations()
 
@@ -83,9 +135,7 @@ export const ReportParameterSelector = ({ setReportParameters }) => {
             <SelectorBar
                 additionalContent={
                     <div className={styles.additionalContentContainer}>
-                        <Link to="/configurations">
-                            <Button small>{i18n.t('Configurations')}</Button>
-                        </Link>
+                        <LinkButton isReportPage={isReportPage} />
                     </div>
                 }
             >
@@ -93,6 +143,7 @@ export const ReportParameterSelector = ({ setReportParameters }) => {
                     groups={configurations?.groups}
                     selectedGroup={selectedGroup}
                     setSelectedGroup={setSelectedGroup}
+                    disabled={!isReportPage}
                 />
                 <OrgUnitSelector
                     orgUnitLevels={data?.orgUnitLevels?.organisationUnitLevels}
@@ -105,18 +156,23 @@ export const ReportParameterSelector = ({ setReportParameters }) => {
                     setSelectedOrgUnit={setSelectedOrgUnit}
                     selectedOrgUnitLevel={selectedOrgUnitLevel}
                     setSelectedOrgUnitLevel={setSelectedOrgUnitLevel}
+                    disabled={!isReportPage}
                 />
                 <PeriodSelector
                     selectedPeriods={selectedPeriods}
                     setSelectedPeriods={setSelectedPeriods}
+                    disabled={!isReportPage}
                 />
                 <div className={styles.generateReportButtonContainer}>
-                    <GenerateReportTooltip disabled={!reportGenerateEnabled}>
+                    <GenerateReportTooltip
+                        disabled={!isReportPage || !reportGenerateEnabled}
+                        isReportPage={isReportPage}
+                    >
                         <Button
                             small
                             primary
                             onClick={generateReport}
-                            disabled={!reportGenerateEnabled}
+                            disabled={!isReportPage || !reportGenerateEnabled}
                         >
                             {i18n.t('Generate report')}
                         </Button>
@@ -127,5 +183,6 @@ export const ReportParameterSelector = ({ setReportParameters }) => {
     }
 }
 ReportParameterSelector.propTypes = {
+    isReportPage: PropTypes.bool,
     setReportParameters: PropTypes.func,
 }

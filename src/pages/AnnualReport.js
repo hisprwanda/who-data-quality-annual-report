@@ -1,16 +1,15 @@
-import React, { useState } from 'react'
+import PropTypes from 'prop-types'
+import React, { useEffect } from 'react'
 import { ReportData } from '../components/annual-report/ReportData.js'
-import { ReportParameterSelector } from '../components/report-parameter-selector/index.js'
 
-export const AnnualReport = () => {
-    const [reportParameters, setReportParameters] = useState({})
+export const AnnualReport = ({ reportParameters, setIsReportPage }) => {
+    useEffect(() => {
+        setIsReportPage(true)
+    })
+    return <ReportData reportParameters={reportParameters} />
+}
 
-    return (
-        <>
-            <ReportParameterSelector
-                setReportParameters={setReportParameters}
-            />
-            <ReportData reportParameters={reportParameters} />
-        </>
-    )
+AnnualReport.propTypes = {
+    reportParameters: PropTypes.object,
+    setIsReportPage: PropTypes.bool,
 }

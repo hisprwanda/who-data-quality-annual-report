@@ -30,7 +30,12 @@ MenuSelect.propTypes = {
     onChange: PropTypes.func,
 }
 
-export const GroupSelector = ({ groups, selectedGroup, setSelectedGroup }) => {
+export const GroupSelector = ({
+    groups,
+    selectedGroup,
+    setSelectedGroup,
+    disabled,
+}) => {
     const groupOptions = [
         { value: CORE_GROUP_CODE, label: i18n.t('[Core]') },
         ...groups.map(({ code, name }) => ({
@@ -50,6 +55,7 @@ export const GroupSelector = ({ groups, selectedGroup, setSelectedGroup }) => {
             open={open}
             setOpen={setOpen}
             noValueMessage={i18n.t('Choose a group')}
+            disabled={disabled}
         >
             <MenuSelect
                 values={groupOptions}
@@ -64,6 +70,7 @@ export const GroupSelector = ({ groups, selectedGroup, setSelectedGroup }) => {
 }
 
 GroupSelector.propTypes = {
+    disabled: PropTypes.bool,
     groups: PropTypes.array,
     selectedGroup: PropTypes.string,
     setSelectedGroup: PropTypes.func,

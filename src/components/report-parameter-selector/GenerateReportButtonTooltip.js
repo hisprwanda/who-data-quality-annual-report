@@ -3,12 +3,16 @@ import { Tooltip } from '@dhis2/ui'
 import PropTypes from 'prop-types'
 import React from 'react'
 
-export const GenerateReportTooltip = ({ disabled, children }) => {
+export const GenerateReportTooltip = ({ disabled, isReportPage, children }) => {
     return disabled ? (
         <Tooltip
-            content={i18n.t(
-                'Group, Organisation unit, Organisation unit level, period, and comparison periods must all be selected before a report can be generated.'
-            )}
+            content={
+                !isReportPage
+                    ? i18n.t('Report must be generated from report page.')
+                    : i18n.t(
+                          'Group, Organisation unit, Organisation unit level, period, and comparison periods must all be selected before a report can be generated.'
+                      )
+            }
         >
             {children}
         </Tooltip>
@@ -20,4 +24,5 @@ export const GenerateReportTooltip = ({ disabled, children }) => {
 GenerateReportTooltip.propTypes = {
     children: PropTypes.node,
     disabled: PropTypes.bool,
+    isReportPage: PropTypes.bool,
 }

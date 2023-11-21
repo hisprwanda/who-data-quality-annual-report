@@ -160,6 +160,7 @@ PeriodsSelect.propTypes = {
 export const PeriodSelector = ({
     selectedPeriods: periods,
     setSelectedPeriods: setPeriods,
+    disabled,
 }) => {
     const [open, setOpen] = useState(false)
     const [periodType, setPeriodType] = useState()
@@ -172,6 +173,7 @@ export const PeriodSelector = ({
             noValueMessage={i18n.t('Choose a period')}
             open={open}
             setOpen={setOpen}
+            disabled={disabled}
         >
             <div className={styles.menuContainer}>
                 <div className={styles.inputsContainer}>
@@ -203,6 +205,7 @@ export const PeriodSelector = ({
     )
 }
 PeriodSelector.propTypes = {
+    disabled: PropTypes.bool,
     selectedPeriods: PropTypes.array,
     setSelectedPeriods: PropTypes.func,
 }

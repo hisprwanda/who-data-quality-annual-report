@@ -21,6 +21,7 @@ SectionLayout.propTypes = {
 }
 
 export const ReportData = ({ reportParameters }) => {
+    console.log(reportParameters)
     if (Object.keys(reportParameters).length === 0) {
         return <ReportInfoScreen />
     }

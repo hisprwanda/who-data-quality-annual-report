@@ -28,6 +28,7 @@ export const OrgUnitSelector = ({
     setSelectedOrgUnit,
     selectedOrgUnitLevel,
     setSelectedOrgUnitLevel,
+    disabled,
 }) => {
     const [open, setOpen] = useState(false)
     const rootOrgUnits = rootOrgUnitsInfo.map(({ id }) => id)
@@ -43,6 +44,7 @@ export const OrgUnitSelector = ({
             open={open}
             setOpen={setOpen}
             noValueMessage={i18n.t('Choose an organisation unit')}
+            disabled={disabled}
         >
             <div className={styles.menuContainer}>
                 <div className={styles.inputsContainer}>
@@ -121,6 +123,7 @@ export const OrgUnitSelector = ({
 }
 
 OrgUnitSelector.propTypes = {
+    disabled: PropTypes.bool,
     orgUnitLevels: PropTypes.array,
     rootOrgUnitsInfo: PropTypes.array,
     selectedOrgUnit: PropTypes.object,

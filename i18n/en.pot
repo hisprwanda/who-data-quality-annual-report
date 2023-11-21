@@ -5,8 +5,8 @@ msgstr ""
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1)\n"
-"POT-Creation-Date: 2023-11-20T20:08:03.059Z\n"
-"PO-Revision-Date: 2023-11-20T20:08:03.059Z\n"
+"POT-Creation-Date: 2023-11-21T08:53:56.792Z\n"
+"PO-Revision-Date: 2023-11-21T08:53:56.792Z\n"
 
 msgid "Select period(s)"
 msgstr "Select period(s)"
@@ -93,6 +93,16 @@ msgstr ""
 msgid "This configuration is used as the basis for the Annual Report."
 msgstr "This configuration is used as the basis for the Annual Report."
 
+msgid "Report must be generated from report page."
+msgstr "Report must be generated from report page."
+
+msgid ""
+"Group, Organisation unit, Organisation unit level, period, and comparison "
+"periods must all be selected before a report can be generated."
+msgstr ""
+"Group, Organisation unit, Organisation unit level, period, and comparison "
+"periods must all be selected before a report can be generated."
+
 msgid "[Core]"
 msgstr "[Core]"
 
@@ -147,11 +157,11 @@ msgstr "Choose a period type first"
 msgid "Preceding years for reference"
 msgstr "Preceding years for reference"
 
+msgid "Exit configurations"
+msgstr "Exit configurations"
+
 msgid "Configurations"
 msgstr "Configurations"
 
 msgid "Generate report"
 msgstr "Generate report"
-
-msgid "Exit configurations"
-msgstr "Exit configurations"
