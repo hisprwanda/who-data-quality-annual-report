@@ -9,7 +9,7 @@ import { SectionFour } from './section4/SectionFour.js'
 
 const SectionLayout = ({ title, children }) => (
     <div>
-        <span className={styles.sectionHeading}>{title.toUpperCase()}</span>
+        <div className={styles.sectionHeading}>{title.toUpperCase()}</div>
         {children}
     </div>
 )
@@ -24,13 +24,19 @@ export const ReportData = ({ reportParameters }) => {
         return null
     }
 
+    const isSectionOneEmpty =
+        !Object.keys(
+            reportParameters.mappedConfiguration.dataElementsAndIndicators
+        ).length ||
+        !Object.keys(reportParameters.mappedConfiguration.dataSets).length
+
     return (
         <div className={styles.reportContainer}>
             <SectionLayout title="Domain 1 - Completeness of Reporting">
-                {reportParameters.dataElements?.length > 0 ? (
-                    <SectionOne reportParameters={reportParameters} />
-                ) : (
+                {isSectionOneEmpty ? (
                     <NoDataInfoBox subsection={false} />
+                ) : (
+                    <SectionOne reportParameters={reportParameters} />
                 )}
             </SectionLayout>
             <SectionLayout title="Domain 2 - Internal Consistency of Reported Data">

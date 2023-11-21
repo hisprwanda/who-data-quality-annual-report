@@ -1,0 +1,16 @@
+.subsection {
+    margin-bottom: 24px;
+}
+
+.marginTop4 {
+    margin-top: 4px;
+}
+
+.section1Chart {
+    composes: subsection;
+    border: 1px solid var(--colors-grey400);
+}
+
+.subsectionSubtitle {
+    font-style: italic;
+}

@@ -1,10 +1,9 @@
 import { getRoundedValue } from '../utils/mathService.js'
 import { convertAnalyticsResponseToObject } from '../utils/utils.js'
-import {
-    OVERALL_RESPONSE_NAME,
-    BY_LEVEL_RESPONSE_NAME,
-    DENOMINATOR_RELATIONS_MAP,
-} from './useFetchSectionFourData.js'
+
+export const OVERALL_RESPONSE_NAME = 'data_over_all_org_units'
+export const BY_LEVEL_RESPONSE_NAME = 'data_detail_by_level'
+export const DENOMINATOR_RELATIONS_MAP = 'denominatorRelationsMap'
 
 const getVal = ({ response, dx, ou, pe }) => {
     return response?.[dx]?.[ou]?.[pe]
@@ -70,6 +69,7 @@ const calculateSection4b = ({
     const fourBItem = {
         overallScore,
         name: relation.name,
+        level: relation.denomMinLevel,
         A: metadata[relation.A.id]?.name,
         B: metadata[relation.B.id]?.name,
         qualityThreshold: relation.criteria,

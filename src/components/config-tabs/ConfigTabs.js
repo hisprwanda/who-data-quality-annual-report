@@ -4,11 +4,11 @@ import { useRefetchConfigurations } from '../../utils/index.js'
 import styles from './ConfigTabs.module.css'
 import { ExternalDataComparison } from './external-data-comparison/ExternalDataComparison.js'
 import { NumeratorRelations } from './numerator-relations/index.js'
+import { Numerators } from './numerators/index.js'
 import { DenominatorRelations } from './tab-contents/DenominatorRelations.js'
 import { Denominators } from './tab-contents/Denominators.js'
 import { NumeratorGroups } from './tab-contents/NumeratorGroups.js'
 import { NumeratorParameters } from './tab-contents/NumeratorParameters.js'
-import { Numerators } from './tab-contents/Numerators.js'
 
 function Tabs({ configurations, mappedNumerators }) {
     const [toggleState, setToggleState] = useState(1)
@@ -96,10 +96,7 @@ function Tabs({ configurations, mappedNumerators }) {
                             : styles.content
                     }
                 >
-                    <Numerators
-                        toggleState={toggleState}
-                        configurations={configurations}
-                    />
+                    <Numerators />
                 </div>
                 <div
                     className={

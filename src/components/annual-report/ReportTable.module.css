@@ -1,0 +1,12 @@
+.reportTable td,
+.reportTable th {
+    border: 1px solid var(--colors-grey400);
+}
+
+.reportTable td:not(:first-child) {
+    text-align: right;
+}
+
+.tableRowHead {
+    background-color: var(--colors-grey200);
+}

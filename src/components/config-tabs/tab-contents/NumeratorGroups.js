@@ -194,5 +194,5 @@ export const NumeratorGroups = ({ toggleState, configurations }) => {
 
 NumeratorGroups.propTypes = {
     configurations: PropTypes.object,
-    toggleState: PropTypes.string,
+    toggleState: PropTypes.number,
 }

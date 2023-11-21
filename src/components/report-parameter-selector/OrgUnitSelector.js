@@ -11,19 +11,12 @@ import PropTypes from 'prop-types'
 import React, { useState } from 'react'
 import styles from './OrgUnitSelector.module.css'
 
-const getSelectionLabel = ({
-    selectedOrgUnit,
-    selectedOrgUnitLevel,
-    orgUnitLevels,
-}) => {
+const getSelectionLabel = ({ selectedOrgUnit, selectedOrgUnitLevel }) => {
     let label = ''
     label += selectedOrgUnit.displayName ?? ''
     label += label && selectedOrgUnitLevel ? '; ' : ''
     if (selectedOrgUnitLevel) {
-        const orgUnitLevelName = orgUnitLevels.find(
-            ({ level }) => String(level) === selectedOrgUnitLevel
-        )?.displayName
-        label += orgUnitLevelName
+        label += selectedOrgUnitLevel.displayName
     }
     return label
 }
@@ -88,10 +81,15 @@ export const OrgUnitSelector = ({
                     </Field>
                     <SingleSelectField
                         label={i18n.t('Choose an organisation unit level')}
-                        selected={selectedOrgUnitLevel ?? ''}
-                        onChange={({ selected }) =>
-                            setSelectedOrgUnitLevel(selected)
-                        }
+                        // format `selected` as just the ID so it's a string
+                        selected={selectedOrgUnitLevel?.id ?? ''}
+                        // parse the selected ID to save the full object in state
+                        onChange={({ selected }) => {
+                            const newSelected = orgUnitLevels.find(
+                                (level) => level.id === selected
+                            )
+                            setSelectedOrgUnitLevel(newSelected)
+                        }}
                     >
                         {orgUnitLevels
                             .filter(({ level }) => {
@@ -99,10 +97,10 @@ export const OrgUnitSelector = ({
                                     level > Number(selectedOrgUnit?.level ?? 1)
                                 )
                             })
-                            .map(({ id, displayName, level }) => (
+                            .map(({ id, displayName }) => (
                                 <SingleSelectOption
                                     key={id}
-                                    value={String(level)}
+                                    value={id}
                                     label={displayName}
                                 />
                             ))}
@@ -126,7 +124,11 @@ OrgUnitSelector.propTypes = {
     orgUnitLevels: PropTypes.array,
     rootOrgUnitsInfo: PropTypes.array,
     selectedOrgUnit: PropTypes.object,
-    selectedOrgUnitLevel: PropTypes.string,
+    selectedOrgUnitLevel: PropTypes.shape({
+        displayName: PropTypes.string,
+        id: PropTypes.string,
+        level: PropTypes.number,
+    }),
     setSelectedOrgUnit: PropTypes.func,
     setSelectedOrgUnitLevel: PropTypes.func,
 }

@@ -3,11 +3,11 @@ import {
     convertAnalyticsResponseToObject,
     sortArrayAfterIndex1,
 } from '../utils/utils.js'
-import {
-    OVERALL_RESPONSE_NAME,
-    BY_LEVEL_RESPONSE_NAME,
-    EXTERNAL_RELATIONS_INDICES_WITH_BY_LEVEL_DATA,
-} from './useFetchSectionThreeData.js'
+
+export const OVERALL_RESPONSE_NAME = 'data_over_all_org_units'
+export const BY_LEVEL_RESPONSE_NAME = 'data_detail_by_level'
+export const EXTERNAL_RELATIONS_INDICES_WITH_BY_LEVEL_DATA =
+    'externalRelationsResponsesIndices'
 
 const MULTIPLE_ORG_UNITS_CHART_TYPE = 'scatter'
 const SINGLE_ORG_UNITS_CHART_TYPE = 'bullet'

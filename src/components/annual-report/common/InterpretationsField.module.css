@@ -1,0 +1,23 @@
+.gridSpan2 {
+    /* This is expected to be added to grids and span 2 columns */
+    grid-column-start: span 2;
+}
+
+.visibleInPrint {
+    display: none;
+}
+
+@media print {
+    .hiddenInPrint {
+        display: none !important; /* needs to compete with display: flex */
+    }
+
+    .visibleInPrint {
+        display: block;
+        /* mimic styles from textarea */
+        padding: 8px 12px;
+        border: 1px solid var(--colors-grey400);
+        font-size: 14px;
+        line-height: 17px;    
+    }
+}
