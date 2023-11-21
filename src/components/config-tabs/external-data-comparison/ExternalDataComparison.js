@@ -21,7 +21,7 @@ import {
 import { EditExternalDataComparisonModel } from './EditExternalDataComparisonModel.js'
 import { ExternalDataComparisonTableItem } from './ExternalDataComparisonTableItem.js'
 
-const AddExternalRelationButton = ({ configurations }) => {
+const AddExternalRelationButton = () => {
     const [addNewModalOpen, setAddNewModalOpen] = useState(false)
     const dispatch = useConfigurationsDispatch()
 
@@ -44,7 +44,6 @@ const AddExternalRelationButton = ({ configurations }) => {
             </Button>
             {addNewModalOpen && (
                 <EditExternalDataComparisonModel
-                    configurations={configurations}
                     onSave={addExternalRelation}
                     onClose={closeModal}
                 />
@@ -112,7 +111,6 @@ export const ExternalDataComparison = () => {
                             <TableCell colSpan="7">
                                 <ButtonStrip end>
                                     <AddExternalRelationButton
-                                        configurations={configurations}
                                     />
                                 </ButtonStrip>
                             </TableCell>

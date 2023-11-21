@@ -8,8 +8,8 @@ import {
     useConfigurationsDispatch,
 } from '../../../utils/index.js'
 import { getNumeratorDataElement } from '../../../utils/numeratorsMetadataData.js'
-import { ConfirmationModal } from '../numerator-relations/ConfirmationModal.js'
 import { EditExternalDataComparisonModel } from './EditExternalDataComparisonModel.js'
+import { ConfirmationModal } from '../ConfirmationModal.js'
 
 /** Manages the "update form" modal and datastore mutation */
 const EditExternalRelationButton = ({ externalRelation }) => {
