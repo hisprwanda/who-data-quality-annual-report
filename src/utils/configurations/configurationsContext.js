@@ -2,7 +2,7 @@ import { useAlert, useDataEngine } from '@dhis2/app-runtime'
 import { Box, CenteredContent, NoticeBox } from '@dhis2/ui'
 import PropTypes from 'prop-types'
 import React, { useState, useContext } from 'react'
-import { LoadingSpinner } from '../../components/common/LoadingSpinner.js'
+import { LoadingSpinner } from '../../components/loading-spinner/LoadingSpinner.js'
 import { configurationsReducer } from './configurationsReducer.js'
 import {
     useSetUpConfigurations,

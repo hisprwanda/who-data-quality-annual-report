@@ -1,7 +1,7 @@
 import { TableBody, TableHead, TableRow } from '@dhis2/ui'
 import PropTypes from 'prop-types'
 import React, { useEffect } from 'react'
-import { LoadingSpinner } from '../../common/LoadingSpinner.js'
+import { LoadingSpinner } from '../../loading-spinner/LoadingSpinner.js'
 import { Chart } from '../Chart.js'
 import {
     InterpretationsField,
