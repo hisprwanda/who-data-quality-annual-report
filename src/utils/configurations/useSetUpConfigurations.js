@@ -27,6 +27,30 @@ const SET_UP_CONFIGURATIONS_MUTATION = {
     data: ({ newConfigurations }) => newConfigurations,
 }
 
+// See https://docs.dhis2.org/en/develop/using-the-api/dhis-core-version-237/data-store.html#webapi_data_store_sharing
+const DATASTORE_METADATA_QUERY = {
+    dataStoreMetadata: { resource: `dataStore/${DATASTORE_ID}/metaData` },
+}
+const DATASTORE_SHARING_MUTATION = {
+    resource: 'sharing',
+    type: 'create',
+    params: ({ id }) => ({ type: 'dataStore', id }),
+    // new sharing settings:
+    data: { object: { publicAccess: 'r-------' } },
+}
+const updateDatastoreSharing = async (engine) => {
+    try {
+        const data = await engine.query(DATASTORE_METADATA_QUERY)
+        const dataStoreID = data.dataStoreMetadata.id
+        await engine.mutate(DATASTORE_SHARING_MUTATION, {
+            variables: { id: dataStoreID },
+        })
+    } catch (err) {
+        console.error('Error updating datastore sharing settings')
+        console.error(err)
+    }
+}
+
 const convertOldConfigToNew = (oldConfigurations) => {
     // Add 'core' property directly on to numerators
     const { coreIndicators } = oldConfigurations
@@ -99,6 +123,10 @@ export const useSetUpConfigurations = (setConfigurations) => {
             setLoading(false)
             return
         }
+
+        // And afterwards, update sharing for this datastore key to 'r-------'
+        // (results aren't critical so it doesn't have to affect any state here)
+        updateDatastoreSharing(engine)
     }, [engine, setConfigurations])
 
     useEffect(() => {
