@@ -326,6 +326,7 @@ const getFacilityReportingData = ({
             filteredData_levels,
             key
         )
+        regionsWithLowScore.sort()
         const dataset = filteredData_overall[key]
         const dataset_levels = filteredData_levels[key] // a corresponding dataset in the reporting rates by ou level
 
@@ -336,8 +337,10 @@ const getFacilityReportingData = ({
         // in case no region was under the threshold, the divergent % will remain zero
         let divergentRegionsPercent = 0
         if (totalRegionsCount > 0) {
-            divergentRegionsPercent =
-                (divergentRegionsCount / totalRegionsCount) * 100
+            divergentRegionsPercent = getRoundedValue(
+                (divergentRegionsCount / totalRegionsCount) * 100,
+                1
+            )
         }
 
         // Add the new properties to the dataset
@@ -349,6 +352,9 @@ const getFacilityReportingData = ({
     }
     const flattenedData = Object.values(filteredData_overall).map(
         (item) => item[0]
+    )
+    flattenedData.sort((a, b) =>
+        a?.dataset_name?.localeCompare(b?.dataset_name)
     )
     return flattenedData
 }
@@ -402,6 +408,7 @@ const getConsistencyOfDatasetCompletenessData = ({
                 period: period,
                 periodsIDs,
             })
+        regionsWithLowScore.sort()
 
         // Calculate "divergentRegionsCount" and "divergentRegionsPercent"
         const divergentRegionsCount = regionsWithLowScore?.length
@@ -424,6 +431,9 @@ const getConsistencyOfDatasetCompletenessData = ({
 
     const flattenedData = Object.values(filteredData_overall).map(
         (item) => item[0]
+    )
+    flattenedData.sort((a, b) =>
+        a?.dataset_name?.localeCompare(b?.dataset_name)
     )
     return flattenedData
 }
