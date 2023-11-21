@@ -1,0 +1,42 @@
+.wrapperDiv {
+    display: flex;
+    flex-direction: column; /* added this */
+    justify-content: center;
+    align-items: center;
+    height: calc(100% - 120px);
+    width: 400px;
+    text-align: center;
+    margin: 0 auto; /* added this */
+}
+
+.headingText {
+    font-size: 20px;
+    line-height: 24px;
+    font-weight: 500;
+    color: var(--colors-grey900);
+    margin-top: 32px;
+    margin-bottom: 16px;
+}
+
+.instructionsText {
+    margin-top: var(--spacers-dp8);
+    font-size: 14px;
+    line-height: 21px;
+    color: var(--colors-grey800);
+}
+.instructionsTextTwo {
+    margin-top: var(--spacers-dp8);
+    font-size: 14px;
+    line-height: 21px;
+    color: var(--colors-grey800);
+}
+.linkTextContainer {
+    margin-top: var(--spacers-dp24);
+}
+
+.linkText {
+    font-size: 14px;
+    line-height: 21px;
+    color: var(--colors-grey800);
+    margin-top: 24px;
+}

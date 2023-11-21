@@ -1,43 +1,4 @@
-.configurationsContainer{
-    width: 100%;
+.configurationsContainer {
     font-size: 14px;
-}
-
-.subContainer {
-    display: flex;
-    flex-direction: column;
-    margin: auto;
-    width: 95%;
-}
-
-.descriptionText{
-    display: flex;
-    justify-content: center;
-    align-items: center;
-}
-
-/* .config-tabs-container{
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 50px;
-} */
-
-.tableParagraph{
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 40px;
-}
-
-.configTable {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-}
-
-.circularLoader {
-    display: flex;
-    justify-content: center;
-    margin-top: 50px;
+    height: 100%;
 }

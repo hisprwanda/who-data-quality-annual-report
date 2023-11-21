@@ -5,8 +5,8 @@ msgstr ""
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1)\n"
-"POT-Creation-Date: 2023-11-20T14:51:32.002Z\n"
-"PO-Revision-Date: 2023-11-20T14:51:32.002Z\n"
+"POT-Creation-Date: 2023-11-21T18:02:20.312Z\n"
+"PO-Revision-Date: 2023-11-21T18:02:20.312Z\n"
 
 msgid "Select period(s)"
 msgstr "Select period(s)"
@@ -65,8 +65,46 @@ msgstr "Survey"
 msgid "Survey: {{survey}}%<br/>Routine: {{routine}}%"
 msgstr "Survey: {{survey}}%<br/>Routine: {{routine}}%"
 
+msgid "Exit configurations"
+msgstr "Exit configurations"
+
 msgid "Please provide a value"
 msgstr "Please provide a value"
+
+msgid "WHO Data Quality Annual Report"
+msgstr "WHO Data Quality Annual Report"
+
+msgid ""
+"Choose a group, organisation unit, and period from the top bar and then "
+"click \"Generate report\""
+msgstr ""
+"Choose a group, organisation unit, and period from the top bar and then "
+"click \"Generate report\""
+
+msgid "Learn more about the Data Quality Annual Report"
+msgstr "Learn more about the Data Quality Annual Report"
+
+msgid "WHO Data Quality Annual Report - Configuration"
+msgstr "WHO Data Quality Annual Report - Configuration"
+
+msgid ""
+"This module is used for configuring the WHO Data Quality Annual Report, and "
+"mapping the proposed data quality indicators to data elements and "
+"indicators in the DHIS2 database."
+msgstr ""
+"This module is used for configuring the WHO Data Quality Annual Report, and "
+"mapping the proposed data quality indicators to data elements and "
+"indicators in the DHIS2 database."
+
+msgid "This configuration is used as the basis for the Annual Report."
+msgstr "This configuration is used as the basis for the Annual Report."
+
+msgid ""
+"Group, Organisation unit, Organisation unit level, period, and comparison "
+"periods must all be selected before a report can be generated."
+msgstr ""
+"Group, Organisation unit, Organisation unit level, period, and comparison "
+"periods must all be selected before a report can be generated."
 
 msgid "[Core]"
 msgstr "[Core]"
@@ -122,8 +160,8 @@ msgstr "Choose a period type first"
 msgid "Preceding years for reference"
 msgstr "Preceding years for reference"
 
+msgid "Configurations"
+msgstr "Configurations"
+
 msgid "Generate report"
 msgstr "Generate report"
-
-msgid "Print"
-msgstr "Print"
