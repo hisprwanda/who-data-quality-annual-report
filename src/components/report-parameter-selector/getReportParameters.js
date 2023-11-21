@@ -4,6 +4,7 @@ export const getReportParameters = ({
     groupID,
     orgUnitID,
     orgUnitLevel,
+    orgUnitLevels,
     boundaryOrgUnitLevel,
     configurations,
     periods,
@@ -24,10 +25,19 @@ export const getReportParameters = ({
         groupID
     )
 
+    const orgUnitLevelNamesByLevel = new Map()
+    orgUnitLevels.forEach(({ level, displayName }) => {
+        orgUnitLevelNamesByLevel.set(level, displayName)
+    })
+
     const reportParameters = {
         orgUnits: [orgUnitID],
-        orgUnitLevel: `LEVEL-${orgUnitLevel}`,
-        orgUnitLevelNumber: orgUnitLevel,
+        // selected org unit level info
+        orgUnitLevel: `LEVEL-${orgUnitLevel.level}`,
+        orgUnitLevelNumber: orgUnitLevel.level,
+        orgUnitLevelName: orgUnitLevel.displayName,
+        // all org unit levels, if needed for mapping:
+        orgUnitLevelNamesByLevel,
         boundaryOrgUnitLevel,
         groupID: groupID,
         // note that `periods[0]` is the current period

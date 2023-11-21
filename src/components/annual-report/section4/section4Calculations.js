@@ -69,6 +69,7 @@ const calculateSection4b = ({
     const fourBItem = {
         overallScore,
         name: relation.name,
+        level: relation.denomMinLevel,
         A: metadata[relation.A.id]?.name,
         B: metadata[relation.B.id]?.name,
         qualityThreshold: relation.criteria,

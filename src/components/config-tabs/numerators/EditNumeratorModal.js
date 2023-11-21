@@ -17,35 +17,36 @@ import {
     hasValue,
 } from '@dhis2/ui'
 import PropTypes from 'prop-types'
-import React from 'react'
+import React, { useMemo } from 'react'
 import { useConfigurations, useDataItemNames } from '../../../utils/index.js'
+import { DATA_ELEMENT, TOTALS } from './constants.js'
 import { DataMappingFormSection } from './DataMappingForm.js'
 import styles from './EditNumeratorModal.module.css'
 
-const { Form, Field } = ReactFinalForm
+const { Form, Field, useField } = ReactFinalForm
 
-const DEFAULT_NUMERATOR_VALUES = {
-    // edited in this form:
-    name: undefined,
-    definition: undefined,
-    core: false,
-    dataID: undefined, // todo: this and dataElementID don't actually get edited
-    dataSetID: [], // todo: -- they use dataItem and dataSets in form state instead
-    dataElementOperandID: undefined,
+const DEFAULT_FORM_VALUES = {
+    // Controls field visibility:
+    dataType: DATA_ELEMENT,
+    dataElementType: TOTALS,
 }
 
-const CurrentMappingInfo = ({ dataID }) => {
+const CurrentMappingInfo = () => {
+    // subscription not needed because it won't be changing
+    const prevDataIDField = useField('prevDataID')
+    const prevDataID = prevDataIDField.input.value
     const dataItemNames = useDataItemNames()
-    const dataItemName = dataItemNames.get(dataID)
 
+    if (!prevDataID) {
+        return null
+    }
+
+    const dataItemName = dataItemNames.get(prevDataID)
     return (
         <div
             className={styles.currentMappingInfo}
         >{`This numerator is currently mapped to "${dataItemName}"`}</div>
     )
-}
-CurrentMappingInfo.propTypes = {
-    dataID: PropTypes.string,
 }
 
 /**
@@ -61,7 +62,7 @@ CurrentMappingInfo.propTypes = {
 export function EditNumeratorModal({ numeratorDataToEdit, onSave, onClose }) {
     const configurations = useConfigurations()
 
-    const numeratorGroupOptions = React.useMemo(
+    const numeratorGroupOptions = useMemo(
         () =>
             configurations.groups
                 .map(({ displayName, code }) => ({
@@ -71,6 +72,26 @@ export function EditNumeratorModal({ numeratorDataToEdit, onSave, onClose }) {
                 .sort((a, b) => a.label.localeCompare(b.label)),
         [configurations.groups]
     )
+
+    const formInitialValues = useMemo(() => {
+        if (!numeratorDataToEdit) {
+            return DEFAULT_FORM_VALUES
+        }
+
+        // properties listed out here for clarity
+        return {
+            name: numeratorDataToEdit.name,
+            definition: numeratorDataToEdit.definition,
+            groups: numeratorDataToEdit.groups,
+            core: numeratorDataToEdit.core,
+            // not an editable field, but will be added to the form state
+            // for convenience (some fields will be read-only)
+            custom: numeratorDataToEdit.custom,
+            // same (for other form logic like if fields are required)
+            prevDataID: numeratorDataToEdit.prevDataID,
+            ...DEFAULT_FORM_VALUES,
+        }
+    }, [numeratorDataToEdit])
 
     return (
         <Form
@@ -105,7 +126,7 @@ export function EditNumeratorModal({ numeratorDataToEdit, onSave, onClose }) {
                 })
                 onClose()
             }}
-            initialValues={numeratorDataToEdit || DEFAULT_NUMERATOR_VALUES}
+            initialValues={formInitialValues}
             // not subcribing to `values` prevents rerendering the entire form on every input change
             subscription={{ submitting: true }}
         >
@@ -175,11 +196,7 @@ export function EditNumeratorModal({ numeratorDataToEdit, onSave, onClose }) {
                             </TableBody>
                         </Table>
 
-                        {numeratorDataToEdit?.dataID && (
-                            <CurrentMappingInfo
-                                dataID={numeratorDataToEdit.dataID}
-                            />
-                        )}
+                        <CurrentMappingInfo />
 
                         <DataMappingFormSection />
                     </ModalContent>

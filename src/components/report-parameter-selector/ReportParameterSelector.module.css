@@ -8,3 +8,7 @@
 .additionalContent * {
     margin-right: 8px;
 }
+
+.noticeBoxContainer {
+    margin: var(--spacers-dp16);
+}

@@ -1,26 +1,13 @@
 import { useAlert, useDataEngine } from '@dhis2/app-runtime'
-import {
-    Box,
-    CenteredContent,
-    CircularLoader,
-    Layer,
-    NoticeBox,
-} from '@dhis2/ui'
+import { Box, CenteredContent, NoticeBox } from '@dhis2/ui'
 import PropTypes from 'prop-types'
 import React, { useState, useContext } from 'react'
+import { LoadingSpinner } from '../../components/loading-spinner/LoadingSpinner.js'
 import { configurationsReducer } from './configurationsReducer.js'
 import {
     useSetUpConfigurations,
     DATASTORE_ID,
 } from './useSetUpConfigurations.js'
-
-const LoadingSpinner = () => (
-    <Layer>
-        <CenteredContent>
-            <CircularLoader />
-        </CenteredContent>
-    </Layer>
-)
 
 const ErrorInfo = ({ errorMessage }) => (
     <Box height={'100%'}>

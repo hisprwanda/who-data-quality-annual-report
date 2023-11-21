@@ -1,7 +1,9 @@
 import { TableBody, TableHead, TableRow } from '@dhis2/ui'
 import PropTypes from 'prop-types'
 import React, { useEffect } from 'react'
+import { LoadingSpinner } from '../../loading-spinner/LoadingSpinner.js'
 import { Chart } from '../Chart.js'
+import { InterpretationsField, SectionError } from '../common/index.js'
 import {
     ReportCell,
     ReportCellHead,
@@ -41,7 +43,12 @@ SubSectionLayout.propTypes = {
     title: PropTypes.string,
 }
 
-const Section3A = ({ title, subtitle, subsectionData }) => (
+const Section3A = ({
+    title,
+    subtitle,
+    subsectionData,
+    reportParameters: { orgUnitLevelNamesByLevel },
+}) => (
     <>
         <ReportTable className={styles.marginBottom4}>
             <TableHead>
@@ -51,6 +58,10 @@ const Section3A = ({ title, subtitle, subsectionData }) => (
         {subsectionData
             .sort((a, b) => a.name.localeCompare(b.name))
             .map((dataRow, index) => {
+                const orgUnitLevelName = orgUnitLevelNamesByLevel.get(
+                    dataRow.level
+                )
+
                 return (
                     <div className={styles.section3Grid} key={dataRow.name}>
                         <ReportTable>
@@ -88,7 +99,7 @@ const Section3A = ({ title, subtitle, subsectionData }) => (
                                 </TableRow>
                                 <TableRow>
                                     <ReportCell>
-                                        Number of Region with divergent score
+                                        {`Number of ${orgUnitLevelName} with divergent score`}
                                     </ReportCell>
                                     <ReportCell>
                                         {isNotMissing(
@@ -101,7 +112,7 @@ const Section3A = ({ title, subtitle, subsectionData }) => (
                                 </TableRow>
                                 <TableRow>
                                     <ReportCell>
-                                        % Region with poor score
+                                        {`Percent of ${orgUnitLevelName} with divergent score`}
                                     </ReportCell>
                                     <ReportCell>
                                         {isNotMissing(
@@ -126,12 +137,15 @@ const Section3A = ({ title, subtitle, subsectionData }) => (
                                 )}
                             </TableBody>
                         </ReportTable>
+
                         <Chart
                             sectionId={'section3'}
                             chartId={`chart${index}`}
                             chartInfo={dataRow.chartInfo}
                             className={styles.section3Chart}
                         />
+
+                        <InterpretationsField />
                     </div>
                 )
             })}
@@ -139,6 +153,7 @@ const Section3A = ({ title, subtitle, subsectionData }) => (
 )
 
 Section3A.propTypes = {
+    reportParameters: PropTypes.object,
     subsectionData: PropTypes.array,
     subtitle: PropTypes.string,
     title: PropTypes.string,
@@ -162,11 +177,11 @@ export const SectionThree = ({ reportParameters }) => {
     }, [refetch, reportParameters])
 
     if (loading) {
-        return <span>loading</span>
+        return <LoadingSpinner noLayer={true} />
     }
 
     if (error) {
-        return <span>{error?.message}</span>
+        return <SectionError error={error} />
     }
 
     if (section3Data) {
@@ -174,6 +189,7 @@ export const SectionThree = ({ reportParameters }) => {
             <Section3A
                 title={sectionInformation.section3a.title}
                 subtitle={sectionInformation.section3a.subtitle}
+                reportParameters={reportParameters}
                 subsectionData={section3Data.section3a}
             />
         )

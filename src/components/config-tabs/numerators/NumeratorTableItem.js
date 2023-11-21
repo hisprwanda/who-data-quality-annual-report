@@ -53,13 +53,13 @@ const EditNumeratorButton = ({ numerator, groupsContainingNumerator }) => {
     const numeratorDataForForm = useMemo(
         () => ({
             name: numerator.name,
-            definition: numerator.definition,
             core: numerator.core,
+            definition: numerator.definition,
             groups: groupsContainingNumerator.map((group) => group.code),
             // if not custom, some fields will be read-only
             custom: numerator.custom,
             // used to print: "This numerator is currently mapped to <dataItem>"
-            dataID: numerator.dataID,
+            prevDataID: numerator.dataID,
         }),
         [numerator, groupsContainingNumerator]
     )
