@@ -2,6 +2,7 @@ import i18n from '@dhis2/d2-i18n'
 import { NoticeBox } from '@dhis2/ui'
 import PropTypes from 'prop-types'
 import React from 'react'
+import styles from './InterpretationsField.module.css'
 
 export const NoDataInfoBox = ({ subsection }) => (
     <NoticeBox
@@ -26,4 +27,52 @@ export const SectionError = ({ error }) => (
 
 SectionError.propTypes = {
     error: PropTypes.object,
+}
+
+export const CouldNotCalculateOverall = ({ subOrgUnitLevelName }) => (
+    <div className={styles.gridSpan2}>
+        <NoticeBox>
+            {i18n.t(
+                'Could not calculate overall score. Calculations at {{subOrgUnitLevelName}} level were skipped.',
+                { subOrgUnitLevelName }
+            )}
+        </NoticeBox>
+    </div>
+)
+
+CouldNotCalculateOverall.propTypes = {
+    subOrgUnitLevelName: PropTypes.string,
+}
+
+export const CouldNotCalculateSubOrgUnits = ({ invalidSubOrgUnitNames }) => (
+    <div className={styles.gridSpan2}>
+        <NoticeBox>
+            {i18n.t(
+                'Could not calculate score for the following: {{invalidSubOrgUnitNames}}.',
+                {
+                    invalidSubOrgUnitNames: invalidSubOrgUnitNames,
+                    nsSeparator: '-:-',
+                }
+            )}
+        </NoticeBox>
+    </div>
+)
+
+CouldNotCalculateSubOrgUnits.propTypes = {
+    invalidSubOrgUnitNames: PropTypes.string,
+}
+
+export const CouldNotCalculateLevels = ({ subOrgUnitLevelName }) => (
+    <div className={styles.gridSpan2}>
+        <NoticeBox>
+            {i18n.t(
+                'The requested level for this relation ({{subOrgUnitLevelName}}) is not retrievable.',
+                { subOrgUnitLevelName }
+            )}
+        </NoticeBox>
+    </div>
+)
+
+CouldNotCalculateLevels.propTypes = {
+    subOrgUnitLevelName: PropTypes.string,
 }

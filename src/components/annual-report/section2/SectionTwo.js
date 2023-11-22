@@ -9,11 +9,16 @@ import {
     SectionError,
 } from '../common/index.js'
 import {
+    CouldNotCalculateOverall,
+    CouldNotCalculateSubOrgUnits,
+} from '../common/Warnings.js'
+import {
     ReportCell,
     ReportCellHead,
     ReportRowHead,
     ReportTable,
 } from '../ReportTable.js'
+import { formatVal } from '../utils/utils.js'
 import styles from './SectionTwo.module.css'
 import { useSectionTwoData } from './useSectionTwoData.js'
 
@@ -120,15 +125,29 @@ const Sections2a2b2c = ({
                         <TableRow key={dataRow.indicator}>
                             <ReportCell>{dataRow.indicator}</ReportCell>
                             <ReportCell>{dataRow.threshold} SD</ReportCell>
-                            <ReportCell>{dataRow.overallScore}%</ReportCell>
+                            <ReportCell>
+                                {formatVal(dataRow.overallScore, {
+                                    roundTo: 1,
+                                    includePercentage: true,
+                                })}
+                            </ReportCell>
                             <ReportCell>
                                 {dataRow.divergentScores?.number}
                             </ReportCell>
                             <ReportCell>
-                                {dataRow.divergentScores?.percentage}%
+                                {formatVal(
+                                    dataRow.divergentScores?.percentage,
+                                    { roundTo: 1, includePercentage: true }
+                                )}
                             </ReportCell>
                             <ReportCell>
                                 {dataRow.divergentScores?.names}
+                                {dataRow.divergentScores?.noncalculable && (
+                                    <>
+                                        <br />
+                                        {`(Could not calculate: ${dataRow.divergentScores?.noncalculable})`}
+                                    </>
+                                )}
                             </ReportCell>
                         </TableRow>
                     ))}
@@ -175,7 +194,12 @@ const Section2DBlock = ({
                 </TableRow>
                 <TableRow>
                     <ReportCell>Overall score</ReportCell>
-                    <ReportCell>{dataRow.overallScore}%</ReportCell>
+                    <ReportCell>
+                        {formatVal(dataRow.overallScore, {
+                            roundTo: 1,
+                            includePercentage: true,
+                        })}
+                    </ReportCell>
                 </TableRow>
                 <TableRow>
                     <ReportCell>
@@ -190,7 +214,10 @@ const Section2DBlock = ({
                         {`Percent of ${orgUnitLevelName} with divergent score`}
                     </ReportCell>
                     <ReportCell>
-                        {dataRow.divergentSubOrgUnits?.percent}%
+                        {formatVal(dataRow.divergentSubOrgUnits?.percent, {
+                            roundTo: 1,
+                            includePercentage: true,
+                        })}
                     </ReportCell>
                 </TableRow>
                 <TableRow>
@@ -214,6 +241,16 @@ const Section2DBlock = ({
                 chartId={`scatter2d_${index}`}
                 chartInfo={dataRow.chartInfo.scatterChartInfo}
                 className={styles.section2dScatterChart}
+            />
+        )}
+        {dataRow.invalid && (
+            <CouldNotCalculateOverall subOrgUnitLevelName={orgUnitLevelName} />
+        )}
+        {Boolean(dataRow.divergentSubOrgUnits?.nonCalculable?.length) && (
+            <CouldNotCalculateSubOrgUnits
+                invalidSubOrgUnitNames={
+                    dataRow.divergentSubOrgUnits?.nonCalculable
+                }
             />
         )}
         <InterpretationsField />
@@ -292,7 +329,12 @@ const Section2EBlock = ({
                 </TableRow>
                 <TableRow>
                     <ReportCell>Overall score</ReportCell>
-                    <ReportCell>{dataRow.overallScore}%</ReportCell>
+                    <ReportCell>
+                        {formatVal(dataRow.overallScore, {
+                            roundTo: 1,
+                            includePercentage: true,
+                        })}
+                    </ReportCell>
                 </TableRow>
                 <TableRow>
                     <ReportCell>
@@ -307,7 +349,10 @@ const Section2EBlock = ({
                         {`Percent of ${orgUnitLevelName} with divergent score`}
                     </ReportCell>
                     <ReportCell>
-                        {dataRow.divergentSubOrgUnits?.percentage}%
+                        {formatVal(dataRow.divergentSubOrgUnits?.percentage, {
+                            roundTo: 1,
+                            includePercentage: true,
+                        })}
                     </ReportCell>
                 </TableRow>
                 <TableRow>
@@ -327,6 +372,16 @@ const Section2EBlock = ({
                 chartId={`chart2e_${index}`}
                 chartInfo={dataRow.chartInfo}
                 className={styles.section2eChart}
+            />
+        )}
+        {dataRow.invalid && (
+            <CouldNotCalculateOverall subOrgUnitLevelName={orgUnitLevelName} />
+        )}
+        {Boolean(dataRow.divergentSubOrgUnits?.nonCalculable?.length) && (
+            <CouldNotCalculateSubOrgUnits
+                invalidSubOrgUnitNames={
+                    dataRow.divergentSubOrgUnits?.nonCalculable
+                }
             />
         )}
         <InterpretationsField />

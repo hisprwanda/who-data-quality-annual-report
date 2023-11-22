@@ -1,8 +1,4 @@
-import {
-    getForecastValue,
-    getMean,
-    getRoundedValue,
-} from '../utils/mathService.js'
+import { getForecastValue, getMean } from '../utils/mathService.js'
 import {
     convertAnalyticsResponseToObject,
     getVal,
@@ -88,6 +84,10 @@ const getRegionsWithLowScoreForConsistencyOfDataset = ({
                 ]
             })
             .filter((point) => !isNaN(point[1]))
+
+        if (points.length === 0) {
+            console.log(`No reference value for ${region.name}`)
+        }
 
         if (trend === 'constant') {
             // reference is average for 'constant' trend
@@ -252,6 +252,10 @@ const filterDataByProvidedPeriodConsistency = (
             })
             .filter((point) => !isNaN(point[1]))
 
+        if (points.length === 0) {
+            console.log(`No reference value for ${datasetId}`)
+        }
+
         if (trend === 'constant') {
             // reference is average for 'constant' trend
             const yearValues = points.map((point) => point[1])
@@ -277,7 +281,7 @@ const filterDataByProvidedPeriodConsistency = (
         const currentYear = [
             {
                 ...dataset[period][0],
-                score: theScore.toFixed(1),
+                score: theScore,
             },
         ]
 
@@ -337,10 +341,8 @@ const getFacilityReportingData = ({
         // in case no region was under the threshold, the divergent % will remain zero
         let divergentRegionsPercent = 0
         if (totalRegionsCount > 0) {
-            divergentRegionsPercent = getRoundedValue(
-                (divergentRegionsCount / totalRegionsCount) * 100,
-                1
-            )
+            divergentRegionsPercent =
+                (divergentRegionsCount / totalRegionsCount) * 100
         }
 
         // Add the new properties to the dataset
@@ -543,10 +545,7 @@ const calculateSection1C = ({
             ou: overallOrgUnit,
             numerator,
         })
-        const overallScore = getRoundedValue(
-            (actualValues / expectedValues) * 100,
-            1
-        )
+        const overallScore = (actualValues / expectedValues) * 100
 
         // then calculate sub units
         const divergentSubOrgUnits = []
@@ -586,10 +585,7 @@ const calculateSection1C = ({
                 .sort(),
             divergentRegionsCount: divergentSubOrgUnits.length,
             divergentRegionsPercent: subOrgUnits.length
-                ? getRoundedValue(
-                      (divergentSubOrgUnits.length / subOrgUnits.length) * 100,
-                      1
-                  )
+                ? (divergentSubOrgUnits.length / subOrgUnits.length) * 100
                 : 0,
         })
     }

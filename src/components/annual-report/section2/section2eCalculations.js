@@ -1,4 +1,3 @@
-import { getRoundedValue } from '../utils/mathService.js'
 import { convertAnalyticsResponseToObject, getVal } from '../utils/utils.js'
 import {
     OVERALL_ORG_UNIT_SECTION_2E,
@@ -91,13 +90,13 @@ const getChartInfoValue = ({
     if (type === 'do') {
         return {
             ...chartInfoValue,
-            value: getRoundedValue(subOrgUnitScore * 100, 2),
+            value: subOrgUnitScore * 100,
         }
     }
     return {
         ...chartInfoValue,
-        x: getRoundedValue(B, 2),
-        y: getRoundedValue(A, 2),
+        x: B,
+        y: A,
     }
 }
 
@@ -138,7 +137,27 @@ const calculateSection2e = ({
             metadata,
         })
 
+        const section2eItem = {
+            title: numeratorRelation.name,
+            A: metadata[numeratorRelation.A]?.name,
+            B: metadata[numeratorRelation.B]?.name,
+            expectedRelationship: RELATIONSHIP_NAMES[numeratorRelation.type],
+            qualityThreshold:
+                numeratorRelation.type === 'do'
+                    ? 'Not negative'
+                    : numeratorRelation.criteria,
+            overallScore: overallScore * 100,
+            chartInfo,
+        }
+
+        // skip subOrgUnitCalculations if score is invalid
+        if (isNaN(overallScore)) {
+            results.section2e.push({ ...section2eItem, invalid: true })
+            continue
+        }
+
         const divergentSubOrgUnits = []
+        const invalidSubOrgUnits = []
         for (const subOrgUnit of subOrgUnitIDs) {
             const subOrgUnitName = metadata[subOrgUnit]?.name
             const { type } = numeratorRelation
@@ -168,6 +187,9 @@ const calculateSection2e = ({
             if (isDivergent) {
                 divergentSubOrgUnits.push(subOrgUnitName)
             }
+            if (isNaN(subOrgUnitScore)) {
+                invalidSubOrgUnits.push(subOrgUnitName)
+            }
             const chartInfoValue = getChartInfoValue({
                 A,
                 B,
@@ -180,23 +202,14 @@ const calculateSection2e = ({
         }
 
         results.section2e.push({
-            title: numeratorRelation.name,
-            A: metadata[numeratorRelation.A]?.name,
-            B: metadata[numeratorRelation.B]?.name,
-            expectedRelationship: RELATIONSHIP_NAMES[numeratorRelation.type],
-            qualityThreshold:
-                numeratorRelation.type === 'do'
-                    ? 'Not negative'
-                    : numeratorRelation.criteria,
-            overallScore: getRoundedValue(overallScore * 100, 1),
+            ...section2eItem,
             divergentSubOrgUnits: {
                 number: divergentSubOrgUnits.length,
-                percentage: getRoundedValue(
+                percentage:
                     (divergentSubOrgUnits.length /
                         (subOrgUnitIDs.length || 1)) *
-                        100,
-                    1
-                ),
+                    100,
+                noncalculable: invalidSubOrgUnits.sort().join(', '),
             },
             chartInfo,
         })
