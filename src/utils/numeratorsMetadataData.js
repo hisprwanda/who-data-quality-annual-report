@@ -1,5 +1,3 @@
-import { Button, ButtonStrip, IconSubtractCircle16, TableCell, TableRow } from '@dhis2/ui'
-import React from 'react'
 import relationTypes from '../data/relationTypes.json'
 
 export const getNumeratorMemberGroups = (configurations, code) => {
@@ -40,14 +38,11 @@ export const getNumeratorDataElement = (mappedNumerators, dataID) => {
 
 export const getNumeratorsInGroup = (numerators, group) => {
     const numeratorsInGroup = []
-
-    for (const key in numerators) {
-        const numerator = numerators[key]
+    numerators.forEach((numerator) => {
         if (group.members.includes(numerator.code)) {
             numeratorsInGroup.push(numerator)
         }
-    }
-
+    })
     return numeratorsInGroup
 }
 

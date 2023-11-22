@@ -38,39 +38,41 @@ export const NumeratorGroupsTableItem = ({ numerators, group }) => {
         [dispatch]
     )
 
+    // check if there are no numerators in group
+    if (numeratorsInGroup.length === 0) {
+        return (
+            <TableRow>
+                <TableCell>No numerators added, please add them.</TableCell>
+            </TableRow>
+        )
+    }
+
     return (
         <>
-            {numeratorsInGroup.length > 0 ? (
-                numeratorsInGroup.map((numerator, key) => (
-                    <TableRow key={key}>
-                        <TableCell>{numerator.name}</TableCell>
-                        <TableCell>
-                            <ButtonStrip end>
-                                <Button
-                                    name="Primary button"
-                                    small
-                                    onClick={() =>
-                                        onRemoveNumerator(group, numerator)
-                                    }
-                                    secondary
-                                    basic
-                                    button
-                                    value="default"
-                                    icon={<IconSubtractCircle16 />}
-                                >
-                                    {' '}
-                                    Remove
-                                </Button>
-                            </ButtonStrip>
-                        </TableCell>
-                    </TableRow>
-                ))
-            ) : (
-                <TableRow>
-                    <TableCell>No numerators added, please add them.</TableCell>
-                    <TableCell></TableCell>
+            {numeratorsInGroup.map((numerator, key) => (
+                <TableRow key={key}>
+                    <TableCell>{numerator.name}</TableCell>
+                    <TableCell>
+                        <ButtonStrip end>
+                            <Button
+                                name="Primary button"
+                                small
+                                onClick={() =>
+                                    onRemoveNumerator(group, numerator)
+                                }
+                                secondary
+                                basic
+                                button
+                                value="default"
+                                icon={<IconSubtractCircle16 />}
+                            >
+                                {' '}
+                                Remove
+                            </Button>
+                        </ButtonStrip>
+                    </TableCell>
                 </TableRow>
-            )}
+            ))}
         </>
     )
 }

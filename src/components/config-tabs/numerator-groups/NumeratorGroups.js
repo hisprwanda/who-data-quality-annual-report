@@ -12,6 +12,7 @@ import {
     SingleSelect,
     SingleSelectOption,
     ButtonStrip,
+    TableFoot,
 } from '@dhis2/ui'
 import PropTypes from 'prop-types'
 import React, { useState, useCallback } from 'react'
@@ -22,9 +23,9 @@ import {
     useConfigurations,
     useConfigurationsDispatch,
 } from '../../../utils/index.js'
-import styles from '../ConfigTabs.module.css'
 import { ConfirmationModal } from '../numerator-relations/ConfirmationModal.js'
 import { AddNumeratorGroupModel } from './AddNumeratorGroupModel.js'
+import styles from './NumeratorGroups.module.css'
 import { NumeratorGroupsTableItem } from './NumeratorGroupsTableItem.js'
 
 const AddGroupButton = () => {
@@ -45,8 +46,7 @@ const AddGroupButton = () => {
     )
 
     return (
-        <div className="group">
-            <br />
+        <div className={styles.addNewGroupBtn}>
             <Button
                 name="Primary button"
                 primary
@@ -112,7 +112,7 @@ export const NumeratorGroups = () => {
     const numerators = configurations.numerators
     const dispatch = useConfigurationsDispatch()
 
-    const [selectedNumerator, setSelectedNumerator] = useState('NA')
+    const [selectedNumerator, setSelectedNumerator] = useState(null)
 
     const handleNumeratorSelection = (selected) => {
         setSelectedNumerator(selected)
@@ -154,6 +154,27 @@ export const NumeratorGroups = () => {
         [dispatch, show]
     )
 
+    // check if there are any groups
+    if (!groups || groups.length === 0) {
+        return (
+            <Table>
+                <TableRow>
+                    <TableCell>No groups found.</TableCell>
+                </TableRow>
+
+                <TableFoot>
+                    <TableRow>
+                        <TableCell>
+                            <ButtonStrip end>
+                                <AddGroupButton />
+                            </ButtonStrip>
+                        </TableCell>
+                    </TableRow>
+                </TableFoot>
+            </Table>
+        )
+    }
+
     return (
         <div>
             <p>
@@ -161,100 +182,87 @@ export const NumeratorGroups = () => {
             </p>
             <hr />
             <div className={styles.groupsContainer}>
-                {groups ? (
-                    groups.map((group, key) => (
-                        <div key={key} className="group">
-                            <h2>{group.name}</h2>
-                            <Table>
-                                <TableHead>
-                                    <TableRowHead>
-                                        <TableCellHead>Data</TableCellHead>
-                                        <TableCellHead
-                                            className={
-                                                styles.numeratoryGroupActions
-                                            }
-                                        >
-                                            Actions{' '}
-                                        </TableCellHead>
-                                    </TableRowHead>
-                                </TableHead>
-                                <TableBody>
-                                    <NumeratorGroupsTableItem
-                                        numerators={numerators}
-                                        group={group}
-                                    />
+                {groups.map((group, key) => (
+                    <div key={key} className="group">
+                        <span className={styles.groupHeader}>{group.name}</span>
+                        <Table>
+                            <TableHead>
+                                <TableRowHead>
+                                    <TableCellHead>Data</TableCellHead>
+                                    <TableCellHead
+                                        className={
+                                            styles.numeratoryGroupActions
+                                        }
+                                    ></TableCellHead>
+                                </TableRowHead>
+                            </TableHead>
+                            <TableBody>
+                                <NumeratorGroupsTableItem
+                                    numerators={numerators}
+                                    group={group}
+                                />
 
-                                    <TableRow>
-                                        <TableCell>
-                                            <SingleSelect
-                                                className="select"
-                                                onChange={(selected) =>
-                                                    handleNumeratorSelection(
-                                                        selected.selected
+                                <TableRow>
+                                    <TableCell>
+                                        <SingleSelect
+                                            placeholder="Select numerator"
+                                            className="select"
+                                            onChange={({ selected }) =>
+                                                handleNumeratorSelection(
+                                                    selected
+                                                )
+                                            }
+                                            selected={selectedNumerator}
+                                        >
+                                            {numerators.map(
+                                                (numerator, key) => (
+                                                    <SingleSelectOption
+                                                        label={numerator.name}
+                                                        value={numerator.code}
+                                                        key={key}
+                                                    />
+                                                )
+                                            )}
+                                        </SingleSelect>
+                                    </TableCell>
+                                    <TableCell>
+                                        <ButtonStrip end>
+                                            <Button
+                                                name="Primary button"
+                                                small
+                                                disabled={
+                                                    selectedNumerator === null
+                                                }
+                                                onClick={() =>
+                                                    handleAddNumerator(
+                                                        selectedNumerator,
+                                                        group
                                                     )
                                                 }
-                                                // placeholder="Select Numerator"
-                                                selected={selectedNumerator}
+                                                primary
+                                                button
+                                                value="default"
+                                                icon={<IconAdd16 />}
                                             >
-                                                <SingleSelectOption
-                                                    label="Select Numerator"
-                                                    value="NA"
-                                                />
-                                                {numerators.map(
-                                                    (numerator, key) => (
-                                                        <SingleSelectOption
-                                                            label={
-                                                                numerator.name
-                                                            }
-                                                            value={
-                                                                numerator.code
-                                                            }
-                                                            key={key}
-                                                        />
-                                                    )
-                                                )}
-                                            </SingleSelect>
-                                        </TableCell>
-                                        <TableCell>
-                                            <ButtonStrip end>
-                                                <Button
-                                                    name="Primary button"
-                                                    small
-                                                    disabled={
-                                                        selectedNumerator !=
-                                                        'NA'
-                                                            ? false
-                                                            : true
-                                                    }
-                                                    onClick={() =>
-                                                        handleAddNumerator(
-                                                            selectedNumerator,
-                                                            group
-                                                        )
-                                                    }
-                                                    primary
-                                                    button
-                                                    value="default"
-                                                    icon={<IconAdd16 />}
-                                                >
-                                                    {' '}
-                                                    Add Numerators
-                                                </Button>
-                                                <DeleteGroupButton
-                                                    group={group}
-                                                />
-                                            </ButtonStrip>
-                                        </TableCell>
-                                    </TableRow>
-                                </TableBody>
-                            </Table>
-                        </div>
-                    ))
-                ) : (
-                    <div className="group">
-                        <h2>No groups found</h2>
+                                                {' '}
+                                                Add Numerators
+                                            </Button>
+                                        </ButtonStrip>
+                                    </TableCell>
+                                </TableRow>
+                            </TableBody>
+                            <TableFoot>
+                                <TableRow>
+                                    <TableCell colSpan="3">
+                                        <ButtonStrip end>
+                                            <DeleteGroupButton group={group} />
+                                        </ButtonStrip>
+                                    </TableCell>
+                                </TableRow>
+                            </TableFoot>
+                        </Table>
                     </div>
-                )}
+                ))}
                 <ButtonStrip end>
                     <AddGroupButton />
                 </ButtonStrip>

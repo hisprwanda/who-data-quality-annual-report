@@ -450,6 +450,7 @@ const getFacilityReportingData = ({
         // Calculate "divergentRegionsCount" and "divergentRegionsPercent"
         const divergentRegionsCount = regionsWithLowScore.length
         const totalRegionsCount = dataset_levels.length
+        
 
         // in case no region was under the threshold, the divergent % will remain zero
         let divergentRegionsPercent = 0

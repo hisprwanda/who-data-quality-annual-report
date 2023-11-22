@@ -14,21 +14,28 @@ import {
 } from '@dhis2/ui'
 import PropTypes from 'prop-types'
 import React from 'react'
+import { useConfigurations } from '../../../utils/index.js'
 const { Form, Field } = ReactFinalForm
 
 const DEFAULT_FORM_VALUES = {
     name: undefined,
-    displayName: undefined,
     members: [],
 }
 
 export function AddNumeratorGroupModel({ onSave, onClose }) {
+    const configurations = useConfigurations()
+    const groups = configurations.groups
+    
     return (
         <Form
             onSubmit={(values, form) => {
-                // todo: validate! 🥳
-                console.log('onSubmit', { values, form })
                 if (onSave) {
+                    // validate the group name is unique
+                    const groupNames = Object.keys(groups).map((key) => groups[key].name)
+                    if (groupNames.includes(values.name)) {
+                        alert('Group name must be unique') //TDOD: use a dhis2-ui alert later
+                        return
+                    }
                     onSave(values)
                 } else {
                     alert('todo')
@@ -50,15 +57,6 @@ export function AddNumeratorGroupModel({ onSave, onClose }) {
                                     <TableCell>
                                         <Field
                                             name="name"
-                                            component={InputFieldFF}
-                                        />
-                                    </TableCell>
-                                </TableRow>
-                                <TableRow>
-                                    <TableCell>Display Name</TableCell>
-                                    <TableCell>
-                                        <Field
-                                            name="displayName"
                                             component={InputFieldFF}
                                         />
                                     </TableCell>

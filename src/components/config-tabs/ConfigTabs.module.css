@@ -70,13 +70,3 @@ button {
     display: block;
 }
 
-.groupsContainer {
-  width: 90%;
-  margin: 0 auto;
-}
-
-.numeratoryGroupActions {
-  display: flex;
-  justify-content: end;
-}
-
