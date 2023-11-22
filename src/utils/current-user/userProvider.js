@@ -4,6 +4,7 @@ import { NoticeBox } from '@dhis2/ui'
 import PropTypes from 'prop-types'
 import React from 'react'
 import { LoadingSpinner } from '../../components/loading-spinner/LoadingSpinner.js'
+import { DATASTORE_ENDPOINT } from '../configurations/useSetUpConfigurations.js'
 import { UserContext } from './userContext.js'
 
 const query = {
@@ -14,11 +15,22 @@ const query = {
                 'id',
                 'dataViewOrganisationUnits',
                 'organisationUnits',
-                'userCredentials[userRoles[id,authorities]]',
+                'authorities',
+                'userGroups',
             ],
         },
     },
+    dataStoreSharing: {
+        resource: `${DATASTORE_ENDPOINT}/metaData`,
+    },
 }
+
+const getAuthorizedIDs = (allItems) =>
+    !Array.isArray(allItems)
+        ? []
+        : [...allItems]
+              .filter(({ access }) => access === 'rw------')
+              .map(({ id }) => id)
 
 export const UserProvider = ({ children }) => {
     const { loading, error, data } = useDataQuery(query)
@@ -31,14 +43,21 @@ export const UserProvider = ({ children }) => {
         return (
             <NoticeBox error>
                 {i18n.t(
-                    'It was not possible to retrieve user information for the current user.'
+                    'It was not possible to retrieve user information for the current user or the sharing settings of the configurations.'
                 )}
             </NoticeBox>
         )
     }
 
-    const { dataViewOrganisationUnits, organisationUnits, userCredentials } =
-        data?.user || {}
+    const {
+        dataViewOrganisationUnits,
+        organisationUnits,
+        authorities,
+        id: userID,
+        userGroups: meUserGroups,
+    } = data?.user || {}
+
+    const { userGroupAccesses, userAccesses } = data?.dataStoreSharing || {}
 
     const rootOrgUnits = (
         dataViewOrganisationUnits ??
@@ -46,17 +65,21 @@ export const UserProvider = ({ children }) => {
         []
     ).map(({ id }) => id)
 
-    const isAuthorized = (userCredentials?.userRoles ?? []).some(
-        ({ authorities }) =>
-            authorities.includes('ALL') ||
-            authorities.includes('F_INDICATOR_PUBLIC_ADD')
-    )
+    const authorizedGroups = getAuthorizedIDs(userGroupAccesses)
+    const authorizedUsers = getAuthorizedIDs(userAccesses)
+    const meUserGroupIDs = meUserGroups.map(({ id }) => id)
+
+    const isAuthorized =
+        authorities?.includes('ALL') ||
+        authorizedUsers.includes(userID) ||
+        authorizedGroups.some((authorizedID) =>
+            meUserGroupIDs.includes(authorizedID)
+        )
 
     const providerValue = {
         isAuthorized,
         rootOrgUnits,
     }
-    console.log(providerValue)
 
     return (
         <UserContext.Provider value={providerValue}>

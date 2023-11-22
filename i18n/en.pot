@@ -5,8 +5,8 @@ msgstr ""
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1)\n"
-"POT-Creation-Date: 2023-11-20T14:51:32.002Z\n"
-"PO-Revision-Date: 2023-11-20T14:51:32.002Z\n"
+"POT-Creation-Date: 2023-11-22T13:23:01.483Z\n"
+"PO-Revision-Date: 2023-11-22T13:23:01.483Z\n"
 
 msgid "Select period(s)"
 msgstr "Select period(s)"
@@ -127,3 +127,9 @@ msgstr "Generate report"
 
 msgid "Print"
 msgstr "Print"
+
+msgid "You do not have access to the configurations module."
+msgstr "You do not have access to the configurations module."
+
+msgid "It was not possible to retrieve user information for the current user."
+msgstr "It was not possible to retrieve user information for the current user."

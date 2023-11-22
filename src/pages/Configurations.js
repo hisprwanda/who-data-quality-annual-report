@@ -16,7 +16,7 @@ export const Configurations = () => {
     if (isAuthorized) {
         return (
             <CenteredContent>
-                <NoticeBox warning title="No access">
+                <NoticeBox warning title={i18n.t('No access')}>
                     {i18n.t(
                         'You do not have access to the configurations module.'
                     )}
