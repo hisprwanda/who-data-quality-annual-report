@@ -11,7 +11,7 @@ const App = () => (
             <CssVariables colors spacers />
             <div className={classes.container}>
                 <HashRouter>
-                        <Routes>
+                    <Routes>
                         <Route path="/">
                             <Route index element={<AnnualReport />} />
                             <Route path="configurations">
