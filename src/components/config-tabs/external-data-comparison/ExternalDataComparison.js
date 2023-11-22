@@ -1,3 +1,4 @@
+import { useDataQuery } from '@dhis2/app-runtime'
 import {
     Button,
     ButtonStrip,
@@ -19,6 +20,17 @@ import {
 } from '../../../utils/index.js'
 import { EditExternalDataComparisonModel } from './EditExternalDataComparisonModel.js'
 import { ExternalDataComparisonTableItem } from './ExternalDataComparisonTableItem.js'
+
+const ORG_UNITS_LEVELS_QUERY = {
+    orgUnitLevels: {
+        resource: 'organisationUnitLevels',
+        params: {
+            paging: false,
+            fields: ['id', 'displayName', 'level'],
+            order: 'level:asc',
+        },
+    },
+}
 
 const AddExternalRelationButton = () => {
     const [addNewModalOpen, setAddNewModalOpen] = useState(false)
@@ -54,6 +66,12 @@ const AddExternalRelationButton = () => {
 export const ExternalDataComparison = () => {
     const configurations = useConfigurations()
     const externalRelations = configurations.externalRelations
+    let ouLevelData = null
+    const { data } = useDataQuery(ORG_UNITS_LEVELS_QUERY)
+
+    if (data) {
+        ouLevelData = data
+    }
 
     return (
         <div>
@@ -91,7 +109,7 @@ export const ExternalDataComparison = () => {
                             externalRelations.map((externalRelation) => (
                                 <ExternalDataComparisonTableItem
                                     externalRelation={externalRelation}
-                                    configurations={configurations}
+                                    ouLevelData={ouLevelData}
                                     key={externalRelation.code}
                                 />
                             ))

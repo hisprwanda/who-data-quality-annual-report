@@ -1,12 +1,11 @@
-import { useDataQuery } from '@dhis2/app-runtime'
 import { SingleSelectFieldFF, ReactFinalForm } from '@dhis2/ui'
-import React, { useMemo } from 'react'
-import { useConfigurations, useDataItemNames } from '../../../utils'
+import React from 'react'
+import { useConfigurations } from '../../../utils/index.js'
 import styles from './DataMappingForm.module.css'
 
 const { Field } = ReactFinalForm
 
-export const NumeratorSelect = ({ name, label, placeholder }) => {
+export const NumeratorSelect = () => {
     const configurations = useConfigurations()
 
     // filter numerators that have data IDs & sort alphabetically

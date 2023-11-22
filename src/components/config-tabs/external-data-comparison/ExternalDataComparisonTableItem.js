@@ -91,7 +91,10 @@ DeleteExternalRelationButton.propTypes = {
     externalRelation: PropTypes.object,
 }
 
-export function ExternalDataComparisonTableItem({ externalRelation }) {
+export function ExternalDataComparisonTableItem({
+    externalRelation,
+    ouLevelData,
+}) {
     const configurations = useConfigurations()
     const dataItemNames = useDataItemNames()
     const routineDataNumerator = useMemo(
@@ -111,6 +114,18 @@ export function ExternalDataComparisonTableItem({ externalRelation }) {
         [configurations.denominators, externalRelation.denominator]
     )
 
+    const comparisonLevel = useMemo(() => {
+        if (ouLevelData) {
+            const level = ouLevelData.orgUnitLevels.organisationUnitLevels.find(
+                (level) =>
+                    level.level.toString() === externalRelation.level.toString()
+            )
+            return level.displayName
+        } else {
+            return ''
+        }
+    }, [externalRelation.level, ouLevelData])
+
     return (
         <TableRow>
             <TableCell>{externalRelation.name}</TableCell>
@@ -120,7 +135,7 @@ export function ExternalDataComparisonTableItem({ externalRelation }) {
             <TableCell>{routineDataNumerator}</TableCell>
             <TableCell>{routineDataDenominator}</TableCell>
             <TableCell>{externalRelation.criteria}%</TableCell>
-            <TableCell>District</TableCell>
+            <TableCell>{comparisonLevel}</TableCell>
             <TableCell>
                 <ButtonStrip>
                     <EditExternalRelationButton
@@ -136,4 +151,5 @@ export function ExternalDataComparisonTableItem({ externalRelation }) {
 }
 ExternalDataComparisonTableItem.propTypes = {
     externalRelation: PropTypes.object,
+    ouLevelData: PropTypes.object,
 }

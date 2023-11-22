@@ -15,17 +15,14 @@ import {
 } from '@dhis2/ui'
 import PropTypes from 'prop-types'
 import React from 'react'
+import { DATA_ELEMENT, TOTALS } from './constants.js'
 import { DataMappingFormSection } from './DataMappingForm.js'
 const { Form, Field } = ReactFinalForm
 
 const DEFAULT_FORM_VALUES = {
-    name: '',
-    criteria: '10',
-    dataType: 'dataElements',
-    externalData: '',
-    numerator: '',
-    denominator: '',
-    level: '',
+    criteria: 10,
+    dataType: DATA_ELEMENT,
+    dataElementType: TOTALS,
 }
 
 export const EditExternalDataComparisonModel = ({
@@ -94,6 +91,10 @@ export const EditExternalDataComparisonModel = ({
                                         <Field
                                             name="criteria"
                                             component={InputFieldFF}
+                                            subscription={{ value: true }}
+                                            parse={(value) => Number(value)}
+                                            format={(value) => String(value)}
+                                            type="number"
                                         />
                                     </TableCell>
                                 </TableRow>

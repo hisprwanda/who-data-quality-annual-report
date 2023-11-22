@@ -1,46 +1,21 @@
-import { useDataEngine, useDataQuery } from '@dhis2/app-runtime'
-import {
-    // rename this to not clash with Field from RFF
-    Field as FieldContainer,
-    ReactFinalForm,
-    TableRow,
-    TableCell,
-    Table,
-    TableBody,
-} from '@dhis2/ui'
+import { TableRow, TableCell, Table, TableBody } from '@dhis2/ui'
 import React from 'react'
-import { DataElementGroupSelect } from '../numerators/DataElementGroupsSelect'
-import { DataElementSelect } from '../numerators/DataElementSelect'
-import { DataElementTypeRadios } from '../numerators/DataElementTypeRadios'
+import { DataElementGroupSelect } from '../numerators/DataElementGroupsSelect.js'
+import { DataElementSelect } from '../numerators/DataElementSelect.js'
+import { DataElementTypeRadios } from '../numerators/DataElementTypeRadios.js'
 import styles from './DataMappingForm.module.css'
-import { DenominatorSelect } from './DenominatorSelect'
-import { NumeratorSelect } from './NumeratorSelect'
-import { OrgUnitLevelSelect } from './OrgUnitLevelSelect'
-
-const { Field, useField } = ReactFinalForm
-
-// Data item types
-const DATA_ELEMENT = 'dataElement'
-const INDICATOR = 'indicator'
+import { DenominatorSelect } from './DenominatorSelect.js'
+import { NumeratorSelect } from './NumeratorSelect.js'
+import { OrgUnitLevelSelect } from './OrgUnitLevelSelect.js'
 
 export const DataMappingFormSection = () => {
-    const dataTypeField = useField('dataType', {
-        subscription: { value: true },
-        // need to set the initial value here instead of on the <Field />
-        // so the components below can render
-        initialValue: DATA_ELEMENT,
-    })
-    const dataType = dataTypeField.input.value
-
     return (
         <div className={styles.mainContainer}>
             {/* <DataTypeRadios /> */}
             <Table>
                 <TableBody>
                     <TableRow>
-                        <TableCell>
-                            Survey/external indicator
-                        </TableCell>
+                        <TableCell>Survey/external indicator</TableCell>
                         <TableCell>
                             <DataElementTypeRadios />
                             <DataElementGroupSelect />
@@ -49,26 +24,20 @@ export const DataMappingFormSection = () => {
                     </TableRow>
 
                     <TableRow>
-                        <TableCell>
-                            Routine data numerator
-                        </TableCell>
+                        <TableCell>Routine data numerator</TableCell>
                         <TableCell>
                             <NumeratorSelect />
                         </TableCell>
                     </TableRow>
                     <TableRow>
-                        <TableCell>
-                            Routine data denominator
-                        </TableCell>
+                        <TableCell>Routine data denominator</TableCell>
                         <TableCell>
                             <DenominatorSelect />
                         </TableCell>
                     </TableRow>
 
                     <TableRow>
-                        <TableCell>
-                            Survel level
-                        </TableCell>
+                        <TableCell>Survel level</TableCell>
                         <TableCell>
                             <OrgUnitLevelSelect />
                         </TableCell>
