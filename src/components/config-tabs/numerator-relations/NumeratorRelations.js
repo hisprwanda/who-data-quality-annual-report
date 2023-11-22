@@ -57,7 +57,6 @@ export const NumeratorRelations = () => {
 
     return (
         <div>
-            <p>Numerator Relations</p>
             <hr />
             <Table>
                 <TableHead>
