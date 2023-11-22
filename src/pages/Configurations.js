@@ -13,7 +13,7 @@ export const Configurations = () => {
     const configurations = useConfigurations()
     const { isAuthorized } = useUserContext()
 
-    if (isAuthorized) {
+    if (!isAuthorized) {
         return (
             <CenteredContent>
                 <NoticeBox warning title={i18n.t('No access')}>
