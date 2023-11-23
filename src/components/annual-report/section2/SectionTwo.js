@@ -271,11 +271,11 @@ const Section2EBlock = ({
             </TableHead>
             <TableBody>
                 <TableRow>
-                    <ReportCell>Denominator A</ReportCell>
+                    <ReportCell>Indicator A</ReportCell>
                     <ReportCell>{dataRow.A}</ReportCell>
                 </TableRow>
                 <TableRow>
-                    <ReportCell>Denominator B</ReportCell>
+                    <ReportCell>Indicator B</ReportCell>
                     <ReportCell>{dataRow.B}</ReportCell>
                 </TableRow>
                 <TableRow>
