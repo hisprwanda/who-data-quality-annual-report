@@ -55,10 +55,7 @@ const convertOldConfigToNew = (oldConfigurations) => {
     // Add 'core' property directly on to numerators
     const { coreIndicators } = oldConfigurations
     const newNumerators = oldConfigurations.numerators.map((numerator) => {
-        if (coreIndicators.includes(numerator.code)) {
-            return { ...numerator, core: true }
-        }
-        return numerator
+        return { ...numerator, core: coreIndicators.includes(numerator.code) }
     })
     return { ...oldConfigurations, numerators: newNumerators }
 }
