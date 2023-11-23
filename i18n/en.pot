@@ -5,8 +5,8 @@ msgstr ""
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1)\n"
-"POT-Creation-Date: 2023-11-21T18:02:20.312Z\n"
-"PO-Revision-Date: 2023-11-21T18:02:20.312Z\n"
+"POT-Creation-Date: 2023-11-23T11:58:13.580Z\n"
+"PO-Revision-Date: 2023-11-23T11:58:13.580Z\n"
 
 msgid "Select period(s)"
 msgstr "Select period(s)"
@@ -28,6 +28,9 @@ msgstr "section"
 
 msgid "Something went wrong when retrieving data"
 msgstr "Something went wrong when retrieving data"
+
+msgid "The Data Quality Annual Report has not been configured"
+msgstr "The Data Quality Annual Report has not been configured"
 
 msgid "No data to display"
 msgstr "No data to display"
