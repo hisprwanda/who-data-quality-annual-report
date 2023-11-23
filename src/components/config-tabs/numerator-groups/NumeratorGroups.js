@@ -1,4 +1,3 @@
-import { useAlert } from '@dhis2/app-runtime'
 import {
     Button,
     Table,
@@ -9,8 +8,6 @@ import {
     TableRow,
     TableRowHead,
     IconAdd16,
-    SingleSelect,
-    SingleSelectOption,
     ButtonStrip,
     TableFoot,
 } from '@dhis2/ui'
@@ -24,7 +21,7 @@ import {
     useConfigurationsDispatch,
 } from '../../../utils/index.js'
 import { ConfirmationModal } from '../numerator-relations/ConfirmationModal.js'
-import { AddNumeratorGroupModel } from './AddNumeratorGroupModel.js'
+import { EditGroupModal } from './EditGroupModal.js'
 import styles from './NumeratorGroups.module.css'
 import { NumeratorGroupsTableItem } from './NumeratorGroupsTableItem.js'
 
@@ -56,13 +53,53 @@ const AddGroupButton = () => {
                 Create a New Group
             </Button>
             {addNewModalOpen && (
-                <AddNumeratorGroupModel
+                <EditGroupModal
                     onSave={addNewNumeratorGroup}
                     onClose={closeModal}
                 />
             )}
         </div>
     )
+}
+
+const EditGroupButton = ({ group }) => {
+    const [editModalOpen, setEditModalOpen] = useState(false)
+    const dispatch = useConfigurationsDispatch()
+
+    const openModal = useCallback(() => setEditModalOpen(true), [])
+    const closeModal = useCallback(() => setEditModalOpen(false), [])
+
+    const updateGroup = useCallback(
+        (newGroupValues) => {
+            dispatch({
+                type: UPDATE_NUMERATOR_GROUP,
+                payload: {
+                    code: group.code,
+                    updatedGroup: newGroupValues,
+                },
+            })
+        },
+        [dispatch, group.code]
+    )
+
+    return (
+        <>
+            <Button small onClick={openModal}>
+                Edit Group
+            </Button>
+            {editModalOpen && (
+                <EditGroupModal
+                    groupToEdit={group}
+                    onSave={updateGroup}
+                    onClose={closeModal}
+                />
+            )}
+        </>
+    )
+}
+
+EditGroupButton.propTypes = {
+    group: PropTypes.object,
 }
 
 const DeleteGroupButton = ({ group }) => {
@@ -110,49 +147,6 @@ export const NumeratorGroups = () => {
     const configurations = useConfigurations()
     const groups = configurations.groups
     const numerators = configurations.numerators
-    const dispatch = useConfigurationsDispatch()
-
-    const [selectedNumerator, setSelectedNumerator] = useState(null)
-
-    const handleNumeratorSelection = (selected) => {
-        setSelectedNumerator(selected)
-    }
-
-    const { show } = useAlert(
-        ({ message }) => message,
-        ({ status }) => {
-            if (status === 'success') {
-                return { success: true }
-            } else if (status === 'error') {
-                return { critical: true }
-            } else {
-                return {}
-            }
-        }
-    )
-
-    const handleAddNumerator = useCallback(
-        (numerator, group) => {
-            if (group.members.includes(numerator)) {
-                const message =
-                    'This numerator is already a member of this group'
-                show({ message, status: 'error' })
-                setSelectedNumerator(null)
-            } else {
-                const newGroup = {
-                    ...group,
-                    members: [...group.members, numerator],
-                }
-                dispatch({
-                    type: UPDATE_NUMERATOR_GROUP,
-                    payload: { updatedGroup: newGroup, code: group.code },
-                })
-
-                setSelectedNumerator(null)
-            }
-        },
-        [dispatch, show]
-    )
 
     // check if there are any groups
     if (!groups || groups.length === 0) {
@@ -201,60 +195,12 @@ export const NumeratorGroups = () => {
                                     numerators={numerators}
                                     group={group}
                                 />
-
-                                <TableRow>
-                                    <TableCell>
-                                        <SingleSelect
-                                            placeholder="Select numerator"
-                                            className="select"
-                                            onChange={({ selected }) =>
-                                                handleNumeratorSelection(
-                                                    selected
-                                                )
-                                            }
-                                            selected={selectedNumerator}
-                                        >
-                                            {numerators.map(
-                                                (numerator, key) => (
-                                                    <SingleSelectOption
-                                                        label={numerator.name}
-                                                        value={numerator.code}
-                                                        key={key}
-                                                    />
-                                                )
-                                            )}
-                                        </SingleSelect>
-                                    </TableCell>
-                                    <TableCell>
-                                        <ButtonStrip end>
-                                            <Button
-                                                name="Primary button"
-                                                small
-                                                disabled={
-                                                    selectedNumerator === null
-                                                }
-                                                onClick={() =>
-                                                    handleAddNumerator(
-                                                        selectedNumerator,
-                                                        group
-                                                    )
-                                                }
-                                                primary
-                                                button
-                                                value="default"
-                                                icon={<IconAdd16 />}
-                                            >
-                                                {' '}
-                                                Add Numerators
-                                            </Button>
-                                        </ButtonStrip>
-                                    </TableCell>
-                                </TableRow>
                             </TableBody>
                             <TableFoot>
                                 <TableRow>
                                     <TableCell colSpan="3">
                                         <ButtonStrip end>
+                                            <EditGroupButton group={group} />
                                             <DeleteGroupButton group={group} />
                                         </ButtonStrip>
                                     </TableCell>
