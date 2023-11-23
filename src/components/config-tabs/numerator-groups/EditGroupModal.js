@@ -44,14 +44,6 @@ export function EditGroupModal({ groupToEdit, onSave, onClose }) {
         <Form
             onSubmit={(values) => {
                 if (onSave) {
-                    // validate the group name is unique
-                    const groupNames = Object.keys(groups).map(
-                        (key) => groups[key].name
-                    )
-                    if (groupNames.includes(values.name) && groupToEdit === undefined) {
-                        alert('Group name must be unique') //TDOD: use a dhis2-ui alert later
-                        return
-                    }
                     onSave(values)
                 } else {
                     alert('todo')
