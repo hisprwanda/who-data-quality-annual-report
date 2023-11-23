@@ -20,32 +20,17 @@ import {
     SingleSelectOption,
 } from '@dhis2/ui'
 import PropTypes from 'prop-types'
-import React, { useState, useEffect } from 'react'
+import React, { useState, useCallback } from 'react'
 import {
     getAllDenominatorType,
     getDenominatorType,
 } from '../../../utils/denominatorsMetadataData.js'
-import { createNewDenominator } from '../../../utils/updateConfigurations.js'
-
-// TODO: move different queries to their own file when they become many
-const updateConfigurationsMutation = {
-    resource: 'dataStore/who-dqa/configurations',
-    type: 'update',
-    data: ({ configurations }) => ({
-        ...configurations,
-        lastUpdated: new Date().toJSON(),
-    }),
-}
-
-//TODO: merge some queries below
-const dataElementGroupsQuery = {
-    elements: {
-        resource: 'dataElementGroups',
-        params: {
-            paging: false,
-        },
-    },
-}
+import {
+    useConfigurations,
+    useConfigurationsDispatch,
+} from '../../../utils/index.js'
+import { DenominatorTableItem } from './DenominatorTableItem.js'
+import { EditDenominatorModal } from './EditDenominatorModal.js'
 
 const orgUnitLevelsQuery = {
     ou: {
@@ -57,143 +42,50 @@ const orgUnitLevelsQuery = {
     },
 }
 
-const dataElementsQuery = {
-    elements: {
-        resource: 'dataElements',
-        params: ({ groupID }) => ({
-            paging: false,
-            filter: `dataElementGroups.id:eq:${groupID}`,
-        }),
-    },
+const AddNewDenominatorButton = () => {
+    const [addNewModalOpen, setAddNewModalOpen] = useState(false)
+    const dispatch = useConfigurationsDispatch()
+
+    const openModal = useCallback(() => setAddNewModalOpen(true), [])
+    const closeModal = useCallback(() => setAddNewModalOpen(false), [])
+
+    const addNewDenominatorRelation = useCallback(
+        ({ newDenominatorData }) => {
+            dispatch({
+                type: CREATE_NUMERATOR,
+                payload: {
+                    newDenominatorData,
+                },
+            })
+        },
+        [dispatch]
+    )
+
+    return (
+        <>
+            <Button primary icon={<IconAdd16 />} onClick={openModal}>
+                Add denominator
+            </Button>
+            {addNewModalOpen && (
+                <EditDenominatorModal
+                    onSave={addNewDenominatorRelation}
+                    onClose={closeModal}
+                />
+            )}
+        </>
+    )
 }
 
-export const Denominators = ({ toggleState, configurations }) => {
-    const [denominators, setDenominators] = useState(null)
-    const [toggleStateModal, setToggleStateModal] = useState(1)
-    const [isModalHidden, setIsModalHidden] = useState(true)
-    const [denominatorTypes, setDenominatorTypes] = useState(null)
-    const [mappedDataElementGroups, setMappedDataElementGroups] = useState(null)
-    const [mappedDataElements, setMappedDataElements] = useState(null)
-    const [orgUnitsLevels, setOrgUnitsLevels] = useState(null)
-    const [selectedElementsGroup, setSelectedElementsGroup] = useState(null)
-    const [newDenominatorInfo, setNewDenominatorInfo] = useState({
-        code: '',
-        dataID: '',
-        displayName: '',
-        lowLevel: '',
-        name: '',
-        type: '',
-    })
-
-    // run the data element groups querry
-    const { data: datalementGroupsData } = useDataQuery(
-        dataElementGroupsQuery,
-        {
-            lazy: false,
-        }
-    )
-
-    // run the data elements querry
-    const { data: dataElementsData, refetch: elementsRefetch } = useDataQuery(
-        dataElementsQuery,
-        {
-            lazy: true,
-        }
-    )
+export const Denominators = () => {
+    const configurations = useConfigurations()
 
     // run the data orgUnits querry
     const { data: dataOrgUnitsData } = useDataQuery(orgUnitLevelsQuery, {
         lazy: false,
     })
 
-    // run mutation querry
-    const [mutate] = useDataMutation(updateConfigurationsMutation)
-
-    const toggleTabModal = (index) => {
-        setToggleStateModal(index)
-    }
-
-    const onModalClose = () => {
-        setIsModalHidden(true)
-    }
-    const onSaveDenominator = async (newDenominatorInfo) => {
-        const updatedConfigurations = createNewDenominator(
-            configurations,
-            newDenominatorInfo
-        )
-        await mutate({ configurations: updatedConfigurations })
-
-        //update the current list
-        setDenominators((denominators) => [...denominators, newDenominatorInfo])
-        setIsModalHidden(true)
-    }
-
-    const handleDataElementSelection = (value) => {
-        //getting the details of a selected data element for name and display name
-        const selectedItem = mappedDataElements.find(
-            (element) => element.value === value.selected
-        )
-        setNewDenominatorInfo({
-            ...newDenominatorInfo,
-            dataID: value.selected,
-            displayName: selectedItem.label,
-            name: selectedItem.label,
-        })
-    }
-
-    useEffect(() => {
-        setDenominators(configurations.denominators)
-
-        // get denominator types
-        setDenominatorTypes(getAllDenominatorType())
-
-        // generate and set the code before saving
-        {
-            configurations &&
-                setNewDenominatorInfo({
-                    ...newDenominatorInfo,
-                    code: 'P' + (configurations.denominators.length + 1), //TODO: further checks are needed in case some denominators have been deleted or the code is taken
-                })
-        }
-    }, [configurations])
-
-    // TODO these 2 use effects below are duplicated in other components, do it once and save it globaly
-    useEffect(() => {
-        if (datalementGroupsData) {
-            const deGroups = datalementGroupsData.elements.dataElementGroups
-            setMappedDataElementGroups(
-                deGroups.map(({ id, displayName }) => ({
-                    value: id,
-                    label: displayName,
-                }))
-            )
-        }
-    }, [datalementGroupsData])
-
-    useEffect(() => {
-        if (dataElementsData) {
-            const dataElements = dataElementsData.elements.dataElements
-            setMappedDataElements(
-                dataElements.map(({ id, displayName }) => ({
-                    value: id,
-                    label: displayName,
-                }))
-            )
-        }
-    }, [dataElementsData])
-
-    useEffect(() => {
-        if (dataOrgUnitsData) {
-            setOrgUnitsLevels(dataOrgUnitsData.ou.organisationUnitLevels)
-        }
-    }, [dataOrgUnitsData])
-
     return (
-        <div
-            className={
-                toggleState === 5 ? 'content  active-content' : 'content'
-            }
-        >
+        <div>
             <p>
                 Please map alternative denominators for comparison, for example
                 denominiators from the National Bureau of Statistics with
@@ -205,80 +97,26 @@ export const Denominators = ({ toggleState, configurations }) => {
                 <Table>
                     <TableHead>
                         <TableRowHead>
-                            <TableCellHead>
-                                Data element/indicator
-                            </TableCellHead>
+                            <TableCellHead> Data element/indicator </TableCellHead>
                             <TableCellHead>Type</TableCellHead>
-                            <TableCellHead>Actions</TableCellHead>
+                            <TableCellHead >Actions</TableCellHead>
                         </TableRowHead>
                     </TableHead>
                     <TableBody>
-                        {denominators ? (
-                            denominators.map((denominator, key) => (
-                                <TableRow key={key}>
-                                    <TableCell>{denominator.name}</TableCell>
-                                    <TableCell>
-                                        {' '}
-                                        {
-                                            getDenominatorType(denominator.type)
-                                                .label
-                                        }
-                                    </TableCell>
-                                    <TableCell>
-                                        <Button
-                                            name="Primary button"
-                                            onClick={() =>
-                                                setIsModalHidden(false)
-                                            }
-                                            basic
-                                            button
-                                            value="default"
-                                            icon={<IconEdit16 />}
-                                        >
-                                            {' '}
-                                            Edit
-                                        </Button>
-                                        <Button
-                                            name="Primary button"
-                                            onClick={() =>
-                                                console.log(
-                                                    'deleting denominator...'
-                                                )
-                                            }
-                                            destructive
-                                            button
-                                            value="default"
-                                            icon={<IconDelete16 />}
-                                        >
-                                            {' '}
-                                            Delete
-                                        </Button>
-                                    </TableCell>
-                                </TableRow>
-                            ))
-                        ) : (
-                            <TableRow>
-                                <TableCell></TableCell>
-                            </TableRow>
-                        )}
+                        {configurations.denominators.map((denominator) => (
+                            <DenominatorTableItem
+                                denominator={denominator}
+                                key={denominator.code}
+                            />
+                        ))}
 
                         {/* Add button */}
 
                         <TableRow>
-                            <TableCell></TableCell>
-                            <TableCell></TableCell>
-                            <TableCell>
-                                <Button
-                                    name="Primary button"
-                                    onClick={() => setIsModalHidden(false)}
-                                    primary
-                                    button
-                                    value="default"
-                                    icon={<IconAdd16 />}
-                                >
-                                    {' '}
-                                    Add Denominator
-                                </Button>
+                            <TableCell colSpan="3">
+                                <ButtonStrip end>
+                                    <AddNewDenominatorButton />
+                                </ButtonStrip>
                             </TableCell>
                         </TableRow>
                     </TableBody>
@@ -286,11 +124,8 @@ export const Denominators = ({ toggleState, configurations }) => {
             </div>
 
             {/* TODO: will move this modal in it's own component */}
-            <Modal
-                onClose={onModalClose}
-                hide={isModalHidden}
-                position="middle"
-                large
+            {/* <Modal
+               
             >
                 <ModalTitle>Add Denominator</ModalTitle>
                 <ModalContent>
@@ -559,7 +394,7 @@ export const Denominators = ({ toggleState, configurations }) => {
                         </Button>
                     </ButtonStrip>
                 </ModalActions>
-            </Modal>
+            </Modal> */}
         </div>
     )
 }
