@@ -328,10 +328,17 @@ const getFacilityReportingData = ({
         )
         regionsWithLowScore.sort()
         const dataset = filteredData_overall[key]
-        const dataset_levels = filteredData_levels[key] // a corresponding dataset in the reporting rates by ou level
+        let dataset_levels = filteredData_levels[key] // a corresponding dataset in the reporting rates by ou level
 
         // Calculate "divergentRegionsCount" and "divergentRegionsPercent"
         const divergentRegionsCount = regionsWithLowScore?.length
+
+        // if dataset_levels is undefined, then there are no regions for this dataset
+        if (!dataset_levels) {
+            console.log('No regions for this dataset: ', key)
+            dataset_levels = []
+        }
+
         const totalRegionsCount = dataset_levels?.length
 
         // in case no region was under the threshold, the divergent % will remain zero
