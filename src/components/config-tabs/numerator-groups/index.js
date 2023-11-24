@@ -1,1 +1,1 @@
-export {NumeratorGroups} from './NumeratorGroups.js'
+export { NumeratorGroups } from './NumeratorGroups.js'

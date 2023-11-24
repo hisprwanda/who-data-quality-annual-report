@@ -2,13 +2,13 @@ import PropTypes from 'prop-types'
 import React, { useState } from 'react'
 import { useRefetchConfigurations } from '../../utils/index.js'
 import styles from './ConfigTabs.module.css'
+import { NumeratorGroups } from './numerator-groups/NumeratorGroups.js'
 import { NumeratorRelations } from './numerator-relations/index.js'
 import { DenominatorRelations } from './tab-contents/DenominatorRelations.js'
 import { Denominators } from './tab-contents/Denominators.js'
 import { ExternalDataComparison } from './tab-contents/ExternalDataComparison.js'
 import { NumeratorParameters } from './tab-contents/NumeratorParameters.js'
 import { Numerators } from './tab-contents/Numerators.js'
-import { NumeratorGroups } from './numerator-groups/NumeratorGroups.js'
 
 function Tabs({ configurations, mappedNumerators }) {
     const [toggleState, setToggleState] = useState(1)

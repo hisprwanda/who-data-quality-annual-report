@@ -27,8 +27,6 @@ const DEFAULT_FORM_VALUES = {
 
 export function EditGroupModal({ groupToEdit, onSave, onClose }) {
     const configurations = useConfigurations()
-    const groups = configurations.groups
-
     const membersOptions = React.useMemo(
         () =>
             configurations.numerators
