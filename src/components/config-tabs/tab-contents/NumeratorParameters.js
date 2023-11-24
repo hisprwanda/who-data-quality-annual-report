@@ -116,7 +116,6 @@ export const NumeratorParameters = ({
                 toggleState === 4 ? 'content  active-content' : 'content'
             }
         >
-            <p>Numerator parameters </p>
             <p>
                 {' '}
                 Modify parameters for each numerator. Only data
@@ -517,5 +516,5 @@ export const NumeratorParameters = ({
 NumeratorParameters.propTypes = {
     configurations: PropTypes.object,
     mappedNumerators: PropTypes.object,
-    toggleState: PropTypes.string,
+    toggleState: PropTypes.number,
 }

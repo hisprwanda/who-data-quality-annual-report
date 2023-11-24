@@ -150,5 +150,5 @@ export const ExternalDataComparison = ({ toggleState, configurations }) => {
 
 ExternalDataComparison.propTypes = {
     configurations: PropTypes.object,
-    toggleState: PropTypes.string,
+    toggleState: PropTypes.number,
 }

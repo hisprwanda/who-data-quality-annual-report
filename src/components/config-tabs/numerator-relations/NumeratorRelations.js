@@ -11,7 +11,6 @@ import {
     ButtonStrip,
     TableFoot,
 } from '@dhis2/ui'
-import PropTypes from 'prop-types'
 import React, { useState, useCallback } from 'react'
 import {
     useConfigurations,
@@ -21,7 +20,7 @@ import {
 import { EditNumeratorRelationModal } from './EditNumeratorRelationModal.js'
 import { NumeratorRelationTableItem } from './NumeratorRelationTableItem.js'
 
-const AddNumeratorRelationButton = ({ configurations }) => {
+const AddNumeratorRelationButton = () => {
     const [addNewModalOpen, setAddNewModalOpen] = useState(false)
     const dispatch = useConfigurationsDispatch()
 
@@ -44,7 +43,6 @@ const AddNumeratorRelationButton = ({ configurations }) => {
             </Button>
             {addNewModalOpen && (
                 <EditNumeratorRelationModal
-                    configurations={configurations}
                     onSave={addNewNumeratorRelation}
                     onClose={closeModal}
                 />
@@ -52,7 +50,6 @@ const AddNumeratorRelationButton = ({ configurations }) => {
         </>
     )
 }
-AddNumeratorRelationButton.propTypes = { configurations: PropTypes.object }
 
 export const NumeratorRelations = () => {
     const configurations = useConfigurations()
@@ -60,7 +57,6 @@ export const NumeratorRelations = () => {
 
     return (
         <div>
-            <p>Numerator Relations</p>
             <hr />
             <Table>
                 <TableHead>
@@ -94,9 +90,7 @@ export const NumeratorRelations = () => {
                     <TableRow>
                         <TableCell colSpan="8">
                             <ButtonStrip end>
-                                <AddNumeratorRelationButton
-                                    configurations={configurations}
-                                />
+                                <AddNumeratorRelationButton />
                             </ButtonStrip>
                         </TableCell>
                     </TableRow>

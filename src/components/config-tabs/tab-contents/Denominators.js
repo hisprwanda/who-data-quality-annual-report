@@ -566,5 +566,5 @@ export const Denominators = ({ toggleState, configurations }) => {
 
 Denominators.propTypes = {
     configurations: PropTypes.object,
-    toggleState: PropTypes.func,
+    toggleState: PropTypes.number,
 }

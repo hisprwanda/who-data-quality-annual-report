@@ -1,10 +1,14 @@
-.additionalContent {
-    height: 40px;
+.additionalContentContainer {
+    height: 100%;
     display: flex;
     align-items: center;
-    padding: 0 0 0 8px;
+    margin-right: var(--spacers-dp8);
 }
 
-.additionalContent * {
-    margin-right: 8px;
+.generateReportButtonContainer {
+    margin: auto 0 auto var(--spacers-dp8);
+}
+
+.noticeBoxContainer {
+    margin: var(--spacers-dp16);
 }

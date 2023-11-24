@@ -181,7 +181,9 @@ export const useSectionTwoData = () => {
             })
 
             const validDataElementPeriodTypes = getValidDataElementPeriodTypes({
-                dataElements: variables.dataElements,
+                dataElements: Object.keys(
+                    variables.mappedConfiguration.dataElementsAndIndicators
+                ),
                 dataSetTypes: dataSetResponse?.dataSets?.dataSets,
                 mappedConfiguration: variables.mappedConfiguration,
             })

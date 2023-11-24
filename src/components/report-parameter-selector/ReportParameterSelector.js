@@ -1,9 +1,12 @@
 import { useDataQuery } from '@dhis2/app-runtime'
 import i18n from '@dhis2/d2-i18n'
-import { Button, SelectorBar } from '@dhis2/ui'
+import { Button, NoticeBox, SelectorBar } from '@dhis2/ui'
 import PropTypes from 'prop-types'
 import React, { useMemo, useState } from 'react'
+import { Link } from 'react-router-dom'
 import { useConfigurations } from '../../utils/index.js'
+import { LoadingSpinner } from '../loading-spinner/LoadingSpinner.js'
+import { GenerateReportTooltip } from './GenerateReportButtonTooltip.js'
 import { getReportParameters } from './getReportParameters.js'
 import { GroupSelector } from './GroupSelector.js'
 import { OrgUnitSelector } from './OrgUnitSelector.js'
@@ -49,6 +52,7 @@ export const ReportParameterSelector = ({ setReportParameters }) => {
                 boundaryOrgUnitLevel: selectedOrgUnit.level,
                 configurations,
                 orgUnitLevel: selectedOrgUnitLevel,
+                orgUnitLevels: data?.orgUnitLevels.organisationUnitLevels,
                 periods: selectedPeriods,
             }),
         [
@@ -58,6 +62,7 @@ export const ReportParameterSelector = ({ setReportParameters }) => {
             configurations,
             selectedOrgUnitLevel,
             selectedPeriods,
+            data,
         ]
     )
 
@@ -66,28 +71,30 @@ export const ReportParameterSelector = ({ setReportParameters }) => {
     }
 
     if (loading) {
-        return <span>Loading</span>
+        return <LoadingSpinner />
     }
 
     if (error) {
         console.error(error)
-        return <span>Error</span>
+        return (
+            <div className={styles.noticeBoxContainer}>
+                <NoticeBox error title="Report cannot be generated">
+                    The app failed to retrieve required information about
+                    organisation units. Without this information, the annual
+                    report cannot be generated.
+                </NoticeBox>
+            </div>
+        )
     }
 
     if (data) {
         return (
             <SelectorBar
                 additionalContent={
-                    <div className={styles.additionalContent}>
-                        <Button
-                            small
-                            primary
-                            onClick={generateReport}
-                            disabled={!reportGenerateEnabled}
-                        >
-                            {i18n.t('Generate report')}
-                        </Button>
-                        <Button small>{i18n.t('Print')}</Button>
+                    <div className={styles.additionalContentContainer}>
+                        <Link to="/configurations">
+                            <Button small>{i18n.t('Configurations')}</Button>
+                        </Link>
                     </div>
                 }
             >
@@ -112,6 +119,18 @@ export const ReportParameterSelector = ({ setReportParameters }) => {
                     selectedPeriods={selectedPeriods}
                     setSelectedPeriods={setSelectedPeriods}
                 />
+                <div className={styles.generateReportButtonContainer}>
+                    <GenerateReportTooltip disabled={!reportGenerateEnabled}>
+                        <Button
+                            small
+                            primary
+                            onClick={generateReport}
+                            disabled={!reportGenerateEnabled}
+                        >
+                            {i18n.t('Generate report')}
+                        </Button>
+                    </GenerateReportTooltip>
+                </div>
             </SelectorBar>
         )
     }

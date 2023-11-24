@@ -1,6 +1,7 @@
 import PropTypes from 'prop-types'
 import React from 'react'
-import { NoDataInfoBox } from './common/NoDataWarning.js'
+import { ReportInfoScreen } from '../info-screen/InfoScreen.js'
+import { NoDataInfoBox } from './common/Warnings.js'
 import styles from './ReportData.module.css'
 import { SectionOne } from './section1/SectionOne.js'
 import { SectionTwo } from './section2/SectionTwo.js'
@@ -21,16 +22,22 @@ SectionLayout.propTypes = {
 
 export const ReportData = ({ reportParameters }) => {
     if (Object.keys(reportParameters).length === 0) {
-        return null
+        return <ReportInfoScreen />
     }
+
+    const isSectionOneEmpty =
+        !Object.keys(
+            reportParameters.mappedConfiguration.dataElementsAndIndicators
+        ).length ||
+        !Object.keys(reportParameters.mappedConfiguration.dataSets).length
 
     return (
         <div className={styles.reportContainer}>
             <SectionLayout title="Domain 1 - Completeness of Reporting">
-                {reportParameters.dataElements?.length > 0 ? (
-                    <SectionOne reportParameters={reportParameters} />
-                ) : (
+                {isSectionOneEmpty ? (
                     <NoDataInfoBox subsection={false} />
+                ) : (
+                    <SectionOne reportParameters={reportParameters} />
                 )}
             </SectionLayout>
             <SectionLayout title="Domain 2 - Internal Consistency of Reported Data">

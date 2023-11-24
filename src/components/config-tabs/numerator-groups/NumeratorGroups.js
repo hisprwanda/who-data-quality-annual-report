@@ -20,7 +20,7 @@ import {
     useConfigurations,
     useConfigurationsDispatch,
 } from '../../../utils/index.js'
-import { ConfirmationModal } from '../numerator-relations/ConfirmationModal.js'
+import { ConfirmationModal } from '../ConfirmationModal.js'
 import { EditGroupModal } from './EditGroupModal.js'
 import styles from './NumeratorGroups.module.css'
 import { NumeratorGroupsTableItem } from './NumeratorGroupsTableItem.js'
