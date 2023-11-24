@@ -1,4 +1,3 @@
-import { useDataQuery, useDataMutation } from '@dhis2/app-runtime'
 import {
     Button,
     ButtonStrip,
@@ -9,38 +8,16 @@ import {
     TableHead,
     TableRow,
     TableRowHead,
-    IconDelete16,
-    IconEdit16,
     IconAdd16,
-    Modal,
-    ModalActions,
-    ModalContent,
-    ModalTitle,
-    SingleSelect,
-    SingleSelectOption,
 } from '@dhis2/ui'
-import PropTypes from 'prop-types'
 import React, { useState, useCallback } from 'react'
 import {
-    getAllDenominatorType,
-    getDenominatorType,
-} from '../../../utils/denominatorsMetadataData.js'
-import {
+    CREATE_DENOMINATOR,
     useConfigurations,
     useConfigurationsDispatch,
 } from '../../../utils/index.js'
 import { DenominatorTableItem } from './DenominatorTableItem.js'
 import { EditDenominatorModal } from './EditDenominatorModal.js'
-
-const orgUnitLevelsQuery = {
-    ou: {
-        resource: 'organisationUnitLevels',
-        params: {
-            fields: 'displayName,id,level',
-            paging: false,
-        },
-    },
-}
 
 const AddNewDenominatorButton = () => {
     const [addNewModalOpen, setAddNewModalOpen] = useState(false)
@@ -52,7 +29,7 @@ const AddNewDenominatorButton = () => {
     const addNewDenominatorRelation = useCallback(
         ({ newDenominatorData }) => {
             dispatch({
-                type: CREATE_NUMERATOR,
+                type: CREATE_DENOMINATOR,
                 payload: {
                     newDenominatorData,
                 },
@@ -79,11 +56,6 @@ const AddNewDenominatorButton = () => {
 export const Denominators = () => {
     const configurations = useConfigurations()
 
-    // run the data orgUnits querry
-    const { data: dataOrgUnitsData } = useDataQuery(orgUnitLevelsQuery, {
-        lazy: false,
-    })
-
     return (
         <div>
             <p>
@@ -97,9 +69,12 @@ export const Denominators = () => {
                 <Table>
                     <TableHead>
                         <TableRowHead>
-                            <TableCellHead> Data element/indicator </TableCellHead>
+                            <TableCellHead>
+                                {' '}
+                                Data element/indicator{' '}
+                            </TableCellHead>
                             <TableCellHead>Type</TableCellHead>
-                            <TableCellHead >Actions</TableCellHead>
+                            <TableCellHead>Actions</TableCellHead>
                         </TableRowHead>
                     </TableHead>
                     <TableBody>
@@ -397,9 +372,4 @@ export const Denominators = () => {
             </Modal> */}
         </div>
     )
-}
-
-Denominators.propTypes = {
-    configurations: PropTypes.object,
-    toggleState: PropTypes.number,
 }

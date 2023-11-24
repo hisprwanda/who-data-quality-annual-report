@@ -1,20 +1,15 @@
-import { useAlert } from '@dhis2/app-runtime'
 import { Button, TableCell, TableRow, ButtonStrip } from '@dhis2/ui'
-import { Chip } from '@dhis2/ui-core'
 import PropTypes from 'prop-types'
 import React, { useMemo, useCallback, useState } from 'react'
+import { getDenominatorType } from '../../../utils/denominatorsMetadataData.js'
 import {
-    CLEAR_NUMERATOR_DATA_MAPPING,
     DELETE_DENOMINATOR,
-    DELETE_NUMERATOR,
-    UPDATE_NUMERATOR,
-    useConfigurations,
+    UPDATE_DENOMINATOR,
     useConfigurationsDispatch,
     useDataItemNames,
 } from '../../../utils/index.js'
 import { ConfirmationModal } from '../ConfirmationModal.js'
 import { EditDenominatorModal } from './EditDenominatorModal.js'
-import { getDenominatorType } from '../../../utils/denominatorsMetadataData.js'
 
 /** Manages the "update form" modal and datastore mutation */
 const EditDenominatorButton = ({ denominator }) => {
@@ -25,15 +20,13 @@ const EditDenominatorButton = ({ denominator }) => {
     const closeModal = useCallback(() => setEditModalOpen(false), [])
 
     const updateDenominator = useCallback(
-        ({
-            newDenominatorData,
-            dataSetsContainingDenominator,
-        }) => {
+        ({ newDenominatorData }) => {
+            console.log('newDenominatorData', newDenominatorData)
             dispatch({
-                type: UPDATE_NUMERATOR,
+                type: UPDATE_DENOMINATOR,
                 payload: {
                     code: denominator.code,
-                    dataSetsContainingDenominator,
+                    updatedDenominatorData: newDenominatorData,
                 },
             })
         },
@@ -43,13 +36,10 @@ const EditDenominatorButton = ({ denominator }) => {
     // not all fields are needed for form initial values
     const denominatorDataForForm = useMemo(
         () => ({
-            name: denominator.name,
-            core: denominator.core,
-            definition: denominator.definition,
-            // if not custom, some fields will be read-only
-            custom: denominator.custom,
-            // used to print: "This denominator is currently mapped to <dataItem>"
-            prevDataID: denominator.dataID,
+            code: denominator.code,
+            type: denominator.type,
+            level: denominator.lowLevel,
+            dataID: denominator.dataID,
         }),
         [denominator]
     )
@@ -73,12 +63,9 @@ EditDenominatorButton.propTypes = {
     denominator: PropTypes.object,
 }
 
-
-
 const DeleteDenominatorButton = ({ denominator }) => {
     const [confirmationModalOpen, setConfirmationModalOpen] = useState(false)
 
-    const { show } = useAlert(({ message }) => message, { critical: true })
     const dispatch = useConfigurationsDispatch()
 
     const openModal = useCallback(() => setConfirmationModalOpen(true), [])
@@ -99,7 +86,7 @@ const DeleteDenominatorButton = ({ denominator }) => {
                 small
                 destructive
                 onClick={() => {
-                        openModal()
+                    openModal()
                 }}
             >
                 Delete
@@ -122,40 +109,17 @@ DeleteDenominatorButton.propTypes = {
 }
 
 export const DenominatorTableItem = ({ denominator }) => {
-    const configurations = useConfigurations()
     const dataItemNames = useDataItemNames()
 
-    const getDataSetName = useCallback(
-        (id) =>
-            configurations.dataSets.find((dataSet) => dataSet.id === id)?.name,
-        [configurations]
-    )
-
-    const dataSetNames = React.useMemo(() => {
-        const { dataSetID } = denominator
-        if (!dataSetID) {
-            return
-        }
-        if (Array.isArray(dataSetID)) {
-            return dataSetID
-                .map((id) => getDataSetName(id))
-                .filter((e) => e)
-                .join(', ')
-        }
-        return getDataSetName(dataSetID)
-    }, [getDataSetName, denominator])
-
-    const denominatorType = React.useMemo(() =>{     
+    const denominatorType = React.useMemo(() => {
         return getDenominatorType(denominator.type).label
-}, [denominator])
-
-
+    }, [denominator])
 
     return (
         <TableRow>
-            <TableCell dense>{denominator.name}</TableCell>
+            <TableCell dense>{dataItemNames.get(denominator.dataID)}</TableCell>
             <TableCell dense>{denominatorType}</TableCell>
-            
+
             <TableCell dense>
                 <ButtonStrip end>
                     <EditDenominatorButton denominator={denominator} />

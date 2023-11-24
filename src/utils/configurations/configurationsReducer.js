@@ -410,11 +410,39 @@ export function configurationsReducer(configurations, { type, payload }) {
 
         // Denominators
         case CREATE_DENOMINATOR: {
-            console.log('CREATE_DENOMINATOR')
+            const prevDenominators = configurations.denominators
+            const nextAvailableCode = getNextAvailableCode(
+                prevDenominators,
+                'P'
+            )
+            const newDenominatorData = {
+                ...payload.newDenominatorData,
+                code: nextAvailableCode,
+            }
+            const newConfigurations = {
+                ...configurations,
+                denominators: [...prevDenominators, newDenominatorData],
+                lastUpdated: getISOTimestamp(),
+            }
+            return newConfigurations
         }
 
         case UPDATE_DENOMINATOR: {
-            console.log('UPDATE_DENOMINATOR')
+            const { updatedDenominatorData, code } = payload
+            const prevDenominators = configurations.denominators
+            const targetIndex = prevDenominators.findIndex(
+                (dn) => dn.code === code
+            )
+            const newConfigurations = {
+                ...configurations,
+                denominators: [
+                    ...prevDenominators.slice(0, targetIndex),
+                    updatedDenominatorData,
+                    ...prevDenominators.slice(targetIndex + 1),
+                ],
+                lastUpdated: getISOTimestamp(),
+            }
+            return newConfigurations
         }
 
         case DELETE_DENOMINATOR: {
@@ -433,7 +461,6 @@ export function configurationsReducer(configurations, { type, payload }) {
             }
             return newConfigurations
         }
-
 
         default:
             throw new Error(`Action type '${type}' not valid`)
