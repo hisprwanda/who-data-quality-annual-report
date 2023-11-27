@@ -9,7 +9,7 @@ import { SectionThree } from './section3/SectionThree.js'
 import { SectionFour } from './section4/SectionFour.js'
 
 const SectionLayout = ({ title, children }) => (
-    <div>
+    <div className={styles.pageBreakBefore}>
         <div className={styles.sectionHeading}>{title.toUpperCase()}</div>
         {children}
     </div>

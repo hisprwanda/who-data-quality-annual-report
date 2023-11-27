@@ -16,3 +16,14 @@
     line-height: 20px;
     color: white;
 }
+
+@media print {
+    /* add page breaks (before each "domain" section) */
+    .pageBreakBefore {
+        break-before: page;
+    }
+
+    .reportContainer {
+        padding: 0;
+    }
+}
