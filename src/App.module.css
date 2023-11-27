@@ -8,6 +8,12 @@ html {
 }
 
 @media print {
+    /* a bit of a hack to get the sizes right during printing (assuming
+    this is printed on A4/US Letter paper): 
+    https://stackoverflow.com/a/66593515 */
+    @page {
+        size: A3;
+    }
     html {
         background-color: white;
     }
