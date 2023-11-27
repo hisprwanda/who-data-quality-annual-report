@@ -102,6 +102,7 @@ export const ReportParameterSelector = ({ setReportParameters }) => {
                         </div>
                     )
                 }
+                className={styles.hideInPrint}
             >
                 <GroupSelector
                     groups={configurations?.groups}

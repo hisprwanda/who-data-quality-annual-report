@@ -8,9 +8,16 @@ html {
 }
 
 @media print {
+    html {
+        background-color: white;
+    }
     /* the `overflow: auto` default allows only printing the visible viewport */
     /* `overflow: visible fixes` that */
     :global(div.app-shell-app) {
         overflow: visible !important;
+    }
+    /* hide the DHIS2 header bar */
+    :global(div.app-shell-adapter > header) {
+        display: none;
     }
 }
