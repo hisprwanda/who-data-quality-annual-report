@@ -1,0 +1,23 @@
+.groupsContainer {
+    width: 100%;
+    margin: 0 auto;
+  }
+  
+  .groupHeader {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-left: 4px;
+    margin: 16px 0;
+    font-size: 18px;
+  }
+  
+  .numeratoryGroupActions {
+    display: flex;
+    justify-content: end;
+  }
+  
+  .addNewGroupBtn {
+    margin-top: 10px;
+  }
+  

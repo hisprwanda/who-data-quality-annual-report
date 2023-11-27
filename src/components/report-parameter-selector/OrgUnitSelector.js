@@ -59,7 +59,7 @@ export const OrgUnitSelector = ({
                                     // clear out selected level if selected org unit is too low
                                     if (
                                         selectedOrgUnitLevel &&
-                                        Number(selectedOrgUnitLevel) <=
+                                        Number(selectedOrgUnitLevel.level) <=
                                             computedLevel
                                     ) {
                                         setSelectedOrgUnitLevel(null)

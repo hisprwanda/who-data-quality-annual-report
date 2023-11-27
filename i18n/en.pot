@@ -5,8 +5,8 @@ msgstr ""
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1)\n"
-"POT-Creation-Date: 2023-11-27T07:19:45.335Z\n"
-"PO-Revision-Date: 2023-11-27T07:19:45.335Z\n"
+"POT-Creation-Date: 2023-11-27T08:09:00.537Z\n"
+"PO-Revision-Date: 2023-11-27T08:09:00.537Z\n"
 
 msgid "Select period(s)"
 msgstr "Select period(s)"
@@ -28,6 +28,9 @@ msgstr "section"
 
 msgid "Something went wrong when retrieving data"
 msgstr "Something went wrong when retrieving data"
+
+msgid "The Data Quality Annual Report has not been configured"
+msgstr "The Data Quality Annual Report has not been configured"
 
 msgid ""
 "Could not calculate overall score. Calculations at {{subOrgUnitLevelName}} "
@@ -188,3 +191,16 @@ msgstr "Configurations"
 
 msgid "Generate report"
 msgstr "Generate report"
+
+msgid "No access"
+msgstr "No access"
+
+msgid "You do not have access to the configurations module."
+msgstr "You do not have access to the configurations module."
+
+msgid ""
+"It was not possible to retrieve user information for the current user or "
+"the sharing settings of the configurations."
+msgstr ""
+"It was not possible to retrieve user information for the current user or "
+"the sharing settings of the configurations."

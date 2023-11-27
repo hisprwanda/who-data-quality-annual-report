@@ -6,7 +6,7 @@ import { LoadingSpinner } from '../../components/loading-spinner/LoadingSpinner.
 import { configurationsReducer } from './configurationsReducer.js'
 import {
     useSetUpConfigurations,
-    DATASTORE_ENDPOINT,
+    DATASTORE_ID,
 } from './useSetUpConfigurations.js'
 
 const ErrorInfo = ({ errorMessage }) => (
@@ -104,7 +104,8 @@ export const useRefetchConfigurations = () => {
 }
 
 const UPDATE_CONFIGURATIONS_MUTATION = {
-    resource: DATASTORE_ENDPOINT,
+    resource: 'dataStore',
+    id: DATASTORE_ID,
     type: 'update',
     data: ({ newConfigurations }) => newConfigurations,
 }

@@ -33,7 +33,7 @@ const isDivergent2e = ({ type, score, overallScore, criteria }) => {
     }
     if (type === 'level') {
         return (
-            score < (1 + criteria / 100) * overallScore ||
+            score < (1 - criteria / 100) * overallScore ||
             score > (1 + criteria / 100) * overallScore
         )
     }
@@ -60,7 +60,7 @@ const getSection2EChartInfoBasic = ({
     }
     return {
         type: 'scatter',
-        slope: type === 'level' ? overallScore / 100 : 1,
+        slope: type === 'level' ? overallScore : 1,
         threshold: criteria,
         xAxisTitle: metadata[B]?.name,
         yAxisTitle: metadata[A]?.name,
@@ -210,6 +210,7 @@ const calculateSection2e = ({
                         (subOrgUnitIDs.length || 1)) *
                     100,
                 noncalculable: invalidSubOrgUnits.sort().join(', '),
+                names: divergentSubOrgUnits.sort().join(', '),
             },
             chartInfo,
         })

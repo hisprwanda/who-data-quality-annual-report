@@ -6,12 +6,12 @@ import { Link } from 'react-router-dom'
 import { useRefetchConfigurations } from '../../utils/index.js'
 import { ConfigInfoScreen } from '../info-screen/InfoScreen.js'
 import styles from './ConfigTabs.module.css'
+import { NumeratorGroups } from './numerator-groups/NumeratorGroups.js'
 import { NumeratorRelations } from './numerator-relations/index.js'
 import { Numerators } from './numerators/index.js'
 import { DenominatorRelations } from './tab-contents/DenominatorRelations.js'
 import { Denominators } from './tab-contents/Denominators.js'
 import { ExternalDataComparison } from './tab-contents/ExternalDataComparison.js'
-import { NumeratorGroups } from './tab-contents/NumeratorGroups.js'
 import { NumeratorParameters } from './tab-contents/NumeratorParameters.js'
 
 const ExitConfigurationsButton = () => (
