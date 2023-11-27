@@ -4,7 +4,7 @@ import { Button, NoticeBox, SelectorBar } from '@dhis2/ui'
 import PropTypes from 'prop-types'
 import React, { useMemo, useState } from 'react'
 import { Link } from 'react-router-dom'
-import { useConfigurations } from '../../utils/index.js'
+import { useConfigurations, useUserContext } from '../../utils/index.js'
 import { LoadingSpinner } from '../loading-spinner/LoadingSpinner.js'
 import { GenerateReportTooltip } from './GenerateReportButtonTooltip.js'
 import { getReportParameters } from './getReportParameters.js'
@@ -33,6 +33,7 @@ const configQuery = {
 export const ReportParameterSelector = ({ setReportParameters }) => {
     const { loading, data, error } = useDataQuery(configQuery)
     const configurations = useConfigurations()
+    const { isAuthorized } = useUserContext()
 
     const [selectedGroup, setSelectedGroup] = useState(null)
     const [selectedOrgUnit, setSelectedOrgUnit] = useState({})
@@ -91,11 +92,15 @@ export const ReportParameterSelector = ({ setReportParameters }) => {
         return (
             <SelectorBar
                 additionalContent={
-                    <div className={styles.additionalContentContainer}>
-                        <Link to="/configurations">
-                            <Button small>{i18n.t('Configurations')}</Button>
-                        </Link>
-                    </div>
+                    !isAuthorized ? null : (
+                        <div className={styles.additionalContentContainer}>
+                            <Link to="/configurations">
+                                <Button small>
+                                    {i18n.t('Configurations')}
+                                </Button>
+                            </Link>
+                        </div>
+                    )
                 }
             >
                 <GroupSelector
