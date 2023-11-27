@@ -35,7 +35,9 @@ export const ReportData = ({ reportParameters }) => {
         <div className={styles.reportContainer}>
             <SectionLayout title="Domain 1 - Completeness of Reporting">
                 {isSectionOneEmpty ? (
-                    <NoDataInfoBox subsection={false} />
+                    <div className={styles.marginBottom24}>
+                        <NoDataInfoBox subsection={false} />
+                    </div>
                 ) : (
                     <SectionOne reportParameters={reportParameters} />
                 )}
@@ -48,7 +50,9 @@ export const ReportData = ({ reportParameters }) => {
                     ?.length > 0 ? (
                     <SectionThree reportParameters={reportParameters} />
                 ) : (
-                    <NoDataInfoBox subsection={false} />
+                    <div className={styles.marginBottom24}>
+                        <NoDataInfoBox subsection={false} />
+                    </div>
                 )}
             </SectionLayout>
             <SectionLayout title="Domain 4 - Consistency of Population Data">
@@ -56,7 +60,9 @@ export const ReportData = ({ reportParameters }) => {
                     ?.length > 0 ? (
                     <SectionFour reportParameters={reportParameters} />
                 ) : (
-                    <NoDataInfoBox subsection={false} />
+                    <div className={styles.marginBottom24}>
+                        <NoDataInfoBox subsection={false} />
+                    </div>
                 )}
             </SectionLayout>
         </div>

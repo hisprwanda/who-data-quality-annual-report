@@ -4,6 +4,10 @@
     background-color: white;
 }
 
+.marginBottom24 {
+    margin-bottom: 24px;
+}
+
 .sectionHeading {
     background: var(--colors-blue400);
     padding: 8px;
