@@ -4,7 +4,7 @@ import { NoticeBox } from '@dhis2/ui'
 import PropTypes from 'prop-types'
 import React from 'react'
 import { LoadingSpinner } from '../../components/loading-spinner/LoadingSpinner.js'
-import { DATASTORE_ENDPOINT } from '../configurations/useSetUpConfigurations.js'
+import { DATASTORE_ID } from '../configurations/useSetUpConfigurations.js'
 import { UserContext } from './userContext.js'
 
 const query = {
@@ -21,7 +21,8 @@ const query = {
         },
     },
     dataStoreSharing: {
-        resource: `${DATASTORE_ENDPOINT}/metaData`,
+        resource: `dataStore`,
+        id: `${DATASTORE_ID}/metaData`,
     },
 }
 
