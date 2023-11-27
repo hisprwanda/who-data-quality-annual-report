@@ -5,17 +5,8 @@ msgstr ""
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1)\n"
-"POT-Creation-Date: 2023-11-23T11:58:13.580Z\n"
-"PO-Revision-Date: 2023-11-23T11:58:13.580Z\n"
-
-msgid "Select period(s)"
-msgstr "Select period(s)"
-
-msgid "Cancel"
-msgstr "Cancel"
-
-msgid "Save"
-msgstr "Save"
+"POT-Creation-Date: 2023-11-27T17:19:57.016Z\n"
+"PO-Revision-Date: 2023-11-27T17:19:57.016Z\n"
 
 msgid "There is no data for this {{sectionType}}"
 msgstr "There is no data for this {{sectionType}}"
@@ -101,6 +92,15 @@ msgstr ""
 
 msgid "This configuration is used as the basis for the Annual Report."
 msgstr "This configuration is used as the basis for the Annual Report."
+
+msgid "Select period(s)"
+msgstr "Select period(s)"
+
+msgid "Cancel"
+msgstr "Cancel"
+
+msgid "Save"
+msgstr "Save"
 
 msgid ""
 "Group, Organisation unit, Organisation unit level, period, and comparison "
