@@ -29,6 +29,9 @@ msgstr "section"
 msgid "Something went wrong when retrieving data"
 msgstr "Something went wrong when retrieving data"
 
+msgid "The Data Quality Annual Report has not been configured"
+msgstr "The Data Quality Annual Report has not been configured"
+
 msgid "No data to display"
 msgstr "No data to display"
 
