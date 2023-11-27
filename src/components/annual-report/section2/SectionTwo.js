@@ -73,8 +73,8 @@ const Sections2a2b2c = ({
 
     if (subsectionData.length === 0) {
         return (
-            <div className={styles.section2abcContainer}>
-                <ReportTable>
+            <div className={styles.marginBottom24}>
+                <ReportTable className={styles.marginBottom4}>
                     <TableHead>
                         <SubSectionLayout
                             title={title}
@@ -88,7 +88,7 @@ const Sections2a2b2c = ({
     }
 
     return (
-        <div className={styles.section2abcContainer}>
+        <div className={styles.marginBottom24}>
             <ReportTable className={styles.marginBottom4}>
                 <TableHead>
                     <SubSectionLayout
@@ -238,7 +238,11 @@ const Section2D = ({ title, subtitle, subsectionData, reportParameters }) => (
                 />
             </TableHead>
         </ReportTable>
-        {subsectionData.length === 0 && <NoDataInfoBox subsection={true} />}
+        {subsectionData.length === 0 && (
+            <div className={styles.marginBottom24}>
+                <NoDataInfoBox subsection={true} />
+            </div>
+        )}
         {subsectionData.map((dataRow, index) => (
             <Section2DBlock
                 key={dataRow.name}
@@ -271,11 +275,11 @@ const Section2EBlock = ({
             </TableHead>
             <TableBody>
                 <TableRow>
-                    <ReportCell>Denominator A</ReportCell>
+                    <ReportCell>Indicator A</ReportCell>
                     <ReportCell>{dataRow.A}</ReportCell>
                 </TableRow>
                 <TableRow>
-                    <ReportCell>Denominator B</ReportCell>
+                    <ReportCell>Indicator B</ReportCell>
                     <ReportCell>{dataRow.B}</ReportCell>
                 </TableRow>
                 <TableRow>
@@ -346,7 +350,11 @@ const Section2E = ({ title, subtitle, subsectionData, reportParameters }) => (
                 <SubSectionLayout title={title} subtitle={subtitle} />
             </TableHead>
         </ReportTable>
-        {subsectionData.length === 0 && <NoDataInfoBox subsection={true} />}
+        {subsectionData.length === 0 && (
+            <div className={styles.marginBottom24}>
+                <NoDataInfoBox subsection={true} />
+            </div>
+        )}
         {subsectionData.map((dataRow, index) => (
             <Section2EBlock
                 key={dataRow.title}
@@ -405,7 +413,11 @@ export const SectionTwo = ({ reportParameters }) => {
                 )
                 .every((subsectionLength) => subsectionLength === 0)
         ) {
-            return <NoDataInfoBox subsection={false} />
+            return (
+                <div className={styles.marginBottom24}>
+                    <NoDataInfoBox subsection={false} />
+                </div>
+            )
         }
 
         return (
