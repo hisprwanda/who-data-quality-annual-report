@@ -125,6 +125,15 @@ msgstr ""
 msgid "This configuration is used as the basis for the Annual Report."
 msgstr "This configuration is used as the basis for the Annual Report."
 
+msgid "Select period(s)"
+msgstr "Select period(s)"
+
+msgid "Cancel"
+msgstr "Cancel"
+
+msgid "Save"
+msgstr "Save"
+
 msgid ""
 "Group, Organisation unit, Organisation unit level, period, and comparison "
 "periods must all be selected before a report can be generated."

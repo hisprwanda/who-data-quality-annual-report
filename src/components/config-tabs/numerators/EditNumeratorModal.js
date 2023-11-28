@@ -65,8 +65,8 @@ export function EditNumeratorModal({ numeratorDataToEdit, onSave, onClose }) {
     const numeratorGroupOptions = useMemo(
         () =>
             configurations.groups
-                .map(({ displayName, code }) => ({
-                    label: displayName,
+                .map(({ name, code }) => ({
+                    label: name,
                     value: code,
                 }))
                 .sort((a, b) => a.label.localeCompare(b.label)),

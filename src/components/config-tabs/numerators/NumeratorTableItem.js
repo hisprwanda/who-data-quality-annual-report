@@ -262,7 +262,7 @@ export const NumeratorTableItem = ({ numerator }) => {
             <TableCell dense>
                 {groupsContainingNumerator.map((group) => (
                     <Chip key={group.code} dense>
-                        {group.displayName}
+                        {group.name}
                     </Chip>
                 ))}
             </TableCell>
