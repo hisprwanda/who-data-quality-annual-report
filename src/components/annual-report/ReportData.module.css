@@ -27,7 +27,7 @@
 
 @media print {
     /* add page breaks (before each "domain" section) */
-    .pageBreakBefore {
+    .pageBreakBefore:not(:first-child) {
         break-before: page;
     }
 }
