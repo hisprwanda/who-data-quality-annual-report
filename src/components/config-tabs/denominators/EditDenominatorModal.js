@@ -11,19 +11,19 @@ import {
     ButtonStrip,
     ReactFinalForm,
     hasValue,
+    InputFieldFF,
     SingleSelectFieldFF,
 } from '@dhis2/ui'
 import PropTypes from 'prop-types'
 import React from 'react'
 import denominatorTypes from '../../../data/denominatorTypes.json'
-import { TOTALS } from './constants.js'
 import { DataMappingFormSection } from './DataMappingForm.js'
 import { OrgUnitLevelSelect } from './OrgUnitLevelSelect.js'
 
 const { Form, Field } = ReactFinalForm
 
 const DEFAULT_FORM_VALUES = {
-    dataElementType: TOTALS,
+    dataElementType: 'totals',
 }
 
 export function EditDenominatorModal({
@@ -31,13 +31,13 @@ export function EditDenominatorModal({
     onSave,
     onClose,
 }) {
-    console.log('denominatorDataToEdit', denominatorDataToEdit)
     return (
         <Form
             onSubmit={(values) => {
                 // Pick data from values
                 // (some values like dataElementType are just for the form)
                 let newDenominatorData = {
+                    name: values.name,
                     lowLevel: values.level,
                     type: values.type,
                 }
@@ -69,6 +69,18 @@ export function EditDenominatorModal({
                     <ModalContent>
                         <Table>
                             <TableBody>
+                                <TableRow>
+                                    <TableCell>Name</TableCell>
+                                    <TableCell>
+                                        <Field
+                                            name="name"
+                                            component={InputFieldFF}
+                                            autoComplete="off"
+                                            placeholder="Denominator name"
+                                            validate={hasValue}
+                                        />
+                                    </TableCell>
+                                </TableRow>
                                 <TableRow>
                                     <TableCell>Type</TableCell>
                                     <TableCell>

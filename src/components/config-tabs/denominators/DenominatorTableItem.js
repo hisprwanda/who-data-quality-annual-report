@@ -21,7 +21,6 @@ const EditDenominatorButton = ({ denominator }) => {
 
     const updateDenominator = useCallback(
         ({ newDenominatorData }) => {
-            console.log('newDenominatorData', newDenominatorData)
             dispatch({
                 type: UPDATE_DENOMINATOR,
                 payload: {
@@ -36,6 +35,7 @@ const EditDenominatorButton = ({ denominator }) => {
     // not all fields are needed for form initial values
     const denominatorDataForForm = useMemo(
         () => ({
+            name: denominator.name,
             code: denominator.code,
             type: denominator.type,
             level: denominator.lowLevel,
@@ -65,7 +65,7 @@ EditDenominatorButton.propTypes = {
 
 const DeleteDenominatorButton = ({ denominator }) => {
     const [confirmationModalOpen, setConfirmationModalOpen] = useState(false)
-
+    const dataItemNames = useDataItemNames()
     const dispatch = useConfigurationsDispatch()
 
     const openModal = useCallback(() => setConfirmationModalOpen(true), [])
@@ -94,7 +94,9 @@ const DeleteDenominatorButton = ({ denominator }) => {
             {confirmationModalOpen && (
                 <ConfirmationModal
                     title="Delete denominator"
-                    text={`Are you sure you want to delete ${denominator.name}?`}
+                    text={`Are you sure you want to delete ${dataItemNames.get(
+                        denominator.dataID
+                    )}?`}
                     action="Delete"
                     destructive
                     onClose={closeModal}
