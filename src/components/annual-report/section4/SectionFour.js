@@ -5,11 +5,16 @@ import { LoadingSpinner } from '../../loading-spinner/LoadingSpinner.js'
 import { Chart } from '../Chart.js'
 import { InterpretationsField, SectionError } from '../common/index.js'
 import {
+    CouldNotCalculateOverall,
+    CouldNotCalculateSubOrgUnits,
+} from '../common/Warnings.js'
+import {
     ReportCell,
     ReportCellHead,
     ReportRowHead,
     ReportTable,
 } from '../ReportTable.js'
+import { formatVal } from '../utils/utils.js'
 import styles from './SectionFour.module.css'
 import { useSectionFourData } from './useSectionFourData.js'
 
@@ -55,7 +60,12 @@ const Section4A = ({ title, subtitle, subsectionData }) => (
                 .map((dataRow) => (
                     <TableRow key={dataRow.name}>
                         <ReportCell>{dataRow.name}</ReportCell>
-                        <ReportCell>{dataRow.value}</ReportCell>
+                        <ReportCell>
+                            {formatVal(dataRow.value, {
+                                roundTo: 2,
+                                includePercentage: false,
+                            })}
+                        </ReportCell>
                     </TableRow>
                 ))}
         </TableBody>
@@ -88,73 +98,107 @@ const Section4B = ({
                 )
 
                 return (
-                    <div className={styles.section4bGrid} key={dataRow.name}>
-                        <ReportTable>
-                            <TableHead>
-                                <ReportRowHead>
-                                    <ReportCellHead colSpan="2">
-                                        {dataRow.name}
-                                    </ReportCellHead>
-                                </ReportRowHead>
-                            </TableHead>
-                            <TableBody>
-                                <TableRow>
-                                    <ReportCell>Denominator A</ReportCell>
-                                    <ReportCell>{dataRow.A}</ReportCell>
-                                </TableRow>
-                                <TableRow>
-                                    <ReportCell>Denominator B</ReportCell>
-                                    <ReportCell>{dataRow.B}</ReportCell>
-                                </TableRow>
-                                <TableRow>
-                                    <ReportCell>Quality threshold</ReportCell>
-                                    <ReportCell>
-                                        ±{dataRow.qualityThreshold}%
-                                    </ReportCell>
-                                </TableRow>
-                                <TableRow>
-                                    <ReportCell>Overall score</ReportCell>
-                                    <ReportCell>
-                                        {dataRow.overallScore}%
-                                    </ReportCell>
-                                </TableRow>
-                                <TableRow>
-                                    <ReportCell>
-                                        {`Number of ${orgUnitLevelName} with divergent score`}
-                                    </ReportCell>
-                                    <ReportCell>
-                                        {dataRow.divergentSubOrgUnits?.number}
-                                    </ReportCell>
-                                </TableRow>
-                                <TableRow>
-                                    <ReportCell>
-                                        {`Percent of ${orgUnitLevelName} with divergent score`}
-                                    </ReportCell>
-                                    <ReportCell>
-                                        {
-                                            dataRow.divergentSubOrgUnits
-                                                ?.percentage
-                                        }
-                                        %
-                                    </ReportCell>
-                                </TableRow>
-                                <TableRow>
-                                    <ReportCell colSpan="2">
-                                        {dataRow.divergentSubOrgUnits?.names}
-                                    </ReportCell>
-                                </TableRow>
-                            </TableBody>
-                        </ReportTable>
+                    <>
+                        <div
+                            className={styles.section4bGrid}
+                            key={dataRow.name}
+                        >
+                            <ReportTable>
+                                <TableHead>
+                                    <ReportRowHead>
+                                        <ReportCellHead colSpan="2">
+                                            {dataRow.name}
+                                        </ReportCellHead>
+                                    </ReportRowHead>
+                                </TableHead>
+                                <TableBody>
+                                    <TableRow>
+                                        <ReportCell>Denominator A</ReportCell>
+                                        <ReportCell>{dataRow.A}</ReportCell>
+                                    </TableRow>
+                                    <TableRow>
+                                        <ReportCell>Denominator B</ReportCell>
+                                        <ReportCell>{dataRow.B}</ReportCell>
+                                    </TableRow>
+                                    <TableRow>
+                                        <ReportCell>
+                                            Quality threshold
+                                        </ReportCell>
+                                        <ReportCell>
+                                            ±{dataRow.qualityThreshold}%
+                                        </ReportCell>
+                                    </TableRow>
+                                    <TableRow>
+                                        <ReportCell>Overall score</ReportCell>
+                                        <ReportCell>
+                                            {formatVal(dataRow.overallScore, {
+                                                roundTo: 1,
+                                                includePercentage: true,
+                                            })}
+                                        </ReportCell>
+                                    </TableRow>
+                                    <TableRow>
+                                        <ReportCell>
+                                            {`Number of ${orgUnitLevelName} with divergent score`}
+                                        </ReportCell>
+                                        <ReportCell>
+                                            {
+                                                dataRow.divergentSubOrgUnits
+                                                    ?.number
+                                            }
+                                        </ReportCell>
+                                    </TableRow>
+                                    <TableRow>
+                                        <ReportCell>
+                                            {`Percent of ${orgUnitLevelName} with divergent score`}
+                                        </ReportCell>
+                                        <ReportCell>
+                                            {formatVal(
+                                                dataRow.divergentSubOrgUnits
+                                                    ?.percentage,
+                                                {
+                                                    roundTo: 1,
+                                                    includePercentage: true,
+                                                }
+                                            )}
+                                        </ReportCell>
+                                    </TableRow>
+                                    <TableRow>
+                                        <ReportCell colSpan="2">
+                                            {
+                                                dataRow.divergentSubOrgUnits
+                                                    ?.names
+                                            }
+                                        </ReportCell>
+                                    </TableRow>
+                                </TableBody>
+                            </ReportTable>
 
-                        <Chart
-                            sectionId={'section4'}
-                            chartId={`chart${index}`}
-                            chartInfo={dataRow.chartInfo}
-                            className={styles.section4bChart}
-                        />
-
-                        <InterpretationsField />
-                    </div>
+                            <Chart
+                                sectionId={'section4'}
+                                chartId={`chart${index}`}
+                                chartInfo={dataRow.chartInfo}
+                                className={styles.section4bChart}
+                            />
+                            {dataRow.invalid && (
+                                <CouldNotCalculateOverall
+                                    subOrgUnitLevelName={orgUnitLevelName}
+                                />
+                            )}
+                            {Boolean(
+                                dataRow.divergentSubOrgUnits?.nonCalculable
+                                    ?.length
+                            ) && (
+                                <CouldNotCalculateSubOrgUnits
+                                    invalidSubOrgUnitNames={
+                                        dataRow.divergentSubOrgUnits
+                                            ?.nonCalculable
+                                    }
+                                />
+                            )}
+                            <InterpretationsField />
+                        </div>
+                    </>
                 )
             })}
     </>
