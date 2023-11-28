@@ -16,6 +16,7 @@ import {
 } from '@dhis2/ui'
 import PropTypes from 'prop-types'
 import React from 'react'
+import { validateUniqueConfigObjectName } from '../../../utils/configurations/validateUniqueConfigObjectName.js'
 import { useConfigurations } from '../../../utils/index.js'
 
 const { Form, Field } = ReactFinalForm
@@ -42,7 +43,22 @@ export function EditGroupModal({ groupToEdit, onSave, onClose }) {
         <Form
             onSubmit={(values) => {
                 if (onSave) {
-                    onSave(values)
+                    // validate that the group name is unique while creating a new group
+                    if (!groupToEdit) {
+                        const isUnique = validateUniqueConfigObjectName(
+                            values.name,
+                            'groups',
+                            configurations
+                        )
+                        if (isUnique) {
+                            onSave(values)
+                        } else {
+                            alert('Group name is not unique')
+                        }
+                    } else {
+                        // if we are not editing an existing group, no need to check if the name is unique
+                        onSave(values)
+                    }
                 } else {
                     alert('todo')
                 }
