@@ -32,39 +32,41 @@ export const ReportData = ({ reportParameters }) => {
         !Object.keys(reportParameters.mappedConfiguration.dataSets).length
 
     return (
-        <div className={styles.reportContainer}>
-            <SectionLayout title="Domain 1 - Completeness of Reporting">
-                {isSectionOneEmpty ? (
-                    <div className={styles.marginBottom24}>
-                        <NoDataInfoBox subsection={false} />
-                    </div>
-                ) : (
-                    <SectionOne reportParameters={reportParameters} />
-                )}
-            </SectionLayout>
-            <SectionLayout title="Domain 2 - Internal Consistency of Reported Data">
-                <SectionTwo reportParameters={reportParameters} />
-            </SectionLayout>
-            <SectionLayout title="Domain 3 - External Comparison">
-                {reportParameters?.mappedConfiguration?.externalRelations
-                    ?.length > 0 ? (
-                    <SectionThree reportParameters={reportParameters} />
-                ) : (
-                    <div className={styles.marginBottom24}>
-                        <NoDataInfoBox subsection={false} />
-                    </div>
-                )}
-            </SectionLayout>
-            <SectionLayout title="Domain 4 - Consistency of Population Data">
-                {reportParameters?.mappedConfiguration?.denominatorRelations
-                    ?.length > 0 ? (
-                    <SectionFour reportParameters={reportParameters} />
-                ) : (
-                    <div className={styles.marginBottom24}>
-                        <NoDataInfoBox subsection={false} />
-                    </div>
-                )}
-            </SectionLayout>
+        <div className={styles.reportArea}>
+            <div className={styles.reportContainer}>
+                <SectionLayout title="Domain 1 - Completeness of Reporting">
+                    {isSectionOneEmpty ? (
+                        <div className={styles.marginBottom24}>
+                            <NoDataInfoBox subsection={false} />
+                        </div>
+                    ) : (
+                        <SectionOne reportParameters={reportParameters} />
+                    )}
+                </SectionLayout>
+                <SectionLayout title="Domain 2 - Internal Consistency of Reported Data">
+                    <SectionTwo reportParameters={reportParameters} />
+                </SectionLayout>
+                <SectionLayout title="Domain 3 - External Comparison">
+                    {reportParameters?.mappedConfiguration?.externalRelations
+                        ?.length > 0 ? (
+                        <SectionThree reportParameters={reportParameters} />
+                    ) : (
+                        <div className={styles.marginBottom24}>
+                            <NoDataInfoBox subsection={false} />
+                        </div>
+                    )}
+                </SectionLayout>
+                <SectionLayout title="Domain 4 - Consistency of Population Data">
+                    {reportParameters?.mappedConfiguration?.denominatorRelations
+                        ?.length > 0 ? (
+                        <SectionFour reportParameters={reportParameters} />
+                    ) : (
+                        <div className={styles.marginBottom24}>
+                            <NoDataInfoBox subsection={false} />
+                        </div>
+                    )}
+                </SectionLayout>
+            </div>
         </div>
     )
 }
