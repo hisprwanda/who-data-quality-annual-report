@@ -428,16 +428,22 @@ export function configurationsReducer(configurations, { type, payload }) {
         }
 
         case UPDATE_DENOMINATOR: {
-            const { updatedDenominatorData, code } = payload
+            const { code, updatedDenominatorData } = payload
             const prevDenominators = configurations.denominators
             const targetIndex = prevDenominators.findIndex(
                 (dn) => dn.code === code
             )
+            const prevDenominator = prevDenominators[targetIndex]
+            const updatedDenominator = {
+                ...prevDenominator,
+                ...updatedDenominatorData,
+            }
+
             const newConfigurations = {
                 ...configurations,
                 denominators: [
                     ...prevDenominators.slice(0, targetIndex),
-                    updatedDenominatorData,
+                    updatedDenominator,
                     ...prevDenominators.slice(targetIndex + 1),
                 ],
                 lastUpdated: getISOTimestamp(),
