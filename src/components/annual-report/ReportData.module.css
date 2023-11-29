@@ -1,14 +1,6 @@
-.reportArea {
-    width: 100%;
-    /* this matches the workspaces in other apps: */
-    background-color: white;
-}
-
 .reportContainer {
     padding: 16px 24px;
-    /* this fixed width keeps layouts tidy, both on screen and in print */
-    width: 1350px;
-    /* bg color duplicated here in case screen is smaller than report */
+    /* this matches the workspaces in other apps: */
     background-color: white;
 }
 
@@ -29,5 +21,10 @@
     /* add page breaks (before each "domain" section) */
     .pageBreakBefore:not(:first-child) {
         break-before: page;
+    }
+
+    .reportContainer {
+        /* an arbitrary number that makes good-looking layouts */
+        width: 1200px;
     }
 }
