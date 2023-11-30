@@ -22,7 +22,7 @@ export const getMean = (valuesArray) => {
         return getSum(valuesArray) / valuesArray.length
     }
     console.log('could not calculate average')
-    return 0 // what is appropriate to return here?
+    return undefined // what is appropriate to return here?
 }
 
 // sample variance
@@ -124,6 +124,9 @@ export const getStats = ({
 
 // assumes array of [x,y] values
 export const getForecastValue = ({ pointsArray, forecastX }) => {
+    if (pointsArray.length <= 1) {
+        return undefined
+    }
     const forecast = regression.linear(pointsArray)
     return forecast.equation[0] * forecastX + forecast.equation[1]
 }

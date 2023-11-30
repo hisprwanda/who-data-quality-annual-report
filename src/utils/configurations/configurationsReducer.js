@@ -5,6 +5,13 @@ export const CREATE_NUMERATOR = 'CREATE_NUMERATOR'
 export const UPDATE_NUMERATOR = 'UPDATE_NUMERATOR'
 export const CLEAR_NUMERATOR_DATA_MAPPING = 'CLEAR_NUMERATOR_DATA_MAPPING'
 export const DELETE_NUMERATOR = 'DELETE_NUMERATOR'
+
+// numerator groups
+export const CREATE_NUMERATOR_GROUP = 'CREATE_NUMERATOR_GROUP'
+export const UPDATE_NUMERATOR_GROUP = 'UPDATE_NUMERATOR_GROUP'
+export const DELETE_NUMERATOR_GROUP = 'DELETE_NUMERATOR_GROUP'
+
+// numerator relations
 export const CREATE_NUMERATOR_RELATION = 'CREATE_NUMERATOR_RELATION'
 export const UPDATE_NUMERATOR_RELATION = 'UPDATE_NUMERATOR_RELATION'
 export const DELETE_NUMERATOR_RELATION = 'DELETE_NUMERATOR_RELATION'
@@ -294,6 +301,53 @@ export function configurationsReducer(configurations, { type, payload }) {
         }
 
         // Numerator relations
+
+        // Numerator Groups
+        case CREATE_NUMERATOR_GROUP: {
+            const prevGroups = configurations.groups
+            const nextAvailableCode = getNextAvailableCode(prevGroups, 'G')
+            const newGroup = {
+                ...payload.newGroup,
+                code: nextAvailableCode,
+            }
+            const newConfigurations = {
+                ...configurations,
+                groups: [...prevGroups, newGroup],
+                lastUpdated: getISOTimestamp(),
+            }
+            return newConfigurations
+        }
+
+        case UPDATE_NUMERATOR_GROUP: {
+            const { updatedGroup, code } = payload
+            const prevGroups = configurations.groups
+            const targetIndex = prevGroups.findIndex((g) => g.code === code)
+            const newConfigurations = {
+                ...configurations,
+                groups: [
+                    ...prevGroups.slice(0, targetIndex),
+                    updatedGroup,
+                    ...prevGroups.slice(targetIndex + 1),
+                ],
+                lastUpdated: getISOTimestamp(),
+            }
+            return newConfigurations
+        }
+
+        case DELETE_NUMERATOR_GROUP: {
+            const { code } = payload
+            const prevGroups = configurations.groups
+            const targetIndex = prevGroups.findIndex((g) => g.code === code)
+            const newConfigurations = {
+                ...configurations,
+                groups: [
+                    ...prevGroups.slice(0, targetIndex),
+                    ...prevGroups.slice(targetIndex + 1),
+                ],
+                lastUpdated: getISOTimestamp(),
+            }
+            return newConfigurations
+        }
 
         case CREATE_NUMERATOR_RELATION: {
             const prevNumeratorRelations = configurations.numeratorRelations

@@ -1,4 +1,4 @@
-import { getStats, getRoundedValue } from '../utils/mathService.js'
+import { getStats } from '../utils/mathService.js'
 import { convertAnalyticsResponseToObject } from '../utils/utils.js'
 import { SUBPERIODS_RESPONSE_NAME } from './section2DataNames.js'
 
@@ -13,6 +13,7 @@ const getRowInformation = ({
     countsKey,
     thresholdValue,
     divergentSubOrgUnits,
+    invalidSubOrgUnits,
     metadata,
 }) => ({
     indicator: metadata[dxID]?.name,
@@ -20,22 +21,20 @@ const getRowInformation = ({
     overallScore:
         counts.totalValidValues === 0
             ? 0
-            : getRoundedValue(
-                  (counts[countsKey] / counts.totalValidValues) * 100,
-                  1
-              ),
+            : (counts[countsKey] / counts.totalValidValues) * 100,
     divergentScores: {
         number: divergentSubOrgUnits[countsKey].length,
         percentage:
             counts.orgUnitLevelsOrGroup === 0
                 ? 0
-                : getRoundedValue(
-                      (divergentSubOrgUnits[countsKey].length /
-                          counts.orgUnitLevelsOrGroup) *
-                          100,
-                      1
-                  ),
+                : (divergentSubOrgUnits[countsKey].length /
+                      counts.orgUnitLevelsOrGroup) *
+                  100,
         names: divergentSubOrgUnits[countsKey]
+            .map((ou) => metadata?.[ou]?.name)
+            .sort()
+            .join(', '),
+        noncalculable: invalidSubOrgUnits
             .map((ou) => metadata?.[ou]?.name)
             .sort()
             .join(', '),
@@ -75,11 +74,17 @@ const calculateSections2a2b2c = ({
             moderateOutliers: [],
             modifiedZOutliers: [],
         }
+        const invalidSubOrgUnits = []
         for (const ou in formattedResponse[dx]) {
             const ouData = formattedResponse[dx][ou]
             const validValues = Object.values(ouData).filter(
                 (val) => !isNaN(Number(val))
             )
+            // if there are not enough valid values to calculate statistics, skip and mark invalid
+            if (validValues.length <= 1) {
+                invalidSubOrgUnits.push(ou)
+                continue
+            }
 
             const stats = getStats({
                 valuesArray: validValues,
@@ -112,6 +117,7 @@ const calculateSections2a2b2c = ({
                 thresholdValue: thresholdValues.extremeOutlier,
                 countsKey: 'extremeOutliers',
                 divergentSubOrgUnits,
+                invalidSubOrgUnits,
                 metadata,
             })
         )
@@ -123,6 +129,7 @@ const calculateSections2a2b2c = ({
                 thresholdValue: thresholdValues.moderateOutlier,
                 countsKey: 'moderateOutliers',
                 divergentSubOrgUnits,
+                invalidSubOrgUnits,
                 metadata,
             })
         )
@@ -134,6 +141,7 @@ const calculateSections2a2b2c = ({
                 thresholdValue: thresholdValues.modifiedZOutlier,
                 countsKey: 'modifiedZOutliers',
                 divergentSubOrgUnits,
+                invalidSubOrgUnits,
                 metadata,
             })
         )

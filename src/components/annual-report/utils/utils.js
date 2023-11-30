@@ -1,3 +1,28 @@
+import i18n from '@dhis2/d2-i18n'
+import { getRoundedValue } from './mathService.js'
+
+export const formatVal = (
+    val,
+    { noRounding, roundTo, includePercentage } = {
+        noRounding: false,
+        roundTo: 1,
+        includePercentage: false,
+    }
+) => {
+    if (val === undefined || val === null) {
+        return i18n.t('Not available')
+    }
+    if (isNaN(val) || !isFinite(val)) {
+        return i18n.t('Cannot be calculated')
+    }
+    if (noRounding) {
+        return `${String(val)}${includePercentage ? '%' : ''}`
+    }
+    return `${String(getRoundedValue(val, roundTo))}${
+        includePercentage ? '%' : ''
+    }`
+}
+
 export const getVal = ({ response, dx, ou, pe }) => {
     const val = response?.[dx]?.[ou]?.[pe]
     if (typeof val !== 'object') {

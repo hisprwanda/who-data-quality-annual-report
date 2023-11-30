@@ -5,8 +5,8 @@ msgstr ""
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1)\n"
-"POT-Creation-Date: 2023-11-21T18:02:20.312Z\n"
-"PO-Revision-Date: 2023-11-21T18:02:20.312Z\n"
+"POT-Creation-Date: 2023-11-27T08:09:00.537Z\n"
+"PO-Revision-Date: 2023-11-27T08:09:00.537Z\n"
 
 msgid "Select period(s)"
 msgstr "Select period(s)"
@@ -28,6 +28,26 @@ msgstr "section"
 
 msgid "Something went wrong when retrieving data"
 msgstr "Something went wrong when retrieving data"
+
+msgid "The Data Quality Annual Report has not been configured"
+msgstr "The Data Quality Annual Report has not been configured"
+
+msgid ""
+"Could not calculate overall score. Calculations at {{subOrgUnitLevelName}} "
+"level were skipped."
+msgstr ""
+"Could not calculate overall score. Calculations at {{subOrgUnitLevelName}} "
+"level were skipped."
+
+msgid "Could not calculate score for the following: {{invalidSubOrgUnitNames}}."
+msgstr "Could not calculate score for the following: {{invalidSubOrgUnitNames}}."
+
+msgid ""
+"The requested level for this relation ({{subOrgUnitLevelName}}) is not "
+"retrievable."
+msgstr ""
+"The requested level for this relation ({{subOrgUnitLevelName}}) is not "
+"retrievable."
 
 msgid "No data to display"
 msgstr "No data to display"
@@ -65,6 +85,12 @@ msgstr "Survey"
 msgid "Survey: {{survey}}%<br/>Routine: {{routine}}%"
 msgstr "Survey: {{survey}}%<br/>Routine: {{routine}}%"
 
+msgid "Not available"
+msgstr "Not available"
+
+msgid "Cannot be calculated"
+msgstr "Cannot be calculated"
+
 msgid "Exit configurations"
 msgstr "Exit configurations"
 
@@ -98,6 +124,15 @@ msgstr ""
 
 msgid "This configuration is used as the basis for the Annual Report."
 msgstr "This configuration is used as the basis for the Annual Report."
+
+msgid "Select period(s)"
+msgstr "Select period(s)"
+
+msgid "Cancel"
+msgstr "Cancel"
+
+msgid "Save"
+msgstr "Save"
 
 msgid ""
 "Group, Organisation unit, Organisation unit level, period, and comparison "
@@ -165,3 +200,16 @@ msgstr "Configurations"
 
 msgid "Generate report"
 msgstr "Generate report"
+
+msgid "No access"
+msgstr "No access"
+
+msgid "You do not have access to the configurations module."
+msgstr "You do not have access to the configurations module."
+
+msgid ""
+"It was not possible to retrieve user information for the current user or "
+"the sharing settings of the configurations."
+msgstr ""
+"It was not possible to retrieve user information for the current user or "
+"the sharing settings of the configurations."
