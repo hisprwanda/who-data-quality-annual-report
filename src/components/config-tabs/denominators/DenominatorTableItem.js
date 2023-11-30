@@ -1,3 +1,4 @@
+import { useAlert } from '@dhis2/app-runtime'
 import { Button, TableCell, TableRow, ButtonStrip } from '@dhis2/ui'
 import PropTypes from 'prop-types'
 import React, { useMemo, useCallback, useState } from 'react'
@@ -5,6 +6,7 @@ import { getDenominatorType } from '../../../utils/denominatorsMetadataData.js'
 import {
     DELETE_DENOMINATOR,
     UPDATE_DENOMINATOR,
+    useConfigurations,
     useConfigurationsDispatch,
     useDataItemNames,
 } from '../../../utils/index.js'
@@ -65,6 +67,8 @@ EditDenominatorButton.propTypes = {
 
 const DeleteDenominatorButton = ({ denominator }) => {
     const [confirmationModalOpen, setConfirmationModalOpen] = useState(false)
+    const configurations = useConfigurations()
+    const { show } = useAlert(({ message }) => message, { critical: true })
     const dataItemNames = useDataItemNames()
     const dispatch = useConfigurationsDispatch()
 
@@ -80,13 +84,70 @@ const DeleteDenominatorButton = ({ denominator }) => {
         [dispatch, denominator.code]
     )
 
+    // Check to see if this numerator is used in any other metadata same as it is done for numerators
+    // denominator relations or external relations and warn the user if so
+    /**
+     * //TODO: this is a copy of the same function in NumeratorTableItem.js,
+     * so it should be refactored into a shared function and use switch statements to determine which metadata to check
+     *  */
+    const validateDenominatorDeletion = useCallback(
+        (object) => {
+            const associatedDenominatorRelations = []
+            configurations.denominatorRelations.forEach((relation) => {
+                const { A, B, name } = relation
+                if (A === denominator.code || B === denominator.code) {
+                    associatedDenominatorRelations.push(name)
+                }
+            })
+
+            const associatedExternalRelations = []
+            configurations.externalRelations.forEach((relation) => {
+                if (relation.denominator === denominator.code) {
+                    associatedExternalRelations.push(relation.name)
+                }
+            })
+
+            if (
+                associatedDenominatorRelations.length === 0 &&
+                associatedExternalRelations.length === 0
+            ) {
+                // then no problem; this deletion is valid
+                return true
+            }
+
+            // Otherwise, warn the user
+            const numRelsText =
+                associatedDenominatorRelations.length > 0
+                    ? '\nDenominator relations: ' +
+                      associatedDenominatorRelations.join(', ') +
+                      '.'
+                    : ''
+            const extRelsText =
+                associatedExternalRelations.length > 0
+                    ? '\nExternal relations: ' +
+                      associatedExternalRelations.join(', ') +
+                      '.'
+                    : ''
+            const message =
+                `Can't delete the denominator "${denominator.name}" because it's ` +
+                `associated with the following metadata.` +
+                numRelsText +
+                extRelsText
+            show({ message })
+            return false
+        },
+        [configurations, denominator, show]
+    )
+
     return (
         <>
             <Button
                 small
                 destructive
                 onClick={() => {
-                    openModal()
+                    if (validateDenominatorDeletion('denominator')) {
+                        openModal()
+                    }
                 }}
             >
                 Delete
