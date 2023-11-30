@@ -50,6 +50,7 @@ export const OrgUnitLevelSelect = () => {
                 label={'Org unit levels'}
                 placeholder={placeholderText}
                 disabled={loading || error || !dataElementGroupOptions}
+                parse={(value) => Number(value)}
                 filterable
             />
         </div>

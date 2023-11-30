@@ -65,7 +65,7 @@ export const Denominators = () => {
             </p>
             <hr />
 
-            <div className="denominatorsContainer">
+            <div>
                 <Table>
                     <TableHead>
                         <TableRowHead>
