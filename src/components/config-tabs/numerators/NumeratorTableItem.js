@@ -52,6 +52,8 @@ const EditNumeratorButton = ({ numerator, groupsContainingNumerator }) => {
     // not all fields are needed for form initial values
     const numeratorDataForForm = useMemo(
         () => ({
+            // todo: refactor to just use code
+            code: numerator.code,
             name: numerator.name,
             core: numerator.core,
             definition: numerator.definition,
@@ -60,6 +62,8 @@ const EditNumeratorButton = ({ numerator, groupsContainingNumerator }) => {
             custom: numerator.custom,
             // used to print: "This numerator is currently mapped to <dataItem>"
             prevDataID: numerator.dataID,
+            dataID: numerator.dataID,
+            dataSetID: numerator.dataSetID,
         }),
         [numerator, groupsContainingNumerator]
     )

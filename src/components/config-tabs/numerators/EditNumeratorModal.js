@@ -61,6 +61,7 @@ const CurrentMappingInfo = () => {
  */
 export function EditNumeratorModal({ numeratorDataToEdit, onSave, onClose }) {
     const configurations = useConfigurations()
+    const dataItemNames = useDataItemNames()
 
     const numeratorGroupOptions = useMemo(
         () =>
@@ -78,6 +79,29 @@ export function EditNumeratorModal({ numeratorDataToEdit, onSave, onClose }) {
             return DEFAULT_FORM_VALUES
         }
 
+        // todo: get numerator by code, then process into initial values
+
+        const dataItem = {
+            id: numeratorDataToEdit.prevDataID,
+            displayName: dataItemNames.get(numeratorDataToEdit.prevDataID),
+        }
+
+        const dataSets = Array.isArray(numeratorDataToEdit.dataSetID)
+            ? numeratorDataToEdit.dataSetID.map((id) => ({
+                  id,
+                  displayName: configurations.dataSets.find(
+                      (ds) => ds.id === id
+                  ).name,
+              }))
+            : [
+                  {
+                      id: numeratorDataToEdit.dataSetID,
+                      displayName: configurations.dataSets.find(
+                          (ds) => ds.id === numeratorDataToEdit.dataSetID
+                      ).name,
+                  },
+              ]
+
         // properties listed out here for clarity
         return {
             name: numeratorDataToEdit.name,
@@ -89,9 +113,13 @@ export function EditNumeratorModal({ numeratorDataToEdit, onSave, onClose }) {
             custom: numeratorDataToEdit.custom,
             // same (for other form logic like if fields are required)
             prevDataID: numeratorDataToEdit.prevDataID,
+            // data mapping
+            dataItem,
+            dataSets,
+            // todo: add dataElementOperand
             ...DEFAULT_FORM_VALUES,
         }
-    }, [numeratorDataToEdit])
+    }, [numeratorDataToEdit, dataItemNames, configurations.dataSets])
 
     return (
         <Form

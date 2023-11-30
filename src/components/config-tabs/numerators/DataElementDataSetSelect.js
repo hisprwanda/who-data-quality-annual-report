@@ -54,6 +54,16 @@ const parseDataSetsResponse = (response) => {
     return { selectOptions, dataSetLookup }
 }
 
+const getInitialOptions = (initialDataSets) => {
+    if (!initialDataSets) {
+        return null
+    }
+    return initialDataSets.map(({ id, displayName }) => ({
+        label: displayName,
+        value: id,
+    }))
+}
+
 export const DataSetSelect = () => {
     const { loading, error, data, refetch } = useDataQuery(
         DATA_SETS_FROM_DATA_ELEMENT_QUERY,
@@ -65,28 +75,42 @@ export const DataSetSelect = () => {
 
     // Depends on dataItem value (which handles both dataElementTypes)
     const dataItemField = useField('dataItem', {
-        subscription: { value: true },
+        subscription: { modified: true, value: true },
     })
     const dataItem = dataItemField.input.value
+    const dataItemModified = dataItemField.meta.modified
 
     // Get the onChange handler to be able to clear this field
-    const dataSetsField = useField('dataSets', { subscription: {} })
+    const dataSetsField = useField('dataSets', {
+        subscription: { initial: true },
+    })
     const onChange = dataSetsField.input.onChange
+    const initialDataSets = dataSetsField.meta.initial
 
-    useEffect(() => {
-        if (dataItem) {
-            refetch({ id: dataItem.id })
-        }
-        // Clear the selection in this field if dataItem changes, even undefined
-        onChange(undefined)
-    }, [dataItem, refetch, onChange])
+    useEffect(
+        (...props) => {
+            console.log({ props })
+            if (dataItem) {
+                refetch({ id: dataItem.id })
+            }
+            // Clear the selection in this field if dataItem changes (but not
+            // if unmodified, so that initial values aren't immediately cleared)
+            if (dataItemModified) {
+                onChange(undefined)
+            }
+        },
+        [dataItem, dataItemModified, refetch, onChange]
+    )
 
     const { selectOptions, dataSetLookup } = useMemo(() => {
         if (!data) {
-            return { selectOptions: null, dataSetLookup: new Map() }
+            // if there is an initial value for dataSets, add those to the options
+            // so they can be selected before the fetch completes
+            const options = getInitialOptions(initialDataSets)
+            return { selectOptions: options, dataSetLookup: new Map() }
         }
         return parseDataSetsResponse(data.response)
-    }, [data])
+    }, [data, initialDataSets])
 
     // Because we want the whole dataSet object in the form state, but the
     // Select UI component can only handle strings as values, we use the
@@ -123,7 +147,8 @@ export const DataSetSelect = () => {
                 placeholder={placeholderText}
                 // sometimes data elements aren't associated with any data
                 // sets though 🤔
-                disabled={loading || error || !selectOptions}
+                loading={loading}
+                disabled={loading || Boolean(error) || !selectOptions}
             />
         </div>
     )

@@ -18,14 +18,6 @@ const DATA_ELEMENT_TOTALS_QUERY = {
         params: { fields: 'dataElements[displayName,id]' },
     },
 }
-const mapDataElementTotalsResponseToOptions = (data) => {
-    return data.response.dataElements
-        .map(({ id, displayName }) => ({
-            label: displayName,
-            value: id,
-        }))
-        .sort((a, b) => a.label.localeCompare(b.label))
-}
 
 const DATA_ELEMENT_DETAILS_QUERY = {
     response: {
@@ -37,18 +29,17 @@ const DATA_ELEMENT_DETAILS_QUERY = {
         }),
     },
 }
-const mapDataElementDetailsResponseToOptions = (data) => {
-    return data.response.dataElementOperands
+
+const mapMetadataItemsToOptions = (items) =>
+    items
         .map(({ id, displayName }) => ({
             label: displayName,
             value: id,
         }))
         .sort((a, b) => a.label.localeCompare(b.label))
-}
 
 export const DataElementSelect = () => {
     const { fetch, loading, error } = useEngineQuery()
-    const [options, setOptions] = useState(null)
     const validate = useDataMappingFieldValidator()
 
     // Depends on 1. dataElementType and 2. dataElementGroupID
@@ -56,44 +47,62 @@ export const DataElementSelect = () => {
         subscription: { value: true },
     })
     const dataElementGroupIDField = useField('dataElementGroupID', {
-        subscription: { value: true },
+        subscription: { modified: true, value: true },
     })
     const dataElementType = dataElementTypeField.input.value
     const dataElementGroupID = dataElementGroupIDField.input.value
+    const dataElementGroupIDModified = dataElementGroupIDField.meta.modified
 
-    // Get the onChange handler to be able to clear this field
-    const dataItemField = useField('dataItem', { subscription: {} })
+    // Some utils for this field: onChange and initial value
+    const dataItemField = useField('dataItem', {
+        subscription: { initial: true },
+    })
     const onChange = dataItemField.input.onChange
+    const initialOptions = dataItemField.meta.initial
+        ? mapMetadataItemsToOptions([dataItemField.meta.initial])
+        : null
+
+    const [options, setOptions] = useState(initialOptions)
 
     useEffect(() => {
-        // Clear the selection in this field
-        onChange(undefined)
+        // Clear this field if the data element group has changed
+        if (dataElementGroupIDModified) {
+            onChange(undefined)
+        }
 
+        // If no group is selected, don't need to fetch
         if (!dataElementGroupID) {
-            // todo: setOptions([])?
             return
         }
 
         if (dataElementType === TOTALS) {
             fetch(DATA_ELEMENT_TOTALS_QUERY, { id: dataElementGroupID }).then(
                 (data) => {
-                    const newOptions =
-                        mapDataElementTotalsResponseToOptions(data)
+                    const newOptions = mapMetadataItemsToOptions(
+                        data.response.dataElements
+                    )
                     setOptions(newOptions)
                 }
             )
         } else {
             fetch(DATA_ELEMENT_DETAILS_QUERY, { id: dataElementGroupID }).then(
                 (data) => {
-                    const newOptions =
-                        mapDataElementDetailsResponseToOptions(data)
+                    const newOptions = mapMetadataItemsToOptions(
+                        data.response.dataElementOperands
+                    )
                     setOptions(newOptions)
                 }
             )
         }
 
         // rerun this if dataElementType or dataElementGroupID change
-    }, [dataElementType, dataElementGroupID, fetch, onChange])
+    }, [
+        dataElementType,
+        dataElementGroupID,
+        dataElementGroupIDModified,
+        fetch,
+        onChange,
+    ])
 
     // Using `format` and `parse` here is a weird trick: we want to add
     // `dataItem={ id, displayName }` to the form state so that it can be
@@ -140,7 +149,7 @@ export const DataElementSelect = () => {
                 label={'Data element'}
                 placeholder={placeholderText}
                 filterable
-                disabled={loading || error || !options}
+                disabled={loading || Boolean(error) || !options}
             />
         </div>
     )
