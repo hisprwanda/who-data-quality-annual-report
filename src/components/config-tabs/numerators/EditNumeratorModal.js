@@ -20,7 +20,7 @@ import PropTypes from 'prop-types'
 import React, { useMemo } from 'react'
 import { useConfigurations, useDataItemNames } from '../../../utils/index.js'
 import { getNumeratorMemberGroups } from '../../../utils/numeratorsMetadataData.js'
-import { DATA_ELEMENT, TOTALS } from './constants.js'
+import { DATA_ELEMENT, DETAILS, TOTALS } from './constants.js'
 import { DataMappingFormSection } from './DataMappingForm.js'
 import styles from './EditNumeratorModal.module.css'
 
@@ -104,15 +104,14 @@ export function EditNumeratorModal({ numeratorCode, onSave, onClose }) {
             numeratorToEdit.code
         ).map((group) => group.code)
 
-        const dataItem = numeratorToEdit.dataID
-            ? {
-                  id: numeratorToEdit.dataID,
-                  displayName: dataItemNames.get(numeratorToEdit.dataID),
-              }
+        const { dataID, dataSetID } = numeratorToEdit
+        const dataElementType = /\w{11}\.\w{11}/.test(dataID) ? DETAILS : TOTALS
+
+        const dataItem = dataID
+            ? { id: dataID, displayName: dataItemNames.get(dataID) }
             : null
 
         let dataSets = null
-        const { dataSetID } = numeratorToEdit
         if (dataSetID && dataSetID.length > 0) {
             // dataSetID could be an array or a string
             if (Array.isArray(dataSetID)) {
@@ -127,26 +126,23 @@ export function EditNumeratorModal({ numeratorCode, onSave, onClose }) {
 
         // todo: add dataElementOperand
 
-        // properties listed out here for clarity
+        // properties picked out here for clarity and to keep form state clean
         return {
             name: numeratorToEdit.name,
             definition: numeratorToEdit.definition,
             groups,
             core: numeratorToEdit.core,
-            // not an editable field, but will be added to the form state
-            // for convenience (some fields will be read-only)
-            custom: numeratorToEdit.custom,
             // data mapping
+            dataType: DATA_ELEMENT, // todo: adapt to indicators
+            dataElementType,
             dataItem,
             dataSets,
-            ...DEFAULT_FORM_VALUES,
         }
     }, [numeratorToEdit, dataItemNames, configurations])
 
     return (
         <Form
             onSubmit={(values) => {
-                // todo: validate! 🥳
                 // todo: data items required on creation, but not edit
 
                 // Pick data from values
