@@ -188,7 +188,7 @@ export const NumeratorParameters = ({
                                         ).map((group, key) => (
                                             <Chip key={key} dense>
                                                 {' '}
-                                                {group.displayName}{' '}
+                                                {group.name}{' '}
                                             </Chip>
                                         ))}
                                     </TableCell>

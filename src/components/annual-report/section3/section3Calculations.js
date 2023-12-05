@@ -1,4 +1,3 @@
-import { getRoundedValue } from '../utils/mathService.js'
 import {
     convertAnalyticsResponseToObject,
     sortArrayAfterIndex1,
@@ -68,12 +67,9 @@ export const calculateSection3 = ({
                 name: relation.name,
                 level: relation.level,
                 qualityThreshold: relation.criteria,
-                surveyValue: getRoundedValue(surveyValue, 1),
-                routineValue: getRoundedValue(routineValue, 1),
-                overallScore: getRoundedValue(
-                    (routineValue / surveyValue) * 100,
-                    1
-                ),
+                surveyValue: surveyValue,
+                routineValue: routineValue,
+                overallScore: (routineValue / surveyValue) * 100,
                 divergentSubOrgUnits: {},
                 chartInfo: {
                     name: relation.name,
@@ -81,8 +77,8 @@ export const calculateSection3 = ({
                     values: [
                         {
                             name: overallMetadata[overallOrgUnit]?.name,
-                            survey: getRoundedValue(surveyValue, 1),
-                            routine: getRoundedValue(routineValue, 1),
+                            survey: surveyValue,
+                            routine: routineValue,
                             divergent: isDivergent3a({
                                 score: routineValue / surveyValue,
                                 criteria: relation.criteria,
@@ -95,7 +91,7 @@ export const calculateSection3 = ({
             // then calculate the divergence on subOrgUnits
             // this only calculable if a byLevel request was possible for the external relation
             if (!externalRelationsResponsesIndices.includes(originalIndex)) {
-                return section3aItem
+                return { ...section3aItem, levelNotAvailable: true }
             }
 
             const correspondingIndex =
@@ -121,7 +117,7 @@ export const calculateSection3 = ({
                     Object.keys(formattedIndividualResponse).includes(uid)
                 )
             ) {
-                return section3aItem
+                return { ...section3aItem, invalid: true }
             }
 
             // if we have gotten here, we can theoretically calculate values and chart is multi-orgunit
@@ -155,8 +151,8 @@ export const calculateSection3 = ({
 
                 const subOrgUnitChartInfo = {
                     name: levelMetadata[subOrgUnit]?.name,
-                    survey: getRoundedValue(surveyValueSubOrgUnit, 1),
-                    routine: getRoundedValue(routineValueSubOrgUnit, 1),
+                    survey: surveyValueSubOrgUnit,
+                    routine: routineValueSubOrgUnit,
                     divergent: subOrgUnitIsDivergent,
                 }
 
@@ -176,12 +172,10 @@ export const calculateSection3 = ({
                 ...section3aItem,
                 divergentSubOrgUnits: {
                     number: divergentSubOrgUnits.length,
-                    percentage: getRoundedValue(
+                    percentage:
                         (divergentSubOrgUnits.length /
                             Math.max(1, subOrgUnits.length)) *
-                            100,
-                        1
-                    ),
+                        100,
                     names: divergentSubOrgUnits
                         .map((ouID) => levelMetadata[ouID]?.name)
                         .sort()

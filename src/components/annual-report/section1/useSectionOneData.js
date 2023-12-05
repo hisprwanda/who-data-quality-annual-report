@@ -2,17 +2,6 @@ import { useDataEngine } from '@dhis2/app-runtime'
 import { useCallback, useState } from 'react'
 import { calculateSection1 } from './section1Calculations.js'
 
-const defaultCOCQuery = {
-    defaultCategoryCombo: {
-        resource: 'categoryCombos',
-        params: {
-            fields: 'id,categoryOptionCombos[id]',
-            filter: 'isDefault:eq:true',
-            paging: false,
-        },
-    },
-}
-
 const reportQueries = {
     reporting_rate_over_all_org_units: {
         resource: 'analytics.json',
@@ -70,19 +59,24 @@ const reportQueries = {
     },
     count_of_data_values_over_all_org_units: {
         resource: 'analytics.json',
-        params: ({ dataElements, orgUnits, currentPeriod }) => ({
-            dimension: `dx:${dataElements.join(';')},ou:${orgUnits.join(
+        params: ({ dataElementOperands, orgUnits, currentPeriod }) => ({
+            dimension: `dx:${dataElementOperands.join(';')},ou:${orgUnits.join(
                 ';'
-            )},pe:${currentPeriod},co`,
+            )},pe:${currentPeriod}`,
             aggregationType: 'COUNT',
         }),
     },
     count_of_data_values_by_org_unit_level: {
         resource: 'analytics.json',
-        params: ({ dataElements, orgUnits, orgUnitLevel, currentPeriod }) => ({
-            dimension: `dx:${dataElements.join(';')},ou:${
+        params: ({
+            dataElementOperands,
+            orgUnits,
+            orgUnitLevel,
+            currentPeriod,
+        }) => ({
+            dimension: `dx:${dataElementOperands.join(';')},ou:${
                 orgUnits.join(';') + ';' + orgUnitLevel
-            },pe:${currentPeriod},co`,
+            },pe:${currentPeriod}`,
             aggregationType: 'COUNT',
         }),
     },
@@ -101,30 +95,19 @@ export const useSectionOneData = () => {
             setLoading(true)
             const dataElementsAndIndicators =
                 variables.mappedConfiguration?.dataElementsAndIndicators
-            const dataElements = Object.keys(dataElementsAndIndicators).map(
-                (de) =>
-                    dataElementsAndIndicators[de].dataElementOperandID.split(
-                        '.'
-                    )[0]
-            )
+            const dataElementOperands = Object.keys(
+                dataElementsAndIndicators
+            ).map((de) => dataElementsAndIndicators[de].dataElementOperandID)
             try {
-                const overallDataQuery = engine.query(reportQueries, {
+                const overallData = await engine.query(reportQueries, {
                     variables: {
                         ...variables,
                         dataSets: Object.keys(
                             variables.mappedConfiguration.dataSets
                         ),
-                        dataElements,
+                        dataElementOperands,
                     },
                 })
-
-                const [defaultCOCResponse, overallData] = await Promise.all([
-                    engine.query(defaultCOCQuery),
-                    overallDataQuery,
-                ])
-                const defaultCOC =
-                    defaultCOCResponse.defaultCategoryCombo?.categoryCombos?.[0]
-                        ?.categoryOptionCombos?.[0]?.id
 
                 const consolidatedData = { ...overallData }
 
@@ -134,7 +117,6 @@ export const useSectionOneData = () => {
                     period: variables.currentPeriod,
                     periodsIDs: variables.periods,
                     overallOrgUnit: variables.orgUnits?.[0],
-                    defaultCOC,
                 })
                 setData(section1Data)
             } catch (e) {
