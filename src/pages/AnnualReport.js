@@ -15,6 +15,7 @@ export const AnnualReport = () => {
         <>
             <ReportParameterSelector
                 setReportParameters={setReportParameters}
+                reportParameters={reportParameters}
             />
             {areConfigurationsUnmapped ? (
                 <div className={styles.warningContainer}>
