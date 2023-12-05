@@ -25,12 +25,12 @@
     print-color-adjust: exact; /* autoprefixer handles -webkit */
 }
 
-@media print {
-    /* add page breaks (before each "domain" section) */
-    .pageBreakBefore:not(:first-child) {
-        break-before: page;
-    }
+/* add page breaks (before each "domain" section) */
+.pageBreakBefore:not(:first-of-type) {
+    break-before: page;
+}
 
+@media print {
     .reportContainer {
         /* an arbitrary number that makes good-looking layouts */
         width: 1200px;

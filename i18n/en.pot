@@ -5,8 +5,8 @@ msgstr ""
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1)\n"
-"POT-Creation-Date: 2023-11-22T13:51:30.672Z\n"
-"PO-Revision-Date: 2023-11-22T13:51:30.672Z\n"
+"POT-Creation-Date: 2023-12-05T09:10:21.163Z\n"
+"PO-Revision-Date: 2023-12-05T09:10:21.163Z\n"
 
 msgid "Select period(s)"
 msgstr "Select period(s)"
@@ -16,6 +16,24 @@ msgstr "Cancel"
 
 msgid "Save"
 msgstr "Save"
+
+msgid "[Core]"
+msgstr "[Core]"
+
+msgid "Data Quality Annual Report"
+msgstr "Data Quality Annual Report"
+
+msgid "Data{{c}} "
+msgstr "Data{{c}} "
+
+msgid "Organisation unit{{c}} "
+msgstr "Organisation unit{{c}} "
+
+msgid "Period{{c}} "
+msgstr "Period{{c}} "
+
+msgid "{{period}}; {{years}} years for reference"
+msgstr "{{period}}; {{years}} years for reference"
 
 msgid "There is no data for this {{sectionType}}"
 msgstr "There is no data for this {{sectionType}}"
@@ -109,9 +127,6 @@ msgstr ""
 "Group, Organisation unit, Organisation unit level, period, and comparison "
 "periods must all be selected before a report can be generated."
 
-msgid "[Core]"
-msgstr "[Core]"
-
 msgid "Group"
 msgstr "Group"
 
@@ -168,6 +183,9 @@ msgstr "Configurations"
 
 msgid "Generate report"
 msgstr "Generate report"
+
+msgid "Print"
+msgstr "Print"
 
 msgid "No access"
 msgstr "No access"

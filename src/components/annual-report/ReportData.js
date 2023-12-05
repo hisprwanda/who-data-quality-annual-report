@@ -3,16 +3,18 @@ import React from 'react'
 import { ReportInfoScreen } from '../info-screen/InfoScreen.js'
 import { NoDataInfoBox } from './common/Warnings.js'
 import styles from './ReportData.module.css'
+import { ReportPrintHeader } from './ReportPrintHeader.js'
 import { SectionOne } from './section1/SectionOne.js'
 import { SectionTwo } from './section2/SectionTwo.js'
 import { SectionThree } from './section3/SectionThree.js'
 import { SectionFour } from './section4/SectionFour.js'
 
 const SectionLayout = ({ title, children }) => (
-    <div className={styles.pageBreakBefore}>
+    // `section` element usage here is important for 'first-of-type' selector
+    <section className={styles.pageBreakBefore}>
         <div className={styles.sectionHeading}>{title.toUpperCase()}</div>
         {children}
-    </div>
+    </section>
 )
 
 SectionLayout.propTypes = {
@@ -33,6 +35,8 @@ export const ReportData = ({ reportParameters }) => {
 
     return (
         <div className={styles.reportContainer}>
+            <ReportPrintHeader reportParameters={reportParameters} />
+
             <SectionLayout title="Domain 1 - Completeness of Reporting">
                 {isSectionOneEmpty ? (
                     <div className={styles.marginBottom24}>
