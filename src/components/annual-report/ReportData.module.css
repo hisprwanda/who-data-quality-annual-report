@@ -1,7 +1,16 @@
-.reportContainer {
-    padding: 16px 24px;
+.reportArea {
     /* this matches the workspaces in other apps: */
     background-color: white;
+}
+
+.reportContainer {
+    padding: 16px 24px;
+}
+
+/* This is used for the `window.print()` condition */
+.printWidth {
+    /* an arbitrary number that makes good-looking layouts */
+    width: 1200px;
 }
 
 .marginBottom24 {
@@ -31,8 +40,8 @@
 }
 
 @media print {
+    /* This is used for the browser File->Print condition */
     .reportContainer {
-        /* an arbitrary number that makes good-looking layouts */
         width: 1200px;
     }
 }

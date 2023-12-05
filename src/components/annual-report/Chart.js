@@ -11,7 +11,11 @@ export const Chart = ({ sectionId, chartId, chartInfo, className }) => {
     }, [sectionId, canvasId, chartInfo])
 
     // Make sure to reflow charts on print so that they are the right size
-    // on the print page (otherwise they can end up too big or too small)
+    // on the print page (otherwise they can end up too big or too small).
+    // NB! This only works for the browser's print controls (Ctrl-P or
+    // File->Print). `window.print()` blocks JS so this won't work. That case
+    // is handled by resizing the report and waiting for charts to reflow on
+    // their own before calling `window.print()` (see pages/AnnualReport.js)
     useEffect(() => {
         if (!window.matchMedia) {
             return

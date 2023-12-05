@@ -33,6 +33,8 @@ const configQuery = {
 export const ReportParameterSelector = ({
     setReportParameters,
     reportParameters,
+    printing,
+    onPrint,
 }) => {
     const { loading, data, error } = useDataQuery(configQuery)
     const configurations = useConfigurations()
@@ -144,16 +146,14 @@ export const ReportParameterSelector = ({
                         </GenerateReportTooltip>
                         <Button
                             small
-                            // NB! this currently blocks programmatic reflow
-                            // of highcharts, unlike the browser 'print'/ctrl-p
-                            // command. Needs fixing
-                            onClick={() => setTimeout(window.print(), 100)}
+                            onClick={onPrint}
                             disabled={
                                 !reportParameters ||
                                 Object.keys(reportParameters).length === 0
                             }
+                            loading={printing}
                         >
-                            {i18n.t('Print')}
+                            {printing ? i18n.t('Printing...') : i18n.t('Print')}
                         </Button>
                     </ButtonStrip>
                 </div>
@@ -162,6 +162,8 @@ export const ReportParameterSelector = ({
     }
 }
 ReportParameterSelector.propTypes = {
+    printing: PropTypes.bool,
     reportParameters: PropTypes.object,
     setReportParameters: PropTypes.func,
+    onPrint: PropTypes.func,
 }
