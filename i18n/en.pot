@@ -5,8 +5,8 @@ msgstr ""
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1)\n"
-"POT-Creation-Date: 2023-12-05T09:10:21.163Z\n"
-"PO-Revision-Date: 2023-12-05T09:10:21.163Z\n"
+"POT-Creation-Date: 2023-12-06T16:42:00.354Z\n"
+"PO-Revision-Date: 2023-12-06T16:42:00.354Z\n"
 
 msgid "Select period(s)"
 msgstr "Select period(s)"
@@ -23,14 +23,14 @@ msgstr "[Core]"
 msgid "Data Quality Annual Report"
 msgstr "Data Quality Annual Report"
 
-msgid "Data{{c}} "
-msgstr "Data{{c}} "
+msgid "Data: "
+msgstr "Data: "
 
-msgid "Organisation unit{{c}} "
-msgstr "Organisation unit{{c}} "
+msgid "Organisation unit: "
+msgstr "Organisation unit: "
 
-msgid "Period{{c}} "
-msgstr "Period{{c}} "
+msgid "Period: "
+msgstr "Period: "
 
 msgid "{{period}}; {{years}} years for reference"
 msgstr "{{period}}; {{years}} years for reference"
@@ -143,15 +143,6 @@ msgstr ""
 msgid "This configuration is used as the basis for the Annual Report."
 msgstr "This configuration is used as the basis for the Annual Report."
 
-msgid "Select period(s)"
-msgstr "Select period(s)"
-
-msgid "Cancel"
-msgstr "Cancel"
-
-msgid "Save"
-msgstr "Save"
-
 msgid ""
 "Group, Organisation unit, Organisation unit level, period, and comparison "
 "periods must all be selected before a report can be generated."
@@ -215,6 +206,9 @@ msgstr "Configurations"
 
 msgid "Generate report"
 msgstr "Generate report"
+
+msgid "Printing..."
+msgstr "Printing..."
 
 msgid "Print"
 msgstr "Print"

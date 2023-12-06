@@ -35,21 +35,19 @@ export const ReportPrintHeader = ({ reportParameters }) => {
             </h1>
             <div className={styles.parametersContainer}>
                 <p className={styles.parameterLine}>
-                    {/**
-                     * Reminder: ':' is the namespace separater for i18next so
-                     * this needs interpolation:
-                     */}
-                    <strong>{i18n.t('Data{{c}} ', { c: ':' })}</strong>
+                    <strong>{i18n.t('Data: ', { nsSeparator: '-:-' })}</strong>
                     {groupName}
                 </p>
                 <p className={styles.parameterLine}>
                     <strong>
-                        {i18n.t('Organisation unit{{c}} ', { c: ':' })}
+                        {i18n.t('Organisation unit: ', { nsSeparator: '-:-' })}
                     </strong>
                     {`${orgUnitName} > ${orgUnitLevelName}`}
                 </p>
                 <p className={styles.parameterLine}>
-                    <strong>{i18n.t('Period{{c}} ', { c: ':' })}</strong>
+                    <strong>
+                        {i18n.t('Period: ', { nsSeparator: '-:-' })}
+                    </strong>
                     {i18n.t('{{period}}; {{years}} years for reference', {
                         period: periods[0].name,
                         years: periods.length - 1,
