@@ -87,20 +87,16 @@ export const DataSetSelect = () => {
     const onChange = dataSetsField.input.onChange
     const initialDataSets = dataSetsField.meta.initial
 
-    useEffect(
-        (...props) => {
-            console.log({ props })
-            if (dataItem) {
-                refetch({ id: dataItem.id })
-            }
-            // Clear the selection in this field if dataItem changes (but not
-            // if unmodified, so that initial values aren't immediately cleared)
-            if (dataItemModified) {
-                onChange(undefined)
-            }
-        },
-        [dataItem, dataItemModified, refetch, onChange]
-    )
+    useEffect(() => {
+        if (dataItem) {
+            refetch({ id: dataItem.id })
+        }
+        // Clear the selection in this field if dataItem changes (but not
+        // if unmodified, so that initial values aren't immediately cleared)
+        if (dataItemModified) {
+            onChange(undefined)
+        }
+    }, [dataItem, dataItemModified, refetch, onChange])
 
     const { selectOptions, dataSetLookup } = useMemo(() => {
         if (!data) {
