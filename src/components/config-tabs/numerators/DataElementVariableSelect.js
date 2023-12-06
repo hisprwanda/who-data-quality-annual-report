@@ -45,7 +45,6 @@ export const VariableSelect = () => {
     const initialOptions = initialValue
         ? [{ value: initialValue, label: dataItemNames.get(initialValue) }]
         : null
-    console.log({ initialOptions, dataItemNames })
     const [options, setOptions] = useState(initialOptions)
 
     useEffect(() => {
