@@ -1,7 +1,16 @@
-.reportContainer {
-    padding: 16px;
-    /* this matches the workspaces in other apps */
+.reportArea {
+    /* this matches the workspaces in other apps: */
     background-color: white;
+}
+
+.reportContainer {
+    padding: 16px 24px;
+}
+
+/* This is used for the `window.print()` condition */
+.printWidth {
+    /* an arbitrary number that makes good-looking layouts */
+    width: 1200px;
 }
 
 .marginBottom24 {
@@ -9,10 +18,30 @@
 }
 
 .sectionHeading {
-    background: var(--colors-blue400);
     padding: 8px;
     margin: 8px 0;
     font-size: 24px;
     line-height: 20px;
     color: white;
+    background: var(--colors-blue400);
+    /*
+    default print settings turn the white-on-blue colors into grey-on-white
+    with weird margins, which is economical, but doesn't look good. Ideally,
+    we would detect the print settings and set our own "economical" styles 
+    for printing, but I don't think that's possible. As a result, we try to 
+    force the color styles to be white-on-blue:
+    */
+    print-color-adjust: exact; /* autoprefixer handles -webkit */
+}
+
+/* add page breaks (before each "domain" section) */
+.pageBreakBefore:not(:first-of-type) {
+    break-before: page;
+}
+
+@media print {
+    /* This is used for the browser File->Print condition */
+    .reportContainer {
+        width: 1200px;
+    }
 }

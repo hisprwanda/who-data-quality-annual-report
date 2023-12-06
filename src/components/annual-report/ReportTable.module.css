@@ -10,3 +10,10 @@
 .tableRowHead {
     background-color: var(--colors-grey200);
 }
+
+@media print {
+    /* avoid tables getting split across 2 pages */
+    .reportTable {
+        break-inside: avoid;
+    }
+}
