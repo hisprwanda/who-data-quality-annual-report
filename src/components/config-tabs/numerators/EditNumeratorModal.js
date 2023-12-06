@@ -17,7 +17,7 @@ import {
     hasValue,
 } from '@dhis2/ui'
 import PropTypes from 'prop-types'
-import React, { useMemo } from 'react'
+import React, { useMemo, useCallback } from 'react'
 import { useConfigurations, useDataItemNames } from '../../../utils/index.js'
 import { getNumeratorMemberGroups } from '../../../utils/numeratorsMetadataData.js'
 import { DATA_ELEMENT, DETAILS, TOTALS } from './constants.js'
@@ -140,42 +140,37 @@ export function EditNumeratorModal({ numeratorCode, onSave, onClose }) {
         }
     }, [numeratorToEdit, dataItemNames, configurations])
 
+    const onSubmit = useCallback(
+        (values) => {
+            // Map form values to numerator data
+            const newNumeratorData = {
+                name: values.name,
+                definition: values.definition,
+                core: values.core,
+                dataItemGroupID: values.dataItemGroupID,
+                // note different form state structure:
+                dataID: values.dataItem.id,
+                dataSetID: values.dataSets.map(({ id }) => id),
+                dataElementOperandID: values.dataElementOperandID,
+            }
+
+            onSave({
+                newNumeratorData,
+                groupsContainingNumerator: values.groups,
+                dataSetsContainingNumerator: values.dataSets,
+            })
+            onClose()
+        },
+        [onSave, onClose]
+    )
+
     return (
         <Form
-            onSubmit={(values) => {
-                // todo: data items required on creation, but not edit
-
-                // Pick data from values
-                // (some values like dataElementType are just for the form)
-                let newNumeratorData = {
-                    name: values.name,
-                    definition: values.definition,
-                    core: values.core,
-                }
-                if (values.dataItem?.id) {
-                    // add these separately so we don't set 'undefined' for a
-                    // numerator we're editing with a dataID already.
-                    // if dataID is set, the other two should be required
-                    newNumeratorData = {
-                        ...newNumeratorData,
-                        // note different form state structure:
-                        dataItemGroupID: values.dataItemGroupID,
-                        dataID: values.dataItem.id,
-                        dataSetID: values.dataSets.map(({ id }) => id),
-                        dataElementOperandID: values.dataElementOperandID,
-                    }
-                }
-
-                onSave({
-                    newNumeratorData,
-                    groupsContainingNumerator: values.groups,
-                    dataSetsContainingNumerator: values.dataSets,
-                })
-                onClose()
-            }}
+            onSubmit={onSubmit}
             initialValues={formInitialValues}
             // not subcribing to `values` prevents rerendering the entire form on every input change
             subscription={{ submitting: true }}
+            validateOnBlur // saves a few computations
         >
             {({ handleSubmit }) => (
                 <Modal onClose={onClose} position="middle">

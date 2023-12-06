@@ -2,12 +2,12 @@ import {
     // rename this to not clash with Field from RFF
     SingleSelectFieldFF,
     ReactFinalForm,
+    hasValue
 } from '@dhis2/ui'
 import React, { useCallback, useState, useEffect, useMemo } from 'react'
 import { TOTALS } from './constants.js'
 import styles from './DataMappingForm.module.css'
 import { useEngineQuery } from './useEngineQuery.js'
-import { useDataMappingFieldValidator } from './useIsFieldRequired.js'
 
 const { Field, useField } = ReactFinalForm
 
@@ -40,7 +40,6 @@ const mapMetadataItemsToOptions = (items) =>
 
 export const DataElementSelect = () => {
     const { fetch, loading, error } = useEngineQuery()
-    const validate = useDataMappingFieldValidator()
 
     // Depends on 1. dataElementType and 2. dataItemGroupID
     const dataElementTypeField = useField('dataElementType', {
@@ -144,7 +143,7 @@ export const DataElementSelect = () => {
                 component={SingleSelectFieldFF}
                 format={format}
                 parse={parse}
-                validate={validate}
+                validate={hasValue}
                 // DHIS2 UI options
                 options={options || []}
                 label={'Data element'}
