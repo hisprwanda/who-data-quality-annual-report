@@ -42,16 +42,16 @@ export const DataElementSelect = () => {
     const { fetch, loading, error } = useEngineQuery()
     const validate = useDataMappingFieldValidator()
 
-    // Depends on 1. dataElementType and 2. dataElementGroupID
+    // Depends on 1. dataElementType and 2. dataItemGroupID
     const dataElementTypeField = useField('dataElementType', {
         subscription: { value: true },
     })
-    const dataElementGroupIDField = useField('dataElementGroupID', {
+    const dataItemGroupIDField = useField('dataItemGroupID', {
         subscription: { modified: true, value: true },
     })
     const dataElementType = dataElementTypeField.input.value
-    const dataElementGroupID = dataElementGroupIDField.input.value
-    const dataElementGroupIDModified = dataElementGroupIDField.meta.modified
+    const dataItemGroupID = dataItemGroupIDField.input.value
+    const dataItemGroupIDModified = dataItemGroupIDField.meta.modified
 
     // Some utils for this field: onChange and initial value
     const dataItemField = useField('dataItem', {
@@ -66,17 +66,17 @@ export const DataElementSelect = () => {
 
     useEffect(() => {
         // Clear this field if the data element group has changed
-        if (dataElementGroupIDModified) {
+        if (dataItemGroupIDModified) {
             onChange(undefined)
         }
 
         // If no group is selected, don't need to fetch
-        if (!dataElementGroupID) {
+        if (!dataItemGroupID) {
             return
         }
 
         if (dataElementType === TOTALS) {
-            fetch(DATA_ELEMENT_TOTALS_QUERY, { id: dataElementGroupID }).then(
+            fetch(DATA_ELEMENT_TOTALS_QUERY, { id: dataItemGroupID }).then(
                 (data) => {
                     const newOptions = mapMetadataItemsToOptions(
                         data.response.dataElements
@@ -85,7 +85,7 @@ export const DataElementSelect = () => {
                 }
             )
         } else {
-            fetch(DATA_ELEMENT_DETAILS_QUERY, { id: dataElementGroupID }).then(
+            fetch(DATA_ELEMENT_DETAILS_QUERY, { id: dataItemGroupID }).then(
                 (data) => {
                     const newOptions = mapMetadataItemsToOptions(
                         data.response.dataElementOperands
@@ -95,11 +95,11 @@ export const DataElementSelect = () => {
             )
         }
 
-        // rerun this if dataElementType or dataElementGroupID change
+        // rerun this if dataElementType or dataItemGroupID change
     }, [
         dataElementType,
-        dataElementGroupID,
-        dataElementGroupIDModified,
+        dataItemGroupID,
+        dataItemGroupIDModified,
         fetch,
         onChange,
     ])
@@ -129,11 +129,11 @@ export const DataElementSelect = () => {
         if (error) {
             return 'An error occurred'
         }
-        if (!dataElementGroupID) {
+        if (!dataItemGroupID) {
             return 'Select a data element group first'
         }
         return 'Select data element'
-    }, [dataElementGroupID, loading, error])
+    }, [dataItemGroupID, loading, error])
 
     return (
         <div className={styles.formRow}>

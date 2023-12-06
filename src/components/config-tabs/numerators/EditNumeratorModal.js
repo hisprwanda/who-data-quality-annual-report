@@ -133,6 +133,7 @@ export function EditNumeratorModal({ numeratorCode, onSave, onClose }) {
             // data mapping
             dataType: DATA_ELEMENT, // todo: adapt to indicators
             dataElementType,
+            dataItemGroupID: numeratorToEdit.dataItemGroupID,
             dataItem,
             dataSets,
             dataElementOperandID: numeratorToEdit.dataElementOperandID,
@@ -158,6 +159,7 @@ export function EditNumeratorModal({ numeratorCode, onSave, onClose }) {
                     newNumeratorData = {
                         ...newNumeratorData,
                         // note different form state structure:
+                        dataItemGroupID: values.dataItemGroupID,
                         dataID: values.dataItem.id,
                         dataSetID: values.dataSets.map(({ id }) => id),
                         dataElementOperandID: values.dataElementOperandID,

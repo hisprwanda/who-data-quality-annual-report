@@ -3,7 +3,7 @@ import { SingleSelectFieldFF, ReactFinalForm } from '@dhis2/ui'
 import React, { useMemo } from 'react'
 import styles from './DataMappingForm.module.css'
 
-const { Field } = ReactFinalForm
+const { Field, useField } = ReactFinalForm
 
 const DATA_ELEMENT_GROUPS_QUERY = {
     reponse: {
@@ -15,36 +15,45 @@ const DATA_ELEMENT_GROUPS_QUERY = {
 export const DataElementGroupSelect = () => {
     const { loading, error, data } = useDataQuery(DATA_ELEMENT_GROUPS_QUERY)
 
-    const dataElementGroupOptions = useMemo(
-        () =>
-            data
-                ? data.reponse.dataElementGroups.map(({ id, displayName }) => ({
-                      label: displayName,
-                      value: id,
-                  }))
-                : null,
-        [data]
-    )
+    const dataItemGroupIDField = useField('dataItemGroupID', {
+        subscription: { initial: true },
+    })
+    const initialValue = dataItemGroupIDField.meta.initial
+
+    const dataElementGroupOptions = useMemo(() => {
+        if (data) {
+            return data.reponse.dataElementGroups.map(
+                ({ id, displayName }) => ({
+                    label: displayName,
+                    value: id,
+                })
+            )
+        } else if (initialValue) {
+            // This isn't always expected if there's a numeratorToEdit, but it
+            // isn't necessary. Data sets and variable for completeness can
+            // still be edited
+            return [{ value: initialValue, label: 'Loading group name...' }]
+        }
+        return null
+    }, [data, initialValue])
 
     const placeholderText = useMemo(() => {
-        if (loading) {
-            return 'Loading...'
-        }
         if (error) {
             return 'An error occurred'
         }
         return 'Select data element group'
-    }, [loading, error])
+    }, [error])
 
     return (
         <div className={styles.formRow}>
             <Field
-                name="dataElementGroupID"
+                name="dataItemGroupID"
                 component={SingleSelectFieldFF}
                 options={dataElementGroupOptions || []}
                 label={'Data element group'}
                 placeholder={placeholderText}
-                disabled={loading || error || !dataElementGroupOptions}
+                loading={loading}
+                disabled={Boolean(error)}
                 filterable
             />
         </div>
