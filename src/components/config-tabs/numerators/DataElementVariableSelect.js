@@ -105,8 +105,7 @@ export const VariableSelect = () => {
                 options={options || []}
                 label={'Variable for completeness'}
                 placeholder={placeholderText}
-                loading={loading}
-                disabled={!dataItem || Boolean(error) || !options}
+                disabled={!dataItem || loading || Boolean(error) || !options}
             />
         </div>
     )

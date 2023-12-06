@@ -68,6 +68,7 @@ export const DataElementSelect = () => {
         // Clear this field if the data element group has changed
         if (dataItemGroupIDModified) {
             onChange(undefined)
+            setOptions(null)
         }
 
         // If no group is selected, don't need to fetch

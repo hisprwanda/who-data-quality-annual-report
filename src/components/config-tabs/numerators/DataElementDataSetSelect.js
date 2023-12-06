@@ -143,8 +143,9 @@ export const DataSetSelect = () => {
                 placeholder={placeholderText}
                 // sometimes data elements aren't associated with any data
                 // sets though 🤔
-                loading={loading}
-                disabled={!dataItem || Boolean(error) || !selectOptions}
+                disabled={
+                    !dataItem || loading || Boolean(error) || !selectOptions
+                }
             />
         </div>
     )
