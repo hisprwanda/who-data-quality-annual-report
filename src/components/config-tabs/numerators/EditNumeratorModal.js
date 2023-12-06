@@ -124,8 +124,6 @@ export function EditNumeratorModal({ numeratorCode, onSave, onClose }) {
             }
         }
 
-        // todo: add dataElementOperand
-
         // properties picked out here for clarity and to keep form state clean
         return {
             name: numeratorToEdit.name,
@@ -137,6 +135,7 @@ export function EditNumeratorModal({ numeratorCode, onSave, onClose }) {
             dataElementType,
             dataItem,
             dataSets,
+            dataElementOperandID: numeratorToEdit.dataElementOperandID,
         }
     }, [numeratorToEdit, dataItemNames, configurations])
 

@@ -49,7 +49,10 @@ export const DataItemNamesProvider = ({ children }) => {
         // compile IDs from numerators, denominators, and external relations
         const dataItemIDs = new Set()
         configurations.numerators.forEach(
-            ({ dataID }) => dataID && dataItemIDs.add(dataID)
+            ({ dataID, dataElementOperandID }) => {
+                dataID && dataItemIDs.add(dataID)
+                dataElementOperandID && dataItemIDs.add(dataElementOperandID)
+            }
         )
         configurations.denominators.forEach(
             ({ dataID }) => dataID && dataItemIDs.add(dataID)
