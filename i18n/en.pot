@@ -17,6 +17,24 @@ msgstr "Cancel"
 msgid "Save"
 msgstr "Save"
 
+msgid "[Core]"
+msgstr "[Core]"
+
+msgid "Data Quality Annual Report"
+msgstr "Data Quality Annual Report"
+
+msgid "Data: "
+msgstr "Data: "
+
+msgid "Organisation unit: "
+msgstr "Organisation unit: "
+
+msgid "Period: "
+msgstr "Period: "
+
+msgid "{{period}}; {{years}} years for reference"
+msgstr "{{period}}; {{years}} years for reference"
+
 msgid "There is no data for this {{sectionType}}"
 msgstr "There is no data for this {{sectionType}}"
 
@@ -25,6 +43,29 @@ msgstr "subsection"
 
 msgid "section"
 msgstr "section"
+
+msgid "Something went wrong when retrieving data"
+msgstr "Something went wrong when retrieving data"
+
+msgid "The Data Quality Annual Report has not been configured"
+msgstr "The Data Quality Annual Report has not been configured"
+
+msgid ""
+"Could not calculate overall score. Calculations at {{subOrgUnitLevelName}} "
+"level were skipped."
+msgstr ""
+"Could not calculate overall score. Calculations at {{subOrgUnitLevelName}} "
+"level were skipped."
+
+msgid "Could not calculate score for the following: {{invalidSubOrgUnitNames}}."
+msgstr "Could not calculate score for the following: {{invalidSubOrgUnitNames}}."
+
+msgid ""
+"The requested level for this relation ({{subOrgUnitLevelName}}) is not "
+"retrievable."
+msgstr ""
+"The requested level for this relation ({{subOrgUnitLevelName}}) is not "
+"retrievable."
 
 msgid "No data to display"
 msgstr "No data to display"
@@ -62,8 +103,52 @@ msgstr "Survey"
 msgid "Survey: {{survey}}%<br/>Routine: {{routine}}%"
 msgstr "Survey: {{survey}}%<br/>Routine: {{routine}}%"
 
+msgid "Not available"
+msgstr "Not available"
+
+msgid "Cannot be calculated"
+msgstr "Cannot be calculated"
+
+msgid "Exit configurations"
+msgstr "Exit configurations"
+
 msgid "Please provide a value"
 msgstr "Please provide a value"
+
+msgid "WHO Data Quality Annual Report"
+msgstr "WHO Data Quality Annual Report"
+
+msgid ""
+"Choose a group, organisation unit, and period from the top bar and then "
+"click \"Generate report\""
+msgstr ""
+"Choose a group, organisation unit, and period from the top bar and then "
+"click \"Generate report\""
+
+msgid "Learn more about the Data Quality Annual Report"
+msgstr "Learn more about the Data Quality Annual Report"
+
+msgid "WHO Data Quality Annual Report - Configuration"
+msgstr "WHO Data Quality Annual Report - Configuration"
+
+msgid ""
+"This module is used for configuring the WHO Data Quality Annual Report, and "
+"mapping the proposed data quality indicators to data elements and "
+"indicators in the DHIS2 database."
+msgstr ""
+"This module is used for configuring the WHO Data Quality Annual Report, and "
+"mapping the proposed data quality indicators to data elements and "
+"indicators in the DHIS2 database."
+
+msgid "This configuration is used as the basis for the Annual Report."
+msgstr "This configuration is used as the basis for the Annual Report."
+
+msgid ""
+"Group, Organisation unit, Organisation unit level, period, and comparison "
+"periods must all be selected before a report can be generated."
+msgstr ""
+"Group, Organisation unit, Organisation unit level, period, and comparison "
+"periods must all be selected before a report can be generated."
 
 msgid "[Core]"
 msgstr "[Core]"
@@ -119,8 +204,27 @@ msgstr "Choose a period type first"
 msgid "Preceding years for reference"
 msgstr "Preceding years for reference"
 
+msgid "Configurations"
+msgstr "Configurations"
+
 msgid "Generate report"
 msgstr "Generate report"
 
+msgid "Printing..."
+msgstr "Printing..."
+
 msgid "Print"
 msgstr "Print"
+
+msgid "No access"
+msgstr "No access"
+
+msgid "You do not have access to the configurations module."
+msgstr "You do not have access to the configurations module."
+
+msgid ""
+"It was not possible to retrieve user information for the current user or "
+"the sharing settings of the configurations."
+msgstr ""
+"It was not possible to retrieve user information for the current user or "
+"the sharing settings of the configurations."

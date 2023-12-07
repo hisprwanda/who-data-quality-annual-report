@@ -5,12 +5,22 @@ export const CREATE_NUMERATOR = 'CREATE_NUMERATOR'
 export const UPDATE_NUMERATOR = 'UPDATE_NUMERATOR'
 export const CLEAR_NUMERATOR_DATA_MAPPING = 'CLEAR_NUMERATOR_DATA_MAPPING'
 export const DELETE_NUMERATOR = 'DELETE_NUMERATOR'
+
+// numerator groups
+export const CREATE_NUMERATOR_GROUP = 'CREATE_NUMERATOR_GROUP'
+export const UPDATE_NUMERATOR_GROUP = 'UPDATE_NUMERATOR_GROUP'
+export const DELETE_NUMERATOR_GROUP = 'DELETE_NUMERATOR_GROUP'
+
+// numerator relations
 export const CREATE_NUMERATOR_RELATION = 'CREATE_NUMERATOR_RELATION'
 export const UPDATE_NUMERATOR_RELATION = 'UPDATE_NUMERATOR_RELATION'
 export const DELETE_NUMERATOR_RELATION = 'DELETE_NUMERATOR_RELATION'
 export const CREATE_DENOMINATOR_RELATION = 'CREATE_DENOMINATOR_RELATION'
 export const UPDATE_DENOMINATOR_RELATION = 'UPDATE_DENOMINATOR_RELATION'
 export const DELETE_DENOMINATOR_RELATION = 'DELETE_DENOMINATOR_RELATION'
+export const CREATE_DENOMINATOR = 'CREATE_DENOMINATOR'
+export const UPDATE_DENOMINATOR = 'UPDATE_DENOMINATOR'
+export const DELETE_DENOMINATOR = 'DELETE_DENOMINATOR'
 export const CREATE_EXTERNAL_RELATION = 'CREATE_EXTERNAL_RELATION'
 export const UPDATE_EXTERNAL_RELATION = 'UPDATE_EXTERNAL_RELATION'
 export const DELETE_EXTERNAL_RELATION = 'DELETE_EXTERNAL_RELATION'
@@ -295,6 +305,53 @@ export function configurationsReducer(configurations, { type, payload }) {
 
         // Numerator relations
 
+        // Numerator Groups
+        case CREATE_NUMERATOR_GROUP: {
+            const prevGroups = configurations.groups
+            const nextAvailableCode = getNextAvailableCode(prevGroups, 'G')
+            const newGroup = {
+                ...payload.newGroup,
+                code: nextAvailableCode,
+            }
+            const newConfigurations = {
+                ...configurations,
+                groups: [...prevGroups, newGroup],
+                lastUpdated: getISOTimestamp(),
+            }
+            return newConfigurations
+        }
+
+        case UPDATE_NUMERATOR_GROUP: {
+            const { updatedGroup, code } = payload
+            const prevGroups = configurations.groups
+            const targetIndex = prevGroups.findIndex((g) => g.code === code)
+            const newConfigurations = {
+                ...configurations,
+                groups: [
+                    ...prevGroups.slice(0, targetIndex),
+                    updatedGroup,
+                    ...prevGroups.slice(targetIndex + 1),
+                ],
+                lastUpdated: getISOTimestamp(),
+            }
+            return newConfigurations
+        }
+
+        case DELETE_NUMERATOR_GROUP: {
+            const { code } = payload
+            const prevGroups = configurations.groups
+            const targetIndex = prevGroups.findIndex((g) => g.code === code)
+            const newConfigurations = {
+                ...configurations,
+                groups: [
+                    ...prevGroups.slice(0, targetIndex),
+                    ...prevGroups.slice(targetIndex + 1),
+                ],
+                lastUpdated: getISOTimestamp(),
+            }
+            return newConfigurations
+        }
+
         case CREATE_NUMERATOR_RELATION: {
             const prevNumeratorRelations = configurations.numeratorRelations
             const nextAvailableCode = getNextAvailableCode(
@@ -402,6 +459,66 @@ export function configurationsReducer(configurations, { type, payload }) {
                 denominatorRelations: [
                     ...prevDenominatorRelations.slice(0, targetIndex),
                     ...prevDenominatorRelations.slice(targetIndex + 1),
+                ],
+                lastUpdated: getISOTimestamp(),
+            }
+            return newConfigurations
+        }
+
+        // Denominators
+        case CREATE_DENOMINATOR: {
+            const prevDenominators = configurations.denominators
+            const nextAvailableCode = getNextAvailableCode(
+                prevDenominators,
+                'P'
+            )
+            const newDenominatorData = {
+                ...payload.newDenominatorData,
+                code: nextAvailableCode,
+            }
+            const newConfigurations = {
+                ...configurations,
+                denominators: [...prevDenominators, newDenominatorData],
+                lastUpdated: getISOTimestamp(),
+            }
+            return newConfigurations
+        }
+
+        case UPDATE_DENOMINATOR: {
+            const { code, updatedDenominatorData } = payload
+            const prevDenominators = configurations.denominators
+            const targetIndex = prevDenominators.findIndex(
+                (dn) => dn.code === code
+            )
+            const prevDenominator = prevDenominators[targetIndex]
+            const updatedDenominator = {
+                ...prevDenominator,
+                ...updatedDenominatorData,
+            }
+
+            const newConfigurations = {
+                ...configurations,
+                denominators: [
+                    ...prevDenominators.slice(0, targetIndex),
+                    updatedDenominator,
+                    ...prevDenominators.slice(targetIndex + 1),
+                ],
+                lastUpdated: getISOTimestamp(),
+            }
+            return newConfigurations
+        }
+
+        case DELETE_DENOMINATOR: {
+            const { code } = payload
+            const prevDenominators = configurations.denominators
+            const targetIndex = prevDenominators.findIndex(
+                (dn) => dn.code === code
+            )
+            const newConfigurations = {
+                ...configurations,
+                denominators: [
+                    ...prevDenominators.slice(0, targetIndex),
+                    ...prevDenominators.slice(targetIndex + 1),
                 ],
                 lastUpdated: getISOTimestamp(),
             }

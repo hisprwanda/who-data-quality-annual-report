@@ -1,5 +1,3 @@
-import { Button, IconSubtractCircle16, TableCell, TableRow } from '@dhis2/ui'
-import React from 'react'
 import relationTypes from '../data/relationTypes.json'
 
 export const getNumeratorMemberGroups = (configurations, code) => {
@@ -38,51 +36,14 @@ export const getNumeratorDataElement = (mappedNumerators, dataID) => {
     }
 }
 
-export const getNumeratorsInGroup = (numerators, group, onDeleteNumerator) => {
+export const getNumeratorsInGroup = (numerators, group) => {
     const numeratorsInGroup = []
-
-    for (const key in numerators) {
-        const numerator = numerators[key]
+    numerators.forEach((numerator) => {
         if (group.members.includes(numerator.code)) {
             numeratorsInGroup.push(numerator)
         }
-    }
-
-    return (
-        <>
-            {numeratorsInGroup.length > 0 ? (
-                numeratorsInGroup.map((numerator, key) => (
-                    <TableRow key={key}>
-                        <TableCell>{numerator.name}</TableCell>
-                        <TableCell>
-                            <Button
-                                name="Primary button"
-                                onClick={() =>
-                                    onDeleteNumerator(
-                                        group.code,
-                                        numerator.code
-                                    )
-                                }
-                                destructive
-                                basic
-                                button
-                                value="default"
-                                icon={<IconSubtractCircle16 />}
-                            >
-                                {' '}
-                                Delete
-                            </Button>
-                        </TableCell>
-                    </TableRow>
-                ))
-            ) : (
-                <TableRow>
-                    <TableCell>No numerators added, please add them.</TableCell>
-                    <TableCell></TableCell>
-                </TableRow>
-            )}
-        </>
-    )
+    })
+    return numeratorsInGroup
 }
 
 export const getNumeratorNameByCode = (numerators, code) => {

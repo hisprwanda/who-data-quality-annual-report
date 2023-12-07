@@ -1,8 +1,4 @@
-import {
-    getForecastValue,
-    getMean,
-    getRoundedValue,
-} from '../utils/mathService.js'
+import { getForecastValue, getMean } from '../utils/mathService.js'
 import { convertAnalyticsResponseToObject, getVal } from '../utils/utils.js'
 import {
     OVERALL_ORG_UNIT_SECTION_2D,
@@ -63,7 +59,7 @@ const get2dLineChartInfo = ({ response, periods, name, ou, dx }) => {
         x: reversePeriods,
         y: reversePeriods.map((pe) => {
             const yVal = getVal({ response, dx, ou, pe })
-            return yVal ? getRoundedValue(yVal, 2) : null
+            return yVal ? yVal : null
         }),
     }
 }
@@ -115,13 +111,14 @@ const calculateSection2d = ({
     for (const dx in overallResponse) {
         // retrieve info for dx
         const dxInfo = mappedConfiguration?.dataElementsAndIndicators?.[dx]
-        if (!overallResponse[dx]?.[overallOrgUnit]?.[currentPeriodID]) {
-            // skip if current period data is missing
+        if (
+            !overallResponse[dx]?.[overallOrgUnit]?.[currentPeriodID] ||
+            !dxInfo
+        ) {
+            // skip if current period data or metadata is missing
             continue
         }
-        const consistency = dxInfo.consistency
-        const trend = dxInfo.trend
-        const comparison = dxInfo.comparison
+        const { consistency, trend, comparison } = dxInfo
 
         // calculate overall score
         const { score: overallScore } = get2dScore({
@@ -140,7 +137,6 @@ const calculateSection2d = ({
             ou: overallOrgUnit,
             dx,
         })
-        // not that orgUnitLevel name is hardcoded; we will need to bring that
         const scatterChartInfo = get2dScatterChartInfoBasic({
             trend,
             comparison,
@@ -151,8 +147,29 @@ const calculateSection2d = ({
             currentPeriodID,
         })
 
+        const section2dItem = {
+            name: metadata?.[dx]?.name,
+            expectedTrend: trend === 'constant' ? 'Constant' : trend,
+            compareRegionTo:
+                comparison === 'ou'
+                    ? metadata?.[overallOrgUnit]?.name
+                    : 'Current vs Forecast',
+            qualityThreshold: consistency,
+            overallScore: overallScore,
+            chartInfo: {
+                scatterChartInfo,
+                lineChartInfo,
+            },
+        }
+
+        // skip subOrgUnit calculations if overall is invalid
+        if (isNaN(overallScore)) {
+            return { ...section2dItem, invalid: true }
+        }
+
         // then get divergent subOrgUnits
         const divergentSubOrgUnits = []
+        const invalidSubOrgUnits = []
 
         subOrgUnitIDs.forEach((subOrgUnit) => {
             const {
@@ -176,33 +193,28 @@ const calculateSection2d = ({
             if (isDivergent) {
                 divergentSubOrgUnits.push(orgUnitName)
             }
+            if (isNaN(subOrgUnitScore)) {
+                invalidSubOrgUnits.push(orgUnitName)
+            }
             scatterChartInfo.values.push({
                 name: orgUnitName,
-                x: getRoundedValue(reference, 2),
-                y: getRoundedValue(current, 2),
+                x: reference,
+                y: current,
                 divergent: isDivergent,
                 invalid: isNaN(subOrgUnitScore),
             })
         })
 
         results.section2d.push({
-            name: metadata?.[dx]?.name,
-            expectedTrend: trend === 'constant' ? 'Constant' : trend,
-            compareRegionTo:
-                comparison === 'ou'
-                    ? metadata?.[overallOrgUnit]?.name
-                    : 'Current vs Forecast',
-            qualityThreshold: consistency,
-            overallScore: getRoundedValue(overallScore, 1),
+            ...section2dItem,
             divergentSubOrgUnits: {
                 number: divergentSubOrgUnits.length,
-                percent: getRoundedValue(
+                percent:
                     (divergentSubOrgUnits.length /
                         (subOrgUnitIDs.length ?? 1)) *
-                        100,
-                    1
-                ),
+                    100,
                 names: divergentSubOrgUnits.sort().join(', '),
+                noncalculable: invalidSubOrgUnits.sort().join(', '),
             },
             chartInfo: {
                 scatterChartInfo,

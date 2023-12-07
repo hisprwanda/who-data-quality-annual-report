@@ -1,18 +1,23 @@
 import { TableBody, TableHead, TableRow } from '@dhis2/ui'
 import PropTypes from 'prop-types'
 import React, { useEffect } from 'react'
+import { LoadingSpinner } from '../../loading-spinner/LoadingSpinner.js'
 import { Chart } from '../Chart.js'
-import { InterpretationsField } from '../common/index.js'
+import { InterpretationsField, SectionError } from '../common/index.js'
+import {
+    CouldNotCalculateLevels,
+    CouldNotCalculateOverall,
+    CouldNotCalculateSubOrgUnits,
+} from '../common/Warnings.js'
 import {
     ReportCell,
     ReportCellHead,
     ReportRowHead,
     ReportTable,
 } from '../ReportTable.js'
+import { formatVal } from '../utils/utils.js'
 import styles from './SectionThree.module.css'
 import { useSectionThreeData } from './useSectionThreeData.js'
-
-const isNotMissing = (val) => val !== undefined && val !== null
 
 const sectionInformation = {
     section3a: {
@@ -75,13 +80,19 @@ const Section3A = ({
                                 <TableRow>
                                     <ReportCell>Survey value</ReportCell>
                                     <ReportCell>
-                                        {dataRow.surveyValue}%
+                                        {formatVal(dataRow.surveyValue, {
+                                            roundTo: 1,
+                                            includePercentage: true,
+                                        })}
                                     </ReportCell>
                                 </TableRow>
                                 <TableRow>
                                     <ReportCell>Routine value</ReportCell>
                                     <ReportCell>
-                                        {dataRow.routineValue}%
+                                        {formatVal(dataRow.routineValue, {
+                                            roundTo: 1,
+                                            includePercentage: true,
+                                        })}
                                     </ReportCell>
                                 </TableRow>
                                 <TableRow>
@@ -93,7 +104,10 @@ const Section3A = ({
                                 <TableRow>
                                     <ReportCell>Overall score</ReportCell>
                                     <ReportCell>
-                                        {dataRow.overallScore}%
+                                        {formatVal(dataRow.overallScore, {
+                                            roundTo: 1,
+                                            includePercentage: true,
+                                        })}
                                     </ReportCell>
                                 </TableRow>
                                 <TableRow>
@@ -101,12 +115,14 @@ const Section3A = ({
                                         {`Number of ${orgUnitLevelName} with divergent score`}
                                     </ReportCell>
                                     <ReportCell>
-                                        {isNotMissing(
-                                            dataRow.divergentSubOrgUnits?.number
-                                        )
-                                            ? dataRow.divergentSubOrgUnits
-                                                  ?.number
-                                            : 'Not available'}
+                                        {formatVal(
+                                            dataRow.divergentSubOrgUnits
+                                                ?.number,
+                                            {
+                                                roundTo: 0,
+                                                includePercentage: false,
+                                            }
+                                        )}
                                     </ReportCell>
                                 </TableRow>
                                 <TableRow>
@@ -114,13 +130,14 @@ const Section3A = ({
                                         {`Percent of ${orgUnitLevelName} with divergent score`}
                                     </ReportCell>
                                     <ReportCell>
-                                        {isNotMissing(
+                                        {formatVal(
                                             dataRow.divergentSubOrgUnits
-                                                ?.percentage
-                                        )
-                                            ? dataRow.divergentSubOrgUnits
-                                                  ?.percentage + '%'
-                                            : 'Not available'}
+                                                ?.percentage,
+                                            {
+                                                roundTo: 1,
+                                                includePercentage: true,
+                                            }
+                                        )}
                                     </ReportCell>
                                 </TableRow>
                                 {dataRow.divergentSubOrgUnits?.names?.length >
@@ -144,6 +161,25 @@ const Section3A = ({
                             className={styles.section3Chart}
                         />
 
+                        {dataRow.levelNotAvailable && (
+                            <CouldNotCalculateLevels
+                                subOrgUnitLevelName={orgUnitLevelName}
+                            />
+                        )}
+                        {dataRow.invalid && (
+                            <CouldNotCalculateOverall
+                                subOrgUnitLevelName={orgUnitLevelName}
+                            />
+                        )}
+                        {Boolean(
+                            dataRow.divergentSubOrgUnits?.nonCalculable?.length
+                        ) && (
+                            <CouldNotCalculateSubOrgUnits
+                                invalidSubOrgUnitNames={
+                                    dataRow.divergentSubOrgUnits?.nonCalculable
+                                }
+                            />
+                        )}
                         <InterpretationsField />
                     </div>
                 )
@@ -176,11 +212,11 @@ export const SectionThree = ({ reportParameters }) => {
     }, [refetch, reportParameters])
 
     if (loading) {
-        return <span>loading</span>
+        return <LoadingSpinner noLayer={true} />
     }
 
     if (error) {
-        return <span>{error?.message}</span>
+        return <SectionError error={error} />
     }
 
     if (section3Data) {

@@ -1,14 +1,16 @@
-import { TableBody, TableHead, TableRow, CircularLoader } from '@dhis2/ui'
+import { TableBody, TableHead, TableRow } from '@dhis2/ui'
 import PropTypes from 'prop-types'
 import React, { useEffect } from 'react'
+import { LoadingSpinner } from '../../loading-spinner/LoadingSpinner.js'
 import { Chart } from '../Chart.js'
-import { InterpretationsField } from '../common/index.js'
+import { InterpretationsField, SectionError } from '../common/index.js'
 import {
     ReportCell,
     ReportCellHead,
     ReportRowHead,
     ReportTable,
 } from '../ReportTable.js'
+import { formatVal } from '../utils/utils.js'
 import styles from './SectionOne.module.css'
 import { useSectionOneData } from './useSectionOneData.js'
 
@@ -25,23 +27,11 @@ export const SectionOne = ({ reportParameters }) => {
     }, [refetch, reportParameters])
 
     if (loading) {
-        return (
-            <div
-                style={{
-                    display: 'flex',
-                    justifyContent: 'center',
-                    marginTop: '50px',
-                }}
-            >
-                {' '}
-                {/* TODO: put styles external */}
-                <CircularLoader large />
-            </div>
-        )
+        return <LoadingSpinner noLayer={true} />
     }
 
     if (error) {
-        return <span>{error?.message}</span>
+        return <SectionError error={error} />
     }
 
     if (section1Data) {
@@ -95,12 +85,23 @@ export const SectionOne = ({ reportParameters }) => {
                                     <ReportCell>
                                         {dataset.threshold}%
                                     </ReportCell>
-                                    <ReportCell>{dataset.score}%</ReportCell>
+                                    <ReportCell>
+                                        {formatVal(dataset.score, {
+                                            roundTo: 1,
+                                            includePercentage: true,
+                                        })}
+                                    </ReportCell>
                                     <ReportCell>
                                         {dataset.divergentRegionsCount}
                                     </ReportCell>
                                     <ReportCell>
-                                        {dataset.divergentRegionsPercent}%
+                                        {formatVal(
+                                            dataset.divergentRegionsPercent,
+                                            {
+                                                roundTo: 1,
+                                                includePercentage: true,
+                                            }
+                                        )}
                                     </ReportCell>
                                     <ReportCell>
                                         {dataset.orgUnitLevelsOrGroups.join(
@@ -162,12 +163,23 @@ export const SectionOne = ({ reportParameters }) => {
                                     <ReportCell>
                                         {dataset.threshold}%
                                     </ReportCell>
-                                    <ReportCell>{dataset.score}%</ReportCell>
+                                    <ReportCell>
+                                        {formatVal(dataset.score, {
+                                            roundTo: 1,
+                                            includePercentage: true,
+                                        })}
+                                    </ReportCell>
                                     <ReportCell>
                                         {dataset.divergentRegionsCount}
                                     </ReportCell>
                                     <ReportCell>
-                                        {dataset.divergentRegionsPercent}%
+                                        {formatVal(
+                                            dataset.divergentRegionsPercent,
+                                            {
+                                                roundTo: 1,
+                                                includePercentage: true,
+                                            }
+                                        )}
                                     </ReportCell>
                                     <ReportCell>
                                         {dataset.orgUnitLevelsOrGroups.join(
@@ -242,13 +254,22 @@ export const SectionOne = ({ reportParameters }) => {
                                         {dataset.actualValues}
                                     </ReportCell>
                                     <ReportCell>
-                                        {dataset.overallScore}%
+                                        {formatVal(dataset.overallScore, {
+                                            roundTo: 1,
+                                            includePercentage: true,
+                                        })}
                                     </ReportCell>
                                     <ReportCell>
                                         {dataset.divergentRegionsCount}
                                     </ReportCell>
                                     <ReportCell>
-                                        {dataset.divergentRegionsPercent}%
+                                        {formatVal(
+                                            dataset.divergentRegionsPercent,
+                                            {
+                                                roundTo: 1,
+                                                includePercentage: true,
+                                            }
+                                        )}
                                     </ReportCell>
                                     <ReportCell>
                                         {dataset.orgUnitLevelsOrGroups.join(
@@ -328,12 +349,29 @@ export const SectionOne = ({ reportParameters }) => {
                                     <ReportCell>
                                         ± {dataset.threshold}%
                                     </ReportCell>
-                                    <ReportCell>{dataset.score}%</ReportCell>
                                     <ReportCell>
-                                        {dataset.divergentRegionsCount}
+                                        {formatVal(dataset.score, {
+                                            roundTo: 1,
+                                            includePercentage: true,
+                                        })}
                                     </ReportCell>
                                     <ReportCell>
-                                        {dataset.divergentRegionsPercent}%
+                                        {formatVal(
+                                            dataset.divergentRegionsCount,
+                                            {
+                                                roundTo: 1,
+                                                includePercentage: false,
+                                            }
+                                        )}
+                                    </ReportCell>
+                                    <ReportCell>
+                                        {formatVal(
+                                            dataset.divergentRegionsPercent,
+                                            {
+                                                roundTo: 1,
+                                                includePercentage: true,
+                                            }
+                                        )}
                                     </ReportCell>
                                     <ReportCell>
                                         {dataset.orgUnitLevelsOrGroups.join(

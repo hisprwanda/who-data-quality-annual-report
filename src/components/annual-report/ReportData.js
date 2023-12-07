@@ -1,17 +1,21 @@
+import cx from 'classnames'
 import PropTypes from 'prop-types'
 import React from 'react'
-import { NoDataInfoBox } from './common/NoDataWarning.js'
+import { ReportInfoScreen } from '../info-screen/InfoScreen.js'
+import { NoDataInfoBox } from './common/Warnings.js'
 import styles from './ReportData.module.css'
+import { ReportPrintHeader } from './ReportPrintHeader.js'
 import { SectionOne } from './section1/SectionOne.js'
 import { SectionTwo } from './section2/SectionTwo.js'
 import { SectionThree } from './section3/SectionThree.js'
 import { SectionFour } from './section4/SectionFour.js'
 
 const SectionLayout = ({ title, children }) => (
-    <div>
+    // `section` element usage here is important for 'first-of-type' selector
+    <section className={styles.pageBreakBefore}>
         <div className={styles.sectionHeading}>{title.toUpperCase()}</div>
         {children}
-    </div>
+    </section>
 )
 
 SectionLayout.propTypes = {
@@ -19,9 +23,9 @@ SectionLayout.propTypes = {
     title: PropTypes.string,
 }
 
-export const ReportData = ({ reportParameters }) => {
+export const ReportData = ({ reportParameters, printing }) => {
     if (Object.keys(reportParameters).length === 0) {
-        return null
+        return <ReportInfoScreen />
     }
 
     const isSectionOneEmpty =
@@ -31,37 +35,52 @@ export const ReportData = ({ reportParameters }) => {
         !Object.keys(reportParameters.mappedConfiguration.dataSets).length
 
     return (
-        <div className={styles.reportContainer}>
-            <SectionLayout title="Domain 1 - Completeness of Reporting">
-                {isSectionOneEmpty ? (
-                    <NoDataInfoBox subsection={false} />
-                ) : (
-                    <SectionOne reportParameters={reportParameters} />
-                )}
-            </SectionLayout>
-            <SectionLayout title="Domain 2 - Internal Consistency of Reported Data">
-                <SectionTwo reportParameters={reportParameters} />
-            </SectionLayout>
-            <SectionLayout title="Domain 3 - External Comparison">
-                {reportParameters?.mappedConfiguration?.externalRelations
-                    ?.length > 0 ? (
-                    <SectionThree reportParameters={reportParameters} />
-                ) : (
-                    <NoDataInfoBox subsection={false} />
-                )}
-            </SectionLayout>
-            <SectionLayout title="Domain 4 - Consistency of Population Data">
-                {reportParameters?.mappedConfiguration?.denominatorRelations
-                    ?.length > 0 ? (
-                    <SectionFour reportParameters={reportParameters} />
-                ) : (
-                    <NoDataInfoBox subsection={false} />
-                )}
-            </SectionLayout>
+        <div className={styles.reportArea}>
+            <div
+                className={cx(styles.reportContainer, {
+                    [styles.printWidth]: printing,
+                })}
+            >
+                <ReportPrintHeader reportParameters={reportParameters} />
+
+                <SectionLayout title="Domain 1 - Completeness of Reporting">
+                    {isSectionOneEmpty ? (
+                        <div className={styles.marginBottom24}>
+                            <NoDataInfoBox subsection={false} />
+                        </div>
+                    ) : (
+                        <SectionOne reportParameters={reportParameters} />
+                    )}
+                </SectionLayout>
+                <SectionLayout title="Domain 2 - Internal Consistency of Reported Data">
+                    <SectionTwo reportParameters={reportParameters} />
+                </SectionLayout>
+                <SectionLayout title="Domain 3 - External Comparison">
+                    {reportParameters?.mappedConfiguration?.externalRelations
+                        ?.length > 0 ? (
+                        <SectionThree reportParameters={reportParameters} />
+                    ) : (
+                        <div className={styles.marginBottom24}>
+                            <NoDataInfoBox subsection={false} />
+                        </div>
+                    )}
+                </SectionLayout>
+                <SectionLayout title="Domain 4 - Consistency of Population Data">
+                    {reportParameters?.mappedConfiguration?.denominatorRelations
+                        ?.length > 0 ? (
+                        <SectionFour reportParameters={reportParameters} />
+                    ) : (
+                        <div className={styles.marginBottom24}>
+                            <NoDataInfoBox subsection={false} />
+                        </div>
+                    )}
+                </SectionLayout>
+            </div>
         </div>
     )
 }
 
 ReportData.propTypes = {
+    printing: PropTypes.bool,
     reportParameters: PropTypes.object,
 }

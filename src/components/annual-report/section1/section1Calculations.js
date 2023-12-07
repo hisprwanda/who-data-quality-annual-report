@@ -1,13 +1,5 @@
-import {
-    getForecastValue,
-    getMean,
-    getRoundedValue,
-} from '../utils/mathService.js'
-import {
-    convertAnalyticsResponseToObject,
-    getVal,
-    getValCO,
-} from '../utils/utils.js'
+import { getForecastValue, getMean } from '../utils/mathService.js'
+import { convertAnalyticsResponseToObject, getVal } from '../utils/utils.js'
 
 // gets a list of retions in which the reporting rate score was lower than the threshold
 const getRegionsWithLowScore = (filterd_datasets, key) => {
@@ -88,6 +80,10 @@ const getRegionsWithLowScoreForConsistencyOfDataset = ({
                 ]
             })
             .filter((point) => !isNaN(point[1]))
+
+        if (points.length === 0) {
+            console.log(`No reference value for ${region.name}`)
+        }
 
         if (trend === 'constant') {
             // reference is average for 'constant' trend
@@ -252,6 +248,10 @@ const filterDataByProvidedPeriodConsistency = (
             })
             .filter((point) => !isNaN(point[1]))
 
+        if (points.length === 0) {
+            console.log(`No reference value for ${datasetId}`)
+        }
+
         if (trend === 'constant') {
             // reference is average for 'constant' trend
             const yearValues = points.map((point) => point[1])
@@ -277,7 +277,7 @@ const filterDataByProvidedPeriodConsistency = (
         const currentYear = [
             {
                 ...dataset[period][0],
-                score: theScore.toFixed(1),
+                score: theScore,
             },
         ]
 
@@ -326,6 +326,7 @@ const getFacilityReportingData = ({
             filteredData_levels,
             key
         )
+        regionsWithLowScore.sort()
         const dataset = filteredData_overall[key]
         const dataset_levels = filteredData_levels[key] // a corresponding dataset in the reporting rates by ou level
 
@@ -349,6 +350,9 @@ const getFacilityReportingData = ({
     }
     const flattenedData = Object.values(filteredData_overall).map(
         (item) => item[0]
+    )
+    flattenedData.sort((a, b) =>
+        a?.dataset_name?.localeCompare(b?.dataset_name)
     )
     return flattenedData
 }
@@ -402,6 +406,7 @@ const getConsistencyOfDatasetCompletenessData = ({
                 period: period,
                 periodsIDs,
             })
+        regionsWithLowScore.sort()
 
         // Calculate "divergentRegionsCount" and "divergentRegionsPercent"
         const divergentRegionsCount = regionsWithLowScore?.length
@@ -424,6 +429,9 @@ const getConsistencyOfDatasetCompletenessData = ({
 
     const flattenedData = Object.values(filteredData_overall).map(
         (item) => item[0]
+    )
+    flattenedData.sort((a, b) =>
+        a?.dataset_name?.localeCompare(b?.dataset_name)
     )
     return flattenedData
 }
@@ -471,8 +479,8 @@ const getExpectedValues = ({ numerator, response, pe, ou }) => {
     }, 0)
 }
 
-const getActualValue1C = ({ response, dx, co, pe, ou }) => {
-    return getValCO({ response, dx, co, ou, pe })
+const getActualValue1C = ({ response, dx, pe, ou }) => {
+    return getVal({ response, dx, ou, pe })
 }
 
 const calculateSection1C = ({
@@ -483,7 +491,6 @@ const calculateSection1C = ({
     mappedConfigurations,
     period,
     overallOrgUnit,
-    defaultCOC,
 }) => {
     const section1C = []
 
@@ -517,15 +524,13 @@ const calculateSection1C = ({
         //  get overall values
         const numerator = mappedConfigurations.dataElementsAndIndicators[de]
         const threshold = numerator.missing
-        const [deID = de, cocID = defaultCOC] =
-            numerator.dataElementOperandID?.split('.')
+        const dataElementOperand = numerator.dataElementOperandID
 
         const actualValues = getActualValue1C({
             response: overall_counts,
             pe: period,
             ou: overallOrgUnit,
-            dx: deID,
-            co: cocID,
+            dx: dataElementOperand,
         })
         const expectedValues = getExpectedValues({
             response: overall_expected_reports,
@@ -533,10 +538,7 @@ const calculateSection1C = ({
             ou: overallOrgUnit,
             numerator,
         })
-        const overallScore = getRoundedValue(
-            (actualValues / expectedValues) * 100,
-            1
-        )
+        const overallScore = (actualValues / expectedValues) * 100
 
         // then calculate sub units
         const divergentSubOrgUnits = []
@@ -545,8 +547,7 @@ const calculateSection1C = ({
                 response: by_level_counts,
                 pe: period,
                 ou: subOrgUnit,
-                dx: deID,
-                co: cocID,
+                dx: dataElementOperand,
             })
             const expectedSubOrgUnit = getExpectedValues({
                 response: by_level_expected_reports,
@@ -566,20 +567,13 @@ const calculateSection1C = ({
             expectedValues,
             actualValues,
             overallScore,
-            indicator_name: `${metadata[deID]?.name} ${
-                cocID && cocID !== defaultCOC
-                    ? '(' + metadata[cocID]?.name + ')'
-                    : ''
-            }`,
+            indicator_name: metadata[dataElementOperand]?.name,
             orgUnitLevelsOrGroups: divergentSubOrgUnits
                 .map((ouID) => metadata[ouID]?.name)
                 .sort(),
             divergentRegionsCount: divergentSubOrgUnits.length,
             divergentRegionsPercent: subOrgUnits.length
-                ? getRoundedValue(
-                      (divergentSubOrgUnits.length / subOrgUnits.length) * 100,
-                      1
-                  )
+                ? (divergentSubOrgUnits.length / subOrgUnits.length) * 100
                 : 0,
         })
     }
@@ -597,7 +591,6 @@ export const calculateSection1 = ({
     period,
     periodsIDs,
     overallOrgUnit,
-    defaultCOC,
 }) => {
     if (!reportQueryResponse || !mappedConfigurations) {
         return {}
@@ -634,7 +627,6 @@ export const calculateSection1 = ({
             mappedConfigurations,
             period: period,
             overallOrgUnit,
-            defaultCOC,
         }),
         section1D: getConsistencyOfDatasetCompletenessData({
             allOrgUnitsData:

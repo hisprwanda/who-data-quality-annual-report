@@ -1,4 +1,3 @@
-import { getRoundedValue } from '../utils/mathService.js'
 import { convertAnalyticsResponseToObject } from '../utils/utils.js'
 
 export const OVERALL_RESPONSE_NAME = 'data_over_all_org_units'
@@ -22,21 +21,19 @@ const calculateSection4a = ({
         }
         section4a.push({
             name: rel.name,
-            value: getRoundedValue(
+            value:
                 getVal({
                     response: formattedResponseOverall,
                     dx: rel.A.id,
                     ou: overallOrgUnit,
                     pe: currentPeriodID,
                 }) /
-                    getVal({
-                        response: formattedResponseOverall,
-                        dx: rel.B.id,
-                        ou: overallOrgUnit,
-                        pe: currentPeriodID,
-                    }),
-                2
-            ),
+                getVal({
+                    response: formattedResponseOverall,
+                    dx: rel.B.id,
+                    ou: overallOrgUnit,
+                    pe: currentPeriodID,
+                }),
         })
     }
     return section4a
@@ -79,19 +76,22 @@ const calculateSection4b = ({
             threshold: relation.criteria,
             values: [],
         },
+        invalid: false,
     }
     // return early if overallScore is invalid
     if (isNaN(overallScore)) {
-        return fourBItem
+        return { ...fourBItem, invalid: true }
     }
 
     // elsewise, loop through subOrgUnits to find divergent subOrgUnits
     const formattedIndResponse = convertAnalyticsResponseToObject({
         ...unformattedIndResponse,
     })
+    const levelMetadata = unformattedIndResponse.metaData?.items || {}
     const subOrgUnits = unformattedIndResponse?.metaData?.dimensions?.ou || []
 
     const divergentSubOrgUnits = []
+    const invalidSubOrgUnits = []
 
     for (const subOrgUnitID of subOrgUnits) {
         const {
@@ -112,30 +112,36 @@ const calculateSection4b = ({
         if (divergent) {
             divergentSubOrgUnits.push(subOrgUnitID)
         }
+        const isInvalid = isNaN(aVal) || isNaN(bVal)
+        if (isInvalid) {
+            invalidSubOrgUnits.push(subOrgUnitID)
+        }
         fourBItem.chartInfo.values.push({
             x: bVal,
             y: aVal,
             name: metadata[subOrgUnitID]?.name,
             divergent,
-            invalid: isNaN(aVal) || isNaN(bVal),
+            invalid: isInvalid,
         })
     }
 
     return {
         ...fourBItem,
-        overallScore: getRoundedValue(overallScore * 100, 1),
+        overallScore: overallScore * 100,
         divergentSubOrgUnits: {
             names: divergentSubOrgUnits
                 .map((ou) => metadata[ou]?.name)
                 .sort()
                 .join(', '),
-            percentage: getRoundedValue(
+            percentage:
                 (divergentSubOrgUnits.length /
                     Math.max(subOrgUnits.length, 1)) *
-                    100,
-                1
-            ),
+                100,
             number: divergentSubOrgUnits.length,
+            noncalculable: invalidSubOrgUnits
+                .map((ouID) => levelMetadata[ouID]?.name)
+                .sort()
+                .join(', '),
         },
     }
 }
