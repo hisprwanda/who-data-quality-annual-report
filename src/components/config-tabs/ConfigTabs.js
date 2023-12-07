@@ -7,11 +7,11 @@ import { useRefetchConfigurations } from '../../utils/index.js'
 import { ConfigInfoScreen } from '../info-screen/InfoScreen.js'
 import styles from './ConfigTabs.module.css'
 import { Denominators } from './denominators/index.js'
+import { ExternalDataComparison } from './external-data-comparison/index.js'
 import { NumeratorGroups } from './numerator-groups/NumeratorGroups.js'
 import { NumeratorRelations } from './numerator-relations/index.js'
 import { Numerators } from './numerators/index.js'
 import { DenominatorRelations } from './tab-contents/DenominatorRelations.js'
-import { ExternalDataComparison } from './tab-contents/ExternalDataComparison.js'
 import { NumeratorParameters } from './tab-contents/NumeratorParameters.js'
 
 const ExitConfigurationsButton = () => (
