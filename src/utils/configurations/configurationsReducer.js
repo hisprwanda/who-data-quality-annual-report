@@ -31,7 +31,6 @@ const DEFAULT_DATASET_QUALITY_PARAMETERS = {
     trend: 'constant',
 }
 
-
 const getISOTimestamp = () => new Date().toISOString()
 
 /**
@@ -410,7 +409,7 @@ export function configurationsReducer(configurations, { type, payload }) {
         }
 
         // External relations
-        
+
         case CREATE_EXTERNAL_RELATION: {
             const prevExternalRelations = configurations.externalRelations
             const nextAvailableCode = getNextAvailableCode(

@@ -32,24 +32,20 @@ export const EditExternalDataComparisonModel = ({
 }) => {
     return (
         <Form
-            onSubmit={(values, form) => {
-                console.log('submitting2...', { values, form })
-                if (onSave) {
-                    onSave({
-                        name: values.name,
-                        criteria: values.criteria,
-                        numerator: values.numerator,
-                        denominator: values.denominator,
-                        level: values.level,
-                        externalData: values.dataItem.id,
-                        dataType:
-                            values.dataType === 'dataElement'
-                                ? 'dataElements'
-                                : 'indicators',
-                    })
-                } else {
-                    alert('todo')
-                }
+            onSubmit={(values) => {
+                onSave({
+                    name: values.name,
+                    criteria: values.criteria,
+                    numerator: values.numerator,
+                    denominator: values.denominator,
+                    level: values.level,
+                    externalData: values.dataItem.id,
+                    dataType:
+                        values.dataType === 'dataElement'
+                            ? 'dataElements'
+                            : 'indicators',
+                })
+
                 onClose()
             }}
             initialValues={externalRelationToEdit || DEFAULT_FORM_VALUES}
@@ -108,8 +104,7 @@ export const EditExternalDataComparisonModel = ({
                     <ModalActions>
                         <ButtonStrip end>
                             <Button secondary onClick={onClose}>
-                                {' '}
-                                Cancel{' '}
+                                Cancel
                             </Button>
                             <Button
                                 primary

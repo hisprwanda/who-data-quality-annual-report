@@ -116,7 +116,6 @@ export const ExternalDataComparison = () => {
                         ) : (
                             <TableRow>
                                 <TableCell>
-                                    {' '}
                                     No external relations found.
                                 </TableCell>
                             </TableRow>

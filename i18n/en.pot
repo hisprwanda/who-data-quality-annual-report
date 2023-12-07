@@ -5,8 +5,8 @@ msgstr ""
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1)\n"
-"POT-Creation-Date: 2023-11-17T13:10:54.423Z\n"
-"PO-Revision-Date: 2023-11-17T13:10:54.423Z\n"
+"POT-Creation-Date: 2023-12-07T11:52:51.391Z\n"
+"PO-Revision-Date: 2023-12-07T11:52:51.391Z\n"
 
 msgid "Select period(s)"
 msgstr "Select period(s)"
@@ -62,11 +62,11 @@ msgstr "Survey"
 msgid "Survey: {{survey}}%<br/>Routine: {{routine}}%"
 msgstr "Survey: {{survey}}%<br/>Routine: {{routine}}%"
 
-msgid "[Core]"
-msgstr "[Core]"
-
 msgid "Please provide a value"
 msgstr "Please provide a value"
+
+msgid "[Core]"
+msgstr "[Core]"
 
 msgid "Group"
 msgstr "Group"

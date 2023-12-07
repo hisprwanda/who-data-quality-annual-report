@@ -52,6 +52,8 @@ export const OrgUnitLevelSelect = () => {
                 placeholder={placeholderText}
                 disabled={loading || error || !dataElementGroupOptions}
                 filterable
+                parse={(value) => Number(value)}
+                format={(value) => (!value ? null : String(value))}
             />
         </div>
     )
