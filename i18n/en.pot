@@ -5,17 +5,8 @@ msgstr ""
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1)\n"
-"POT-Creation-Date: 2023-12-07T11:52:51.391Z\n"
-"PO-Revision-Date: 2023-12-07T11:52:51.391Z\n"
-
-msgid "Select period(s)"
-msgstr "Select period(s)"
-
-msgid "Cancel"
-msgstr "Cancel"
-
-msgid "Save"
-msgstr "Save"
+"POT-Creation-Date: 2023-12-07T13:15:05.686Z\n"
+"PO-Revision-Date: 2023-12-07T13:15:05.686Z\n"
 
 msgid "[Core]"
 msgstr "[Core]"
@@ -149,9 +140,6 @@ msgid ""
 msgstr ""
 "Group, Organisation unit, Organisation unit level, period, and comparison "
 "periods must all be selected before a report can be generated."
-
-msgid "[Core]"
-msgstr "[Core]"
 
 msgid "Group"
 msgstr "Group"
