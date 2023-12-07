@@ -1,6 +1,6 @@
 import { useDataQuery } from '@dhis2/app-runtime'
 import i18n from '@dhis2/d2-i18n'
-import { Button, NoticeBox, SelectorBar } from '@dhis2/ui'
+import { Button, ButtonStrip, NoticeBox, SelectorBar } from '@dhis2/ui'
 import PropTypes from 'prop-types'
 import React, { useMemo, useState } from 'react'
 import { Link } from 'react-router-dom'
@@ -30,7 +30,12 @@ const configQuery = {
     },
 }
 
-export const ReportParameterSelector = ({ setReportParameters }) => {
+export const ReportParameterSelector = ({
+    setReportParameters,
+    reportParameters,
+    printing,
+    onPrint,
+}) => {
     const { loading, data, error } = useDataQuery(configQuery)
     const configurations = useConfigurations()
     const { isAuthorized } = useUserContext()
@@ -50,6 +55,7 @@ export const ReportParameterSelector = ({ setReportParameters }) => {
             getReportParameters({
                 groupID: selectedGroup,
                 orgUnitID: selectedOrgUnit.id,
+                orgUnitName: selectedOrgUnit.displayName,
                 boundaryOrgUnitLevel: selectedOrgUnit.level,
                 configurations,
                 orgUnitLevel: selectedOrgUnitLevel,
@@ -57,8 +63,7 @@ export const ReportParameterSelector = ({ setReportParameters }) => {
                 periods: selectedPeriods,
             }),
         [
-            selectedOrgUnit.id,
-            selectedOrgUnit.level,
+            selectedOrgUnit,
             selectedGroup,
             configurations,
             selectedOrgUnitLevel,
@@ -102,6 +107,7 @@ export const ReportParameterSelector = ({ setReportParameters }) => {
                         </div>
                     )
                 }
+                className={styles.hideInPrint}
             >
                 <GroupSelector
                     groups={configurations?.groups}
@@ -125,21 +131,39 @@ export const ReportParameterSelector = ({ setReportParameters }) => {
                     setSelectedPeriods={setSelectedPeriods}
                 />
                 <div className={styles.generateReportButtonContainer}>
-                    <GenerateReportTooltip disabled={!reportGenerateEnabled}>
-                        <Button
-                            small
-                            primary
-                            onClick={generateReport}
+                    <ButtonStrip>
+                        <GenerateReportTooltip
                             disabled={!reportGenerateEnabled}
                         >
-                            {i18n.t('Generate report')}
+                            <Button
+                                small
+                                primary
+                                onClick={generateReport}
+                                disabled={!reportGenerateEnabled}
+                            >
+                                {i18n.t('Generate report')}
+                            </Button>
+                        </GenerateReportTooltip>
+                        <Button
+                            small
+                            onClick={onPrint}
+                            disabled={
+                                !reportParameters ||
+                                Object.keys(reportParameters).length === 0
+                            }
+                            loading={printing}
+                        >
+                            {printing ? i18n.t('Printing...') : i18n.t('Print')}
                         </Button>
-                    </GenerateReportTooltip>
+                    </ButtonStrip>
                 </div>
             </SelectorBar>
         )
     }
 }
 ReportParameterSelector.propTypes = {
+    printing: PropTypes.bool,
+    reportParameters: PropTypes.object,
     setReportParameters: PropTypes.func,
+    onPrint: PropTypes.func,
 }

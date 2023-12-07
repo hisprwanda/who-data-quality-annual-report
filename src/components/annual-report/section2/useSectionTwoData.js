@@ -11,17 +11,6 @@ import {
     LEVEL_OR_GROUP_SECTION_2E,
 } from './section2DataNames.js'
 
-const dataSetInformation = {
-    dataSets: {
-        resource: 'dataSets',
-        params: ({ dataSets }) => ({
-            paging: false,
-            fields: ['id', 'periodType'],
-            filter: `id:in:[${dataSets.join()}]`,
-        }),
-    },
-}
-
 const section2abcQuery = {
     [SUBPERIODS_RESPONSE_NAME]: {
         resource: 'analytics.json',
@@ -85,13 +74,10 @@ export const fetchDataBySubPeriod = async ({ engine, variables }) => {
 
 const getValidDataElementPeriodTypes = ({
     dataElements,
-    dataSetTypes,
+    dataSetsInfo,
     mappedConfiguration,
 }) => {
     const validDataElementPeriodTypes = {}
-    const dataSetTypeMap = dataSetTypes.reduce((dsMap, ds) => {
-        return { ...dsMap, [ds.id]: ds.periodType }
-    }, {})
     dataElements.forEach((de) => {
         const dataSetsForDE =
             mappedConfiguration.dataElementsAndIndicators[de]?.dataSetID
@@ -101,7 +87,9 @@ const getValidDataElementPeriodTypes = ({
             ? dataSetsForDE
             : [dataSetsForDE]
         const periodTypesSet = new Set(
-            dataSetsForDEArray?.map((dsID) => dataSetTypeMap[dsID])
+            dataSetsForDEArray
+                ?.map((dsID) => dataSetsInfo[dsID]?.periodType)
+                .filter((peType) => Boolean(peType))
         )
         if (periodTypesSet.size === 1) {
             validDataElementPeriodTypes[de] = [...periodTypesSet][0]
@@ -175,16 +163,12 @@ export const useSectionTwoData = () => {
 
             // set to loading
             setLoading(true)
-            // get data sets and check that each data element is associated with only one period type
-            const dataSetResponse = await engine.query(dataSetInformation, {
-                variables: { dataSets: variables.dataSets },
-            })
-
+            // check each data element is associated with only one period type
             const validDataElementPeriodTypes = getValidDataElementPeriodTypes({
                 dataElements: Object.keys(
                     variables.mappedConfiguration.dataElementsAndIndicators
                 ),
-                dataSetTypes: dataSetResponse?.dataSets?.dataSets,
+                dataSetsInfo: variables.mappedConfiguration?.dataSets,
                 mappedConfiguration: variables.mappedConfiguration,
             })
 

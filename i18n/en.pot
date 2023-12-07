@@ -183,6 +183,12 @@ msgstr "Configurations"
 msgid "Generate report"
 msgstr "Generate report"
 
+msgid "Printing..."
+msgstr "Printing..."
+
+msgid "Print"
+msgstr "Print"
+
 msgid "No access"
 msgstr "No access"
 
