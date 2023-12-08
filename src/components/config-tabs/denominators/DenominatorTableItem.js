@@ -84,60 +84,57 @@ const DeleteDenominatorButton = ({ denominator }) => {
         [dispatch, denominator.code]
     )
 
-    // Check to see if this numerator is used in any other metadata same as it is done for numerators
+    // Check to see if this denominator is used in any other metadata same as it is done for numerators
     // denominator relations or external relations and warn the user if so
     /**
      * //TODO: this is a copy of the same function in NumeratorTableItem.js,
      * so it should be refactored into a shared function and use switch statements to determine which metadata to check
      *  */
-    const validateDenominatorDeletion = useCallback(
-        (object) => {
-            const associatedDenominatorRelations = []
-            configurations.denominatorRelations.forEach((relation) => {
-                const { A, B, name } = relation
-                if (A === denominator.code || B === denominator.code) {
-                    associatedDenominatorRelations.push(name)
-                }
-            })
-
-            const associatedExternalRelations = []
-            configurations.externalRelations.forEach((relation) => {
-                if (relation.denominator === denominator.code) {
-                    associatedExternalRelations.push(relation.name)
-                }
-            })
-
-            if (
-                associatedDenominatorRelations.length === 0 &&
-                associatedExternalRelations.length === 0
-            ) {
-                // then no problem; this deletion is valid
-                return true
+    const validateDenominatorDeletion = useCallback(() => {
+        const associatedDenominatorRelations = []
+        configurations.denominatorRelations.forEach((relation) => {
+            const { A, B, name } = relation
+            if (A === denominator.code || B === denominator.code) {
+                associatedDenominatorRelations.push(name)
             }
+        })
 
-            // Otherwise, warn the user
-            const numRelsText =
-                associatedDenominatorRelations.length > 0
-                    ? '\nDenominator relations: ' +
-                      associatedDenominatorRelations.join(', ') +
-                      '.'
-                    : ''
-            const extRelsText =
-                associatedExternalRelations.length > 0
-                    ? '\nExternal relations: ' +
-                      associatedExternalRelations.join(', ') +
-                      '.'
-                    : ''
-            const message =
-                `Can't delete the denominator "${denominator.name}" because it's ` +
-                `associated with the following metadata.` +
-                numRelsText +
-                extRelsText
-            show({ message })
-            return false
-        },
-        [configurations, denominator, show]
-    )
+        const associatedExternalRelations = []
+        configurations.externalRelations.forEach((relation) => {
+            if (relation.denominator === denominator.code) {
+                associatedExternalRelations.push(relation.name)
+            }
+        })
+
+        if (
+            associatedDenominatorRelations.length === 0 &&
+            associatedExternalRelations.length === 0
+        ) {
+            // then no problem; this deletion is valid
+            return true
+        }
+
+        // Otherwise, warn the user
+        const numRelsText =
+            associatedDenominatorRelations.length > 0
+                ? '\nDenominator relations: ' +
+                  associatedDenominatorRelations.join(', ') +
+                  '.'
+                : ''
+        const extRelsText =
+            associatedExternalRelations.length > 0
+                ? '\nExternal relations: ' +
+                  associatedExternalRelations.join(', ') +
+                  '.'
+                : ''
+        const message =
+            `Can't delete the denominator "${denominator.name}" because it's ` +
+            `associated with the following metadata.` +
+            numRelsText +
+            extRelsText
+        show({ message })
+        return false
+    }, [configurations, denominator, show])
 
     return (
         <>
@@ -145,7 +142,7 @@ const DeleteDenominatorButton = ({ denominator }) => {
                 small
                 destructive
                 onClick={() => {
-                    if (validateDenominatorDeletion('denominator')) {
+                    if (validateDenominatorDeletion()) {
                         openModal()
                     }
                 }}
