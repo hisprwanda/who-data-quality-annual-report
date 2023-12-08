@@ -170,7 +170,6 @@ export function EditNumeratorModal({ numeratorCode, onSave, onClose }) {
             initialValues={formInitialValues}
             // not subcribing to `values` prevents rerendering the entire form on every input change
             subscription={{ submitting: true }}
-            validateOnBlur // saves a few computations
         >
             {({ handleSubmit }) => (
                 <Modal onClose={onClose} position="middle">
