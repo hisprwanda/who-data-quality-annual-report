@@ -40,9 +40,18 @@ export const VariableSelect = () => {
     const onChange = dataElementOperandIDField.input.onChange
     const initialValue = dataElementOperandIDField.meta.initial
 
-    const initialOptions = initialValue
-        ? [{ value: initialValue, label: dataItemNames.get(initialValue) }]
-        : null
+    const initialOptions = useMemo(
+        () =>
+            initialValue
+                ? [
+                      {
+                          value: initialValue,
+                          label: dataItemNames.get(initialValue),
+                      },
+                  ]
+                : null,
+        [initialValue, dataItemNames]
+    )
     const [options, setOptions] = useState(initialOptions)
 
     useEffect(() => {
@@ -65,11 +74,14 @@ export const VariableSelect = () => {
                     ({ id, displayName }) => ({ label: displayName, value: id })
                 )
                 setOptions(newOptions)
+                // there's only one option; go ahead and set it
+                if (newOptions.length === 1) {
+                    onChange(newOptions[0].value)
+                }
             })
-        } else {
+        } else { // dataElementType === DETAILS
             const { displayName, id } = dataItem
             setOptions([{ label: displayName, value: id }])
-            // there's only one option; go ahead and set it
             onChange(id)
         }
     }, [

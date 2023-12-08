@@ -104,7 +104,8 @@ export function EditNumeratorModal({ numeratorCode, onSave, onClose }) {
             numeratorToEdit.code
         ).map((group) => group.code)
 
-        const { dataID, dataSetID } = numeratorToEdit
+        const { dataID, dataSetID, dataElementOperandID } = numeratorToEdit
+
         const dataElementType = /\w{11}\.\w{11}/.test(dataID) ? DETAILS : TOTALS
 
         const dataItem = dataID
@@ -124,6 +125,17 @@ export function EditNumeratorModal({ numeratorCode, onSave, onClose }) {
             }
         }
 
+        // legacy configurations sometimes have DE operand IDs with the default
+        // COC ID, which can be problematic. We can test for that since the
+        // dataElementOperands response for dataItemNames WON'T include the ID.
+        // If the ID can't be found in dataItemNames, we cut off the COC ID for
+        // the form
+        const resolvedDataElementOperandID = dataItemNames.get(
+            dataElementOperandID
+        )
+            ? dataElementOperandID
+            : dataElementOperandID.substring(0, 11)
+
         // properties picked out here for clarity and to keep form state clean
         return {
             name: numeratorToEdit.name,
@@ -136,7 +148,7 @@ export function EditNumeratorModal({ numeratorCode, onSave, onClose }) {
             dataItemGroupID: numeratorToEdit.dataItemGroupID,
             dataItem,
             dataSets,
-            dataElementOperandID: numeratorToEdit.dataElementOperandID,
+            dataElementOperandID: resolvedDataElementOperandID,
         }
     }, [numeratorToEdit, dataItemNames, configurations])
 
