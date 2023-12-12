@@ -1,0 +1,13 @@
+.mainContainer {
+    margin-top: 24px;
+}
+
+.radiosContainer {
+    display: flex;
+    padding: 4px 0px;
+    gap: 24px;
+}
+
+.formRow {
+    margin-bottom: 12px;
+}

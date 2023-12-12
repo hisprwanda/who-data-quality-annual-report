@@ -12,3 +12,9 @@
 .noticeBoxContainer {
     margin: var(--spacers-dp16);
 }
+
+@media print {
+    .hideInPrint {
+        display: none !important; /* `important` overrides `flex` */
+    }
+}

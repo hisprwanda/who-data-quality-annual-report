@@ -5,17 +5,26 @@ msgstr ""
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1)\n"
-"POT-Creation-Date: 2023-11-22T13:51:30.672Z\n"
-"PO-Revision-Date: 2023-11-22T13:51:30.672Z\n"
+"POT-Creation-Date: 2023-12-07T13:15:05.686Z\n"
+"PO-Revision-Date: 2023-12-07T13:15:05.686Z\n"
 
-msgid "Select period(s)"
-msgstr "Select period(s)"
+msgid "[Core]"
+msgstr "[Core]"
 
-msgid "Cancel"
-msgstr "Cancel"
+msgid "Data Quality Annual Report"
+msgstr "Data Quality Annual Report"
 
-msgid "Save"
-msgstr "Save"
+msgid "Data: "
+msgstr "Data: "
+
+msgid "Organisation unit: "
+msgstr "Organisation unit: "
+
+msgid "Period: "
+msgstr "Period: "
+
+msgid "{{period}}; {{years}} years for reference"
+msgstr "{{period}}; {{years}} years for reference"
 
 msgid "There is no data for this {{sectionType}}"
 msgstr "There is no data for this {{sectionType}}"
@@ -31,6 +40,23 @@ msgstr "Something went wrong when retrieving data"
 
 msgid "The Data Quality Annual Report has not been configured"
 msgstr "The Data Quality Annual Report has not been configured"
+
+msgid ""
+"Could not calculate overall score. Calculations at {{subOrgUnitLevelName}} "
+"level were skipped."
+msgstr ""
+"Could not calculate overall score. Calculations at {{subOrgUnitLevelName}} "
+"level were skipped."
+
+msgid "Could not calculate score for the following: {{invalidSubOrgUnitNames}}."
+msgstr "Could not calculate score for the following: {{invalidSubOrgUnitNames}}."
+
+msgid ""
+"The requested level for this relation ({{subOrgUnitLevelName}}) is not "
+"retrievable."
+msgstr ""
+"The requested level for this relation ({{subOrgUnitLevelName}}) is not "
+"retrievable."
 
 msgid "No data to display"
 msgstr "No data to display"
@@ -67,6 +93,12 @@ msgstr "Survey"
 
 msgid "Survey: {{survey}}%<br/>Routine: {{routine}}%"
 msgstr "Survey: {{survey}}%<br/>Routine: {{routine}}%"
+
+msgid "Not available"
+msgstr "Not available"
+
+msgid "Cannot be calculated"
+msgstr "Cannot be calculated"
 
 msgid "Exit configurations"
 msgstr "Exit configurations"
@@ -108,9 +140,6 @@ msgid ""
 msgstr ""
 "Group, Organisation unit, Organisation unit level, period, and comparison "
 "periods must all be selected before a report can be generated."
-
-msgid "[Core]"
-msgstr "[Core]"
 
 msgid "Group"
 msgstr "Group"
@@ -168,6 +197,12 @@ msgstr "Configurations"
 
 msgid "Generate report"
 msgstr "Generate report"
+
+msgid "Printing..."
+msgstr "Printing..."
+
+msgid "Print"
+msgstr "Print"
 
 msgid "No access"
 msgstr "No access"

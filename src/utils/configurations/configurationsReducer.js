@@ -18,6 +18,12 @@ export const DELETE_NUMERATOR_RELATION = 'DELETE_NUMERATOR_RELATION'
 export const CREATE_DENOMINATOR_RELATION = 'CREATE_DENOMINATOR_RELATION'
 export const UPDATE_DENOMINATOR_RELATION = 'UPDATE_DENOMINATOR_RELATION'
 export const DELETE_DENOMINATOR_RELATION = 'DELETE_DENOMINATOR_RELATION'
+export const CREATE_DENOMINATOR = 'CREATE_DENOMINATOR'
+export const UPDATE_DENOMINATOR = 'UPDATE_DENOMINATOR'
+export const DELETE_DENOMINATOR = 'DELETE_DENOMINATOR'
+export const CREATE_EXTERNAL_RELATION = 'CREATE_EXTERNAL_RELATION'
+export const UPDATE_EXTERNAL_RELATION = 'UPDATE_EXTERNAL_RELATION'
+export const DELETE_EXTERNAL_RELATION = 'DELETE_EXTERNAL_RELATION'
 
 const DEFAULT_NUMERATOR_QUALITY_PARAMETERS = {
     moderateOutlier: 2,
@@ -453,6 +459,124 @@ export function configurationsReducer(configurations, { type, payload }) {
                 denominatorRelations: [
                     ...prevDenominatorRelations.slice(0, targetIndex),
                     ...prevDenominatorRelations.slice(targetIndex + 1),
+                ],
+                lastUpdated: getISOTimestamp(),
+            }
+            return newConfigurations
+        }
+
+        // Denominators
+        case CREATE_DENOMINATOR: {
+            const prevDenominators = configurations.denominators
+            const nextAvailableCode = getNextAvailableCode(
+                prevDenominators,
+                'P'
+            )
+            const newDenominatorData = {
+                ...payload.newDenominatorData,
+                code: nextAvailableCode,
+            }
+            const newConfigurations = {
+                ...configurations,
+                denominators: [...prevDenominators, newDenominatorData],
+                lastUpdated: getISOTimestamp(),
+            }
+            return newConfigurations
+        }
+
+        case UPDATE_DENOMINATOR: {
+            const { code, updatedDenominatorData } = payload
+            const prevDenominators = configurations.denominators
+            const targetIndex = prevDenominators.findIndex(
+                (dn) => dn.code === code
+            )
+            const prevDenominator = prevDenominators[targetIndex]
+            const updatedDenominator = {
+                ...prevDenominator,
+                ...updatedDenominatorData,
+            }
+
+            const newConfigurations = {
+                ...configurations,
+                denominators: [
+                    ...prevDenominators.slice(0, targetIndex),
+                    updatedDenominator,
+                    ...prevDenominators.slice(targetIndex + 1),
+                ],
+                lastUpdated: getISOTimestamp(),
+            }
+            return newConfigurations
+        }
+
+        case DELETE_DENOMINATOR: {
+            const { code } = payload
+            const prevDenominators = configurations.denominators
+            const targetIndex = prevDenominators.findIndex(
+                (dn) => dn.code === code
+            )
+            const newConfigurations = {
+                ...configurations,
+                denominators: [
+                    ...prevDenominators.slice(0, targetIndex),
+                    ...prevDenominators.slice(targetIndex + 1),
+                ],
+                lastUpdated: getISOTimestamp(),
+            }
+            return newConfigurations
+        }
+
+        // External relations
+
+        case CREATE_EXTERNAL_RELATION: {
+            const prevExternalRelations = configurations.externalRelations
+            const nextAvailableCode = getNextAvailableCode(
+                prevExternalRelations,
+                'ER'
+            )
+            const newExternalRelation = {
+                ...payload.newExternalRelation,
+                code: nextAvailableCode,
+            }
+            const newConfigurations = {
+                ...configurations,
+                externalRelations: [
+                    ...prevExternalRelations,
+                    newExternalRelation,
+                ],
+                lastUpdated: getISOTimestamp(),
+            }
+            return newConfigurations
+        }
+
+        case UPDATE_EXTERNAL_RELATION: {
+            const { updatedExternalRelation, code } = payload
+            const prevExternalRelations = configurations.externalRelations
+            const targetIndex = prevExternalRelations.findIndex(
+                (er) => er.code === code
+            )
+            const newConfigurations = {
+                ...configurations,
+                externalRelations: [
+                    ...prevExternalRelations.slice(0, targetIndex),
+                    updatedExternalRelation,
+                    ...prevExternalRelations.slice(targetIndex + 1),
+                ],
+                lastUpdated: getISOTimestamp(),
+            }
+            return newConfigurations
+        }
+
+        case DELETE_EXTERNAL_RELATION: {
+            const { code } = payload
+            const prevExternalRelations = configurations.externalRelations
+            const targetIndex = prevExternalRelations.findIndex(
+                (er) => er.code === code
+            )
+            const newConfigurations = {
+                ...configurations,
+                externalRelations: [
+                    ...prevExternalRelations.slice(0, targetIndex),
+                    ...prevExternalRelations.slice(targetIndex + 1),
                 ],
                 lastUpdated: getISOTimestamp(),
             }
