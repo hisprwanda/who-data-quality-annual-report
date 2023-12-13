@@ -118,9 +118,10 @@ export function ExternalDataComparisonTableItem({
         if (ouLevelData) {
             const level = ouLevelData.orgUnitLevels.organisationUnitLevels.find(
                 (level) =>
-                    level.level.toString() === externalRelation.level.toString()
+                    level.level?.toString() ===
+                    externalRelation.level?.toString()
             )
-            return level.displayName
+            return level?.displayName
         } else {
             return ''
         }

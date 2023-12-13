@@ -10,9 +10,9 @@ export const NumeratorSelect = () => {
 
     // filter numerators that have data IDs & sort alphabetically
     const numeratorOptions = React.useMemo(() => {
-        const numeratorsWithDataIds = configurations.numerators
-            .filter((numerator) => numerator.dataID != null)
-            .sort((a, b) => a.name.localeCompare(b.name))
+        const numeratorsWithDataIds = [...configurations.numerators].sort(
+            (a, b) => a.name?.localeCompare(b.name)
+        )
         return numeratorsWithDataIds.map(({ name, code }) => ({
             label: name,
             value: code,

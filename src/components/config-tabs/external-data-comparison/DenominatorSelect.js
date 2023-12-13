@@ -11,11 +11,11 @@ export const DenominatorSelect = () => {
     // filter denominators that have data IDs & sort alphabetically
 
     const denominatorOptions = React.useMemo(() => {
-        const denominatorsWithDataIds = configurations.denominators
-            .filter((denominator) => denominator.dataID != null)
-            .sort((a, b) => a.name.localeCompare(b.name))
+        const denominatorsWithDataIds = [...configurations.denominators].sort(
+            (a, b) => a.name?.localeCompare(b.name)
+        )
         return denominatorsWithDataIds.map(({ name, code }) => ({
-            label: name,
+            label: name ?? code,
             value: code,
         }))
     }, [configurations.denominators])
