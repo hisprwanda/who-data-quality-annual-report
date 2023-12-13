@@ -18,7 +18,7 @@ export const getDenominatorRelations = (denominators, code) => {
         (denominator) => denominator.code == code
     )
     if (denominatorObj) {
-        return denominatorObj.name
+        return denominatorObj.name ?? denominatorObj.code
     }
 }
 

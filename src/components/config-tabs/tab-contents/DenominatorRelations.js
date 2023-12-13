@@ -366,7 +366,8 @@ export const DenominatorRelations = ({ toggleState }) => {
                                                           ) => (
                                                               <SingleSelectOption
                                                                   label={
-                                                                      denominator.name
+                                                                      denominator.name ??
+                                                                      denominator.code
                                                                   }
                                                                   value={
                                                                       denominator.code
@@ -408,7 +409,8 @@ export const DenominatorRelations = ({ toggleState }) => {
                                                           ) => (
                                                               <SingleSelectOption
                                                                   label={
-                                                                      denominator.name
+                                                                      denominator.name ??
+                                                                      denominator.code
                                                                   }
                                                                   value={
                                                                       denominator.code

@@ -8,7 +8,6 @@ import {
     UPDATE_DENOMINATOR,
     useConfigurations,
     useConfigurationsDispatch,
-    useDataItemNames,
 } from '../../../utils/index.js'
 import { ConfirmationModal } from '../ConfirmationModal.js'
 import { EditDenominatorModal } from './EditDenominatorModal.js'
@@ -69,7 +68,6 @@ const DeleteDenominatorButton = ({ denominator }) => {
     const [confirmationModalOpen, setConfirmationModalOpen] = useState(false)
     const configurations = useConfigurations()
     const { show } = useAlert(({ message }) => message, { critical: true })
-    const dataItemNames = useDataItemNames()
     const dispatch = useConfigurationsDispatch()
 
     const openModal = useCallback(() => setConfirmationModalOpen(true), [])
@@ -152,9 +150,9 @@ const DeleteDenominatorButton = ({ denominator }) => {
             {confirmationModalOpen && (
                 <ConfirmationModal
                     title="Delete denominator"
-                    text={`Are you sure you want to delete ${dataItemNames.get(
-                        denominator.dataID
-                    )}?`}
+                    text={`Are you sure you want to delete ${
+                        denominator.name ?? denominator.code
+                    }?`}
                     action="Delete"
                     destructive
                     onClose={closeModal}
@@ -169,15 +167,13 @@ DeleteDenominatorButton.propTypes = {
 }
 
 export const DenominatorTableItem = ({ denominator }) => {
-    const dataItemNames = useDataItemNames()
-
     const denominatorType = React.useMemo(() => {
         return getDenominatorType(denominator.type).label
     }, [denominator])
 
     return (
         <TableRow>
-            <TableCell dense>{dataItemNames.get(denominator.dataID)}</TableCell>
+            <TableCell dense>{denominator.name ?? denominator.code}</TableCell>
             <TableCell dense>{denominatorType}</TableCell>
 
             <TableCell dense>

@@ -69,10 +69,7 @@ export const Denominators = () => {
                 <Table>
                     <TableHead>
                         <TableRowHead>
-                            <TableCellHead>
-                                {' '}
-                                Data element/indicator{' '}
-                            </TableCellHead>
+                            <TableCellHead>Name</TableCellHead>
                             <TableCellHead>Type</TableCellHead>
                             <TableCellHead>Actions</TableCellHead>
                         </TableRowHead>
