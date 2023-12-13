@@ -1,3 +1,4 @@
+import { useAlert } from '@dhis2/app-runtime'
 import {
     Button,
     Table,
@@ -15,8 +16,7 @@ import {
     hasValue,
 } from '@dhis2/ui'
 import PropTypes from 'prop-types'
-import React from 'react'
-import { validateUniqueConfigObjectName } from '../../../utils/configurations/validateUniqueConfigObjectName.js'
+import React, { useCallback } from 'react'
 import { useConfigurations } from '../../../utils/index.js'
 
 const { Form, Field } = ReactFinalForm
@@ -28,6 +28,8 @@ const DEFAULT_FORM_VALUES = {
 
 export function EditGroupModal({ groupToEdit, onSave, onClose }) {
     const configurations = useConfigurations()
+    const { show } = useAlert(({ message }) => message, { critical: true })
+
     const membersOptions = React.useMemo(
         () =>
             configurations.numerators
@@ -39,24 +41,42 @@ export function EditGroupModal({ groupToEdit, onSave, onClose }) {
         [configurations.numerators]
     )
 
+    /**
+     * Returns true if the newName is unique accross groups names & false if not
+     */
+    const validateUniqueGroupName = useCallback(
+        (newName) => {
+            // check if there are any groups
+            if (!configurations.groups || configurations.groups.length === 0) {
+                return true
+            }
+            // check if the new group name is unique
+            const existingGroup = configurations.groups.find(
+                (group) => group.name.toLowerCase() === newName.toLowerCase()
+            )
+            if (existingGroup) {
+                return false
+            }
+            return true
+        },
+        [configurations.groups]
+    )
+
     return (
         <Form
             onSubmit={(values) => {
                 if (onSave) {
-                    // validate that the group name is unique while creating a new group
-                    if (!groupToEdit) {
-                        const isUnique = validateUniqueConfigObjectName(
-                            values.name,
-                            'groups',
-                            configurations
-                        )
-                        if (isUnique) {
+                    // validate that the group name is unique while creating or editing group
+                    // (if we are editing an existing group, we need to check if the groupToEdit name has been changed, if so, we need to check if the new name is unique)
+                    if (!groupToEdit || groupToEdit.name !== values.name) {
+                        if (validateUniqueGroupName(values.name)) {
                             onSave(values)
                         } else {
-                            alert('Group name is not unique')
+                            // warn the user that the group name is not unique
+                            const message = `A group with the name "${values.name}" already exists. Please choose a different name.`
+                            show({ message })
                         }
                     } else {
-                        // if we are not editing an existing group, no need to check if the name is unique
                         onSave(values)
                     }
                 } else {
