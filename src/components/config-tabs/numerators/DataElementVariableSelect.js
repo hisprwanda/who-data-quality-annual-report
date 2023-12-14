@@ -46,7 +46,9 @@ export const VariableSelect = () => {
                 ? [
                       {
                           value: initialValue,
-                          label: dataItemNames.get(initialValue),
+                          // If the name isn't available in dataItemNames yet,
+                          // it will get populated by the useEffect logic soon
+                          label: dataItemNames.get(initialValue) || '',
                       },
                   ]
                 : null,

@@ -4,6 +4,7 @@ import React from 'react'
 import ConfigTabs from '../components/config-tabs/ConfigTabs.js'
 import {
     DataItemNamesProvider,
+    DefaultCocIDProvider,
     useConfigurations,
     useUserContext,
 } from '../utils/index.js'
@@ -26,10 +27,12 @@ export const Configurations = () => {
     }
 
     return (
-        <DataItemNamesProvider>
-            <div className={styles.configurationsContainer}>
-                <ConfigTabs configurations={configurations} />
-            </div>
-        </DataItemNamesProvider>
+        <DefaultCocIDProvider>
+            <DataItemNamesProvider>
+                <div className={styles.configurationsContainer}>
+                    <ConfigTabs configurations={configurations} />
+                </div>
+            </DataItemNamesProvider>
+        </DefaultCocIDProvider>
     )
 }

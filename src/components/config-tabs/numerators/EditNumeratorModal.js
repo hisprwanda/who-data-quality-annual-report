@@ -18,8 +18,13 @@ import {
 } from '@dhis2/ui'
 import PropTypes from 'prop-types'
 import React, { useMemo, useCallback } from 'react'
-import { useConfigurations, useDataItemNames } from '../../../utils/index.js'
+import {
+    useConfigurations,
+    useDataItemNames,
+    useDefaultCocID,
+} from '../../../utils/index.js'
 import { getNumeratorMemberGroups } from '../../../utils/numeratorsMetadataData.js'
+import { LoadingSpinner } from '../../loading-spinner/LoadingSpinner.js'
 import { DATA_ELEMENT, DETAILS, INDICATOR, TOTALS } from './constants.js'
 import { DataMappingFormSection } from './DataMappingForm.js'
 import styles from './EditNumeratorModal.module.css'
@@ -62,6 +67,7 @@ const getDataMappingFormValues = ({
     numeratorToEdit,
     dataItemNames,
     configurations,
+    defaultCocID,
 }) => {
     const { dataID, dataSetID, dataElementOperandID } = numeratorToEdit
 
@@ -108,13 +114,12 @@ const getDataMappingFormValues = ({
     }
 
     // legacy configurations sometimes have DE operand IDs with the default
-    // COC ID, which can be problematic. We can test for that since the
-    // dataElementOperands response for dataItemNames WON'T include the ID.
-    // If the ID can't be found in dataItemNames, we cut off the COC ID for
-    // the form
-    const resolvedDataElementOperandID = dataItemNames.get(dataElementOperandID)
-        ? dataElementOperandID
-        : dataElementOperandID.substring(0, 11)
+    // COC ID, which can be problematic
+    const resolvedDataElementOperandID = dataElementOperandID.endsWith(
+        defaultCocID
+    )
+        ? dataElementOperandID.substring(0, 11)
+        : dataElementOperandID
 
     return {
         dataType,
@@ -140,6 +145,7 @@ const getDataMappingFormValues = ({
 export function EditNumeratorModal({ numeratorCode, onSave, onClose }) {
     const configurations = useConfigurations()
     const dataItemNames = useDataItemNames()
+    const { defaultCocID, loading } = useDefaultCocID()
 
     const numeratorGroupOptions = useMemo(
         () =>
@@ -163,7 +169,7 @@ export function EditNumeratorModal({ numeratorCode, onSave, onClose }) {
     )
 
     const formInitialValues = useMemo(() => {
-        if (!numeratorToEdit) {
+        if (!numeratorToEdit || !defaultCocID) {
             return DEFAULT_FORM_VALUES
         }
 
@@ -177,6 +183,7 @@ export function EditNumeratorModal({ numeratorCode, onSave, onClose }) {
             numeratorToEdit,
             dataItemNames,
             configurations,
+            defaultCocID,
         })
 
         return {
@@ -186,7 +193,7 @@ export function EditNumeratorModal({ numeratorCode, onSave, onClose }) {
             core: numeratorToEdit.core,
             ...dataMappingValues,
         }
-    }, [numeratorToEdit, dataItemNames, configurations])
+    }, [numeratorToEdit, dataItemNames, configurations, defaultCocID])
 
     const onSubmit = useCallback(
         (values) => {
@@ -211,6 +218,12 @@ export function EditNumeratorModal({ numeratorCode, onSave, onClose }) {
         },
         [onSave, onClose]
     )
+
+    // defaultCocID will have fetched upon opening the configurations page,
+    // so it shouldn't usually be loading at this point
+    if (loading) {
+        return <LoadingSpinner />
+    }
 
     return (
         <Form
