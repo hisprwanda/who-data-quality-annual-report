@@ -99,7 +99,7 @@ export const useSetUpConfigurations = (setConfigurations) => {
             // otherwise, we can set up the default configurations
             console.log('No previous configurations found; setting up defaults')
             // (currently these defaults are also from the old app)
-            newConfigurations = convertOldConfigToNew(defaultConfigurations)
+            newConfigurations = defaultConfigurations
         }
 
         // finally, send mutation of new configurations to set up data store
