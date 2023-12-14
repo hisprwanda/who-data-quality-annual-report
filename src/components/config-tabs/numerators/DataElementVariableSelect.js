@@ -79,7 +79,8 @@ export const VariableSelect = () => {
                     onChange(newOptions[0].value)
                 }
             })
-        } else { // dataElementType === DETAILS
+        } else {
+            // dataElementType === DETAILS
             const { displayName, id } = dataItem
             setOptions([{ label: displayName, value: id }])
             onChange(id)

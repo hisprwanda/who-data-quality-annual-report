@@ -20,7 +20,7 @@ import PropTypes from 'prop-types'
 import React, { useMemo, useCallback } from 'react'
 import { useConfigurations, useDataItemNames } from '../../../utils/index.js'
 import { getNumeratorMemberGroups } from '../../../utils/numeratorsMetadataData.js'
-import { DATA_ELEMENT, DETAILS, TOTALS } from './constants.js'
+import { DATA_ELEMENT, DETAILS, INDICATOR, TOTALS } from './constants.js'
 import { DataMappingFormSection } from './DataMappingForm.js'
 import styles from './EditNumeratorModal.module.css'
 
@@ -35,7 +35,7 @@ const DEFAULT_FORM_VALUES = {
 const CurrentMappingInfo = () => {
     const {
         meta: { initial: initialDataItem },
-    } = useField('dataItem', { subscription: { initial: true } })
+    } = useField('prevDataItem', { subscription: { initial: true } })
 
     if (!initialDataItem) {
         return null
@@ -55,6 +55,75 @@ const mapDataSetIDToFormItem = (id, configurations) => {
         // this includes a fallback: the dataSet SHOULD be found, but showing
         // the ID can be helpful during dev and debugging
         displayName: dataSet?.name || `dataSetID:${id}`,
+    }
+}
+
+const getDataMappingFormValues = ({
+    numeratorToEdit,
+    dataItemNames,
+    configurations,
+}) => {
+    const { dataID, dataSetID, dataElementOperandID } = numeratorToEdit
+
+    if (!dataID) {
+        // the numerator isn't mapped yet
+        return DEFAULT_FORM_VALUES
+    }
+
+    // If this is a data element, the dataID and dataElementOperand ID will
+    // share the dataElement ID. Otherwise, it's an indicator
+    const dataType =
+        dataID.substring(0, 11) === dataElementOperandID.substring(0, 11)
+            ? DATA_ELEMENT
+            : INDICATOR
+
+    // both data elements and indicators will want to know the data item name
+    const dataItem = dataID
+        ? { id: dataID, displayName: dataItemNames.get(dataID) }
+        : null
+
+    if (dataType === INDICATOR) {
+        // todo: support indicator mapping too (RWDQA-80)
+        return {
+            // used for "Currently mapped to: " line:
+            prevDataItem: dataItem,
+            ...DEFAULT_FORM_VALUES,
+        }
+    }
+
+    // Handle data element mapping:
+    const dataElementType = /\w{11}\.\w{11}/.test(dataID) ? DETAILS : TOTALS
+
+    let dataSets = null
+    if (dataSetID && dataSetID.length > 0) {
+        // dataSetID could be an array or a string
+        if (Array.isArray(dataSetID)) {
+            dataSets = dataSetID.map((id) =>
+                mapDataSetIDToFormItem(id, configurations)
+            )
+        } else {
+            // note that this still returns an array
+            dataSets = [mapDataSetIDToFormItem(dataSetID, configurations)]
+        }
+    }
+
+    // legacy configurations sometimes have DE operand IDs with the default
+    // COC ID, which can be problematic. We can test for that since the
+    // dataElementOperands response for dataItemNames WON'T include the ID.
+    // If the ID can't be found in dataItemNames, we cut off the COC ID for
+    // the form
+    const resolvedDataElementOperandID = dataItemNames.get(dataElementOperandID)
+        ? dataElementOperandID
+        : dataElementOperandID.substring(0, 11)
+
+    return {
+        dataType,
+        dataElementType,
+        dataItemGroupID: numeratorToEdit.dataItemGroupID,
+        dataItem,
+        prevDataItem: dataItem,
+        dataSets,
+        dataElementOperandID: resolvedDataElementOperandID,
     }
 }
 
@@ -104,51 +173,18 @@ export function EditNumeratorModal({ numeratorCode, onSave, onClose }) {
             numeratorToEdit.code
         ).map((group) => group.code)
 
-        const { dataID, dataSetID, dataElementOperandID } = numeratorToEdit
+        const dataMappingValues = getDataMappingFormValues({
+            numeratorToEdit,
+            dataItemNames,
+            configurations,
+        })
 
-        const dataElementType = /\w{11}\.\w{11}/.test(dataID) ? DETAILS : TOTALS
-
-        const dataItem = dataID
-            ? { id: dataID, displayName: dataItemNames.get(dataID) }
-            : null
-
-        let dataSets = null
-        if (dataSetID && dataSetID.length > 0) {
-            // dataSetID could be an array or a string
-            if (Array.isArray(dataSetID)) {
-                dataSets = dataSetID.map((id) =>
-                    mapDataSetIDToFormItem(id, configurations)
-                )
-            } else {
-                // note that this still returns an array
-                dataSets = [mapDataSetIDToFormItem(dataSetID, configurations)]
-            }
-        }
-
-        // legacy configurations sometimes have DE operand IDs with the default
-        // COC ID, which can be problematic. We can test for that since the
-        // dataElementOperands response for dataItemNames WON'T include the ID.
-        // If the ID can't be found in dataItemNames, we cut off the COC ID for
-        // the form
-        const resolvedDataElementOperandID = dataItemNames.get(
-            dataElementOperandID
-        )
-            ? dataElementOperandID
-            : dataElementOperandID.substring(0, 11)
-
-        // properties picked out here for clarity and to keep form state clean
         return {
             name: numeratorToEdit.name,
             definition: numeratorToEdit.definition,
             groups,
             core: numeratorToEdit.core,
-            // data mapping
-            dataType: DATA_ELEMENT, // todo: adapt to indicators
-            dataElementType,
-            dataItemGroupID: numeratorToEdit.dataItemGroupID,
-            dataItem,
-            dataSets,
-            dataElementOperandID: resolvedDataElementOperandID,
+            ...dataMappingValues,
         }
     }, [numeratorToEdit, dataItemNames, configurations])
 
