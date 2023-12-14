@@ -1,16 +1,11 @@
 import { useDataEngine } from '@dhis2/app-runtime'
 import { useState, useEffect, useCallback } from 'react'
 import defaultConfigurations from '../../data/metadata.json'
-
-// If in a dev environment, use a custom data store key if it's set.
-// Otherwise, use "configurations" (if none is set or in production)
-const DATASTORE_KEY =
-    (process.env.NODE_ENV === 'development' &&
-        process.env.REACT_APP_DHIS2_APP_DATASTORE_KEY) ||
-    'configurations'
-export const DATASTORE_ID = `who-dqa/${DATASTORE_KEY}`
-
-const OLD_APP_DATASTORE_ID = 'dataQualityTool/settings'
+import {
+    DATASTORE_ID,
+    DATASTORE_KEY,
+    OLD_APP_DATASTORE_ID,
+} from './constants.js'
 
 const CONFIGURATIONS_QUERY = {
     configurations: {
