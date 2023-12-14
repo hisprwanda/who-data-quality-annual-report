@@ -3,6 +3,7 @@ import { getConfigObjectsForAnalytics } from '../../utils/getConfigObjectsForAna
 export const getReportParameters = ({
     groupID,
     orgUnitID,
+    orgUnitName,
     orgUnitLevel,
     orgUnitLevels,
     boundaryOrgUnitLevel,
@@ -32,6 +33,7 @@ export const getReportParameters = ({
 
     const reportParameters = {
         orgUnits: [orgUnitID],
+        orgUnitName: orgUnitName,
         // selected org unit level info
         orgUnitLevel: `LEVEL-${orgUnitLevel.level}`,
         orgUnitLevelNumber: orgUnitLevel.level,

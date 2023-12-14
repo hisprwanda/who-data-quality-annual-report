@@ -1,1 +1,1 @@
-export {Denominators} from './Denominators.js'
+export { Denominators } from './Denominators.js'

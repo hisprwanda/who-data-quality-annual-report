@@ -1,0 +1,22 @@
+.title {
+    margin: 0 0 4px;
+}
+
+.parametersContainer {
+    margin-bottom: 24px;
+}
+
+.parameterLine {
+    margin: 0;
+    line-height: 17px;
+}
+
+.showOnlyInPrint {
+    display: none;
+}
+
+@media print {
+    .showOnlyInPrint {
+        display: block;
+    }
+}

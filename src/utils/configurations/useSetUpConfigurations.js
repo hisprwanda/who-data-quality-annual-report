@@ -1,6 +1,6 @@
 import { useDataEngine } from '@dhis2/app-runtime'
 import { useState, useEffect, useCallback } from 'react'
-import defaultConfigurations from '../../data/metadata.json'
+import defaultConfigurations from '../../data/defaultConfigurations.json'
 import {
     DATASTORE_ID,
     DATASTORE_KEY,

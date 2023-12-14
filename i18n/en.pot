@@ -8,14 +8,23 @@ msgstr ""
 "POT-Creation-Date: 2023-12-13T11:14:15.701Z\n"
 "PO-Revision-Date: 2023-12-13T11:14:15.701Z\n"
 
-msgid "Select period(s)"
-msgstr "Select period(s)"
+msgid "[Core]"
+msgstr "[Core]"
 
-msgid "Cancel"
-msgstr "Cancel"
+msgid "Data Quality Annual Report"
+msgstr "Data Quality Annual Report"
 
-msgid "Save"
-msgstr "Save"
+msgid "Data: "
+msgstr "Data: "
+
+msgid "Organisation unit: "
+msgstr "Organisation unit: "
+
+msgid "Period: "
+msgstr "Period: "
+
+msgid "{{period}}; {{years}} years for reference"
+msgstr "{{period}}; {{years}} years for reference"
 
 msgid "There is no data for this {{sectionType}}"
 msgstr "There is no data for this {{sectionType}}"
@@ -129,9 +138,6 @@ msgstr ""
 "Group, Organisation unit, Organisation unit level, period, and comparison "
 "periods must all be selected before a report can be generated."
 
-msgid "[Core]"
-msgstr "[Core]"
-
 msgid "Group"
 msgstr "Group"
 
@@ -188,6 +194,12 @@ msgstr "Configurations"
 
 msgid "Generate report"
 msgstr "Generate report"
+
+msgid "Printing..."
+msgstr "Printing..."
+
+msgid "Print"
+msgstr "Print"
 
 msgid "No access"
 msgstr "No access"
