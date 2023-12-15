@@ -5,8 +5,8 @@ msgstr ""
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1)\n"
-"POT-Creation-Date: 2023-12-07T13:15:05.686Z\n"
-"PO-Revision-Date: 2023-12-07T13:15:05.686Z\n"
+"POT-Creation-Date: 2023-12-13T11:14:15.701Z\n"
+"PO-Revision-Date: 2023-12-13T11:14:15.701Z\n"
 
 msgid "[Core]"
 msgstr "[Core]"
@@ -102,9 +102,6 @@ msgstr "Cannot be calculated"
 
 msgid "Exit configurations"
 msgstr "Exit configurations"
-
-msgid "Please provide a value"
-msgstr "Please provide a value"
 
 msgid "WHO Data Quality Annual Report"
 msgstr "WHO Data Quality Annual Report"

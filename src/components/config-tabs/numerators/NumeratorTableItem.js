@@ -23,7 +23,7 @@ import { EditNumeratorModal } from './EditNumeratorModal.js'
 import styles from './NumeratorTableItem.module.css'
 
 /** Manages the "update form" modal and datastore mutation */
-const EditNumeratorButton = ({ numerator, groupsContainingNumerator }) => {
+const EditNumeratorButton = ({ numerator }) => {
     const [editModalOpen, setEditModalOpen] = useState(false)
     const dispatch = useConfigurationsDispatch()
 
@@ -49,21 +49,6 @@ const EditNumeratorButton = ({ numerator, groupsContainingNumerator }) => {
         [dispatch, numerator.code]
     )
 
-    // not all fields are needed for form initial values
-    const numeratorDataForForm = useMemo(
-        () => ({
-            name: numerator.name,
-            core: numerator.core,
-            definition: numerator.definition,
-            groups: groupsContainingNumerator.map((group) => group.code),
-            // if not custom, some fields will be read-only
-            custom: numerator.custom,
-            // used to print: "This numerator is currently mapped to <dataItem>"
-            prevDataID: numerator.dataID,
-        }),
-        [numerator, groupsContainingNumerator]
-    )
-
     return (
         <>
             <Button small onClick={openModal}>
@@ -71,7 +56,7 @@ const EditNumeratorButton = ({ numerator, groupsContainingNumerator }) => {
             </Button>
             {editModalOpen && (
                 <EditNumeratorModal
-                    numeratorDataToEdit={numeratorDataForForm}
+                    numeratorCode={numerator.code}
                     onSave={updateNumerator}
                     onClose={closeModal}
                 />
@@ -80,7 +65,6 @@ const EditNumeratorButton = ({ numerator, groupsContainingNumerator }) => {
     )
 }
 EditNumeratorButton.propTypes = {
-    groupsContainingNumerator: PropTypes.array,
     numerator: PropTypes.object,
 }
 
@@ -272,10 +256,7 @@ export const NumeratorTableItem = ({ numerator }) => {
             <TableCell dense>{dataSetNames}</TableCell>
             <TableCell dense>
                 <ButtonStrip end>
-                    <EditNumeratorButton
-                        numerator={numerator}
-                        groupsContainingNumerator={groupsContainingNumerator}
-                    />
+                    <EditNumeratorButton numerator={numerator} />
                     {numerator.custom ? (
                         <DeleteNumeratorButton numerator={numerator} />
                     ) : (

@@ -4,7 +4,7 @@ import { NoticeBox } from '@dhis2/ui'
 import PropTypes from 'prop-types'
 import React from 'react'
 import { LoadingSpinner } from '../../components/loading-spinner/LoadingSpinner.js'
-import { DATASTORE_ID } from '../configurations/useSetUpConfigurations.js'
+import { DATASTORE_ID } from '../configurations/index.js'
 import { UserContext } from './userContext.js'
 
 const query = {

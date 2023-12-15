@@ -61,9 +61,8 @@ export function EditNumeratorRelationModal({
 
     return (
         <Form
-            onSubmit={(values, form) => {
+            onSubmit={(values) => {
                 // todo: validate! 🥳
-                console.log('onSubmit', { values, form })
                 if (onSave) {
                     onSave(values)
                 } else {

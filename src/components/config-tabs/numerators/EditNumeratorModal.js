@@ -17,9 +17,15 @@ import {
     hasValue,
 } from '@dhis2/ui'
 import PropTypes from 'prop-types'
-import React, { useMemo } from 'react'
-import { useConfigurations, useDataItemNames } from '../../../utils/index.js'
-import { DATA_ELEMENT, TOTALS } from './constants.js'
+import React, { useMemo, useCallback } from 'react'
+import {
+    useConfigurations,
+    useDataItemNames,
+    useDefaultCocID,
+} from '../../../utils/index.js'
+import { getNumeratorMemberGroups } from '../../../utils/numeratorsMetadataData.js'
+import { LoadingSpinner } from '../../loading-spinner/LoadingSpinner.js'
+import { DATA_ELEMENT, DETAILS, INDICATOR, TOTALS } from './constants.js'
 import { DataMappingFormSection } from './DataMappingForm.js'
 import styles from './EditNumeratorModal.module.css'
 
@@ -32,25 +38,102 @@ const DEFAULT_FORM_VALUES = {
 }
 
 const CurrentMappingInfo = () => {
-    // subscription not needed because it won't be changing
-    const prevDataIDField = useField('prevDataID')
-    const prevDataID = prevDataIDField.input.value
-    const dataItemNames = useDataItemNames()
+    const {
+        meta: { initial: initialDataItem },
+    } = useField('prevDataItem', { subscription: { initial: true } })
 
-    if (!prevDataID) {
+    if (!initialDataItem) {
         return null
     }
 
-    const dataItemName = dataItemNames.get(prevDataID)
     return (
         <div
             className={styles.currentMappingInfo}
-        >{`This numerator is currently mapped to "${dataItemName}"`}</div>
+        >{`This numerator is currently mapped to "${initialDataItem.displayName}"`}</div>
     )
 }
 
+const mapDataSetIDToFormItem = (id, configurations) => {
+    const dataSet = configurations.dataSets.find((ds) => ds.id === id)
+    return {
+        id,
+        // this includes a fallback: the dataSet SHOULD be found, but showing
+        // the ID can be helpful during dev and debugging
+        displayName: dataSet?.name || `dataSetID:${id}`,
+    }
+}
+
+const getDataMappingFormValues = ({
+    numeratorToEdit,
+    dataItemNames,
+    configurations,
+    defaultCocID,
+}) => {
+    const { dataID, dataSetID, dataElementOperandID } = numeratorToEdit
+
+    if (!dataID) {
+        // the numerator isn't mapped yet
+        return DEFAULT_FORM_VALUES
+    }
+
+    // If this is a data element, the dataID and dataElementOperand ID will
+    // share the dataElement ID. Otherwise, it's an indicator
+    const dataType =
+        dataID.substring(0, 11) === dataElementOperandID.substring(0, 11)
+            ? DATA_ELEMENT
+            : INDICATOR
+
+    // both data elements and indicators will want to know the data item name
+    const dataItem = dataID
+        ? { id: dataID, displayName: dataItemNames.get(dataID) }
+        : null
+
+    if (dataType === INDICATOR) {
+        // todo: support indicator mapping too (RWDQA-80)
+        return {
+            // used for "Currently mapped to: " line:
+            prevDataItem: dataItem,
+            ...DEFAULT_FORM_VALUES,
+        }
+    }
+
+    // Handle data element mapping:
+    const dataElementType = /\w{11}\.\w{11}/.test(dataID) ? DETAILS : TOTALS
+
+    let dataSets = null
+    if (dataSetID && dataSetID.length > 0) {
+        // dataSetID could be an array or a string
+        if (Array.isArray(dataSetID)) {
+            dataSets = dataSetID.map((id) =>
+                mapDataSetIDToFormItem(id, configurations)
+            )
+        } else {
+            // note that this still returns an array
+            dataSets = [mapDataSetIDToFormItem(dataSetID, configurations)]
+        }
+    }
+
+    // legacy configurations sometimes have DE operand IDs with the default
+    // COC ID, which can be problematic
+    const resolvedDataElementOperandID = dataElementOperandID.endsWith(
+        defaultCocID
+    )
+        ? dataElementOperandID.substring(0, 11)
+        : dataElementOperandID
+
+    return {
+        dataType,
+        dataElementType,
+        dataItemGroupID: numeratorToEdit.dataItemGroupID,
+        dataItem,
+        prevDataItem: dataItem,
+        dataSets,
+        dataElementOperandID: resolvedDataElementOperandID,
+    }
+}
+
 /**
- * If `numeratorToEdit`, is provided, this will behave in "update" mode:
+ * If `numeratorCode`, is provided, this will behave in "update" mode:
  * - the fields will be prefilled with the values of that relation
  * - some text in the modal will refer to editing/updating
  * - the data store mutation will be an "update" action on that numerator
@@ -59,8 +142,10 @@ const CurrentMappingInfo = () => {
  * - text in the modal will refer to creating/adding new
  * - the data store mutation will create a new numerator object
  */
-export function EditNumeratorModal({ numeratorDataToEdit, onSave, onClose }) {
+export function EditNumeratorModal({ numeratorCode, onSave, onClose }) {
     const configurations = useConfigurations()
+    const dataItemNames = useDataItemNames()
+    const { defaultCocID, loading } = useDefaultCocID()
 
     const numeratorGroupOptions = useMemo(
         () =>
@@ -73,59 +158,76 @@ export function EditNumeratorModal({ numeratorDataToEdit, onSave, onClose }) {
         [configurations.groups]
     )
 
+    const numeratorToEdit = useMemo(
+        () =>
+            numeratorCode
+                ? configurations.numerators.find(
+                      (n) => n.code === numeratorCode
+                  )
+                : null,
+        [numeratorCode, configurations]
+    )
+
     const formInitialValues = useMemo(() => {
-        if (!numeratorDataToEdit) {
+        if (!numeratorToEdit || !defaultCocID) {
             return DEFAULT_FORM_VALUES
         }
 
-        // properties listed out here for clarity
+        // process the `numerator` config object into form values
+        const groups = getNumeratorMemberGroups(
+            configurations,
+            numeratorToEdit.code
+        ).map((group) => group.code)
+
+        const dataMappingValues = getDataMappingFormValues({
+            numeratorToEdit,
+            dataItemNames,
+            configurations,
+            defaultCocID,
+        })
+
         return {
-            name: numeratorDataToEdit.name,
-            definition: numeratorDataToEdit.definition,
-            groups: numeratorDataToEdit.groups,
-            core: numeratorDataToEdit.core,
-            // not an editable field, but will be added to the form state
-            // for convenience (some fields will be read-only)
-            custom: numeratorDataToEdit.custom,
-            // same (for other form logic like if fields are required)
-            prevDataID: numeratorDataToEdit.prevDataID,
-            ...DEFAULT_FORM_VALUES,
+            name: numeratorToEdit.name,
+            definition: numeratorToEdit.definition,
+            groups,
+            core: numeratorToEdit.core,
+            ...dataMappingValues,
         }
-    }, [numeratorDataToEdit])
+    }, [numeratorToEdit, dataItemNames, configurations, defaultCocID])
+
+    const onSubmit = useCallback(
+        (values) => {
+            // Map form values to numerator data
+            const newNumeratorData = {
+                name: values.name,
+                definition: values.definition,
+                core: values.core,
+                dataItemGroupID: values.dataItemGroupID,
+                // note different form state structure:
+                dataID: values.dataItem.id,
+                dataSetID: values.dataSets.map(({ id }) => id),
+                dataElementOperandID: values.dataElementOperandID,
+            }
+
+            onSave({
+                newNumeratorData,
+                groupsContainingNumerator: values.groups,
+                dataSetsContainingNumerator: values.dataSets,
+            })
+            onClose()
+        },
+        [onSave, onClose]
+    )
+
+    // defaultCocID will have fetched upon opening the configurations page,
+    // so it shouldn't usually be loading at this point
+    if (loading) {
+        return <LoadingSpinner />
+    }
 
     return (
         <Form
-            onSubmit={(values) => {
-                // todo: validate! 🥳
-                // todo: data items required on creation, but not edit
-
-                // Pick data from values
-                // (some values like dataElementType are just for the form)
-                let newNumeratorData = {
-                    name: values.name,
-                    definition: values.definition,
-                    core: values.core,
-                }
-                if (values.dataItem?.id) {
-                    // add these separately so we don't set 'undefined' for a
-                    // numerator we're editing with a dataID already.
-                    // if dataID is set, the other two should be required
-                    newNumeratorData = {
-                        ...newNumeratorData,
-                        // note different form state structure:
-                        dataID: values.dataItem.id,
-                        dataSetID: values.dataSets.map(({ id }) => id),
-                        dataElementOperandID: values.dataElementOperandID,
-                    }
-                }
-
-                onSave({
-                    newNumeratorData,
-                    groupsContainingNumerator: values.groups,
-                    dataSetsContainingNumerator: values.dataSets,
-                })
-                onClose()
-            }}
+            onSubmit={onSubmit}
             initialValues={formInitialValues}
             // not subcribing to `values` prevents rerendering the entire form on every input change
             subscription={{ submitting: true }}
@@ -133,8 +235,7 @@ export function EditNumeratorModal({ numeratorDataToEdit, onSave, onClose }) {
             {({ handleSubmit }) => (
                 <Modal onClose={onClose} position="middle">
                     <ModalTitle>
-                        {(numeratorDataToEdit ? 'Edit' : 'Create') +
-                            ' numerator'}
+                        {(numeratorToEdit ? 'Edit' : 'Create') + ' numerator'}
                     </ModalTitle>
                     <ModalContent>
                         <Table>
@@ -151,8 +252,8 @@ export function EditNumeratorModal({ numeratorDataToEdit, onSave, onClose }) {
                                             validate={hasValue}
                                             // read-only if editing a built-in numerator
                                             disabled={
-                                                numeratorDataToEdit &&
-                                                !numeratorDataToEdit.custom
+                                                numeratorToEdit &&
+                                                !numeratorToEdit.custom
                                             }
                                         />
                                     </TableCell>
@@ -166,8 +267,8 @@ export function EditNumeratorModal({ numeratorDataToEdit, onSave, onClose }) {
                                             placeholder="Numerator definition"
                                             rows={2}
                                             disabled={
-                                                numeratorDataToEdit &&
-                                                !numeratorDataToEdit.custom
+                                                numeratorToEdit &&
+                                                !numeratorToEdit.custom
                                             }
                                         />
                                     </TableCell>
@@ -210,7 +311,7 @@ export function EditNumeratorModal({ numeratorDataToEdit, onSave, onClose }) {
                                 type="submit"
                                 onClick={handleSubmit}
                             >
-                                {numeratorDataToEdit ? 'Save' : 'Create'}
+                                {numeratorToEdit ? 'Save' : 'Create'}
                             </Button>
                         </ButtonStrip>
                     </ModalActions>
@@ -220,7 +321,7 @@ export function EditNumeratorModal({ numeratorDataToEdit, onSave, onClose }) {
     )
 }
 EditNumeratorModal.propTypes = {
-    numeratorDataToEdit: PropTypes.object,
+    numeratorCode: PropTypes.string,
     onClose: PropTypes.func,
     onSave: PropTypes.func,
 }
