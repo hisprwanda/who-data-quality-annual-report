@@ -16,8 +16,9 @@ import {
 } from '@dhis2/ui'
 import PropTypes from 'prop-types'
 import React from 'react'
-import relationTypes from '../../../data/relationTypes.json'
-import { useConfigurations } from '../../../utils/index.js'
+import relationTypes from '../../../data/denominatorTypes.json'
+import DenominatorASelect from './DenominatorASelect.js'
+import DenominatorBSelect from './DenominatorBSelect.js'
 
 const { Form, Field } = ReactFinalForm
 
@@ -29,38 +30,11 @@ const DEFAULT_FORM_VALUES = {
     criteria: 0,
 }
 
-const RELATION_TYPE_OPTIONS = relationTypes.map((type) => ({
-    label: type.displayName,
-    value: type.code,
-}))
-
-/**
- * If `numeratorRelationToEdit`, is provided, this will behave in "update" mode:
- * - the fields will be prefilled with the values of that relation
- * - some text in the modal will refer to editing/updating
- * - the data store mutation will be an "update" action on that relation
- * Otherwise, this will behave in "add new" mode:
- * - the fields will be empty
- * - text in the modal will refer to creating/adding new
- * - the data store mutation will create a new numeratorRelation object
- */
-export function EditNumeratorRelationModal({
-    numeratorRelationToEdit,
+export function EditDenominatorRelationModal({
+    denominatorRelationToEdit,
     onSave,
     onClose,
 }) {
-    const configurations = useConfigurations()
-    const numeratorOptions = React.useMemo(() => {
-        const numeratorsWithDataIds = configurations.numerators
-            .filter((numerator) => numerator.dataID != null)
-            // sort is okay because filter() creates a copy
-            .sort((a, b) => a.name.localeCompare(b.name))
-        return numeratorsWithDataIds.map(({ name, code }) => ({
-            label: name,
-            value: code,
-        }))
-    }, [configurations.numerators])
-
     return (
         <Form
             onSubmit={(values, form) => {
@@ -73,15 +47,15 @@ export function EditNumeratorRelationModal({
                 }
                 onClose()
             }}
-            initialValues={numeratorRelationToEdit || DEFAULT_FORM_VALUES}
+            initialValues={denominatorRelationToEdit || DEFAULT_FORM_VALUES}
             // not subcribing to `values` prevents rerendering the entire form on every input change
             subscription={{ submitting: true }}
         >
             {({ handleSubmit }) => (
                 <Modal onClose={onClose} position="middle">
                     <ModalTitle>
-                        {(numeratorRelationToEdit ? 'Edit' : 'Create') +
-                            ' numerator relation'}
+                        {(denominatorRelationToEdit ? 'Edit' : 'Create') +
+                            ' denominator relation'}
                     </ModalTitle>
                     <ModalContent>
                         <Table>
@@ -103,34 +77,22 @@ export function EditNumeratorRelationModal({
                                         <Field
                                             name="type"
                                             component={SingleSelectFieldFF}
-                                            options={RELATION_TYPE_OPTIONS}
+                                            options={relationTypes}
                                             placeholder="Select relation type"
                                             validate={hasValue}
                                         />
                                     </TableCell>
                                 </TableRow>
                                 <TableRow>
-                                    <TableCell>Numerator A</TableCell>
+                                    <TableCell>Denominator A</TableCell>
                                     <TableCell>
-                                        <Field
-                                            name="A"
-                                            component={SingleSelectFieldFF}
-                                            options={numeratorOptions}
-                                            placeholder="Select numerator A"
-                                            validate={hasValue}
-                                        />
+                                        <DenominatorASelect />
                                     </TableCell>
                                 </TableRow>
                                 <TableRow>
-                                    <TableCell>Numerator B</TableCell>
+                                    <TableCell>Denominator B</TableCell>
                                     <TableCell>
-                                        <Field
-                                            name="B"
-                                            component={SingleSelectFieldFF}
-                                            options={numeratorOptions}
-                                            placeholder="Select numerator B"
-                                            validate={hasValue}
-                                        />
+                                        <DenominatorBSelect />
                                     </TableCell>
                                 </TableRow>
                                 <TableRow>
@@ -165,7 +127,7 @@ export function EditNumeratorRelationModal({
                                     handleSubmit()
                                 }}
                             >
-                                {numeratorRelationToEdit ? 'Save' : 'Create'}
+                                {denominatorRelationToEdit ? 'Save' : 'Create'}
                             </Button>
                         </ButtonStrip>
                     </ModalActions>
@@ -174,8 +136,8 @@ export function EditNumeratorRelationModal({
         </Form>
     )
 }
-EditNumeratorRelationModal.propTypes = {
-    numeratorRelationToEdit: PropTypes.object,
+EditDenominatorRelationModal.propTypes = {
+    denominatorRelationToEdit: PropTypes.object,
     onClose: PropTypes.func,
     onSave: PropTypes.func,
 }

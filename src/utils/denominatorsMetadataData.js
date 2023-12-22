@@ -26,3 +26,12 @@ export const getDenominatorRelations = (denominators, code) => {
 export const filterDenominatorsByType = (denominators, type) => {
     return denominators.filter((denominator) => denominator.type == type)
 }
+
+export const getDenominatorNameByCode = (denominators, code) => {
+    const denominatorObj = denominators.find(
+        (denominator) => denominator.code == code
+    )
+    if (denominatorObj) {
+        return denominatorObj.name
+    }
+}
