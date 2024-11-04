@@ -37,7 +37,7 @@ export function EditGroupModal({ groupToEdit, onSave, onClose }) {
                     label: name,
                     value: code,
                 }))
-                .sort((a, b) => a.label.localeCompare(b.label)), // sort alphabetically
+                .sort((a, b) => a.label?.localeCompare(b.label)), // sort alphabetically
         [configurations.numerators]
     )
 

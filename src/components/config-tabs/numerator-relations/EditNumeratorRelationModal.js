@@ -51,7 +51,7 @@ export function EditNumeratorRelationModal({
     const configurations = useConfigurations()
     const numeratorOptions = React.useMemo(() => {
         const numeratorsWithDataIds = [...configurations.numerators].sort(
-            (a, b) => a.name.localeCompare(b.name)
+            (a, b) => a.name?.localeCompare(b.name)
         )
         return numeratorsWithDataIds.map(({ name, code }) => ({
             label: name,

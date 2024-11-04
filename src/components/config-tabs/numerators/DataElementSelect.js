@@ -36,7 +36,7 @@ const mapMetadataItemsToOptions = (items) =>
             label: displayName,
             value: id,
         }))
-        .sort((a, b) => a.label.localeCompare(b.label))
+        .sort((a, b) => a.label?.localeCompare(b.label))
 
 export const DataElementSelect = () => {
     const { fetch, loading, error } = useEngineQuery()

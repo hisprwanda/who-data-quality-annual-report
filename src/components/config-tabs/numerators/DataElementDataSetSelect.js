@@ -48,7 +48,7 @@ const parseDataSetsResponse = (response) => {
     dataSetLookup.forEach((dataSet, id) => {
         selectOptions.push({ label: dataSet.displayName, value: id })
     })
-    selectOptions.sort((a, b) => a.label.localeCompare(b.label))
+    selectOptions.sort((a, b) => a.label?.localeCompare(b.label))
 
     return { selectOptions, dataSetLookup }
 }
