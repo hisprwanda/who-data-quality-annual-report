@@ -5,26 +5,8 @@ msgstr ""
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1)\n"
-"POT-Creation-Date: 2023-12-13T11:14:15.701Z\n"
-"PO-Revision-Date: 2023-12-13T11:14:15.701Z\n"
-
-msgid "[Core]"
-msgstr "[Core]"
-
-msgid "Data Quality Annual Report"
-msgstr "Data Quality Annual Report"
-
-msgid "Data: "
-msgstr "Data: "
-
-msgid "Organisation unit: "
-msgstr "Organisation unit: "
-
-msgid "Period: "
-msgstr "Period: "
-
-msgid "{{period}}; {{years}} years for reference"
-msgstr "{{period}}; {{years}} years for reference"
+"POT-Creation-Date: 2024-11-01T15:07:47.517Z\n"
+"PO-Revision-Date: 2024-11-01T15:07:47.518Z\n"
 
 msgid "There is no data for this {{sectionType}}"
 msgstr "There is no data for this {{sectionType}}"
@@ -60,6 +42,24 @@ msgstr ""
 
 msgid "No data to display"
 msgstr "No data to display"
+
+msgid "[Core]"
+msgstr "[Core]"
+
+msgid "Data Quality Annual Report"
+msgstr "Data Quality Annual Report"
+
+msgid "Data: "
+msgstr "Data: "
+
+msgid "Organisation unit: "
+msgstr "Organisation unit: "
+
+msgid "Period: "
+msgstr "Period: "
+
+msgid "{{period}}; {{years}} years for reference"
+msgstr "{{period}}; {{years}} years for reference"
 
 msgid "% Completeness"
 msgstr "% Completeness"

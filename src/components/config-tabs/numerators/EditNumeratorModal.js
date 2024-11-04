@@ -154,7 +154,7 @@ export function EditNumeratorModal({ numeratorCode, onSave, onClose }) {
                     label: name,
                     value: code,
                 }))
-                .sort((a, b) => a.label.localeCompare(b.label)),
+                .sort((a, b) => a.label?.localeCompare(b.label)),
         [configurations.groups]
     )
 
