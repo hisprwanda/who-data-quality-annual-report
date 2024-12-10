@@ -11,23 +11,35 @@ import PropTypes from 'prop-types'
 import React, { useState } from 'react'
 import styles from './OrgUnitSelector.module.css'
 
-const getSelectionLabel = ({ selectedOrgUnit, selectedOrgUnitLevel }) => {
+const getSelectionLabel = ({
+    selectedOrgUnit,
+    selectedOrgUnitLevel,
+    selectedOrgUnitGroup,
+}) => {
     let label = ''
     label += selectedOrgUnit.displayName ?? ''
     label += label && selectedOrgUnitLevel ? '; ' : ''
     if (selectedOrgUnitLevel) {
         label += selectedOrgUnitLevel.displayName
     }
+    label += label && selectedOrgUnitGroup ? '; ' : ''
+    if (selectedOrgUnitGroup) {
+        label += selectedOrgUnitGroup.displayName
+    }
+
     return label
 }
 
 export const OrgUnitSelector = ({
     orgUnitLevels,
+    orgUnitGroups,
     rootOrgUnitsInfo,
     selectedOrgUnit,
     setSelectedOrgUnit,
     selectedOrgUnitLevel,
+    selectedOrgUnitGroup,
     setSelectedOrgUnitLevel,
+    setSelectedOrgUnitGroup,
 }) => {
     const [open, setOpen] = useState(false)
     const rootOrgUnits = rootOrgUnitsInfo.map(({ id }) => id)
@@ -38,7 +50,9 @@ export const OrgUnitSelector = ({
             value={getSelectionLabel({
                 selectedOrgUnit,
                 selectedOrgUnitLevel,
+                selectedOrgUnitGroup,
                 orgUnitLevels,
+                orgUnitGroups,
             })}
             open={open}
             setOpen={setOpen}
@@ -105,6 +119,26 @@ export const OrgUnitSelector = ({
                                 />
                             ))}
                     </SingleSelectField>
+                    <SingleSelectField
+                        label={i18n.t('Choose an organisation unit group')}
+                        // format `selected` as just the ID so it's a string
+                        selected={selectedOrgUnitGroup?.id ?? ''}
+                        // parse the selected ID to save the full object in state
+                        onChange={({ selected }) => {
+                            const newSelected = orgUnitGroups.find(
+                                (group) => group.id === selected
+                            )
+                            setSelectedOrgUnitGroup(newSelected)
+                        }}
+                    >
+                        {orgUnitGroups.map(({ id, displayName }) => (
+                            <SingleSelectOption
+                                key={id}
+                                value={id}
+                                label={displayName}
+                            />
+                        ))}
+                    </SingleSelectField>
                 </div>
                 <Button
                     secondary
@@ -121,14 +155,20 @@ export const OrgUnitSelector = ({
 }
 
 OrgUnitSelector.propTypes = {
+    orgUnitGroups: PropTypes.array,
     orgUnitLevels: PropTypes.array,
     rootOrgUnitsInfo: PropTypes.array,
     selectedOrgUnit: PropTypes.object,
+    selectedOrgUnitGroup: PropTypes.shape({
+        displayName: PropTypes.string,
+        id: PropTypes.string,
+    }),
     selectedOrgUnitLevel: PropTypes.shape({
         displayName: PropTypes.string,
         id: PropTypes.string,
         level: PropTypes.number,
     }),
     setSelectedOrgUnit: PropTypes.func,
+    setSelectedOrgUnitGroup: PropTypes.func,
     setSelectedOrgUnitLevel: PropTypes.func,
 }

@@ -6,6 +6,7 @@ export const getReportParameters = ({
     orgUnitName,
     orgUnitLevel,
     orgUnitLevels,
+    orgUnitGroup,
     boundaryOrgUnitLevel,
     configurations,
     periods,
@@ -14,7 +15,7 @@ export const getReportParameters = ({
         !orgUnitID ||
         !groupID ||
         !configurations ||
-        !orgUnitLevel ||
+        (!orgUnitLevel && !orgUnitGroup) ||
         periods.length === 0 ||
         !boundaryOrgUnitLevel
     ) {
@@ -34,17 +35,15 @@ export const getReportParameters = ({
     const reportParameters = {
         orgUnits: [orgUnitID],
         orgUnitName: orgUnitName,
-        // selected org unit level info
-        orgUnitLevel: `LEVEL-${orgUnitLevel.level}`,
-        orgUnitLevelNumber: orgUnitLevel.level,
-        orgUnitLevelName: orgUnitLevel.displayName,
-        // all org unit levels, if needed for mapping:
+        orgUnitLevelNumber: orgUnitLevel?.level,
+        orgUnitLevelName: orgUnitLevel?.displayName,
         orgUnitLevelNamesByLevel,
         boundaryOrgUnitLevel,
         groupID: groupID,
-        // note that `periods[0]` is the current period
         periods,
         mappedConfiguration,
+        orgUnitLevel: orgUnitLevel ? `OU_LEVEL-${orgUnitLevel.level}` : null,
+        orgUnitGroup: orgUnitGroup ? `OU_GROUP-${orgUnitGroup.id}` : null,
     }
     return reportParameters
 }
