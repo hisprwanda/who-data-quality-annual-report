@@ -104,6 +104,8 @@ export const OrgUnitSelector = ({
                             )
                             setSelectedOrgUnitLevel(newSelected)
                         }}
+                        disabled={!!selectedOrgUnitGroup?.id}
+                        clearable
                     >
                         {orgUnitLevels
                             .filter(({ level }) => {
@@ -130,6 +132,8 @@ export const OrgUnitSelector = ({
                             )
                             setSelectedOrgUnitGroup(newSelected)
                         }}
+                        disabled={!!selectedOrgUnitLevel?.id}
+                        clearable
                     >
                         {orgUnitGroups.map(({ id, displayName }) => (
                             <SingleSelectOption
