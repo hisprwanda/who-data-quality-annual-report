@@ -57,10 +57,12 @@ const reportQueries = {
     },
     expected_reports_over_all_org_units: {
         resource: 'analytics.json',
-        params: ({ dataSets, orgUnits, currentPeriod }) => ({
+        params: ({ dataSets, orgUnits, orgUnitGroup, currentPeriod }) => ({
             dimension: `dx:${dataSets
                 .map((ds) => ds + '.EXPECTED_REPORTS')
-                .join(';')},ou:${orgUnits.join(';')},pe:${currentPeriod}`,
+                .join(';')},ou:${
+                orgUnits.join(';') + (orgUnitGroup ? ';' + orgUnitGroup : '')
+            },pe:${currentPeriod}`,
         }),
     },
     expected_reports_by_org_unit_level: {
@@ -83,10 +85,15 @@ const reportQueries = {
     },
     count_of_data_values_over_all_org_units: {
         resource: 'analytics.json',
-        params: ({ dataElementOperands, orgUnits, currentPeriod }) => ({
-            dimension: `dx:${dataElementOperands.join(';')},ou:${orgUnits.join(
-                ';'
-            )},pe:${currentPeriod}`,
+        params: ({
+            dataElementOperands,
+            orgUnits,
+            orgUnitGroup,
+            currentPeriod,
+        }) => ({
+            dimension: `dx:${dataElementOperands.join(';')},ou:${
+                orgUnits.join(';') + (orgUnitGroup ? ';' + orgUnitGroup : '')
+            },pe:${currentPeriod}`,
             aggregationType: 'COUNT',
         }),
     },

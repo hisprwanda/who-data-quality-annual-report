@@ -6,6 +6,7 @@ export const getReportParameters = ({
     orgUnitName,
     orgUnitLevel,
     orgUnitLevels,
+    orgUnitGroups,
     orgUnitGroup,
     boundaryOrgUnitLevel,
     configurations,
@@ -27,6 +28,7 @@ export const getReportParameters = ({
         groupID
     )
 
+    //TODO: work on this when org unit group is selected. this seems to be used in section 3 and 4 only.
     const orgUnitLevelNamesByLevel = new Map()
     orgUnitLevels.forEach(({ level, displayName }) => {
         orgUnitLevelNamesByLevel.set(level, displayName)
@@ -36,7 +38,8 @@ export const getReportParameters = ({
         orgUnits: [orgUnitID],
         orgUnitName: orgUnitName,
         orgUnitLevelNumber: orgUnitLevel?.level,
-        orgUnitLevelName: orgUnitLevel?.displayName,
+        orgUnitLevelName:
+            orgUnitLevel?.displayName || orgUnitGroup?.displayName, //TODO: u might need to update the name of this variable (orgUnitLevelName) to orgUnitLevelGroupName
         orgUnitLevelNamesByLevel,
         boundaryOrgUnitLevel,
         groupID: groupID,

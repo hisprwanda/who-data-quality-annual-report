@@ -1,5 +1,9 @@
 import { getForecastValue, getMean } from '../utils/mathService.js'
-import { convertAnalyticsResponseToObject, getVal } from '../utils/utils.js'
+import {
+    convertAnalyticsResponseToObject,
+    getVal,
+    getVals,
+} from '../utils/utils.js'
 
 // gets a list of retions in which the reporting rate score was lower than the threshold
 const getRegionsWithLowScore = (filterd_datasets, key) => {
@@ -82,7 +86,7 @@ const getRegionsWithLowScoreForConsistencyOfDataset = ({
             .filter((point) => !isNaN(point[1]))
 
         if (points.length === 0) {
-            console.log(`No reference value for ${region.name}`)
+            // console.log(`No reference value for ${region.name}`)
         }
 
         if (trend === 'constant') {
@@ -480,14 +484,14 @@ const getSection1dChartInfo = ({ allOrgUnitsData, periodsIDs, ou }) => {
 const getExpectedValues = ({ numerator, response, pe, ou }) => {
     return numerator.dataSetID.reduce((totalExpected, dsUID) => {
         totalExpected += Number(
-            getVal({ response, dx: dsUID + '.EXPECTED_REPORTS', ou, pe }) ?? 0
+            getVals({ response, dx: dsUID + '.EXPECTED_REPORTS', ou, pe }) ?? 0
         )
         return totalExpected
     }, 0)
 }
 
 const getActualValue1C = ({ response, dx, pe, ou }) => {
-    return getVal({ response, dx, ou, pe })
+    return getVals({ response, dx, ou, pe })
 }
 
 const calculateSection1C = ({
@@ -533,18 +537,22 @@ const calculateSection1C = ({
         const threshold = numerator.missing
         const dataElementOperand = numerator.dataElementOperandID
 
+        console.log('overall_expected_reports', overall_expected_reports)
+
         const actualValues = getActualValue1C({
             response: overall_counts,
             pe: period,
             ou: overallOrgUnit,
             dx: dataElementOperand,
         })
+
         const expectedValues = getExpectedValues({
             response: overall_expected_reports,
             pe: period,
             ou: overallOrgUnit,
             numerator,
         })
+        console.log('expectedValues', expectedValues)
         const overallScore = (actualValues / expectedValues) * 100
 
         // then calculate sub units

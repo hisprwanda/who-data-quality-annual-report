@@ -77,6 +77,7 @@ export const ReportParameterSelector = ({
                 orgUnitLevel: selectedOrgUnitLevel,
                 orgUnitGroup: selectedOrgUnitGroup,
                 orgUnitLevels: data?.orgUnitLevels.organisationUnitLevels,
+                orgUnitGroups: data?.orgUnitGroups.organisationUnitGroups,
                 periods: selectedPeriods,
             }),
         [
