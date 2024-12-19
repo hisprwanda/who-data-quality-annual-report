@@ -5,10 +5,23 @@ import { calculateSection1 } from './section1Calculations.js'
 const reportQueries = {
     reporting_rate_over_all_org_units: {
         resource: 'analytics.json',
+        params: ({ dataSets, orgUnits, orgUnitGroup, periods }) => ({
+            dimension: `dx:${dataSets
+                .map((de) => de + '.REPORTING_RATE')
+                .join(';')},ou:${
+                orgUnits.join(';') + (orgUnitGroup ? ';' + orgUnitGroup : '')
+            },pe:${periods.join(';')}`,
+        }),
+    },
+    // for the section 1 d chart
+    reporting_rate_over_all_org_units_chart: {
+        resource: 'analytics.json',
         params: ({ dataSets, orgUnits, periods }) => ({
             dimension: `dx:${dataSets
                 .map((de) => de + '.REPORTING_RATE')
-                .join(';')},ou:${orgUnits.join(';')},pe:${periods.join(';')}`,
+                .join(';')},ou:${
+                orgUnits.join(';')
+            },pe:${periods.join(';')}`,
         }),
     },
     reporting_rate_by_org_unit_level: {

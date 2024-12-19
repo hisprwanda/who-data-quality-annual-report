@@ -134,6 +134,7 @@ export const OrgUnitSelector = ({
                         }}
                         disabled={!!selectedOrgUnitLevel?.id}
                         clearable
+                        filterable
                     >
                         {orgUnitGroups.map(({ id, displayName }) => (
                             <SingleSelectOption

@@ -86,7 +86,7 @@ const getRegionsWithLowScoreForConsistencyOfDataset = ({
             .filter((point) => !isNaN(point[1]))
 
         if (points.length === 0) {
-            // console.log(`No reference value for ${region.name}`)
+            console.log(`No reference value for ${region.name}`)
         }
 
         if (trend === 'constant') {
@@ -174,7 +174,7 @@ const getJsonObjectsFormatFromTableFormat = ({
             } else if (comparison === 'th') {
                 rowData['comparison'] = 'Current vs forecast'
             } else if (comparison == 'ou') {
-                rowData['comparison'] = metaData.items[row[ouHeaderIndex]].name
+                rowData['comparison'] = metaData.items[row[ouHeaderIndex]].name // for this one we use the top selected org unit name
             }
         }
 
@@ -464,7 +464,7 @@ const getSection1dChartInfo = ({ allOrgUnitsData, periodsIDs, ou }) => {
 
     for (const dx in formattedData) {
         const points = periods.map(
-            (pe) => getVal({ response: formattedData, dx, ou, pe }) ?? null
+            (pe) => getVals({ response: formattedData, dx, ou, pe }) ?? null
         )
 
         // if all points are null: skip; otherwise, add
@@ -537,8 +537,7 @@ const calculateSection1C = ({
         const threshold = numerator.missing
         const dataElementOperand = numerator.dataElementOperandID
 
-        console.log('overall_expected_reports', overall_expected_reports)
-
+        // TODO: you might need to pass the ous of the selected ou group, then filter out the values whose ouss are not in the group
         const actualValues = getActualValue1C({
             response: overall_counts,
             pe: period,
@@ -552,7 +551,6 @@ const calculateSection1C = ({
             ou: overallOrgUnit,
             numerator,
         })
-        console.log('expectedValues', expectedValues)
         const overallScore = (actualValues / expectedValues) * 100
 
         // then calculate sub units
@@ -623,9 +621,9 @@ export const calculateSection1 = ({
         }), // list of objects for every dataset selected (regarding completeness)
         section1B: getFacilityReportingData({
             allOrgUnitsData:
-                reportQueryResponse.reporting_rate_over_all_org_units,
+                reportQueryResponse.reporting_timeliness_over_all_org_units,
             byOrgUnitLevelData:
-                reportQueryResponse.reporting_rate_by_org_unit_level,
+                reportQueryResponse.reporting_timeliness_by_org_unit_level,
             mappedConfigurations: mappedConfigurations,
             period: period,
             calculatingFor: 'section1B',
@@ -655,7 +653,7 @@ export const calculateSection1 = ({
         }), // list of objects for Consistency of dataset completeness over time
         chartInfo: getSection1dChartInfo({
             allOrgUnitsData:
-                reportQueryResponse.reporting_rate_over_all_org_units,
+                reportQueryResponse.reporting_rate_over_all_org_units_chart,
             periodsIDs,
             ou: overallOrgUnit,
         }),

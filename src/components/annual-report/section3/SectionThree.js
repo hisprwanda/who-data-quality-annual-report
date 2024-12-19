@@ -112,7 +112,7 @@ const Section3A = ({
                                 </TableRow>
                                 <TableRow>
                                     <ReportCell>
-                                        {`Number of ${orgUnitLevelName} with divergent score`}
+                                        {`Number of ${orgUnitLevelName}s with divergent score`}
                                     </ReportCell>
                                     <ReportCell>
                                         {formatVal(
@@ -127,7 +127,7 @@ const Section3A = ({
                                 </TableRow>
                                 <TableRow>
                                     <ReportCell>
-                                        {`Percent of ${orgUnitLevelName} with divergent score`}
+                                        {`Percent of ${orgUnitLevelName}s with divergent score`}
                                     </ReportCell>
                                     <ReportCell>
                                         {formatVal(
