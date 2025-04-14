@@ -4,6 +4,7 @@ import { HashRouter, Routes, Route } from 'react-router-dom'
 import classes from './App.module.css'
 import { AnnualReport, Configurations } from './pages/index.js'
 import { ConfigurationsProvider, UserProvider } from './utils/index.js'
+import i18n from './locales/index.js'
 
 const App = () => (
     <ConfigurationsProvider>

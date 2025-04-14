@@ -1,3 +1,4 @@
+import i18n from '@dhis2/d2-i18n'
 import { useDataQuery } from '@dhis2/app-runtime'
 import {
     Button,
@@ -51,7 +52,7 @@ const AddExternalRelationButton = () => {
     return (
         <>
             <Button primary icon={<IconAdd16 />} onClick={openModal}>
-                Add External Relation
+                {i18n.t('Add External Relation')}
             </Button>
             {addNewModalOpen && (
                 <EditExternalDataComparisonModel
@@ -76,11 +77,9 @@ export const ExternalDataComparison = () => {
     return (
         <div>
             <p>
-                {`Please identify external (survey) data that can be used for
-                comparison with routine data, e.g. ANC coverage, immunisation
-                coverage etc. The "external data" should refer to calculated
-                survey result (e.g. a percentage), whilst the numerator and
-                denominator refer to the raw data`}
+                {i18n.t(
+                    " Please identify external (survey) data that can be used for comparison with routine data, e.g. ANC coverage, immunisation coverage etc. The 'external data' should refer to calculated survey result (e.g. a percentage), whilst the numerator  denominator refer to the raw data"
+                )}
             </p>
             <hr />
 
@@ -88,20 +87,20 @@ export const ExternalDataComparison = () => {
                 <Table>
                     <TableHead>
                         <TableRowHead>
-                            <TableCellHead>Name</TableCellHead>
+                            <TableCellHead>{i18n.t('Name')}</TableCellHead>
                             <TableCellHead>
-                                Survey/external indicator
+                                {i18n.t('Survey/external indicator ')}
                             </TableCellHead>
                             <TableCellHead>
-                                Routine data numerator
+                                {i18n.t('Routine data numerator')}
                             </TableCellHead>
                             <TableCellHead>
-                                Routine data denominator
+                                {i18n.t('Routine data denominator ')}
                             </TableCellHead>
-                            <TableCellHead>Criteria</TableCellHead>
+                            <TableCellHead>{i18n.t('Criteria')}</TableCellHead>
                             {/* TODO: have dhis2 metadata objects you will neen into a context api objt */}
-                            <TableCellHead>Level</TableCellHead>
-                            <TableCellHead>Actions</TableCellHead>
+                            <TableCellHead>{i18n.t('Level')}</TableCellHead>
+                            <TableCellHead>{i18n.t('Actions')}</TableCellHead>
                         </TableRowHead>
                     </TableHead>
                     <TableBody>
@@ -116,7 +115,7 @@ export const ExternalDataComparison = () => {
                         ) : (
                             <TableRow>
                                 <TableCell>
-                                    No external relations found.
+                                    {i18n.t('No external relations found.')}
                                 </TableCell>
                             </TableRow>
                         )}

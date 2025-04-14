@@ -1,3 +1,4 @@
+import i18n from '@dhis2/d2-i18n'
 import { Button, TableCell, TableRow, ButtonStrip } from '@dhis2/ui'
 import PropTypes from 'prop-types'
 import React, { useState, useMemo, useCallback } from 'react'
@@ -36,7 +37,7 @@ const EditExternalRelationButton = ({ externalRelation }) => {
     return (
         <>
             <Button small onClick={openModal}>
-                Edit
+                {i18n.t('Edit')}
             </Button>
             {editModalOpen && (
                 <EditExternalDataComparisonModel
@@ -72,13 +73,15 @@ const DeleteExternalRelationButton = ({ externalRelation }) => {
     return (
         <>
             <Button small destructive onClick={openModal}>
-                Delete
+                {i18n.t('Delete')}
             </Button>
             {confirmationModalOpen && (
                 <ConfirmationModal
-                    title="Delete External Relation"
-                    text={`Are you sure you want to delete ${externalRelation.name}?`}
-                    action="Delete"
+                    title={i18n.t('Delete external relation')}
+                    text={i18n.t('Are you sure you want to delete ', {
+                        name: externalRelation.name,
+                    })}
+                    action={i18n.t('Delete')}
                     destructive
                     onClose={closeModal}
                     onConfirm={deleteRelation}

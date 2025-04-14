@@ -1,3 +1,4 @@
+import i18n from '@dhis2/d2-i18n'
 import { useDataQuery } from '@dhis2/app-runtime'
 import { SingleSelectFieldFF, ReactFinalForm } from '@dhis2/ui'
 import React, { useMemo } from 'react'
@@ -34,12 +35,12 @@ export const OrgUnitLevelSelect = () => {
 
     const placeholderText = useMemo(() => {
         if (loading) {
-            return 'Loading...'
+            return i18n.t('Loading...')
         }
         if (error) {
-            return 'An error occurred'
+            return i18n.t('An error occurred')
         }
-        return 'Select an org unit level'
+        return i18n.t('Select an org unit level')
     }, [loading, error])
 
     return (
@@ -48,7 +49,7 @@ export const OrgUnitLevelSelect = () => {
                 name="level"
                 component={SingleSelectFieldFF}
                 options={dataElementGroupOptions || []}
-                label={'Org unit levels'}
+                label={i18n.t('Org unit levels')}
                 placeholder={placeholderText}
                 disabled={loading || error || !dataElementGroupOptions}
                 filterable

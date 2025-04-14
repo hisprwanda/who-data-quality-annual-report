@@ -1,3 +1,4 @@
+import i18n from '@dhis2/d2-i18n'
 import { useDataQuery } from '@dhis2/app-runtime'
 import { SingleSelectFieldFF, ReactFinalForm } from '@dhis2/ui'
 import React, { useMemo } from 'react'
@@ -39,9 +40,9 @@ export const DataElementGroupSelect = () => {
 
     const placeholderText = useMemo(() => {
         if (error) {
-            return 'An error occurred'
+            return i18n.t('An error occurred')
         }
-        return 'Select data element group'
+        return i18n.t('Select data element group')
     }, [error])
 
     return (
@@ -50,7 +51,7 @@ export const DataElementGroupSelect = () => {
                 name="dataItemGroupID"
                 component={SingleSelectFieldFF}
                 options={dataElementGroupOptions || []}
-                label={'Data element group'}
+                label={i18n.t('Data element group')}
                 placeholder={placeholderText}
                 loading={loading}
                 disabled={Boolean(error)}

@@ -1,3 +1,4 @@
+import i18n from '@dhis2/d2-i18n'
 import {
     // rename this to not clash with Field from RFF
     Field as FieldContainer,
@@ -20,14 +21,14 @@ const { Field } = ReactFinalForm
 const DataTypeRadios = () => {
     return (
         <div className={styles.formRow}>
-            <FieldContainer label="Data type">
+            <FieldContainer label={i18n.t('Data type')}>
                 <div className={styles.radiosContainer}>
                     <Field
                         name="dataType"
                         type="radio"
                         component={RadioFieldFF}
                         value={DATA_ELEMENT}
-                        label={'Data element'}
+                        label={i18n.t('Data element')}
                         initialValue={DATA_ELEMENT}
                     />
                     <Field
@@ -35,7 +36,7 @@ const DataTypeRadios = () => {
                         type="radio"
                         component={RadioFieldFF}
                         value={INDICATOR}
-                        label={'Indicator'}
+                        label={i18n.t('Indicator')}
                     />
                 </div>
             </FieldContainer>

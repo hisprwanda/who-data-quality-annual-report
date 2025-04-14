@@ -1,3 +1,4 @@
+import i18n from '@dhis2/d2-i18n'
 import { useDataQuery } from '@dhis2/app-runtime'
 import { MultiSelectFieldFF, ReactFinalForm, hasValue } from '@dhis2/ui'
 import React, { useEffect, useMemo, useCallback } from 'react'
@@ -117,15 +118,15 @@ export const DataSetSelect = () => {
 
     const placeholderText = useMemo(() => {
         if (loading) {
-            return 'Loading...'
+            return i18n.t('Loading...')
         }
         if (error) {
-            return 'An error occurred'
+            return i18n.t('An error occurred')
         }
         if (!dataItem.id) {
-            return 'Select a data element first'
+            return i18n.t('Select a data element first')
         }
-        return 'Select data sets'
+        return i18n.t('Select data sets')
     }, [dataItem.id, loading, error])
 
     return (
@@ -137,7 +138,7 @@ export const DataSetSelect = () => {
                 format={format}
                 parse={parse}
                 validate={hasValue}
-                label={'Data sets for completeness'}
+                label={i18n.t('Data sets for completeness')}
                 placeholder={placeholderText}
                 // sometimes data elements aren't associated with any data
                 // sets though 🤔

@@ -21,32 +21,58 @@ import {
 import { formatVal } from '../utils/utils.js'
 import styles from './SectionTwo.module.css'
 import { useSectionTwoData } from './useSectionTwoData.js'
+import i18n from '@dhis2/d2-i18n'
 
 const sectionInformation = {
     section2a: {
-        title: '2a: Extreme outliers',
-        subtitle: ({ orgUnitLevelName }) =>
-            `Extreme outliers, using the standard method. Threshold denotes the number of standard deviations from the mean. ${orgUnitLevelName} are counted as divergent if they have one or more extreme outliers for an indicator.`,
+        title: i18n.t('2a- Extreme outliers'),
+        subtitle: ({ orgUnitLevelName }) => {
+            i18n.t(
+                'Extreme outliers, using the standard method. Threshold denotes the number of standard deviations from the mean. {{ouName}} are counted as divergent if they have one or more extreme outliers for an indicator.',
+                {
+                    ouName: orgUnitLevelName,
+                }
+            )
+        },
     },
     section2b: {
-        title: '2b: Moderate outliers',
-        subtitle: ({ orgUnitLevelName }) =>
-            `Moderate outliers, using the standard method. Threshold denotes the number of standard deviations from the mean. ${orgUnitLevelName} are counted as divergent if they have two or more moderate outliers for an indicator.`,
+        title: i18n.t('2b- Moderate outliers'),
+        subtitle: ({ orgUnitLevelName }) => {
+            i18n.t(
+                'Moderate outliers, using the standard method. Threshold denotes the number of standard deviations from the mean. {{ouName}} are counted as divergent if they have two or more moderate outliers for an indicator.',
+                {
+                    ouName: orgUnitLevelName,
+                }
+            )
+        },
     },
     section2c: {
-        title: '2c: Moderate outliers',
-        subtitle: ({ orgUnitLevelName }) =>
-            `Moderate outliers, based on median (modified Z score). ${orgUnitLevelName} are counted as divergent if they have two or more moderate outliers for an indicator.`,
+        title: i18n.t('2c- Moderate outliers'),
+        subtitle: ({ orgUnitLevelName }) => {
+            i18n.t(
+                'Moderate outliers, based on median (modified Z score). {{ouname}} are counted as divergent if they have two or more moderate outliers for an indicator.',
+                {
+                    ouname: orgUnitLevelName,
+                }
+            )
+        },
     },
     section2d: {
-        title: '2d: Consistency of indicator values over time',
-        subtitle: ({ numReferenceYears }) =>
-            `Difference between the current year and either the average of the ${numReferenceYears} preceding years (if expected trend is constant), or the forecasted value.`,
+        title: i18n.t('2d- Consistency of indicator values over time'),
+        subtitle: ({ numReferenceYears }) => {
+            i18n.t(
+                'Difference between the current year and either the average of the {{num}} preceding years (if expected trend is constant), or the forecasted value.',
+                {
+                    num: numReferenceYears,
+                }
+            )
+        },
     },
     section2e: {
-        title: '2e: Consistency between related indicators',
-        subtitle:
-            'Consistency between reported values for two related indicators within the same year.',
+        title: i18n.t('2e- Consistency between related indicators'),
+        subtitle: i18n.t(
+            'Consistency between reported values for two related indicators within the same year.'
+        ),
     },
 }
 
@@ -102,22 +128,28 @@ const Sections2a2b2c = ({
                     />
                     <ReportRowHead>
                         <ReportCellHead rowSpan="2" width="200">
-                            Indicator
+                            {i18n.t('Indicator')}
                         </ReportCellHead>
                         <ReportCellHead rowSpan="2" width="80">
-                            Threshold
+                            {i18n.t('Threshold')}
                         </ReportCellHead>
                         <ReportCellHead rowSpan="2" width="80">
-                            Overall score
+                            {i18n.t('Overall score')}
                         </ReportCellHead>
                         <ReportCellHead colSpan="3">
-                            {`${orgUnitLevelName} with divergent score`}
+                            {i18n.t('{{ouname}} with divergent score', {
+                                ouname: orgUnitLevelName,
+                            })}
                         </ReportCellHead>
                     </ReportRowHead>
                     <ReportRowHead>
-                        <ReportCellHead width="110">Number</ReportCellHead>
-                        <ReportCellHead width="110">Percent</ReportCellHead>
-                        <ReportCellHead>Names</ReportCellHead>
+                        <ReportCellHead width="110">
+                            {i18n.t('Number')}
+                        </ReportCellHead>
+                        <ReportCellHead width="110">
+                            {i18n.t('Percent')}
+                        </ReportCellHead>
+                        <ReportCellHead>{i18n.t('Names')}</ReportCellHead>
                     </ReportRowHead>
                 </TableHead>
                 <TableBody>
@@ -178,22 +210,22 @@ const Section2DBlock = ({
             </TableHead>
             <TableBody>
                 <TableRow>
-                    <ReportCell>Expected trend</ReportCell>
+                    <ReportCell>{i18n.t('Expected trend')}</ReportCell>
                     <ReportCell>
                         {dataRow.expectedTrend[0].toUpperCase() +
                             dataRow.expectedTrend.slice(1)}
                     </ReportCell>
                 </TableRow>
                 <TableRow>
-                    <ReportCell>Compare region to</ReportCell>
+                    <ReportCell>{i18n.t('Compare region to')}</ReportCell>
                     <ReportCell>{dataRow.compareRegionTo}</ReportCell>
                 </TableRow>
                 <TableRow>
-                    <ReportCell>Quality threshold</ReportCell>
+                    <ReportCell>{i18n.t('Quality threshold')}</ReportCell>
                     <ReportCell>± {dataRow.qualityThreshold}%</ReportCell>
                 </TableRow>
                 <TableRow>
-                    <ReportCell>Overall score</ReportCell>
+                    <ReportCell>{i18n.t('Overall score')}</ReportCell>
                     <ReportCell>
                         {formatVal(dataRow.overallScore, {
                             roundTo: 1,
@@ -203,7 +235,9 @@ const Section2DBlock = ({
                 </TableRow>
                 <TableRow>
                     <ReportCell>
-                        {`Number of ${orgUnitLevelName} with divergent score`}
+                        {i18n.t('Number of {{ouname}} with divergent score', {
+                            ouname: orgUnitLevelName,
+                        })}
                     </ReportCell>
                     <ReportCell>
                         {dataRow.divergentSubOrgUnits?.number}
@@ -211,7 +245,9 @@ const Section2DBlock = ({
                 </TableRow>
                 <TableRow>
                     <ReportCell>
-                        {`Percent of ${orgUnitLevelName} with divergent score`}
+                        {i18n.t('Percent of {{ouname}} with divergent score', {
+                            ouname: orgUnitLevelName,
+                        })}
                     </ReportCell>
                     <ReportCell>
                         {formatVal(dataRow.divergentSubOrgUnits?.percent, {
@@ -312,19 +348,19 @@ const Section2EBlock = ({
             </TableHead>
             <TableBody>
                 <TableRow>
-                    <ReportCell>Indicator A</ReportCell>
+                    <ReportCell>{i18n.t('Indicator A')}</ReportCell>
                     <ReportCell>{dataRow.A}</ReportCell>
                 </TableRow>
                 <TableRow>
-                    <ReportCell>Indicator B</ReportCell>
+                    <ReportCell>{i18n.t('Indicator B')}</ReportCell>
                     <ReportCell>{dataRow.B}</ReportCell>
                 </TableRow>
                 <TableRow>
-                    <ReportCell>Expected relationship</ReportCell>
+                    <ReportCell>{i18n.t('Expected relationship')}</ReportCell>
                     <ReportCell>{dataRow.expectedRelationship}</ReportCell>
                 </TableRow>
                 <TableRow>
-                    <ReportCell>Quality threshold</ReportCell>
+                    <ReportCell>{i18n.t('Quality threshold')}</ReportCell>
                     <ReportCell>
                         {dataRow.expectedRelationship === 'Dropout rate'
                             ? ''
@@ -332,7 +368,7 @@ const Section2EBlock = ({
                     </ReportCell>
                 </TableRow>
                 <TableRow>
-                    <ReportCell>Overall score</ReportCell>
+                    <ReportCell>{i18n.t('Overall score')}</ReportCell>
                     <ReportCell>
                         {formatVal(dataRow.overallScore, {
                             roundTo: 1,
@@ -342,7 +378,9 @@ const Section2EBlock = ({
                 </TableRow>
                 <TableRow>
                     <ReportCell>
-                        {`Number of ${orgUnitLevelName} with divergent score`}
+                        {i18n.t('Number of {{ouname}} with divergent score', {
+                            ouname: orgUnitLevelName,
+                        })}
                     </ReportCell>
                     <ReportCell>
                         {dataRow.divergentSubOrgUnits?.number}
@@ -350,7 +388,9 @@ const Section2EBlock = ({
                 </TableRow>
                 <TableRow>
                     <ReportCell>
-                        {`Percent of ${orgUnitLevelName} with divergent score`}
+                        {i18n.t('Percent of {{ouname}} with divergent score', {
+                            ouname: orgUnitLevelName,
+                        })}
                     </ReportCell>
                     <ReportCell>
                         {formatVal(dataRow.divergentSubOrgUnits?.percentage, {

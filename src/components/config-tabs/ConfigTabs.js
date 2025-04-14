@@ -26,37 +26,37 @@ const ExitConfigurationsButton = () => (
 
 const configSections = [
     {
-        label: 'Numerators',
+        label: i18n.t('Numerators'),
         renderSection: () => <Numerators />,
     },
     {
-        label: 'Numerator groups',
+        label: i18n.t('Numerator groups'),
         renderSection: ({ configurations }) => (
             <NumeratorGroups configurations={configurations} />
         ),
     },
     {
-        label: 'Numerator relations',
+        label: i18n.t('Numerator relations'),
         renderSection: () => <NumeratorRelations />,
     },
     {
-        label: 'Numerator quality parameters',
+        label: i18n.t('Numerator quality parameters'),
         renderSection: ({ configurations }) => (
             <NumeratorParameters configurations={configurations} />
         ),
     },
     {
-        label: 'Denominators',
+        label: i18n.t('Denominators'),
         renderSection: ({ configurations }) => (
             <Denominators configurations={configurations} />
         ),
     },
     {
-        label: 'Denominator relations',
+        label: i18n.t('Denominator relations'),
         renderSection: () => <DenominatorRelations />,
     },
     {
-        label: 'External data comparison',
+        label: i18n.t('External data comparison'),
         renderSection: ({ configurations }) => (
             <ExternalDataComparison configurations={configurations} />
         ),

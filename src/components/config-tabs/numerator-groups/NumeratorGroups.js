@@ -13,6 +13,7 @@ import {
 } from '@dhis2/ui'
 import PropTypes from 'prop-types'
 import React, { useState, useCallback } from 'react'
+import i18n from '@dhis2/d2-i18n'
 import {
     CREATE_NUMERATOR_GROUP,
     DELETE_NUMERATOR_GROUP,
@@ -85,7 +86,7 @@ const EditGroupButton = ({ group }) => {
     return (
         <>
             <Button small onClick={openModal}>
-                Edit Group
+                {i18n.t('Edit Group')}
             </Button>
             {editModalOpen && (
                 <EditGroupModal
@@ -108,6 +109,7 @@ const DeleteGroupButton = ({ group }) => {
 
     const openModal = useCallback(() => setConfirmationModalOpen(true), [])
     const closeModal = useCallback(() => setConfirmationModalOpen(false), [])
+    let groupName = group.name
 
     const deleteNumeratorGroup = useCallback(
         (group) => {
@@ -122,16 +124,19 @@ const DeleteGroupButton = ({ group }) => {
     return (
         <>
             <Button small destructive onClick={openModal}>
-                Delete Group
+                {i18n.t('Delete Group')}
             </Button>
 
             {confirmationModalOpen && (
                 <ConfirmationModal
-                    title="Delete numerator group"
-                    text={`Are you sure you want to delete ${group.name}?`}
+                    title={i18n.t('Delete numerator group')}
+                    text={i18n.t(
+                        'Are you sure you want to delete {{groupName}}?',
+                        { groupName }
+                    )}
                     onClose={closeModal}
                     onConfirm={() => deleteNumeratorGroup(group)}
-                    action="Delete"
+                    action={i18n.t('Delete')}
                     destructive
                 />
             )}
@@ -153,7 +158,7 @@ export const NumeratorGroups = () => {
         return (
             <Table>
                 <TableRow>
-                    <TableCell>No groups found.</TableCell>
+                    <TableCell>{i18n.t('No groups found')}</TableCell>
                 </TableRow>
 
                 <TableFoot>
@@ -172,7 +177,9 @@ export const NumeratorGroups = () => {
     return (
         <div>
             <p>
-                Add and remove numerators to/from groups, and to add new groups.
+                {i18n.t(
+                    'Add and remove numerators to/from groups, and to add new groups.'
+                )}
             </p>
             <hr />
             <div className={styles.groupsContainer}>

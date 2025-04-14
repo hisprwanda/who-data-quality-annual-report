@@ -1,3 +1,4 @@
+import i18n from '@dhis2/d2-i18n'
 import { SingleSelectFieldFF, ReactFinalForm, hasValue } from '@dhis2/ui'
 import React, { useState, useEffect, useMemo } from 'react'
 import { useDataItemNames } from '../../../utils/index.js'
@@ -98,15 +99,15 @@ export const VariableSelect = () => {
 
     const placeholderText = useMemo(() => {
         if (loading) {
-            return 'Loading...'
+            return i18n.t('Loading...')
         }
         if (error) {
-            return 'An error occurred'
+            return i18n.t('An error occurred')
         }
         if (!dataItem.id) {
-            return 'Select a data element first'
+            return i18n.t('Select a data element first')
         }
-        return 'Select variable'
+        return i18n.t('Select variable')
     }, [dataItem.id, loading, error])
 
     return (
@@ -116,7 +117,7 @@ export const VariableSelect = () => {
                 component={SingleSelectFieldFF}
                 validate={hasValue}
                 options={options || []}
-                label={'Variable for completeness'}
+                label={i18n.t('Variable for completeness')}
                 placeholder={placeholderText}
                 disabled={!dataItem || loading || Boolean(error) || !options}
             />

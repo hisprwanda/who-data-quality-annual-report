@@ -11,6 +11,7 @@ import {
     ButtonStrip,
 } from '@dhis2/ui'
 import React, { useCallback, useState } from 'react'
+import i18n from '@dhis2/d2-i18n'
 import {
     CREATE_NUMERATOR,
     useConfigurations,
@@ -47,7 +48,7 @@ const AddNewNumeratorButton = () => {
     return (
         <>
             <Button primary icon={<IconAdd16 />} onClick={openModal}>
-                Add numerator
+                {i18n.t("Add numerator")}
             </Button>
             {addNewModalOpen && (
                 <EditNumeratorModal
@@ -65,20 +66,19 @@ export const Numerators = () => {
     return (
         <>
             <p>
-                Please map the reference numerators to the corresponding data
-                element/indicator in this database.
+                {i18n.t("Please map the reference numerators to the corresponding data element/indicator in this database.")}
             </p>
             <hr />
 
             <Table>
                 <TableHead>
                     <TableRowHead>
-                        <TableCellHead>Group</TableCellHead>
-                        <TableCellHead>Reference numerator</TableCellHead>
-                        <TableCellHead>Core</TableCellHead>
-                        <TableCellHead>Data element/indicator</TableCellHead>
-                        <TableCellHead>Dataset</TableCellHead>
-                        <TableCellHead>Actions</TableCellHead>
+                        <TableCellHead>{i18n.t("Group")}</TableCellHead>
+                        <TableCellHead>{i18n.t("Reference numerator")}</TableCellHead>
+                        <TableCellHead>{i18n.t("Core")}</TableCellHead>
+                        <TableCellHead>{i18n.t("Data element/indicator")}</TableCellHead>
+                        <TableCellHead>{i18n.t("Dataset")}</TableCellHead>
+                        <TableCellHead>{i18n.t("Actions")}</TableCellHead>
                     </TableRowHead>
                 </TableHead>
                 <TableBody>

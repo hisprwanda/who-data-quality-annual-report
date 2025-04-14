@@ -1,3 +1,4 @@
+import i18n from '@dhis2/d2-i18n'
 import { TableBody, TableHead, TableRow } from '@dhis2/ui'
 import PropTypes from 'prop-types'
 import React, { useEffect } from 'react'
@@ -21,7 +22,7 @@ import { useSectionThreeData } from './useSectionThreeData.js'
 
 const sectionInformation = {
     section3a: {
-        title: '3a: Comparison with external/survey data',
+        title: i18n.t('3a- Comparison with external/survey data'),
         subtitle:
             'Consistency of routine data with data from external source, e.g. population-based surveys.',
     },
@@ -78,7 +79,9 @@ const Section3A = ({
                             </TableHead>
                             <TableBody>
                                 <TableRow>
-                                    <ReportCell>Survey value</ReportCell>
+                                    <ReportCell>
+                                        {i18n.t('Survey value')}
+                                    </ReportCell>
                                     <ReportCell>
                                         {formatVal(dataRow.surveyValue, {
                                             roundTo: 1,
@@ -87,7 +90,9 @@ const Section3A = ({
                                     </ReportCell>
                                 </TableRow>
                                 <TableRow>
-                                    <ReportCell>Routine value</ReportCell>
+                                    <ReportCell>
+                                        {i18n.t('Routine value')}
+                                    </ReportCell>
                                     <ReportCell>
                                         {formatVal(dataRow.routineValue, {
                                             roundTo: 1,
@@ -96,13 +101,17 @@ const Section3A = ({
                                     </ReportCell>
                                 </TableRow>
                                 <TableRow>
-                                    <ReportCell>Quality threshold</ReportCell>
+                                    <ReportCell>
+                                        {i18n.t('Quality threshold')}
+                                    </ReportCell>
                                     <ReportCell>
                                         ± {dataRow.qualityThreshold}%
                                     </ReportCell>
                                 </TableRow>
                                 <TableRow>
-                                    <ReportCell>Overall score</ReportCell>
+                                    <ReportCell>
+                                        {i18n.t('Overall score')}
+                                    </ReportCell>
                                     <ReportCell>
                                         {formatVal(dataRow.overallScore, {
                                             roundTo: 1,
@@ -112,7 +121,12 @@ const Section3A = ({
                                 </TableRow>
                                 <TableRow>
                                     <ReportCell>
-                                        {`Number of ${orgUnitLevelName} with divergent score`}
+                                        {i18n.t(
+                                            'Number of {{ouname}} with divergent score',
+                                            {
+                                                ouname: orgUnitLevelName,
+                                            }
+                                        )}
                                     </ReportCell>
                                     <ReportCell>
                                         {formatVal(
@@ -127,7 +141,12 @@ const Section3A = ({
                                 </TableRow>
                                 <TableRow>
                                     <ReportCell>
-                                        {`Percent of ${orgUnitLevelName} with divergent score`}
+                                        {i18n.t(
+                                            'Percent of {{ouname}} with divergent score',
+                                            {
+                                                ouname: orgUnitLevelName,
+                                            }
+                                        )}
                                     </ReportCell>
                                     <ReportCell>
                                         {formatVal(

@@ -1,3 +1,4 @@
+import i18n from '@dhis2/d2-i18n'
 import {
     ButtonStrip,
     Button,
@@ -42,7 +43,9 @@ export const NumeratorGroupsTableItem = ({ numerators, group }) => {
     if (numeratorsInGroup.length === 0) {
         return (
             <TableRow>
-                <TableCell>No numerators added, please add them.</TableCell>
+                <TableCell>
+                    {i18n.t('No numerators added, please add them.')}
+                </TableCell>
             </TableRow>
         )
     }
@@ -66,8 +69,7 @@ export const NumeratorGroupsTableItem = ({ numerators, group }) => {
                                 value="default"
                                 icon={<IconSubtractCircle16 />}
                             >
-                                {' '}
-                                Remove
+                                {i18n.t('Remove')}
                             </Button>
                         </ButtonStrip>
                     </TableCell>

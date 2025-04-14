@@ -1,3 +1,4 @@
+import i18n from '@dhis2/d2-i18n'
 import {
     Button,
     Table,
@@ -63,20 +64,23 @@ export function EditDenominatorModal({
             {({ handleSubmit }) => (
                 <Modal onClose={onClose} position="middle">
                     <ModalTitle>
-                        {(denominatorDataToEdit ? 'Edit' : 'Create') +
-                            ' denominator'}
+                        {(denominatorDataToEdit
+                            ? i18n.t('Edit')
+                            : i18n.t('Create')) + i18n.t(' denominator')}
                     </ModalTitle>
                     <ModalContent>
                         <Table>
                             <TableBody>
                                 <TableRow>
-                                    <TableCell>Name</TableCell>
+                                    <TableCell>{i18n.t('Name')}</TableCell>
                                     <TableCell>
                                         <Field
                                             name="name"
                                             component={InputFieldFF}
                                             autoComplete="off"
-                                            placeholder="Denominator name"
+                                            placeholder={i18n.t(
+                                                'Denominator name'
+                                            )}
                                             validate={hasValue}
                                         />
                                     </TableCell>
@@ -88,20 +92,24 @@ export function EditDenominatorModal({
                                             name="type"
                                             component={SingleSelectFieldFF}
                                             options={denominatorTypes}
-                                            placeholder="Select denominator type"
+                                            placeholder={i18n.t(
+                                                'Select denominator type'
+                                            )}
                                             validate={hasValue}
                                         />
                                     </TableCell>
                                 </TableRow>
                                 <TableRow>
-                                    <TableCell>Denominator</TableCell>
+                                    <TableCell>
+                                        {i18n.t('Denominator')}
+                                    </TableCell>
                                     <TableCell>
                                         <DataMappingFormSection />
                                     </TableCell>
                                 </TableRow>
                                 <TableRow>
                                     <TableCell>
-                                        Lowest available level{' '}
+                                        {i18n.t('Lowest available level')}
                                     </TableCell>
                                     <TableCell>
                                         <OrgUnitLevelSelect />
@@ -113,14 +121,16 @@ export function EditDenominatorModal({
                     <ModalActions>
                         <ButtonStrip end>
                             <Button secondary onClick={onClose}>
-                                Cancel
+                                {i18n.t('Cancel')}
                             </Button>
                             <Button
                                 primary
                                 type="submit"
                                 onClick={handleSubmit}
                             >
-                                {denominatorDataToEdit ? 'Save' : 'Create'}
+                                {denominatorDataToEdit
+                                    ? i18n.t('Save')
+                                    : i18n.t('Create')}
                             </Button>
                         </ButtonStrip>
                     </ModalActions>

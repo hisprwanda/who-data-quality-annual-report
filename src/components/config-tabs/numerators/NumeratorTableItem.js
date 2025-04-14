@@ -1,3 +1,4 @@
+import i18n from '@dhis2/d2-i18n'
 import { useAlert } from '@dhis2/app-runtime'
 import {
     Button,
@@ -52,7 +53,7 @@ const EditNumeratorButton = ({ numerator }) => {
     return (
         <>
             <Button small onClick={openModal}>
-                Edit
+                {i18n.t('Edit')}
             </Button>
             {editModalOpen && (
                 <EditNumeratorModal
@@ -101,9 +102,12 @@ const ClearNumeratorButton = ({ numerator }) => {
             </Button>
             {confirmationModalOpen && (
                 <ConfirmationModal
-                    title="Clear numerator data mapping"
-                    text={`Are you sure you want to clear the data mappings for ${numerator.name}?`}
-                    action="Clear"
+                    title={i18n.t('Clear numerator data mapping')}
+                    text={i18n.t(
+                        'Are you sure you want to clear the data mappings for {{numerator.name}}?',
+                        { numerator: numerator }
+                    )}
+                    action={i18n.t('Clear')}
                     onClose={closeModal}
                     onConfirm={clearNumerator}
                 />
@@ -193,7 +197,7 @@ const DeleteNumeratorButton = ({ numerator }) => {
                 }}
                 className={styles.clearOrDeleteButton}
             >
-                Delete
+                {i18n.t('Delete')}
             </Button>
             {confirmationModalOpen && (
                 <ConfirmationModal

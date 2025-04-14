@@ -1,3 +1,4 @@
+import i18n from '@dhis2/d2-i18n'
 import {
     Button,
     ButtonStrip,
@@ -41,7 +42,7 @@ const AddNewDenominatorButton = () => {
     return (
         <>
             <Button primary icon={<IconAdd16 />} onClick={openModal}>
-                Add denominator
+                {i18n.t('Add denominator')}
             </Button>
             {addNewModalOpen && (
                 <EditDenominatorModal
@@ -59,9 +60,9 @@ export const Denominators = () => {
     return (
         <div>
             <p>
-                Please map alternative denominators for comparison, for example
-                denominiators from the National Bureau of Statistics with
-                denominators used by health programmes.
+                {i18n.t(
+                    'Please map alternative denominators for comparison, for example denominiators from the National Bureau of Statistics with denominators used by health programmes.'
+                )}
             </p>
             <hr />
 
@@ -69,9 +70,9 @@ export const Denominators = () => {
                 <Table>
                     <TableHead>
                         <TableRowHead>
-                            <TableCellHead>Name</TableCellHead>
-                            <TableCellHead>Type</TableCellHead>
-                            <TableCellHead>Actions</TableCellHead>
+                            <TableCellHead>{i18n.t('Name')}</TableCellHead>
+                            <TableCellHead>{i18n.t('Type')}</TableCellHead>
+                            <TableCellHead>{i18n.t('Actions')}</TableCellHead>
                         </TableRowHead>
                     </TableHead>
                     <TableBody>

@@ -1,3 +1,4 @@
+import i18n from '@dhis2/d2-i18n'
 import {
     Button,
     Table,
@@ -47,9 +48,11 @@ const CurrentMappingInfo = () => {
     }
 
     return (
-        <div
-            className={styles.currentMappingInfo}
-        >{`This numerator is currently mapped to "${initialDataItem.displayName}"`}</div>
+        <div className={styles.currentMappingInfo}>
+            {i18n.t('This numerator is currently mapped to {{dataItem}}', {
+                dataItem: initialDataItem.displayName,
+            })}
+        </div>
     )
 }
 
@@ -246,7 +249,9 @@ export function EditNumeratorModal({ numeratorCode, onSave, onClose }) {
                                         <Field
                                             name="name"
                                             component={InputFieldFF}
-                                            placeholder="Numerator name"
+                                            placeholder={i18n.t(
+                                                'Numerator name'
+                                            )}
                                             autoComplete="off"
                                             // a validator util from UI -- basically 'required'
                                             validate={hasValue}
@@ -264,7 +269,9 @@ export function EditNumeratorModal({ numeratorCode, onSave, onClose }) {
                                         <Field
                                             name="definition"
                                             component={TextAreaFieldFF}
-                                            placeholder="Numerator definition"
+                                            placeholder={i18n.t(
+                                                'Numerator definition'
+                                            )}
                                             rows={2}
                                             disabled={
                                                 numeratorToEdit &&
@@ -274,18 +281,20 @@ export function EditNumeratorModal({ numeratorCode, onSave, onClose }) {
                                     </TableCell>
                                 </TableRow>
                                 <TableRow>
-                                    <TableCell>Groups</TableCell>
+                                    <TableCell>{i18n.t('Groups')}</TableCell>
                                     <TableCell>
                                         <Field
                                             name="groups"
                                             component={MultiSelectFieldFF}
                                             options={numeratorGroupOptions}
-                                            placeholder="Select numerator groups"
+                                            placeholder={i18n.t(
+                                                'Select numerator groups'
+                                            )}
                                         />
                                     </TableCell>
                                 </TableRow>
                                 <TableRow>
-                                    <TableCell>Core</TableCell>
+                                    <TableCell>{i18n.t('Core')}</TableCell>
                                     <TableCell>
                                         <Field
                                             name="core"
@@ -304,14 +313,16 @@ export function EditNumeratorModal({ numeratorCode, onSave, onClose }) {
                     <ModalActions>
                         <ButtonStrip end>
                             <Button secondary onClick={onClose}>
-                                Cancel
+                                {i18n.t('Cancel ')}
                             </Button>
                             <Button
                                 primary
                                 type="submit"
                                 onClick={handleSubmit}
                             >
-                                {numeratorToEdit ? 'Save' : 'Create'}
+                                {numeratorToEdit
+                                    ? i18n.t('Save')
+                                    : i18n.t('Create')}
                             </Button>
                         </ButtonStrip>
                     </ModalActions>

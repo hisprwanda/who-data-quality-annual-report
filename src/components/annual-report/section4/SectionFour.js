@@ -1,3 +1,4 @@
+import i18n from '@dhis2/d2-i18n'
 import { TableBody, TableHead, TableRow } from '@dhis2/ui'
 import PropTypes from 'prop-types'
 import React, { useEffect } from 'react'
@@ -20,10 +21,10 @@ import { useSectionFourData } from './useSectionFourData.js'
 
 const sectionInformation = {
     section4a: {
-        title: '4a: Consistency with UN population projection',
+        title: '4a- Consistency with UN population projection',
     },
     section4b: {
-        title: '4b: Consistency of denominators',
+        title: '4b- Consistency of denominators',
         subtitle: 'Consistency of denominators within the same year',
     },
 }
@@ -139,7 +140,12 @@ const Section4B = ({
                                     </TableRow>
                                     <TableRow>
                                         <ReportCell>
-                                            {`Number of ${orgUnitLevelName} with divergent score`}
+                                            {i18n.t(
+                                                'Number of {{ouname}} with divergent score',
+                                                {
+                                                    ouname: orgUnitLevelName,
+                                                }
+                                            )}
                                         </ReportCell>
                                         <ReportCell>
                                             {
@@ -150,7 +156,12 @@ const Section4B = ({
                                     </TableRow>
                                     <TableRow>
                                         <ReportCell>
-                                            {`Percent of ${orgUnitLevelName} with divergent score`}
+                                            {i18n.t(
+                                                'Percent of {{ouname}} with divergent score',
+                                                {
+                                                    ouname: orgUnitLevelName,
+                                                }
+                                            )}
                                         </ReportCell>
                                         <ReportCell>
                                             {formatVal(

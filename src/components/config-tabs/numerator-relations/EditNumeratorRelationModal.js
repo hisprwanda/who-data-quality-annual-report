@@ -1,3 +1,4 @@
+import i18n from '@dhis2/d2-i18n'
 import {
     Button,
     Table,
@@ -77,14 +78,15 @@ export function EditNumeratorRelationModal({
             {({ handleSubmit }) => (
                 <Modal onClose={onClose} position="middle">
                     <ModalTitle>
-                        {(numeratorRelationToEdit ? 'Edit' : 'Create') +
-                            ' numerator relation'}
+                        {(numeratorRelationToEdit
+                            ? i18n.t('Edit')
+                            : i18n.t('Create')) + i18n.t(' numerator relation')}
                     </ModalTitle>
                     <ModalContent>
                         <Table>
                             <TableBody>
                                 <TableRow>
-                                    <TableCell>Name</TableCell>
+                                    <TableCell>{i18n.t('Name')}</TableCell>
                                     <TableCell>
                                         <Field
                                             name="name"
@@ -93,7 +95,7 @@ export function EditNumeratorRelationModal({
                                     </TableCell>
                                 </TableRow>
                                 <TableRow>
-                                    <TableCell>Type</TableCell>
+                                    <TableCell>{i18n.t('Type')}</TableCell>
                                     <TableCell>
                                         <Field
                                             name="type"
@@ -104,29 +106,39 @@ export function EditNumeratorRelationModal({
                                     </TableCell>
                                 </TableRow>
                                 <TableRow>
-                                    <TableCell>Numerator A</TableCell>
+                                    <TableCell>
+                                        {i18n.t('Numerator A')}
+                                    </TableCell>
                                     <TableCell>
                                         <Field
                                             name="A"
                                             component={SingleSelectFieldFF}
                                             options={numeratorOptions}
-                                            placeholder="Select numerator A"
+                                            placeholder={i18n.t(
+                                                'Select numerator A'
+                                            )}
                                         />
                                     </TableCell>
                                 </TableRow>
                                 <TableRow>
-                                    <TableCell>Numerator B</TableCell>
+                                    <TableCell>
+                                        {i18n.t('Numerator B')}
+                                    </TableCell>
                                     <TableCell>
                                         <Field
                                             name="B"
                                             component={SingleSelectFieldFF}
                                             options={numeratorOptions}
-                                            placeholder="Select numerator B"
+                                            placeholder={i18n.t(
+                                                'Select numerator B'
+                                            )}
                                         />
                                     </TableCell>
                                 </TableRow>
                                 <TableRow>
-                                    <TableCell>Threshold (+/-) %</TableCell>
+                                    <TableCell>
+                                        {i18n.t('Threshold (+/-) %')}
+                                    </TableCell>
                                     <TableCell>
                                         <Field
                                             name="criteria"
@@ -141,14 +153,15 @@ export function EditNumeratorRelationModal({
                             </TableBody>
                         </Table>
                         <p>
-                            Threshold denotes the % difference from national
-                            figure that is accepted for a sub-national unit.
+                            {i18n.t(
+                                'Threshold denotes the % difference from national figure that is accepted for a sub-national unit.'
+                            )}
                         </p>
                     </ModalContent>
                     <ModalActions>
                         <ButtonStrip end>
                             <Button secondary onClick={onClose}>
-                                Cancel
+                                {i18n.t('Cancel')}
                             </Button>
                             <Button
                                 primary
@@ -157,7 +170,9 @@ export function EditNumeratorRelationModal({
                                     handleSubmit()
                                 }}
                             >
-                                {numeratorRelationToEdit ? 'Save' : 'Create'}
+                                {numeratorRelationToEdit
+                                    ? i18n.t('Save')
+                                    : i18n.t('Create')}
                             </Button>
                         </ButtonStrip>
                     </ModalActions>

@@ -1,3 +1,4 @@
+import i18n from '@dhis2/d2-i18n'
 import { useDataMutation } from '@dhis2/app-runtime'
 import {
     Button,
@@ -96,7 +97,7 @@ export const NumeratorParameters = ({
         if (updatedConfigurations != null) {
             await mutate({ configurations: updatedConfigurations })
         } else {
-            alert('Cannot upload null configurations!')
+            alert(i18n.t('Cannot upload null configurations!'))
         }
     }
 
@@ -117,38 +118,47 @@ export const NumeratorParameters = ({
             }
         >
             <p>
-                {' '}
-                Modify parameters for each numerator. Only data
-                elements/indicators mapped to the database are displayed.
+                {i18n.t(
+                    'Modify parameters for each numerator. Only data elements/indicators mapped to the database are displayed.'
+                )}
             </p>
             <hr />
             <ul>
                 <li>
-                    Moderate outliers: Number of standard deviations (SD) from
-                    the mean for a values to quality as a moderate outlier.
+                    {i18n.t(
+                        'Moderate outliers: Number of standard deviations (SD) from the mean for a values to quality as a moderate outlier.',
+                        { nsSeparator: '-:-' }
+                    )}
                 </li>
                 <li>
-                    Extreme outliers: Number of standard deviations (SD) from
-                    the mean for a values to quality as an extreme outlier.
+                    {i18n.t(
+                        'Extreme outliers: Number of standard deviations (SD) from the mean for a values to quality as an extreme outlier.',
+                        { nsSeparator: '-:-' }
+                    )}
                 </li>
                 <li>
-                    Consistency: Threshold for consistency over time (percentage
-                    change over time).{' '}
+                    {i18n.t(
+                        'Consistency: Threshold for consistency over time (percentage change over time).',
+                        { nsSeparator: '-:-' }
+                    )}
                 </li>
                 <li>
-                    Expected trend: Whether the numerator value is expected to
-                    be constant over time or increase/decrease.{' '}
+                    {i18n.t(
+                        'Expected trend: Whether the numerator value is expected to be constant over time or increase/decrease.',
+                        { nsSeparator: '-:-' }
+                    )}
                 </li>
                 <li>
-                    Missing/zero values: Whether to compare consistency over
-                    time across organisation units, or to the expected change
-                    (e.g. constant or increasing/decreasing).{' '}
+                    {i18n.t(
+                        'Missing/zero values: Whether to compare consistency over time across organisation units, or to the expected change (e.g. constant or increasing/decreasing).',
+                        { nsSeparator: '-:-' }
+                    )}
                 </li>
                 <li>
-                    Missing/zero values: Threshold for missing/zero values for
-                    variable completeness. Note: when zero values are not stored
-                    for a data element, zeros and missing are not
-                    differentiated.{' '}
+                    {i18n.t(
+                        'Missing/zero values: Threshold for missing/zero values for variable completeness. Note: when zero values are not stored for a data element, zeros and missing are not differentiated.',
+                        { nsSeparator: '-:-' }
+                    )}
                 </li>
             </ul>
 
@@ -156,24 +166,30 @@ export const NumeratorParameters = ({
                 <Table>
                     <TableHead>
                         <TableRowHead>
-                            <TableCellHead>Group </TableCellHead>
+                            <TableCellHead>{i18n.t('Group')} </TableCellHead>
                             <TableCellHead>
-                                Reference indicator/data element
+                                {i18n.t('Reference indicator/data element')}
                             </TableCellHead>
                             <TableCellHead>
-                                Local data element/indicator{' '}
+                                {i18n.t('Local data element/indicator')}
                             </TableCellHead>
                             <TableCellHead>
-                                Moderate outlier (SD){' '}
-                            </TableCellHead>
-                            <TableCellHead>Extreme outlier (SD) </TableCellHead>
-                            <TableCellHead>Consistency (%)</TableCellHead>
-                            <TableCellHead>Expected trend </TableCellHead>
-                            <TableCellHead>
-                                Compare orgunit consistency with{' '}
+                                {i18n.t('Moderate outlier (SD)')}
                             </TableCellHead>
                             <TableCellHead>
-                                Missing/zero values (%)
+                                {i18n.t('Extreme outlier (SD)')}{' '}
+                            </TableCellHead>
+                            <TableCellHead>
+                                {i18n.t('Consistency (%)')}
+                            </TableCellHead>
+                            <TableCellHead>
+                                {i18n.t('Expected trend')}{' '}
+                            </TableCellHead>
+                            <TableCellHead>
+                                {i18n.t('Compare orgunit consistency with')}
+                            </TableCellHead>
+                            <TableCellHead>
+                                {i18n.t('Missing/zero values (%)')}
                             </TableCellHead>
                         </TableRowHead>
                     </TableHead>
@@ -187,8 +203,7 @@ export const NumeratorParameters = ({
                                             numerator.code
                                         ).map((group, key) => (
                                             <Chip key={key} dense>
-                                                {' '}
-                                                {group.name}{' '}
+                                                {group.name}
                                             </Chip>
                                         ))}
                                     </TableCell>
@@ -197,7 +212,7 @@ export const NumeratorParameters = ({
                                         {getNumeratorDataElement(
                                             mappedNumerators,
                                             numerator.dataID
-                                        )}{' '}
+                                        )}
                                     </TableCell>
                                     <TableCell>
                                         <SingleSelect
@@ -223,7 +238,7 @@ export const NumeratorParameters = ({
                                                 )
                                             ) : (
                                                 <SingleSelectOption
-                                                    label="option one"
+                                                    label={i18n.t('option one')}
                                                     value="1"
                                                 />
                                             )}
@@ -253,7 +268,7 @@ export const NumeratorParameters = ({
                                                 )
                                             ) : (
                                                 <SingleSelectOption
-                                                    label="option one"
+                                                    label={i18n.t('option one')}
                                                     value="1"
                                                 />
                                             )}
@@ -288,15 +303,15 @@ export const NumeratorParameters = ({
                                             }
                                         >
                                             <SingleSelectOption
-                                                label="Constant"
+                                                label={i18n.t('Constant')}
                                                 value="constant"
                                             />
                                             <SingleSelectOption
-                                                label="Increasing"
+                                                label={i18n.t('Increasing')}
                                                 value="increasing"
                                             />
                                             <SingleSelectOption
-                                                label="Decreasing"
+                                                label={i18n.t('Decreasing')}
                                                 value="decreasing"
                                             />
                                         </SingleSelectField>
@@ -313,11 +328,13 @@ export const NumeratorParameters = ({
                                             }
                                         >
                                             <SingleSelectOption
-                                                label="Overall result"
+                                                label={i18n.t('Overall result')}
                                                 value="ou"
                                             />
                                             <SingleSelectOption
-                                                label="Expected result"
+                                                label={i18n.t(
+                                                    'Expected result'
+                                                )}
                                                 value="th"
                                             />
                                         </SingleSelectField>
@@ -350,37 +367,49 @@ export const NumeratorParameters = ({
                 </Table>
             </div>
 
-            <p>Dataset completeness</p>
+            <p>{i18n.t('Dataset completeness')}</p>
             <p>
-                {' '}
-                Set the thresholds for various completeness in the table below.
-                Only dataset linked to indicators are displayed.
+                {i18n.t(
+                    'Set the thresholds for various completeness in the table below. Only dataset linked to indicators are displayed.'
+                )}
             </p>
             <hr />
             <ul>
-                <li>Completeness: Threshold for completeness of reporting.</li>
                 <li>
-                    Extreme outliers: Number of standard deviations (SD) from
-                    the mean for a values to quality as an extreme outlier.
+                    {i18n.t(
+                        'Completeness: Threshold for completeness of reporting.',
+                        { nsSeparator: '-:-' }
+                    )}
                 </li>
                 <li>
-                    Consistency: Threshold for consistency over time (percentage
-                    change over time).{' '}
+                    {i18n.t(
+                        'Extreme outliers: Number of standard deviations (SD) from the mean for a values to quality as an extreme outlier.',
+                        { nsSeparator: '-:-' }
+                    )}
                 </li>
                 <li>
-                    Expected trend: Whether the numerator value is expected to
-                    be constant over time or increase/decrease.{' '}
+                    {i18n.t(
+                        'Consistency: Threshold for consistency over time (percentage change over time).',
+                        { nsSeparator: '-:-' }
+                    )}
                 </li>
                 <li>
-                    Missing/zero values: Whether to compare consistency over
-                    time across organisation units, or to the expected change
-                    (e.g. constant or increasing/decreasing).{' '}
+                    {i18n.t(
+                        'Expected trend: Whether the numerator value is expected to be constant over time or increase/decrease.',
+                        { nsSeparator: '-:-' }
+                    )}
                 </li>
                 <li>
-                    Missing/zero values: Threshold for missing/zero values for
-                    variable completeness. Note: when zero values are not stored
-                    for a data element, zeros and missing are not
-                    differentiated.{' '}
+                    {i18n.t(
+                        'Missing/zero values: Whether to compare consistency over time across organisation units, or to the expected change (e.g. constant or increasing/decreasing).',
+                        { nsSeparator: '-:-' }
+                    )}
+                </li>
+                <li>
+                    {i18n.t(
+                        'Missing/zero values: Threshold for missing/zero values for variable completeness. Note: when zero values are not stored for a data element, zeros and missing are not differentiated.',
+                        { nsSeparator: '-:-' }
+                    )}
                 </li>
             </ul>
 
@@ -388,13 +417,21 @@ export const NumeratorParameters = ({
                 <Table>
                     <TableHead>
                         <TableRowHead>
-                            <TableCellHead>Group </TableCellHead>
-                            <TableCellHead>Completeness (%) </TableCellHead>
-                            <TableCellHead>Timeliness(%)</TableCellHead>
-                            <TableCellHead>Consistency (%) </TableCellHead>
-                            <TableCellHead>Expected trend</TableCellHead>
+                            <TableCellHead>{i18n.t('Group ')}</TableCellHead>
                             <TableCellHead>
-                                Compare orgunit consistency with
+                                {i18n.t('Completeness (%) ')}
+                            </TableCellHead>
+                            <TableCellHead>
+                                {i18n.t('Timeliness(%)')}
+                            </TableCellHead>
+                            <TableCellHead>
+                                {i18n.t('Consistency (%) ')}
+                            </TableCellHead>
+                            <TableCellHead>
+                                {i18n.t('Expected trend')}
+                            </TableCellHead>
+                            <TableCellHead>
+                                {i18n.t('Compare orgunit consistency with')}
                             </TableCellHead>
                         </TableRowHead>
                     </TableHead>
@@ -446,15 +483,15 @@ export const NumeratorParameters = ({
                                             }
                                         >
                                             <SingleSelectOption
-                                                label="Constant"
+                                                label={i18n.t('Constant')}
                                                 value="Constant"
                                             />
                                             <SingleSelectOption
-                                                label="Increasing"
+                                                label={i18n.t('Increasing')}
                                                 value="Increasing"
                                             />
                                             <SingleSelectOption
-                                                label="Decreasing"
+                                                label={i18n.t('Decreasing')}
                                                 value="Decreasing"
                                             />
                                         </SingleSelectField>
@@ -466,11 +503,13 @@ export const NumeratorParameters = ({
                                             }
                                         >
                                             <SingleSelectOption
-                                                label="Overall result"
+                                                label={i18n.t('Overall result')}
                                                 value="Overall result"
                                             />
                                             <SingleSelectOption
-                                                label="Expected result"
+                                                label={i18n.t(
+                                                    'Expected result'
+                                                )}
                                                 value="Expected result"
                                             />
                                         </SingleSelectField>
@@ -501,8 +540,7 @@ export const NumeratorParameters = ({
                                     value="default"
                                     icon={<IconAdd16 />}
                                 >
-                                    {' '}
-                                    Save Changes
+                                    {i18n.t('Save Changes')}
                                 </Button>
                             </TableCell>
                         </TableRow>

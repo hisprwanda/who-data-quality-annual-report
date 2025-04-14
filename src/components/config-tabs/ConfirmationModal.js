@@ -1,3 +1,4 @@
+import i18n from '@dhis2/d2-i18n'
 import {
     Button,
     ButtonStrip,
@@ -23,7 +24,7 @@ export const ConfirmationModal = ({
         <ModalActions>
             <ButtonStrip end>
                 <Button secondary onClick={onClose}>
-                    Cancel
+                    {i18n.t('Cancel')}
                 </Button>
                 <Button
                     destructive={destructive}

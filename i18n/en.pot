@@ -5,8 +5,8 @@ msgstr ""
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1)\n"
-"POT-Creation-Date: 2024-11-01T15:07:47.517Z\n"
-"PO-Revision-Date: 2024-11-01T15:07:47.518Z\n"
+"POT-Creation-Date: 2025-04-14T17:35:34.664Z\n"
+"PO-Revision-Date: 2025-04-14T17:35:34.664Z\n"
 
 msgid "There is no data for this {{sectionType}}"
 msgstr "There is no data for this {{sectionType}}"
@@ -22,6 +22,18 @@ msgstr "Something went wrong when retrieving data"
 
 msgid "The Data Quality Annual Report has not been configured"
 msgstr "The Data Quality Annual Report has not been configured"
+
+msgid "Go to the"
+msgstr "Go to the"
+
+msgid "configurations page"
+msgstr "configurations page"
+
+msgid "to set up the report."
+msgstr "to set up the report."
+
+msgid "Contact your system administrator."
+msgstr "Contact your system administrator."
 
 msgid ""
 "Could not calculate overall score. Calculations at {{subOrgUnitLevelName}} "
@@ -42,6 +54,18 @@ msgstr ""
 
 msgid "No data to display"
 msgstr "No data to display"
+
+msgid "Domain 1 - Completeness of Reporting"
+msgstr "Domain 1 - Completeness of Reporting"
+
+msgid "Domain 2 - Internal Consistency of Reported Data"
+msgstr "Domain 2 - Internal Consistency of Reported Data"
+
+msgid "Domain 3 - External Comparison"
+msgstr "Domain 3 - External Comparison"
+
+msgid "Domain 4 - Consistency of Population Data"
+msgstr "Domain 4 - Consistency of Population Data"
 
 msgid "[Core]"
 msgstr "[Core]"
@@ -67,6 +91,77 @@ msgstr "% Completeness"
 msgid "Reporting completeness over time"
 msgstr "Reporting completeness over time"
 
+msgid "1a- Completeness of facility reporting"
+msgstr "1a- Completeness of facility reporting"
+
+msgid "The percentage of expected reports that have been entered and completed."
+msgstr "The percentage of expected reports that have been entered and completed."
+
+msgid "Data set"
+msgstr "Data set"
+
+msgid "Quality threshold"
+msgstr "Quality threshold"
+
+msgid "Overall score"
+msgstr "Overall score"
+
+msgid "{{divergents}} with divergent score"
+msgstr "{{divergents}} with divergent score"
+
+msgid "Number"
+msgstr "Number"
+
+msgid "Percentage"
+msgstr "Percentage"
+
+msgid "Name"
+msgstr "Name"
+
+msgid "1b- Timeliness of facility reporting"
+msgstr "1b- Timeliness of facility reporting"
+
+msgid ""
+"The percentage of expected reports that have been entered and completed on "
+"time."
+msgstr ""
+"The percentage of expected reports that have been entered and completed on "
+"time."
+
+msgid "1c- Completeness of indicator data"
+msgstr "1c- Completeness of indicator data"
+
+msgid ""
+"Reports where values are not missing. If zeros are not stored, zeros are "
+"counted as missing."
+msgstr ""
+"Reports where values are not missing. If zeros are not stored, zeros are "
+"counted as missing."
+
+msgid "Indicator"
+msgstr "Indicator"
+
+msgid "Values"
+msgstr "Values"
+
+msgid "Overall Score"
+msgstr "Overall Score"
+
+msgid "Expected"
+msgstr "Expected"
+
+msgid "Actual"
+msgstr "Actual"
+
+msgid "1d- Consistency of dataset completeness over time"
+msgstr "1d- Consistency of dataset completeness over time"
+
+msgid "Expected Trend"
+msgstr "Expected Trend"
+
+msgid "Compare Region to"
+msgstr "Compare Region to"
+
 msgid "Dropout rate (%)"
 msgstr "Dropout rate (%)"
 
@@ -78,6 +173,95 @@ msgstr "Org units"
 
 msgid "<b>{{name}}</b><br/>{{yLabel}}: {{y}}<br/>{{xLabel}}: {{x}}"
 msgstr "<b>{{name}}</b><br/>{{yLabel}}: {{y}}<br/>{{xLabel}}: {{x}}"
+
+msgid "2a- Extreme outliers"
+msgstr "2a- Extreme outliers"
+
+msgid ""
+"Extreme outliers, using the standard method. Threshold denotes the number "
+"of standard deviations from the mean. {{ouName}} are counted as divergent "
+"if they have one or more extreme outliers for an indicator."
+msgstr ""
+"Extreme outliers, using the standard method. Threshold denotes the number "
+"of standard deviations from the mean. {{ouName}} are counted as divergent "
+"if they have one or more extreme outliers for an indicator."
+
+msgid "2b- Moderate outliers"
+msgstr "2b- Moderate outliers"
+
+msgid ""
+"Moderate outliers, using the standard method. Threshold denotes the number "
+"of standard deviations from the mean. {{ouName}} are counted as divergent "
+"if they have two or more moderate outliers for an indicator."
+msgstr ""
+"Moderate outliers, using the standard method. Threshold denotes the number "
+"of standard deviations from the mean. {{ouName}} are counted as divergent "
+"if they have two or more moderate outliers for an indicator."
+
+msgid "2c- Moderate outliers"
+msgstr "2c- Moderate outliers"
+
+msgid ""
+"Moderate outliers, based on median (modified Z score). {{ouname}} are "
+"counted as divergent if they have two or more moderate outliers for an "
+"indicator."
+msgstr ""
+"Moderate outliers, based on median (modified Z score). {{ouname}} are "
+"counted as divergent if they have two or more moderate outliers for an "
+"indicator."
+
+msgid "2d- Consistency of indicator values over time"
+msgstr "2d- Consistency of indicator values over time"
+
+msgid ""
+"Difference between the current year and either the average of the {{num}} "
+"preceding years (if expected trend is constant), or the forecasted value."
+msgstr ""
+"Difference between the current year and either the average of the {{num}} "
+"preceding years (if expected trend is constant), or the forecasted value."
+
+msgid "2e- Consistency between related indicators"
+msgstr "2e- Consistency between related indicators"
+
+msgid ""
+"Consistency between reported values for two related indicators within the "
+"same year."
+msgstr ""
+"Consistency between reported values for two related indicators within the "
+"same year."
+
+msgid "Threshold"
+msgstr "Threshold"
+
+msgid "{{ouname}} with divergent score"
+msgstr "{{ouname}} with divergent score"
+
+msgid "Percent"
+msgstr "Percent"
+
+msgid "Names"
+msgstr "Names"
+
+msgid "Expected trend"
+msgstr "Expected trend"
+
+msgid "Compare region to"
+msgstr "Compare region to"
+
+msgid "Number of {{ouname}} with divergent score"
+msgstr "Number of {{ouname}} with divergent score"
+
+msgid "Percent of {{ouname}} with divergent score"
+msgstr "Percent of {{ouname}} with divergent score"
+
+msgid "Indicator A"
+msgstr "Indicator A"
+
+msgid "Indicator B"
+msgstr "Indicator B"
+
+msgid "Expected relationship"
+msgstr "Expected relationship"
 
 msgid "Chart not available"
 msgstr "Chart not available"
@@ -94,6 +278,15 @@ msgstr "Survey"
 msgid "Survey: {{survey}}%<br/>Routine: {{routine}}%"
 msgstr "Survey: {{survey}}%<br/>Routine: {{routine}}%"
 
+msgid "3a- Comparison with external/survey data"
+msgstr "3a- Comparison with external/survey data"
+
+msgid "Survey value"
+msgstr "Survey value"
+
+msgid "Routine value"
+msgstr "Routine value"
+
 msgid "Not available"
 msgstr "Not available"
 
@@ -102,6 +295,500 @@ msgstr "Cannot be calculated"
 
 msgid "Exit configurations"
 msgstr "Exit configurations"
+
+msgid "Numerators"
+msgstr "Numerators"
+
+msgid "Numerator groups"
+msgstr "Numerator groups"
+
+msgid "Numerator relations"
+msgstr "Numerator relations"
+
+msgid "Numerator quality parameters"
+msgstr "Numerator quality parameters"
+
+msgid "Denominators"
+msgstr "Denominators"
+
+msgid "Denominator relations"
+msgstr "Denominator relations"
+
+msgid "External data comparison"
+msgstr "External data comparison"
+
+msgid "Cancel"
+msgstr "Cancel"
+
+msgid "Add denominator"
+msgstr "Add denominator"
+
+msgid ""
+"Please map alternative denominators for comparison, for example "
+"denominiators from the National Bureau of Statistics with denominators used "
+"by health programmes."
+msgstr ""
+"Please map alternative denominators for comparison, for example "
+"denominiators from the National Bureau of Statistics with denominators used "
+"by health programmes."
+
+msgid "Type"
+msgstr "Type"
+
+msgid "Actions"
+msgstr "Actions"
+
+msgid "Edit"
+msgstr "Edit"
+
+msgid ""
+"\n"
+"Denominator relations- {{relations}}."
+msgstr ""
+"\n"
+"Denominator relations- {{relations}}."
+
+msgid ""
+"\n"
+"External relations- {{relations}}."
+msgstr ""
+"\n"
+"External relations- {{relations}}."
+
+msgid ""
+"Can't delete the denominator {{name}} because it's associated with the "
+"following metadata.{{numRelsText}}{{extRelsText}}"
+msgstr ""
+"Can't delete the denominator {{name}} because it's associated with the "
+"following metadata.{{numRelsText}}{{extRelsText}}"
+
+msgid "Delete"
+msgstr "Delete"
+
+msgid "Delete denominator"
+msgstr "Delete denominator"
+
+msgid "Create"
+msgstr "Create"
+
+msgid " denominator"
+msgstr " denominator"
+
+msgid "Denominator name"
+msgstr "Denominator name"
+
+msgid "Select denominator type"
+msgstr "Select denominator type"
+
+msgid "Denominator"
+msgstr "Denominator"
+
+msgid "Lowest available level"
+msgstr "Lowest available level"
+
+msgid "Save"
+msgstr "Save"
+
+msgid "Add External Relation"
+msgstr "Add External Relation"
+
+msgid ""
+" Please identify external (survey) data that can be used for comparison "
+"with routine data, e.g. ANC coverage, immunisation coverage etc. The "
+"'external data' should refer to calculated survey result (e.g. a "
+"percentage), whilst the numerator  denominator refer to the raw data"
+msgstr ""
+" Please identify external (survey) data that can be used for comparison "
+"with routine data, e.g. ANC coverage, immunisation coverage etc. The "
+"'external data' should refer to calculated survey result (e.g. a "
+"percentage), whilst the numerator  denominator refer to the raw data"
+
+msgid "Survey/external indicator "
+msgstr "Survey/external indicator "
+
+msgid "Routine data numerator"
+msgstr "Routine data numerator"
+
+msgid "Routine data denominator "
+msgstr "Routine data denominator "
+
+msgid "Criteria"
+msgstr "Criteria"
+
+msgid "Level"
+msgstr "Level"
+
+msgid "No external relations found."
+msgstr "No external relations found."
+
+msgid "Delete external relation"
+msgstr "Delete external relation"
+
+msgid "Are you sure you want to delete "
+msgstr "Are you sure you want to delete "
+
+msgid "Select a numerator"
+msgstr "Select a numerator"
+
+msgid "Loading..."
+msgstr "Loading..."
+
+msgid "An error occurred"
+msgstr "An error occurred"
+
+msgid "Select an org unit level"
+msgstr "Select an org unit level"
+
+msgid "Org unit levels"
+msgstr "Org unit levels"
+
+msgid ""
+"A group with the name {{name}} already exists. Please choose a different "
+"name."
+msgstr ""
+"A group with the name {{name}} already exists. Please choose a different "
+"name."
+
+msgid " Group"
+msgstr " Group"
+
+msgid "Group Members"
+msgstr "Group Members"
+
+msgid "Select numerators"
+msgstr "Select numerators"
+
+msgid "Edit Group"
+msgstr "Edit Group"
+
+msgid "Delete Group"
+msgstr "Delete Group"
+
+msgid "Delete numerator group"
+msgstr "Delete numerator group"
+
+msgid "Are you sure you want to delete {{groupName}}?"
+msgstr "Are you sure you want to delete {{groupName}}?"
+
+msgid "No groups found"
+msgstr "No groups found"
+
+msgid "Add and remove numerators to/from groups, and to add new groups."
+msgstr "Add and remove numerators to/from groups, and to add new groups."
+
+msgid "No numerators added, please add them."
+msgstr "No numerators added, please add them."
+
+msgid "Remove"
+msgstr "Remove"
+
+msgid " numerator relation"
+msgstr " numerator relation"
+
+msgid "Numerator A"
+msgstr "Numerator A"
+
+msgid "Select numerator A"
+msgstr "Select numerator A"
+
+msgid "Numerator B"
+msgstr "Numerator B"
+
+msgid "Select numerator B"
+msgstr "Select numerator B"
+
+msgid "Threshold (+/-) %"
+msgstr "Threshold (+/-) %"
+
+msgid ""
+"Threshold denotes the % difference from national figure that is accepted "
+"for a sub-national unit."
+msgstr ""
+"Threshold denotes the % difference from national figure that is accepted "
+"for a sub-national unit."
+
+msgid "Add Numerator Relation"
+msgstr "Add Numerator Relation"
+
+msgid "Threshold (%)"
+msgstr "Threshold (%)"
+
+msgid "Threshold explanation"
+msgstr "Threshold explanation"
+
+msgid "Description"
+msgstr "Description"
+
+msgid "No numerator relations found."
+msgstr "No numerator relations found."
+
+msgid "Delete numerator relation"
+msgstr "Delete numerator relation"
+
+msgid "Are you sure you want to delete"
+msgstr "Are you sure you want to delete"
+
+msgid "Select a data element first"
+msgstr "Select a data element first"
+
+msgid "Select data sets"
+msgstr "Select data sets"
+
+msgid "Data sets for completeness"
+msgstr "Data sets for completeness"
+
+msgid "Select data element group"
+msgstr "Select data element group"
+
+msgid "Data element group"
+msgstr "Data element group"
+
+msgid "Select a data element group first"
+msgstr "Select a data element group first"
+
+msgid "Select data element"
+msgstr "Select data element"
+
+msgid "Data element"
+msgstr "Data element"
+
+msgid "Data element type"
+msgstr "Data element type"
+
+msgid "Totals"
+msgstr "Totals"
+
+msgid "Details"
+msgstr "Details"
+
+msgid "Select variable"
+msgstr "Select variable"
+
+msgid "Variable for completeness"
+msgstr "Variable for completeness"
+
+msgid "Data type"
+msgstr "Data type"
+
+msgid "This numerator is currently mapped to {{dataItem}}"
+msgstr "This numerator is currently mapped to {{dataItem}}"
+
+msgid "Numerator name"
+msgstr "Numerator name"
+
+msgid "Numerator definition"
+msgstr "Numerator definition"
+
+msgid "Groups"
+msgstr "Groups"
+
+msgid "Select numerator groups"
+msgstr "Select numerator groups"
+
+msgid "Core"
+msgstr "Core"
+
+msgid "Cancel "
+msgstr "Cancel "
+
+msgid "Add numerator"
+msgstr "Add numerator"
+
+msgid ""
+"Please map the reference numerators to the corresponding data "
+"element/indicator in this database."
+msgstr ""
+"Please map the reference numerators to the corresponding data "
+"element/indicator in this database."
+
+msgid "Group"
+msgstr "Group"
+
+msgid "Reference numerator"
+msgstr "Reference numerator"
+
+msgid "Data element/indicator"
+msgstr "Data element/indicator"
+
+msgid "Dataset"
+msgstr "Dataset"
+
+msgid "Clear numerator data mapping"
+msgstr "Clear numerator data mapping"
+
+msgid "Are you sure you want to clear the data mappings for {{numerator.name}}?"
+msgstr "Are you sure you want to clear the data mappings for {{numerator.name}}?"
+
+msgid "Clear"
+msgstr "Clear"
+
+msgid "Delete denominator relation"
+msgstr "Delete denominator relation"
+
+msgid "Are you sure you want to delete {{relation}}?"
+msgstr "Are you sure you want to delete {{relation}}?"
+
+msgid "Name "
+msgstr "Name "
+
+msgid "Denominator A "
+msgstr "Denominator A "
+
+msgid "Denominator B "
+msgstr "Denominator B "
+
+msgid "Primary button"
+msgstr "Primary button"
+
+msgid " Edit"
+msgstr " Edit"
+
+msgid "Add Relations"
+msgstr "Add Relations"
+
+msgid "Denominator relations mapping"
+msgstr "Denominator relations mapping"
+
+msgid "Select relation type"
+msgstr "Select relation type"
+
+msgid "Denominator A"
+msgstr "Denominator A"
+
+msgid "Select denominator A"
+msgstr "Select denominator A"
+
+msgid "Denominator B"
+msgstr "Denominator B"
+
+msgid "Select denominator B"
+msgstr "Select denominator B"
+
+msgid " Cancel"
+msgstr " Cancel"
+
+msgid "Cannot upload null configurations!"
+msgstr "Cannot upload null configurations!"
+
+msgid ""
+"Modify parameters for each numerator. Only data elements/indicators mapped "
+"to the database are displayed."
+msgstr ""
+"Modify parameters for each numerator. Only data elements/indicators mapped "
+"to the database are displayed."
+
+msgid ""
+"Moderate outliers: Number of standard deviations (SD) from the mean for a "
+"values to quality as a moderate outlier."
+msgstr ""
+"Moderate outliers: Number of standard deviations (SD) from the mean for a "
+"values to quality as a moderate outlier."
+
+msgid ""
+"Extreme outliers: Number of standard deviations (SD) from the mean for a "
+"values to quality as an extreme outlier."
+msgstr ""
+"Extreme outliers: Number of standard deviations (SD) from the mean for a "
+"values to quality as an extreme outlier."
+
+msgid ""
+"Consistency: Threshold for consistency over time (percentage change over "
+"time)."
+msgstr ""
+"Consistency: Threshold for consistency over time (percentage change over "
+"time)."
+
+msgid ""
+"Expected trend: Whether the numerator value is expected to be constant over "
+"time or increase/decrease."
+msgstr ""
+"Expected trend: Whether the numerator value is expected to be constant over "
+"time or increase/decrease."
+
+msgid ""
+"Missing/zero values: Whether to compare consistency over time across "
+"organisation units, or to the expected change (e.g. constant or "
+"increasing/decreasing)."
+msgstr ""
+"Missing/zero values: Whether to compare consistency over time across "
+"organisation units, or to the expected change (e.g. constant or "
+"increasing/decreasing)."
+
+msgid ""
+"Missing/zero values: Threshold for missing/zero values for variable "
+"completeness. Note: when zero values are not stored for a data element, "
+"zeros and missing are not differentiated."
+msgstr ""
+"Missing/zero values: Threshold for missing/zero values for variable "
+"completeness. Note: when zero values are not stored for a data element, "
+"zeros and missing are not differentiated."
+
+msgid "Reference indicator/data element"
+msgstr "Reference indicator/data element"
+
+msgid "Local data element/indicator"
+msgstr "Local data element/indicator"
+
+msgid "Moderate outlier (SD)"
+msgstr "Moderate outlier (SD)"
+
+msgid "Extreme outlier (SD)"
+msgstr "Extreme outlier (SD)"
+
+msgid "Consistency (%)"
+msgstr "Consistency (%)"
+
+msgid "Compare orgunit consistency with"
+msgstr "Compare orgunit consistency with"
+
+msgid "Missing/zero values (%)"
+msgstr "Missing/zero values (%)"
+
+msgid "option one"
+msgstr "option one"
+
+msgid "Constant"
+msgstr "Constant"
+
+msgid "Increasing"
+msgstr "Increasing"
+
+msgid "Decreasing"
+msgstr "Decreasing"
+
+msgid "Overall result"
+msgstr "Overall result"
+
+msgid "Expected result"
+msgstr "Expected result"
+
+msgid "Dataset completeness"
+msgstr "Dataset completeness"
+
+msgid ""
+"Set the thresholds for various completeness in the table below. Only "
+"dataset linked to indicators are displayed."
+msgstr ""
+"Set the thresholds for various completeness in the table below. Only "
+"dataset linked to indicators are displayed."
+
+msgid "Completeness: Threshold for completeness of reporting."
+msgstr "Completeness: Threshold for completeness of reporting."
+
+msgid "Group "
+msgstr "Group "
+
+msgid "Completeness (%) "
+msgstr "Completeness (%) "
+
+msgid "Timeliness(%)"
+msgstr "Timeliness(%)"
+
+msgid "Consistency (%) "
+msgstr "Consistency (%) "
+
+msgid "Save Changes"
+msgstr "Save Changes"
 
 msgid "WHO Data Quality Annual Report"
 msgstr "WHO Data Quality Annual Report"
@@ -137,9 +824,6 @@ msgid ""
 msgstr ""
 "Group, Organisation unit, Organisation unit level, period, and comparison "
 "periods must all be selected before a report can be generated."
-
-msgid "Group"
-msgstr "Group"
 
 msgid "Choose a group"
 msgstr "Choose a group"
@@ -188,6 +872,13 @@ msgstr "Choose a period type first"
 
 msgid "Preceding years for reference"
 msgstr "Preceding years for reference"
+
+msgid ""
+"The app failed to retrieve required information about organisation units. "
+"Without this information, the annual report cannot be generated."
+msgstr ""
+"The app failed to retrieve required information about organisation units. "
+"Without this information, the annual report cannot be generated."
 
 msgid "Configurations"
 msgstr "Configurations"

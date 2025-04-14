@@ -9,6 +9,7 @@ import { SectionOne } from './section1/SectionOne.js'
 import { SectionTwo } from './section2/SectionTwo.js'
 import { SectionThree } from './section3/SectionThree.js'
 import { SectionFour } from './section4/SectionFour.js'
+import i18n from '@dhis2/d2-i18n'
 
 const SectionLayout = ({ title, children }) => (
     // `section` element usage here is important for 'first-of-type' selector
@@ -43,7 +44,9 @@ export const ReportData = ({ reportParameters, printing }) => {
             >
                 <ReportPrintHeader reportParameters={reportParameters} />
 
-                <SectionLayout title="Domain 1 - Completeness of Reporting">
+                <SectionLayout
+                    title={i18n.t('Domain 1 - Completeness of Reporting')}
+                >
                     {isSectionOneEmpty ? (
                         <div className={styles.marginBottom24}>
                             <NoDataInfoBox subsection={false} />
@@ -52,10 +55,14 @@ export const ReportData = ({ reportParameters, printing }) => {
                         <SectionOne reportParameters={reportParameters} />
                     )}
                 </SectionLayout>
-                <SectionLayout title="Domain 2 - Internal Consistency of Reported Data">
+                <SectionLayout
+                    title={i18n.t(
+                        'Domain 2 - Internal Consistency of Reported Data'
+                    )}
+                >
                     <SectionTwo reportParameters={reportParameters} />
                 </SectionLayout>
-                <SectionLayout title="Domain 3 - External Comparison">
+                <SectionLayout title={i18n.t('Domain 3 - External Comparison')}>
                     {reportParameters?.mappedConfiguration?.externalRelations
                         ?.length > 0 ? (
                         <SectionThree reportParameters={reportParameters} />
@@ -65,7 +72,9 @@ export const ReportData = ({ reportParameters, printing }) => {
                         </div>
                     )}
                 </SectionLayout>
-                <SectionLayout title="Domain 4 - Consistency of Population Data">
+                <SectionLayout
+                    title={i18n.t('Domain 4 - Consistency of Population Data')}
+                >
                     {reportParameters?.mappedConfiguration?.denominatorRelations
                         ?.length > 0 ? (
                         <SectionFour reportParameters={reportParameters} />

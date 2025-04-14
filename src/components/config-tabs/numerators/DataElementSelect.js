@@ -1,8 +1,9 @@
+import i18n from '@dhis2/d2-i18n'
 import {
     // rename this to not clash with Field from RFF
     SingleSelectFieldFF,
     ReactFinalForm,
-    hasValue
+    hasValue,
 } from '@dhis2/ui'
 import React, { useCallback, useState, useEffect, useMemo } from 'react'
 import { TOTALS } from './constants.js'
@@ -124,15 +125,15 @@ export const DataElementSelect = () => {
 
     const placeholderText = useMemo(() => {
         if (loading) {
-            return 'Loading...'
+            return i18n.t('Loading...')
         }
         if (error) {
-            return 'An error occurred'
+            return i18n.t('An error occurred')
         }
         if (!dataItemGroupID) {
-            return 'Select a data element group first'
+            return i18n.t('Select a data element group first')
         }
-        return 'Select data element'
+        return i18n.t('Select data element')
     }, [dataItemGroupID, loading, error])
 
     return (
@@ -146,7 +147,7 @@ export const DataElementSelect = () => {
                 validate={hasValue}
                 // DHIS2 UI options
                 options={options || []}
-                label={'Data element'}
+                label={i18n.t('Data element')}
                 placeholder={placeholderText}
                 filterable
                 disabled={loading || Boolean(error) || !options}

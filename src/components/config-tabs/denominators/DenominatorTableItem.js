@@ -1,3 +1,4 @@
+import i18n from '@dhis2/d2-i18n'
 import { useAlert } from '@dhis2/app-runtime'
 import { Button, TableCell, TableRow, ButtonStrip } from '@dhis2/ui'
 import PropTypes from 'prop-types'
@@ -48,7 +49,7 @@ const EditDenominatorButton = ({ denominator }) => {
     return (
         <>
             <Button small onClick={openModal}>
-                Edit
+                {i18n.t('Edit')}
             </Button>
             {editModalOpen && (
                 <EditDenominatorModal
@@ -115,21 +116,24 @@ const DeleteDenominatorButton = ({ denominator }) => {
         // Otherwise, warn the user
         const numRelsText =
             associatedDenominatorRelations.length > 0
-                ? '\nDenominator relations: ' +
-                  associatedDenominatorRelations.join(', ') +
-                  '.'
+                ? i18n.t('\nDenominator relations- {{relations}}.', {
+                      relations: associatedDenominatorRelations.join(', '),
+                  })
                 : ''
         const extRelsText =
             associatedExternalRelations.length > 0
-                ? '\nExternal relations: ' +
-                  associatedExternalRelations.join(', ') +
-                  '.'
+                ? i18n.t('\nExternal relations- {{relations}}.', {
+                      relations: associatedExternalRelations.join(', '),
+                  })
                 : ''
-        const message =
-            `Can't delete the denominator "${denominator.name}" because it's ` +
-            `associated with the following metadata.` +
-            numRelsText +
-            extRelsText
+        const message = i18n.t(
+            'Can\'t delete the denominator {{name}} because it\'s associated with the following metadata.{{numRelsText}}{{extRelsText}}',
+            {
+                name: denominator.name,
+                numRelsText,
+                extRelsText,
+            }
+        )
         show({ message })
         return false
     }, [configurations, denominator, show])
@@ -145,15 +149,15 @@ const DeleteDenominatorButton = ({ denominator }) => {
                     }
                 }}
             >
-                Delete
+                {i18n.t('Delete')}
             </Button>
             {confirmationModalOpen && (
                 <ConfirmationModal
-                    title="Delete denominator"
+                    title={i18n.t('Delete denominator')}
                     text={`Are you sure you want to delete ${
                         denominator.name ?? denominator.code
                     }?`}
-                    action="Delete"
+                    action={i18n.t('Delete')}
                     destructive
                     onClose={closeModal}
                     onConfirm={deleteDenominator}

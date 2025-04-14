@@ -85,9 +85,7 @@ export const ReportParameterSelector = ({
         return (
             <div className={styles.noticeBoxContainer}>
                 <NoticeBox error title="Report cannot be generated">
-                    The app failed to retrieve required information about
-                    organisation units. Without this information, the annual
-                    report cannot be generated.
+                    {i18n.t("The app failed to retrieve required information about organisation units. Without this information, the annual report cannot be generated.")}
                 </NoticeBox>
             </div>
         )

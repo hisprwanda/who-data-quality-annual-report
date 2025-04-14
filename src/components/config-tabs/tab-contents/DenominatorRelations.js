@@ -1,3 +1,4 @@
+import i18n from '@dhis2/d2-i18n'
 import {
     Button,
     Table,
@@ -54,13 +55,18 @@ const DeleteRelationButton = ({ relation }) => {
     return (
         <>
             <Button small destructive onClick={openModal}>
-                Delete
+                {i18n.t('Delete')}
             </Button>
             {confirmationModalOpen && (
                 <ConfirmationModal
-                    title="Delete denominator relation"
-                    text={`Are you sure you want to delete ${relation.name}?`}
-                    action="Delete"
+                    title={i18n.t('Delete denominator relation')}
+                    text={i18n.t(
+                        'Are you sure you want to delete {{relation}}?',
+                        {
+                            relation: relation.name,
+                        }
+                    )}
+                    action={i18n.t('Delete')}
                     destructive
                     onClose={closeModal}
                     onConfirm={deleteRelation}
@@ -181,20 +187,24 @@ export const DenominatorRelations = ({ toggleState }) => {
             }
         >
             <p>
-                Please map alternative denominators for comparison, for example
-                denominiators from the National Bureau of Statistics with
-                denominators used by health programmes.
+                {i18n.t(
+                    'Please map alternative denominators for comparison, for example denominiators from the National Bureau of Statistics with denominators used by health programmes.'
+                )}
             </p>
             <hr />
             <div className="denominatorRelationsContainer">
                 <Table>
                     <TableHead>
                         <TableRowHead>
-                            <TableCellHead>Name </TableCellHead>
-                            <TableCellHead> Denominator A </TableCellHead>
-                            <TableCellHead> Denominator B </TableCellHead>
-                            <TableCellHead>Criteria</TableCellHead>
-                            <TableCellHead>Actions</TableCellHead>
+                            <TableCellHead>{i18n.t('Name ')}</TableCellHead>
+                            <TableCellHead>
+                                {i18n.t('Denominator A ')}
+                            </TableCellHead>
+                            <TableCellHead>
+                                {i18n.t('Denominator B ')}
+                            </TableCellHead>
+                            <TableCellHead>{i18n.t('Criteria')}</TableCellHead>
+                            <TableCellHead>{i18n.t('Actions')}</TableCellHead>
                         </TableRowHead>
                     </TableHead>
                     <TableBody>
@@ -218,7 +228,7 @@ export const DenominatorRelations = ({ toggleState }) => {
                                     <TableCell>
                                         <ButtonStrip>
                                             <Button
-                                                name="Primary button"
+                                                name={i18n.t('Primary button')}
                                                 small
                                                 onClick={() => {
                                                     onEditRelation(relation)
@@ -229,8 +239,7 @@ export const DenominatorRelations = ({ toggleState }) => {
                                                 value="default"
                                                 icon={<IconEdit16 />}
                                             >
-                                                {' '}
-                                                Edit
+                                                {i18n.t(' Edit')}
                                             </Button>
                                             <DeleteRelationButton
                                                 relation={relation}
@@ -254,7 +263,7 @@ export const DenominatorRelations = ({ toggleState }) => {
                             <TableCell></TableCell>
                             <TableCell>
                                 <Button
-                                    name="Primary button"
+                                    name={i18n.t('Primary button')}
                                     onClick={() => {
                                         onAddRelation()
                                     }}
@@ -263,8 +272,7 @@ export const DenominatorRelations = ({ toggleState }) => {
                                     value="default"
                                     icon={<IconAdd16 />}
                                 >
-                                    {' '}
-                                    Add Relations
+                                    {i18n.t('Add Relations')}
                                 </Button>
                             </TableCell>
                         </TableRow>
@@ -274,17 +282,19 @@ export const DenominatorRelations = ({ toggleState }) => {
                 {/* TODO: Implement modal reuse as Kai did in Numerator relations*/}
                 {isModalOpen && (
                     <Modal onClose={closeModal} position="middle">
-                        <ModalTitle>Denominator relations mapping</ModalTitle>
+                        <ModalTitle>
+                            {i18n.t('Denominator relations mapping')}
+                        </ModalTitle>
                         <ModalContent>
                             <Table>
                                 <TableBody>
                                     <TableRow>
                                         <TableCell>
-                                            <p>Name</p>
+                                            <p>{i18n.t('Name')}</p>
                                         </TableCell>
                                         <TableCell>
                                             <Input
-                                                label="Name"
+                                                label={i18n.t('Name')}
                                                 name="name"
                                                 value={
                                                     newDenominatorRelationInfo.name
@@ -304,7 +314,7 @@ export const DenominatorRelations = ({ toggleState }) => {
                                     </TableRow>
                                     <TableRow>
                                         <TableCell>
-                                            <p>Type</p>
+                                            <p>{i18n.t('Type')}</p>
                                         </TableCell>
                                         <TableCell>
                                             <SingleSelect
@@ -314,7 +324,9 @@ export const DenominatorRelations = ({ toggleState }) => {
                                                         e.selected
                                                     )
                                                 }
-                                                placeholder="Select relation type"
+                                                placeholder={i18n.t(
+                                                    'Select relation type'
+                                                )}
                                                 selected={
                                                     newDenominatorRelationInfo.type
                                                 }
@@ -339,7 +351,7 @@ export const DenominatorRelations = ({ toggleState }) => {
                                     </TableRow>
                                     <TableRow>
                                         <TableCell>
-                                            <p>Denominator A</p>
+                                            <p>{i18n.t('Denominator A')}</p>
                                         </TableCell>
                                         <TableCell>
                                             <SingleSelect
@@ -355,7 +367,9 @@ export const DenominatorRelations = ({ toggleState }) => {
                                                         e.selected
                                                     )
                                                 }}
-                                                placeholder="Select denominator A"
+                                                placeholder={i18n.t(
+                                                    'Select denominator A'
+                                                )}
                                                 selected={selectedDenominatorA}
                                             >
                                                 {filteredDenominators
@@ -382,7 +396,7 @@ export const DenominatorRelations = ({ toggleState }) => {
                                     </TableRow>
                                     <TableRow>
                                         <TableCell>
-                                            <p>Denominator B</p>
+                                            <p>{i18n.t('Denominator B')}</p>
                                         </TableCell>
                                         <TableCell>
                                             <SingleSelect
@@ -398,7 +412,9 @@ export const DenominatorRelations = ({ toggleState }) => {
                                                         e.selected
                                                     )
                                                 }}
-                                                placeholder="Select denominator B"
+                                                placeholder={i18n.t(
+                                                    'Select denominator B'
+                                                )}
                                                 selected={selectedDenominatorB}
                                             >
                                                 {filteredDenominators
@@ -425,11 +441,11 @@ export const DenominatorRelations = ({ toggleState }) => {
                                     </TableRow>
                                     <TableRow>
                                         <TableCell>
-                                            <p>Threshold (+/-) %</p>
+                                            <p>{i18n.t('Threshold (+/-) %')}</p>
                                         </TableCell>
                                         <TableCell>
                                             <Input
-                                                label="Name"
+                                                label={i18n.t('Name')}
                                                 name="name"
                                                 required
                                                 className="input"
@@ -451,15 +467,15 @@ export const DenominatorRelations = ({ toggleState }) => {
                                 </TableBody>
                             </Table>
                             <p>
-                                Threshold denotes the % difference from national
-                                figure that is accepted for a sub-national unit.
+                                {i18n.t(
+                                    'Threshold denotes the % difference from national figure that is accepted for a sub-national unit.'
+                                )}
                             </p>
                         </ModalContent>
                         <ModalActions>
                             <ButtonStrip end>
                                 <Button secondary onClick={closeModal}>
-                                    {' '}
-                                    Cancel{' '}
+                                    {i18n.t(' Cancel')}
                                 </Button>
                                 <Button
                                     primary
@@ -470,7 +486,6 @@ export const DenominatorRelations = ({ toggleState }) => {
                                         )
                                     }
                                 >
-                                    {' '}
                                     {updateType === 'create'
                                         ? 'Create'
                                         : 'Update'}{' '}

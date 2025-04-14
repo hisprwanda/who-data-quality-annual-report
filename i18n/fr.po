@@ -1,0 +1,887 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: i18next-conv\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1)\n"
+"POT-Creation-Date: 2024-11-01T15:07:47.517Z\n"
+"PO-Revision-Date: 2024-11-01T15:07:47.518Z\n"
+
+msgid "There is no data for this {{sectionType}}"
+msgstr "Il n'y a pas de données pour ce {{sectionType}}"
+
+msgid "subsection"
+msgstr "sous-section"
+
+msgid "section"
+msgstr "section"
+
+msgid "Something went wrong when retrieving data"
+msgstr "Une erreur s'est produite lors de la récupération des données"
+
+msgid "The Data Quality Annual Report has not been configured"
+msgstr "Le rapport annuel sur la qualité des données n'a pas été configuré"
+
+msgid "Go to the"
+msgstr "Aller à la"
+
+msgid "configurations page"
+msgstr "page de configuration"
+
+msgid "to set up the report."
+msgstr "pour configurer le rapport."
+
+msgid "Contact your system administrator."
+msgstr "Contactez votre administrateur système."
+
+msgid ""
+"Could not calculate overall score. Calculations at {{subOrgUnitLevelName}} "
+"level were skipped."
+msgstr ""
+"Impossible de calculer le score global. Les calculs au niveau {{subOrgUnitLevelName}} "
+"ont été ignorés."
+
+msgid "Could not calculate score for the following: {{invalidSubOrgUnitNames}}."
+msgstr "Impossible de calculer le score pour les éléments suivants : {{invalidSubOrgUnitNames}}."
+
+msgid ""
+"The requested level for this relation ({{subOrgUnitLevelName}}) is not "
+"retrievable."
+msgstr ""
+"Le niveau demandé pour cette relation ({{subOrgUnitLevelName}}) est inaccessible."
+
+msgid "No data to display"
+msgstr "Aucune donnée à afficher"
+
+msgid "Domain 1 - Completeness of Reporting"
+msgstr "Domaine 1 - Complétude des rapports"
+
+msgid "Domain 2 - Internal Consistency of Reported Data"
+msgstr "Domaine 2 - Cohérence interne des données rapportées"
+
+msgid "Domain 3 - External Comparison"
+msgstr "Domaine 3 - Comparaison externe"
+
+msgid "Domain 4 - Consistency of Population Data"
+msgstr "Domaine 4 - Cohérence des données démographiques"
+
+msgid "[Core]"
+msgstr "[Noyau]"
+
+msgid "Data Quality Annual Report"
+msgstr "Rapport annuel sur la qualité des données"
+
+msgid "Data: "
+msgstr "Données : "
+
+msgid "Organisation unit: "
+msgstr "Unité organisationnelle : "
+
+msgid "Period: "
+msgstr "Période : "
+
+msgid "{{period}}; {{years}} years for reference"
+msgstr "{{period}} ; {{years}} années de référence"
+
+msgid "% Completeness"
+msgstr "% Complétude"
+
+msgid "Reporting completeness over time"
+msgstr "Complétude des rapports dans le temps"
+
+msgid "1a- Completeness of facility reporting"
+msgstr "1a- Complétude des rapports des établissements"
+
+msgid "The percentage of expected reports that have been entered and completed."
+msgstr "Le pourcentage de rapports attendus qui ont été saisis et complétés."
+
+msgid "Data set"
+msgstr "Ensemble de données"
+
+msgid "Quality threshold"
+msgstr "Seuil de qualité"
+
+msgid "Overall score"
+msgstr "Score global"
+
+msgid "{{divergents}} with divergent score"
+msgstr "{{divergents}} avec un score divergent"
+
+msgid "Number"
+msgstr "Nombre"
+
+msgid "Percentage"
+msgstr "Pourcentage"
+
+msgid "Name"
+msgstr "Nom"
+
+msgid "1b- Timeliness of facility reporting"
+msgstr "1b- Ponctualité des rapports des établissements"
+
+msgid ""
+"The percentage of expected reports that have been entered and completed on "
+"time."
+msgstr ""
+"Le pourcentage de rapports attendus qui ont été saisis et complétés à temps."
+
+msgid "1c- Completeness of indicator data"
+msgstr "1c- Complétude des données des indicateurs"
+
+msgid ""
+"Reports where values are not missing. If zeros are not stored, zeros are "
+"counted as missing."
+msgstr ""
+"Rapports sans valeurs manquantes. Si les zéros ne sont pas enregistrés, ils sont considérés comme manquants."
+
+msgid "Indicator"
+msgstr "Indicateur"
+
+msgid "Values"
+msgstr "Valeurs"
+
+msgid "Overall Score"
+msgstr "Score global"
+
+msgid "Expected"
+msgstr "Attendu"
+
+msgid "Actual"
+msgstr "Réel"
+
+msgid "1d- Consistency of dataset completeness over time"
+msgstr "1d- Cohérence de la complétude des ensembles de données dans le temps"
+
+msgid "Expected Trend"
+msgstr "Tendance attendue"
+
+msgid "Compare Region to"
+msgstr "Comparer la région à"
+
+msgid "Dropout rate (%)"
+msgstr "Taux d'abandon (%)"
+
+msgid "<b>{{name}}</b><br/>{{value}}% dropout"
+msgstr "<b>{{name}}</b><br/>{{value}}% d'abandon"
+
+msgid "Org units"
+msgstr "Unités organisationnelles"
+
+msgid "<b>{{name}}</b><br/>{{yLabel}}: {{y}}<br/>{{xLabel}}: {{x}}"
+msgstr "<b>{{name}}</b><br/>{{yLabel}} : {{y}}<br/>{{xLabel}} : {{x}}"
+
+msgid "2a- Extreme outliers"
+msgstr "2a- Valeurs aberrantes extrêmes"
+
+msgid ""
+"Extreme outliers, using the standard method. Threshold denotes the number "
+"of standard deviations from the mean. {{ouName}} are counted as divergent "
+"if they have one or more extreme outliers for an indicator."
+msgstr ""
+"Valeurs aberrantes extrêmes, selon la méthode standard. Le seuil indique le nombre "
+"d'écarts-types par rapport à la moyenne. {{ouName}} sont considérées comme divergentes "
+"si elles présentent une ou plusieurs valeurs aberrantes extrêmes pour un indicateur."
+
+msgid "2b- Moderate outliers"
+msgstr "2b- Valeurs aberrantes modérées"
+
+msgid ""
+"Moderate outliers, using the standard method. Threshold denotes the number "
+"of standard deviations from the mean. {{ouName}} are counted as divergent "
+"if they have two or more moderate outliers for an indicator."
+msgstr ""
+"Valeurs aberrantes modérées, selon la méthode standard. Le seuil indique le nombre "
+"d'écarts-types par rapport à la moyenne. {{ouName}} sont considérées comme divergentes "
+"si elles présentent deux ou plusieurs valeurs aberrantes modérées pour un indicateur."
+
+msgid "2c- Moderate outliers"
+msgstr "2c- Valeurs aberrantes modérées"
+
+msgid ""
+"Moderate outliers, based on median (modified Z score). {{ouname}} are "
+"counted as divergent if they have two or more moderate outliers for an "
+"indicator."
+msgstr ""
+"Valeurs aberrantes modérées, basées sur la médiane (score Z modifié). {{ouname}} sont "
+"considérées comme divergentes si elles présentent deux ou plusieurs valeurs aberrantes modérées pour un indicateur."
+
+msgid "2d- Consistency of indicator values over time"
+msgstr "2d- Cohérence des valeurs des indicateurs dans le temps"
+
+msgid ""
+"Difference between the current year and either the average of the {{num}} "
+"preceding years (if expected trend is constant), or the forecasted value."
+msgstr ""
+"Différence entre l'année en cours et soit la moyenne des {{num}} années précédentes "
+"(si la tendance attendue est constante), soit la valeur prévue."
+
+msgid "2e- Consistency between related indicators"
+msgstr "2e- Cohérence entre indicateurs liés"
+
+msgid ""
+"Consistency between reported values for two related indicators within the "
+"same year."
+msgstr ""
+"Cohérence entre les valeurs rapportées de deux indicateurs liés au cours de la même année."
+
+msgid "Threshold"
+msgstr "Seuil"
+
+msgid "{{ouname}} with divergent score"
+msgstr "{{ouname}} avec un score divergent"
+
+msgid "Percent"
+msgstr "Pourcentage"
+
+msgid "Names"
+msgstr "Noms"
+
+msgid "Expected trend"
+msgstr "Tendance attendue"
+
+msgid "Compare region to"
+msgstr "Comparer la région à"
+
+msgid "Number of {{ouname}} with divergent score"
+msgstr "Nombre de {{ouname}} avec un score divergent"
+
+msgid "Percent of {{ouname}} with divergent score"
+msgstr "Pourcentage de {{ouname}} avec un score divergent"
+
+msgid "Indicator A"
+msgstr "Indicateur A"
+
+msgid "Indicator B"
+msgstr "Indicateur B"
+
+msgid "Expected relationship"
+msgstr "Relation attendue"
+
+msgid "Chart not available"
+msgstr "Graphique non disponible"
+
+msgid "<b>{{name}}</b><br/>Survey: {{survey}}%<br/>Routine: {{routine}}%"
+msgstr "<b>{{name}}</b><br/>Enquête : {{survey}}%<br/>Routine : {{routine}}%"
+
+msgid "Routine"
+msgstr "Routine"
+
+msgid "Survey"
+msgstr "Enquête"
+
+msgid "Survey: {{survey}}%<br/>Routine: {{routine}}%"
+msgstr "Enquête : {{survey}}%<br/>Routine : {{routine}}%"
+
+msgid "3a- Comparison with external/survey data"
+msgstr "3a- Comparaison avec des données externes/enquêtes"
+
+msgid "Survey value"
+msgstr "Valeur de l'enquête"
+
+msgid "Routine value"
+msgstr "Valeur de routine"
+
+msgid "Not available"
+msgstr "Non disponible"
+
+msgid "Cannot be calculated"
+msgstr "Ne peut pas être calculé"
+
+msgid "Exit configurations"
+msgstr "Quitter les configurations"
+
+msgid "Numerators"
+msgstr "Numérateurs"
+
+msgid "Numerator groups"
+msgstr "Groupes de numérateurs"
+
+msgid "Numerator relations"
+msgstr "Relations de numérateurs"
+
+msgid "Numerator quality parameters"
+msgstr "Paramètres de qualité des numérateurs"
+
+msgid "Denominators"
+msgstr "Dénominateurs"
+
+msgid "Denominator relations"
+msgstr "Relations de dénominateurs"
+
+msgid "External data comparison"
+msgstr "Comparaison de données externes"
+
+msgid "Cancel"
+msgstr "Annuler"
+
+msgid "Add denominator"
+msgstr "Ajouter un dénominateur"
+
+msgid ""
+"Please map alternative denominators for comparison, for example "
+"denominiators from the National Bureau of Statistics with denominators used "
+"by health programmes."
+msgstr ""
+"Veuillez associer des dénominateurs alternatifs pour la comparaison, par exemple "
+"ceux du Bureau National des Statistiques avec ceux utilisés par les programmes de santé."
+
+msgid "Type"
+msgstr "Type"
+
+msgid "Actions"
+msgstr "Actions"
+
+msgid "Edit Group"
+msgstr "Modifier le groupe"
+
+msgid "Delete Group"
+msgstr "Supprimer le groupe"
+
+msgid "Delete numerator group"
+msgstr "Supprimer le groupe de numérateurs"
+
+msgid "Are you sure you want to delete {{groupName}}?"
+msgstr "Êtes-vous sûr de vouloir supprimer {{groupName}} ?"
+
+msgid "Delete"
+msgstr "Supprimer"
+
+msgid "No groups found"
+msgstr "Aucun groupe trouvé"
+
+msgid "Add and remove numerators to/from groups, and to add new groups."
+msgstr "Ajouter ou supprimer des numérateurs aux groupes, et créer de nouveaux groupes."
+
+msgid "Loading..."
+msgstr "Chargement..."
+
+msgid "An error occurred"
+msgstr "Une erreur s'est produite"
+
+msgid "Select a data element first"
+msgstr "Sélectionnez d'abord un élément de données"
+
+msgid "Select data sets"
+msgstr "Sélectionner des ensembles de données"
+
+msgid "Data sets for completeness"
+msgstr "Ensembles de données pour la complétude"
+
+msgid "Select data element group"
+msgstr "Sélectionner un groupe d’éléments de données"
+
+msgid "Data element group"
+msgstr "Groupe d’éléments de données"
+
+msgid "Select a data element group first"
+msgstr "Sélectionnez d'abord un groupe d’éléments de données"
+
+msgid "Select data element"
+msgstr "Sélectionner un élément de données"
+
+msgid "Data element"
+msgstr "Élément de données"
+
+msgid "Data element type"
+msgstr "Type d’élément de données"
+
+msgid "Totals"
+msgstr "Totaux"
+
+msgid "Details"
+msgstr "Détails"
+
+msgid "Select variable"
+msgstr "Sélectionner une variable"
+
+msgid "Variable for completeness"
+msgstr "Variable pour la complétude"
+
+msgid "Data type"
+msgstr "Type de données"
+
+msgid "This numerator is currently mapped to {{dataItem}}"
+msgstr "Ce numérateur est actuellement associé à {{dataItem}}"
+
+msgid "Numerator name"
+msgstr "Nom du numérateur"
+
+msgid "Numerator definition"
+msgstr "Définition du numérateur"
+
+msgid "Groups"
+msgstr "Groupes"
+
+msgid "Select numerator groups"
+msgstr "Sélectionner des groupes de numérateurs"
+
+msgid "Core"
+msgstr "Noyau"
+
+msgid "Cancel "
+msgstr "Annuler"
+
+msgid "Add numerator"
+msgstr "Ajouter un numérateur"
+
+msgid ""
+"Please map the reference numerators to the corresponding data "
+"element/indicator in this database."
+msgstr ""
+"Veuillez associer les numérateurs de référence aux éléments de données/indicateurs correspondants dans cette base de données."
+
+msgid "Group"
+msgstr "Groupe"
+
+msgid "Reference numerator"
+msgstr "Numérateur de référence"
+
+msgid "Data element/indicator"
+msgstr "Élément de données/indicateur"
+
+msgid "Dataset"
+msgstr "Ensemble de données"
+
+msgid "Edit"
+msgstr "Modifier"
+
+msgid "Clear numerator data mapping"
+msgstr "Effacer le mappage des données du numérateur"
+
+msgid "Are you sure you want to clear the data mappings for {{numerator.name}}?"
+msgstr "Êtes-vous sûr de vouloir effacer le mappage des données pour {{numerator.name}} ?"
+
+msgid "Clear"
+msgstr "Effacer"
+
+msgid "Delete denominator relation"
+msgstr "Supprimer la relation de dénominateur"
+
+msgid "Are you sure you want to delete {{relation}}?"
+msgstr "Êtes-vous sûr de vouloir supprimer {{relation}} ?"
+
+msgid "Name "
+msgstr "Nom "
+
+msgid "Denominator A "
+msgstr "Dénominateur A "
+
+msgid "Denominator B "
+msgstr "Dénominateur B "
+
+msgid "Criteria"
+msgstr "Critères"
+
+msgid "Primary button"
+msgstr "Bouton principal"
+
+msgid " Edit"
+msgstr " Modifier"
+
+msgid "Add Relations"
+msgstr "Ajouter des relations"
+
+msgid "Denominator relations mapping"
+msgstr "Mappage des relations de dénominateur"
+
+msgid "Select relation type"
+msgstr "Sélectionner le type de relation"
+
+msgid "Denominator A"
+msgstr "Dénominateur A"
+
+msgid "Select denominator A"
+msgstr "Sélectionner le dénominateur A"
+
+msgid "Denominator B"
+msgstr "Dénominateur B"
+
+msgid "Select denominator B"
+msgstr "Sélectionner le dénominateur B"
+
+msgid " Cancel"
+msgstr " Annuler"
+
+msgid "Cannot upload null configurations!"
+msgstr "Impossible de télécharger des configurations nulles !"
+
+msgid ""
+"Modify parameters for each numerator. Only data elements/indicators mapped "
+"to the database are displayed."
+msgstr ""
+"Modifier les paramètres pour chaque numérateur. Seuls les éléments/indicateurs associés à la base de données sont affichés."
+
+msgid ""
+"Moderate outliers: Number of standard deviations (SD) from the mean for a "
+"values to quality as a moderate outlier."
+msgstr ""
+"Valeurs aberrantes modérées : Nombre d'écarts-types (ET) par rapport à la moyenne pour qu’une valeur soit considérée comme modérée."
+
+msgid ""
+"Extreme outliers: Number of standard deviations (SD) from the mean for a "
+"values to quality as an extreme outlier."
+msgstr ""
+"Valeurs aberrantes extrêmes : Nombre d'écarts-types (ET) par rapport à la moyenne pour qu’une valeur soit considérée comme extrême."
+
+msgid ""
+"Consistency: Threshold for consistency over time (percentage change over "
+"time)."
+msgstr ""
+"Cohérence : Seuil de cohérence dans le temps (variation en pourcentage)."
+
+msgid ""
+"Expected trend: Whether the numerator value is expected to be constant over "
+"time or increase/decrease."
+msgstr ""
+"Tendance attendue : Indique si la valeur du numérateur est censée rester constante, augmenter ou diminuer avec le temps."
+
+msgid ""
+"Missing/zero values: Whether to compare consistency over time across "
+"organisation units, or to the expected change (e.g. constant or "
+"increasing/decreasing)."
+msgstr ""
+"Valeurs manquantes/zéro : Indique s’il faut comparer la cohérence dans le temps entre unités organisationnelles ou par rapport à la tendance attendue."
+
+msgid ""
+"Missing/zero values: Threshold for missing/zero values for variable "
+"completeness. Note: when zero values are not stored for a data element, "
+"zeros and missing are not differentiated."
+msgstr ""
+"Valeurs manquantes/zéro : Seuil de valeurs manquantes/zéro pour la complétude. "
+"Remarque : lorsque les zéros ne sont pas enregistrés, ils sont considérés comme manquants."
+
+msgid "Reference indicator/data element"
+msgstr "Indicateur/élément de données de référence"
+
+msgid "Local data element/indicator"
+msgstr "Indicateur/élément de données local"
+
+msgid "Moderate outlier (SD)"
+msgstr "Valeur aberrante modérée (ET)"
+
+msgid "Extreme outlier (SD)"
+msgstr "Valeur aberrante extrême (ET)"
+
+msgid "Consistency (%)"
+msgstr "Cohérence (%)"
+
+msgid "Compare orgunit consistency with"
+msgstr "Comparer la cohérence des unités organisationnelles avec"
+
+msgid "Missing/zero values (%)"
+msgstr "Valeurs manquantes/zéro (%)"
+
+msgid "option one"
+msgstr "option un"
+
+msgid "Constant"
+msgstr "Constant"
+
+msgid "Increasing"
+msgstr "Croissant"
+
+msgid "Decreasing"
+msgstr "Décroissant"
+
+msgid "Overall result"
+msgstr "Résultat global"
+
+msgid "Expected result"
+msgstr "Résultat attendu"
+
+msgid "Dataset completeness"
+msgstr "Complétude des ensembles de données"
+
+msgid ""
+"Set the thresholds for various completeness in the table below. Only "
+"dataset linked to indicators are displayed."
+msgstr ""
+"Définir les seuils de complétude dans le tableau ci-dessous. Seuls les ensembles liés aux indicateurs sont affichés."
+
+msgid "Completeness: Threshold for completeness of reporting."
+msgstr "Complétude : Seuil de complétude des rapports."
+
+msgid "Group "
+msgstr "Groupe "
+
+msgid "Completeness (%) "
+msgstr "Complétude (%) "
+
+msgid "Timeliness(%)"
+msgstr "Ponctualité (%)"
+
+msgid "Consistency (%) "
+msgstr "Cohérence (%) "
+
+msgid "Save Changes"
+msgstr "Enregistrer les modifications"
+
+msgid "WHO Data Quality Annual Report"
+msgstr "Rapport annuel sur la qualité des données de l'OMS"
+
+msgid ""
+"Choose a group, organisation unit, and period from the top bar and then "
+"click \"Generate report\""
+msgstr ""
+"Sélectionnez un groupe, une unité organisationnelle et une période dans la barre supérieure, puis cliquez sur « Générer le rapport »"
+
+msgid "Learn more about the Data Quality Annual Report"
+msgstr "En savoir plus sur le rapport annuel sur la qualité des données"
+
+msgid "WHO Data Quality Annual Report - Configuration"
+msgstr "Rapport annuel sur la qualité des données de l'OMS - Configuration"
+
+msgid ""
+"This module is used for configuring the WHO Data Quality Annual Report, and "
+"mapping the proposed data quality indicators to data elements and "
+"indicators in the DHIS2 database."
+msgstr ""
+"Ce module permet de configurer le rapport annuel sur la qualité des données de l'OMS et d'associer les indicateurs proposés aux éléments de données et indicateurs de la base DHIS2."
+
+msgid "This configuration is used as the basis for the Annual Report."
+msgstr "Cette configuration est utilisée comme base pour le rapport annuel."
+
+msgid ""
+"Group, Organisation unit, Organisation unit level, period, and comparison "
+"periods must all be selected before a report can be generated."
+msgstr ""
+"Le groupe, l’unité organisationnelle, le niveau, la période et les périodes de comparaison doivent être sélectionnés avant de générer un rapport."
+
+msgid "Choose a group"
+msgstr "Choisir un groupe"
+
+msgid "Organisation unit"
+msgstr "Unité organisationnelle"
+
+msgid "Choose an organisation unit"
+msgstr "Choisir une unité organisationnelle"
+
+msgid "Choose an organisation unit level"
+msgstr "Choisir un niveau d’unité organisationnelle"
+
+msgid "Hide menu"
+msgstr "Masquer le menu"
+
+msgid "Yearly"
+msgstr "Annuel"
+
+msgid "Financial Year (April)"
+msgstr "Année fiscale (avril)"
+
+msgid "Financial Year (July)"
+msgstr "Année fiscale (juillet)"
+
+msgid "Financial Year (October)"
+msgstr "Année fiscale (octobre)"
+
+msgid "Financial Year (November)"
+msgstr "Année fiscale (novembre)"
+
+msgid "Period type"
+msgstr "Type de période"
+
+msgid "Choose a period type"
+msgstr "Choisir un type de période"
+
+msgid "Period"
+msgstr "Période"
+
+msgid "Choose a period"
+msgstr "Choisir une période"
+
+msgid "Choose a period type first"
+msgstr "Choisissez d'abord un type de période"
+
+msgid "Preceding years for reference"
+msgstr "Années précédentes comme référence"
+
+msgid ""
+"The app failed to retrieve required information about organisation units. "
+"Without this information, the annual report cannot be generated."
+msgstr ""
+"L'application n'a pas pu récupérer les informations nécessaires sur les unités organisationnelles. "
+"Sans ces informations, le rapport annuel ne peut pas être généré."
+
+msgid "Configurations"
+msgstr "Configurations"
+
+msgid "Generate report"
+msgstr "Générer le rapport"
+
+msgid "Printing..."
+msgstr "Impression..."
+
+msgid "Print"
+msgstr "Imprimer"
+
+msgid "No access"
+msgstr "Accès refusé"
+
+msgid "You do not have access to the configurations module."
+msgstr "Vous n'avez pas accès au module de configuration."
+
+msgid ""
+"It was not possible to retrieve user information for the current user or "
+"the sharing settings of the configurations."
+msgstr ""
+"Impossible de récupérer les informations de l'utilisateur actuel ou les paramètres de partage des configurations."
+
+msgid ""
+"\n"
+"Denominator relations- {{relations}}."
+msgstr ""
+"\n"
+"Relations de dénominateurs - {{relations}}."
+
+msgid ""
+"\n"
+"External relations- {{relations}}."
+msgstr ""
+"\n"
+"Relations externes - {{relations}}."
+
+msgid ""
+"Can't delete the denominator {{name}} because it's associated with the "
+"following metadata.{{numRelsText}}{{extRelsText}}"
+msgstr ""
+"Impossible de supprimer le dénominateur {{name}} car il est associé aux "
+"métadonnées suivantes.{{numRelsText}}{{extRelsText}}"
+
+msgid "Delete denominator"
+msgstr "Supprimer le dénominateur"
+
+msgid "Create"
+msgstr "Créer"
+
+msgid " denominator"
+msgstr " dénominateur"
+
+msgid "Denominator name"
+msgstr "Nom du dénominateur"
+
+msgid "Select denominator type"
+msgstr "Sélectionner le type de dénominateur"
+
+msgid "Denominator"
+msgstr "Dénominateur"
+
+msgid "Lowest available level"
+msgstr "Niveau disponible le plus bas"
+
+msgid "Save"
+msgstr "Enregistrer"
+
+msgid "Add External Relation"
+msgstr "Ajouter une relation externe"
+
+msgid ""
+" Please identify external (survey) data that can be used for comparison "
+"with routine data, e.g. ANC coverage, immunisation coverage etc. The "
+"'external data' should refer to calculated survey result (e.g. a "
+"percentage), whilst the numerator  denominator refer to the raw data"
+msgstr ""
+" Veuillez identifier les données externes (enquêtes) pouvant être utilisées pour comparaison "
+"avec les données de routine, par ex. couverture ANC, couverture vaccinale, etc. "
+"Les 'données externes' doivent se référer à un résultat d'enquête calculé (par ex. un pourcentage), "
+"tandis que le numérateur et le dénominateur se réfèrent aux données brutes."
+
+msgid "Survey/external indicator "
+msgstr "Indicateur d’enquête/externe "
+
+msgid "Routine data numerator"
+msgstr "Numérateur des données de routine"
+
+msgid "Routine data denominator "
+msgstr "Dénominateur des données de routine "
+
+msgid "Level"
+msgstr "Niveau"
+
+msgid "No external relations found."
+msgstr "Aucune relation externe trouvée."
+
+msgid "Delete external relation"
+msgstr "Supprimer la relation externe"
+
+msgid "Are you sure you want to delete "
+msgstr "Êtes-vous sûr de vouloir supprimer "
+
+msgid "Select a numerator"
+msgstr "Sélectionner un numérateur"
+
+msgid "An error occurred"
+msgstr "Une erreur s'est produite"
+
+msgid "Select an org unit level"
+msgstr "Sélectionner un niveau d'unité organisationnelle"
+
+msgid "Org unit levels"
+msgstr "Niveaux des unités organisationnelles"
+
+msgid ""
+"A group with the name {{name}} already exists. Please choose a different "
+"name."
+msgstr ""
+"Un groupe portant le nom {{name}} existe déjà. Veuillez choisir un autre nom."
+
+msgid " Group"
+msgstr " Groupe"
+
+msgid "Group Members"
+msgstr "Membres du groupe"
+
+msgid "Select numerators"
+msgstr "Sélectionner des numérateurs"
+
+msgid "No numerators added, please add them."
+msgstr "Aucun numérateur ajouté, veuillez en ajouter."
+
+msgid "Remove"
+msgstr "Supprimer"
+
+msgid " numerator relation"
+msgstr " relation de numérateur"
+
+msgid "Numerator A"
+msgstr "Numérateur A"
+
+msgid "Select numerator A"
+msgstr "Sélectionner le numérateur A"
+
+msgid "Numerator B"
+msgstr "Numérateur B"
+
+msgid "Select numerator B"
+msgstr "Sélectionner le numérateur B"
+
+msgid "Threshold (+/-) %"
+msgstr "Seuil (+/-) %"
+
+msgid ""
+"Threshold denotes the % difference from national figure that is accepted "
+"for a sub-national unit."
+msgstr ""
+"Le seuil indique la différence en pourcentage par rapport à la valeur nationale "
+"acceptée pour une unité infranationale."
+
+msgid "Add Numerator Relation"
+msgstr "Ajouter une relation de numérateur"
+
+msgid "Threshold (%)"
+msgstr "Seuil (%)"
+
+msgid "Threshold explanation"
+msgstr "Explication du seuil"
+
+msgid "Description"
+msgstr "Description"
+
+msgid "No numerator relations found."
+msgstr "Aucune relation de numérateur trouvée."
+
+msgid "Delete numerator relation"
+msgstr "Supprimer la relation de numérateur"
+
+msgid "Are you sure you want to delete"
+msgstr "Êtes-vous sûr de vouloir supprimer"

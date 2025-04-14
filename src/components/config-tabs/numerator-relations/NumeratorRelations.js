@@ -1,3 +1,4 @@
+import i18n from '@dhis2/d2-i18n'
 import {
     Button,
     Table,
@@ -39,7 +40,7 @@ const AddNumeratorRelationButton = () => {
     return (
         <>
             <Button primary icon={<IconAdd16 />} onClick={openModal}>
-                Add Numerator Relation
+                {i18n.t('Add Numerator Relation')}
             </Button>
             {addNewModalOpen && (
                 <EditNumeratorRelationModal
@@ -61,14 +62,16 @@ export const NumeratorRelations = () => {
             <Table>
                 <TableHead>
                     <TableRowHead>
-                        <TableCellHead>Name</TableCellHead>
-                        <TableCellHead>Numerator A</TableCellHead>
-                        <TableCellHead>Numerator B</TableCellHead>
-                        <TableCellHead>Type</TableCellHead>
-                        <TableCellHead>Threshold (%)</TableCellHead>
-                        <TableCellHead>Threshold explanation</TableCellHead>
-                        <TableCellHead>Description</TableCellHead>
-                        <TableCellHead>Actions</TableCellHead>
+                        <TableCellHead>{i18n.t('Name')}</TableCellHead>
+                        <TableCellHead>{i18n.t('Numerator A')}</TableCellHead>
+                        <TableCellHead>{i18n.t('Numerator B')}</TableCellHead>
+                        <TableCellHead>{i18n.t('Type')}</TableCellHead>
+                        <TableCellHead>{i18n.t('Threshold (%)')}</TableCellHead>
+                        <TableCellHead>
+                            {i18n.t('Threshold explanation')}
+                        </TableCellHead>
+                        <TableCellHead>{i18n.t('Description')}</TableCellHead>
+                        <TableCellHead>{i18n.t('Actions')}</TableCellHead>
                     </TableRowHead>
                 </TableHead>
                 <TableBody>
@@ -82,7 +85,9 @@ export const NumeratorRelations = () => {
                         ))
                     ) : (
                         <TableRow>
-                            <TableCell>No numerator relations found.</TableCell>
+                            <TableCell>
+                                {i18n.t('No numerator relations found.')}
+                            </TableCell>
                         </TableRow>
                     )}
                 </TableBody>

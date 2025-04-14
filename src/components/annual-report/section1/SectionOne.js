@@ -1,3 +1,4 @@
+import i18n from '@dhis2/d2-i18n'
 import { TableBody, TableHead, TableRow } from '@dhis2/ui'
 import PropTypes from 'prop-types'
 import React, { useEffect } from 'react'
@@ -43,7 +44,9 @@ export const SectionOne = ({ reportParameters }) => {
                         <TableHead>
                             <ReportRowHead>
                                 <ReportCellHead colSpan="6">
-                                    1a: Completeness of facility reporting
+                                    {i18n.t(
+                                        '1a- Completeness of facility reporting'
+                                    )}
                                 </ReportCellHead>
                             </ReportRowHead>
                             <TableRow>
@@ -51,28 +54,41 @@ export const SectionOne = ({ reportParameters }) => {
                                     colSpan="6"
                                     className={styles.subsectionSubtitle}
                                 >
-                                    The percentage of expected reports that have
-                                    been entered and completed.
+                                    {i18n.t(
+                                        'The percentage of expected reports that have been entered and completed.'
+                                    )}
                                 </ReportCell>
                             </TableRow>
                             <ReportRowHead>
                                 <ReportCellHead rowSpan="2">
-                                    Data set
+                                    {i18n.t('Data set')}
                                 </ReportCellHead>
                                 <ReportCellHead rowSpan="2">
-                                    Quality threshold
+                                    {i18n.t('Quality threshold')}
                                 </ReportCellHead>
                                 <ReportCellHead rowSpan="2">
-                                    Overall score
+                                    {i18n.t('Overall score')}
                                 </ReportCellHead>
                                 <ReportCellHead colSpan="3">
-                                    {`${reportParameters.orgUnitLevelName} with divergent score`}
+                                    {i18n.t(
+                                        '{{divergents}} with divergent score',
+                                        {
+                                            divergents:
+                                                reportParameters.orgUnitLevelName,
+                                        }
+                                    )}
                                 </ReportCellHead>
                             </ReportRowHead>
                             <ReportRowHead>
-                                <ReportCellHead>Number</ReportCellHead>
-                                <ReportCellHead>Percentage</ReportCellHead>
-                                <ReportCellHead>Name</ReportCellHead>
+                                <ReportCellHead>
+                                    {i18n.t('Number')}
+                                </ReportCellHead>
+                                <ReportCellHead>
+                                    {i18n.t('Percentage')}
+                                </ReportCellHead>
+                                <ReportCellHead>
+                                    {i18n.t('Name')}
+                                </ReportCellHead>
                             </ReportRowHead>
                         </TableHead>
 
@@ -121,7 +137,9 @@ export const SectionOne = ({ reportParameters }) => {
                         <TableHead>
                             <ReportRowHead>
                                 <ReportCellHead colSpan="6">
-                                    1b: Timeliness of facility reporting
+                                    {i18n.t(
+                                        '1b- Timeliness of facility reporting'
+                                    )}
                                 </ReportCellHead>
                             </ReportRowHead>
                             <TableRow>
@@ -129,28 +147,41 @@ export const SectionOne = ({ reportParameters }) => {
                                     colSpan="6"
                                     className={styles.subsectionSubtitle}
                                 >
-                                    The percentage of expected reports that have
-                                    been entered and completed on time.
+                                    {i18n.t(
+                                        'The percentage of expected reports that have been entered and completed on time.'
+                                    )}
                                 </ReportCell>
                             </TableRow>
                             <ReportRowHead>
                                 <ReportCellHead rowSpan="2">
-                                    Data set
+                                    {i18n.t('Data set')}
                                 </ReportCellHead>
                                 <ReportCellHead rowSpan="2">
-                                    Quality threshold
+                                    {i18n.t('Quality threshold')}
                                 </ReportCellHead>
                                 <ReportCellHead rowSpan="2">
-                                    Overall score
+                                    {i18n.t('Overall score')}
                                 </ReportCellHead>
                                 <ReportCellHead colSpan="3">
-                                    {`${reportParameters.orgUnitLevelName} with divergent score`}
+                                    {i18n.t(
+                                        '{{divergents}} with divergent score',
+                                        {
+                                            divergents:
+                                                reportParameters.orgUnitLevelName,
+                                        }
+                                    )}
                                 </ReportCellHead>
                             </ReportRowHead>
                             <ReportRowHead>
-                                <ReportCellHead>Number</ReportCellHead>
-                                <ReportCellHead>Percentage</ReportCellHead>
-                                <ReportCellHead>Name</ReportCellHead>
+                                <ReportCellHead>
+                                    {i18n.t('Number')}
+                                </ReportCellHead>
+                                <ReportCellHead>
+                                    {i18n.t('Percentage')}
+                                </ReportCellHead>
+                                <ReportCellHead>
+                                    {i18n.t('Name')}
+                                </ReportCellHead>
                             </ReportRowHead>
                         </TableHead>
 
@@ -199,7 +230,9 @@ export const SectionOne = ({ reportParameters }) => {
                         <TableHead>
                             <ReportRowHead>
                                 <ReportCellHead colSpan="8">
-                                    1c: Completeness of indicator data
+                                    {i18n.t(
+                                        '1c- Completeness of indicator data'
+                                    )}
                                 </ReportCellHead>
                             </ReportRowHead>
                             <TableRow>
@@ -207,34 +240,50 @@ export const SectionOne = ({ reportParameters }) => {
                                     colSpan="8"
                                     className={styles.subsectionSubtitle}
                                 >
-                                    Reports where values are not missing. If
-                                    zeros are not stored, zeros are counted as
-                                    missing.
+                                    {i18n.t(
+                                        'Reports where values are not missing. If zeros are not stored, zeros are counted as missing.'
+                                    )}
                                 </ReportCell>
                             </TableRow>
                             <ReportRowHead>
                                 <ReportCellHead rowSpan="2">
-                                    Indicator
+                                    {i18n.t('Indicator')}
                                 </ReportCellHead>
                                 <ReportCellHead rowSpan="2">
-                                    Quality threshold
+                                    {i18n.t('Quality threshold')}
                                 </ReportCellHead>
                                 <ReportCellHead colSpan="2">
-                                    Values
+                                    {i18n.t('Values')}
                                 </ReportCellHead>
                                 <ReportCellHead rowSpan="2">
-                                    Overall Score
+                                    {i18n.t('Overall Score')}
                                 </ReportCellHead>
                                 <ReportCellHead colSpan="3">
-                                    {`${reportParameters.orgUnitLevelName} with divergent score`}
+                                    {i18n.t(
+                                        '{{divergents}} with divergent score',
+                                        {
+                                            divergents:
+                                                reportParameters.orgUnitLevelName,
+                                        }
+                                    )}
                                 </ReportCellHead>
                             </ReportRowHead>
                             <ReportRowHead>
-                                <ReportCellHead>Expected</ReportCellHead>
-                                <ReportCellHead>Actual</ReportCellHead>
-                                <ReportCellHead>Number</ReportCellHead>
-                                <ReportCellHead>Percentage</ReportCellHead>
-                                <ReportCellHead>Name</ReportCellHead>
+                                <ReportCellHead>
+                                    {i18n.t('Expected')}
+                                </ReportCellHead>
+                                <ReportCellHead>
+                                    {i18n.t('Actual')}
+                                </ReportCellHead>
+                                <ReportCellHead>
+                                    {i18n.t('Number')}
+                                </ReportCellHead>
+                                <ReportCellHead>
+                                    {i18n.t('Percentage')}
+                                </ReportCellHead>
+                                <ReportCellHead>
+                                    {i18n.t('Name')}
+                                </ReportCellHead>
                             </ReportRowHead>
                         </TableHead>
 
@@ -289,8 +338,9 @@ export const SectionOne = ({ reportParameters }) => {
                         <TableHead>
                             <ReportRowHead>
                                 <ReportCellHead colSpan="8">
-                                    1d: Consistency of dataset completeness over
-                                    time
+                                    {i18n.t(
+                                        '1d- Consistency of dataset completeness over time'
+                                    )}
                                 </ReportCellHead>
                             </ReportRowHead>
                             <TableRow>
@@ -308,28 +358,40 @@ export const SectionOne = ({ reportParameters }) => {
                             </TableRow>
                             <ReportRowHead>
                                 <ReportCellHead rowSpan="2">
-                                    Data set
+                                    {i18n.t('Data set')}
                                 </ReportCellHead>
                                 <ReportCellHead rowSpan="2">
-                                    Expected Trend
+                                    {i18n.t('Expected Trend')}
                                 </ReportCellHead>
                                 <ReportCellHead rowSpan="2">
-                                    Compare Region to
+                                    {i18n.t('Compare Region to')}
                                 </ReportCellHead>
                                 <ReportCellHead rowSpan="2">
-                                    Quality threshold
+                                    {i18n.t('Quality threshold')}
                                 </ReportCellHead>
                                 <ReportCellHead rowSpan="2">
-                                    Overall score
+                                    {i18n.t('Overall score')}
                                 </ReportCellHead>
                                 <ReportCellHead colSpan="3">
-                                    {`${reportParameters.orgUnitLevelName} with divergent score`}
+                                    {i18n.t(
+                                        '{{divergents}} with divergent score',
+                                        {
+                                            divergents:
+                                                reportParameters.orgUnitLevelName,
+                                        }
+                                    )}
                                 </ReportCellHead>
                             </ReportRowHead>
                             <ReportRowHead>
-                                <ReportCellHead>Number</ReportCellHead>
-                                <ReportCellHead>Percentage</ReportCellHead>
-                                <ReportCellHead>Name</ReportCellHead>
+                                <ReportCellHead>
+                                    {i18n.t('Number')}
+                                </ReportCellHead>
+                                <ReportCellHead>
+                                    {i18n.t('Percentage')}
+                                </ReportCellHead>
+                                <ReportCellHead>
+                                    {i18n.t('Name')}
+                                </ReportCellHead>
                             </ReportRowHead>
                         </TableHead>
 

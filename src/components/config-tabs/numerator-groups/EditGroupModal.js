@@ -1,3 +1,4 @@
+import i18n from '@dhis2/d2-i18n'
 import { useAlert } from '@dhis2/app-runtime'
 import {
     Button,
@@ -73,7 +74,12 @@ export function EditGroupModal({ groupToEdit, onSave, onClose }) {
                             onSave(values)
                         } else {
                             // warn the user that the group name is not unique
-                            const message = `A group with the name "${values.name}" already exists. Please choose a different name.`
+                            const message = i18n.t(
+                                'A group with the name {{name}} already exists. Please choose a different name.',
+                                {
+                                    name: values.name,
+                                }
+                            )
                             show({ message })
                         }
                     } else {
@@ -91,13 +97,14 @@ export function EditGroupModal({ groupToEdit, onSave, onClose }) {
             {({ handleSubmit }) => (
                 <Modal onClose={onClose} position="middle">
                     <ModalTitle>
-                        {(groupToEdit ? 'Edit' : 'Create') + ' Group'}
+                        {(groupToEdit ? i18n.t('Edit') : i18n.t('Create')) +
+                            i18n.t(' Group')}
                     </ModalTitle>
                     <ModalContent>
                         <Table>
                             <TableBody>
                                 <TableRow>
-                                    <TableCell>Name</TableCell>
+                                    <TableCell>{i18n.t('Name')}</TableCell>
                                     <TableCell>
                                         <Field
                                             name="name"
@@ -108,13 +115,17 @@ export function EditGroupModal({ groupToEdit, onSave, onClose }) {
                                     </TableCell>
                                 </TableRow>
                                 <TableRow>
-                                    <TableCell>Group Members</TableCell>
+                                    <TableCell>
+                                        {i18n.t('Group Members')}
+                                    </TableCell>
                                     <TableCell>
                                         <Field
                                             name="members"
                                             component={MultiSelectFieldFF}
                                             options={membersOptions}
-                                            placeholder="Select numerators"
+                                            placeholder={i18n.t(
+                                                'Select numerators'
+                                            )}
                                             filterable
                                         />
                                     </TableCell>
@@ -125,7 +136,7 @@ export function EditGroupModal({ groupToEdit, onSave, onClose }) {
                     <ModalActions>
                         <ButtonStrip end>
                             <Button secondary onClick={onClose}>
-                                Cancel
+                                {i18n.t('Cancel')}
                             </Button>
                             <Button
                                 primary
@@ -134,7 +145,9 @@ export function EditGroupModal({ groupToEdit, onSave, onClose }) {
                                     handleSubmit()
                                 }}
                             >
-                                {groupToEdit ? 'Save' : 'Create'}
+                                {groupToEdit
+                                    ? i18n.t('Save')
+                                    : i18n.t('Create')}
                             </Button>
                         </ButtonStrip>
                     </ModalActions>

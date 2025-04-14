@@ -41,12 +41,14 @@ export const NoMappingsWarning = () => {
         >
             {isAuthorized ? (
                 <span>
-                    Go to the{' '}
-                    <Link to={'/configurations'}>configurations page</Link> to
-                    set up the report.
+                    {i18n.t('Go to the')}
+                    <Link to={'/configurations'}>
+                        {i18n.t('configurations page')}
+                    </Link>
+                    {i18n.t('to set up the report.')}
                 </span>
             ) : (
-                <span>Contact your system administrator.</span>
+                <span>{i18n.t('Contact your system administrator.')}</span>
             )}
         </NoticeBox>
     )
