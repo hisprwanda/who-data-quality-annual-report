@@ -31,6 +31,23 @@ export const getVal = ({ response, dx, ou, pe }) => {
     return undefined
 }
 
+export const getVals = ({ response, dx, ou, pe }) => {
+    let val = 0
+
+    if (!response || typeof response !== 'object') {
+        return undefined
+    }
+
+    const dxData = response[dx]
+    if (!dxData || typeof dxData !== 'object') {
+        return undefined
+    }
+    for (const ou in dxData) {
+        val += dxData[ou][pe]
+    }
+    return val || undefined
+}
+
 export const getValCO = ({ response, dx, ou, pe, co }) => {
     return response?.[dx]?.[ou]?.[pe]?.[co]
 }

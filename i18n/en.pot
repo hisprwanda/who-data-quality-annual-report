@@ -5,8 +5,8 @@ msgstr ""
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1)\n"
-"POT-Creation-Date: 2024-11-01T15:07:47.517Z\n"
-"PO-Revision-Date: 2024-11-01T15:07:47.518Z\n"
+"POT-Creation-Date: 2024-11-21T07:21:27.326Z\n"
+"PO-Revision-Date: 2024-11-21T07:21:27.327Z\n"
 
 msgid "There is no data for this {{sectionType}}"
 msgstr "There is no data for this {{sectionType}}"
@@ -153,6 +153,9 @@ msgstr "Choose an organisation unit"
 msgid "Choose an organisation unit level"
 msgstr "Choose an organisation unit level"
 
+msgid "Choose an organisation unit group"
+msgstr "Choose an organisation unit group"
+
 msgid "Hide menu"
 msgstr "Hide menu"
 
@@ -200,6 +203,9 @@ msgstr "Printing..."
 
 msgid "Print"
 msgstr "Print"
+
+msgid "Clear selection"
+msgstr "Clear selection"
 
 msgid "No access"
 msgstr "No access"

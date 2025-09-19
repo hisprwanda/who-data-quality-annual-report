@@ -111,7 +111,7 @@ const Sections2a2b2c = ({
                             Overall score
                         </ReportCellHead>
                         <ReportCellHead colSpan="3">
-                            {`${orgUnitLevelName} with divergent score`}
+                            {`${orgUnitLevelName}s with divergent score`}
                         </ReportCellHead>
                     </ReportRowHead>
                     <ReportRowHead>
@@ -203,7 +203,7 @@ const Section2DBlock = ({
                 </TableRow>
                 <TableRow>
                     <ReportCell>
-                        {`Number of ${orgUnitLevelName} with divergent score`}
+                        {`Number of ${orgUnitLevelName}s with divergent score`}
                     </ReportCell>
                     <ReportCell>
                         {dataRow.divergentSubOrgUnits?.number}
@@ -211,7 +211,7 @@ const Section2DBlock = ({
                 </TableRow>
                 <TableRow>
                     <ReportCell>
-                        {`Percent of ${orgUnitLevelName} with divergent score`}
+                        {`Percent of ${orgUnitLevelName}s with divergent score`}
                     </ReportCell>
                     <ReportCell>
                         {formatVal(dataRow.divergentSubOrgUnits?.percent, {
@@ -342,7 +342,7 @@ const Section2EBlock = ({
                 </TableRow>
                 <TableRow>
                     <ReportCell>
-                        {`Number of ${orgUnitLevelName} with divergent score`}
+                        {`Number of ${orgUnitLevelName}s with divergent score`}
                     </ReportCell>
                     <ReportCell>
                         {dataRow.divergentSubOrgUnits?.number}
@@ -350,7 +350,7 @@ const Section2EBlock = ({
                 </TableRow>
                 <TableRow>
                     <ReportCell>
-                        {`Percent of ${orgUnitLevelName} with divergent score`}
+                        {`Percent of ${orgUnitLevelName}s with divergent score`}
                     </ReportCell>
                     <ReportCell>
                         {formatVal(dataRow.divergentSubOrgUnits?.percentage, {

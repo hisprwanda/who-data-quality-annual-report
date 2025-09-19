@@ -66,7 +66,7 @@ export const SectionOne = ({ reportParameters }) => {
                                     Overall score
                                 </ReportCellHead>
                                 <ReportCellHead colSpan="3">
-                                    {`${reportParameters.orgUnitLevelName} with divergent score`}
+                                    {`${reportParameters.orgUnitLevelName}s with divergent score`}
                                 </ReportCellHead>
                             </ReportRowHead>
                             <ReportRowHead>
@@ -144,7 +144,7 @@ export const SectionOne = ({ reportParameters }) => {
                                     Overall score
                                 </ReportCellHead>
                                 <ReportCellHead colSpan="3">
-                                    {`${reportParameters.orgUnitLevelName} with divergent score`}
+                                    {`${reportParameters.orgUnitLevelName}s with divergent score`}
                                 </ReportCellHead>
                             </ReportRowHead>
                             <ReportRowHead>
@@ -226,7 +226,7 @@ export const SectionOne = ({ reportParameters }) => {
                                     Overall Score
                                 </ReportCellHead>
                                 <ReportCellHead colSpan="3">
-                                    {`${reportParameters.orgUnitLevelName} with divergent score`}
+                                    {`${reportParameters.orgUnitLevelName}s with divergent score`}
                                 </ReportCellHead>
                             </ReportRowHead>
                             <ReportRowHead>
@@ -323,7 +323,7 @@ export const SectionOne = ({ reportParameters }) => {
                                     Overall score
                                 </ReportCellHead>
                                 <ReportCellHead colSpan="3">
-                                    {`${reportParameters.orgUnitLevelName} with divergent score`}
+                                    {`${reportParameters.orgUnitLevelName}s with divergent score`}
                                 </ReportCellHead>
                             </ReportRowHead>
                             <ReportRowHead>
@@ -344,7 +344,8 @@ export const SectionOne = ({ reportParameters }) => {
                                             dataset.trend.slice(1)}
                                     </ReportCell>
                                     <ReportCell>
-                                        {dataset.comparison}
+                                        {/* for section 1d, the compare region is the top selected (overall) org unit */}
+                                        {reportParameters.orgUnitLevelName}
                                     </ReportCell>
                                     <ReportCell>
                                         ± {dataset.threshold}%

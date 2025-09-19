@@ -37,7 +37,7 @@ export const DataMappingFormSection = () => {
                     </TableRow>
 
                     <TableRow>
-                        <TableCell>Survel level</TableCell>
+                        <TableCell>Survey level</TableCell>
                         <TableCell>
                             <OrgUnitLevelSelect />
                         </TableCell>

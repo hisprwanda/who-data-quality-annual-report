@@ -5,19 +5,40 @@ import { calculateSection1 } from './section1Calculations.js'
 const reportQueries = {
     reporting_rate_over_all_org_units: {
         resource: 'analytics.json',
+        params: ({ dataSets, orgUnits, orgUnitGroup, periods }) => ({
+            dimension: `dx:${dataSets
+                .map((de) => de + '.REPORTING_RATE')
+                .join(';')},ou:${
+                orgUnits.join(';') + (orgUnitGroup ? ';' + orgUnitGroup : '')
+            },pe:${periods.join(';')}`,
+        }),
+    },
+    // for the section 1 d chart
+    reporting_rate_over_all_org_units_chart: {
+        resource: 'analytics.json',
         params: ({ dataSets, orgUnits, periods }) => ({
             dimension: `dx:${dataSets
                 .map((de) => de + '.REPORTING_RATE')
-                .join(';')},ou:${orgUnits.join(';')},pe:${periods.join(';')}`,
+                .join(';')},ou:${
+                orgUnits.join(';')
+            },pe:${periods.join(';')}`,
         }),
     },
     reporting_rate_by_org_unit_level: {
         resource: 'analytics.json',
-        params: ({ dataSets, orgUnits, orgUnitLevel, periods }) => ({
+        params: ({
+            dataSets,
+            orgUnits,
+            orgUnitLevel,
+            orgUnitGroup,
+            periods,
+        }) => ({
             dimension: `dx:${dataSets
                 .map((ds) => ds + '.REPORTING_RATE')
                 .join(';')},ou:${
-                orgUnits.join(';') + ';' + orgUnitLevel
+                orgUnits.join(';') +
+                (orgUnitLevel ? ';' + orgUnitLevel : '') +
+                (orgUnitGroup ? ';' + orgUnitGroup : '')
             },pe:${periods.join(';')}`,
         }),
     },
@@ -31,38 +52,61 @@ const reportQueries = {
     },
     reporting_timeliness_by_org_unit_level: {
         resource: 'analytics.json',
-        params: ({ dataSets, orgUnits, orgUnitLevel, currentPeriod }) => ({
+        params: ({
+            dataSets,
+            orgUnits,
+            orgUnitLevel,
+            orgUnitGroup,
+            currentPeriod,
+        }) => ({
             dimension: `dx:${dataSets
                 .map((ds) => ds + '.REPORTING_RATE_ON_TIME')
                 .join(';')},ou:${
-                orgUnits.join(';') + ';' + orgUnitLevel
+                orgUnits.join(';') +
+                (orgUnitLevel ? ';' + orgUnitLevel : '') +
+                (orgUnitGroup ? ';' + orgUnitGroup : '')
             },pe:${currentPeriod}`,
         }),
     },
     expected_reports_over_all_org_units: {
         resource: 'analytics.json',
-        params: ({ dataSets, orgUnits, currentPeriod }) => ({
+        params: ({ dataSets, orgUnits, orgUnitGroup, currentPeriod }) => ({
             dimension: `dx:${dataSets
                 .map((ds) => ds + '.EXPECTED_REPORTS')
-                .join(';')},ou:${orgUnits.join(';')},pe:${currentPeriod}`,
+                .join(';')},ou:${
+                orgUnits.join(';') + (orgUnitGroup ? ';' + orgUnitGroup : '')
+            },pe:${currentPeriod}`,
         }),
     },
     expected_reports_by_org_unit_level: {
         resource: 'analytics.json',
-        params: ({ dataSets, orgUnits, orgUnitLevel, currentPeriod }) => ({
+        params: ({
+            dataSets,
+            orgUnits,
+            orgUnitLevel,
+            orgUnitGroup,
+            currentPeriod,
+        }) => ({
             dimension: `dx:${dataSets
                 .map((ds) => ds + '.EXPECTED_REPORTS')
                 .join(';')},ou:${
-                orgUnits.join(';') + ';' + orgUnitLevel
+                orgUnits.join(';') +
+                (orgUnitLevel ? ';' + orgUnitLevel : '') +
+                (orgUnitGroup ? ';' + orgUnitGroup : '')
             },pe:${currentPeriod}`,
         }),
     },
     count_of_data_values_over_all_org_units: {
         resource: 'analytics.json',
-        params: ({ dataElementOperands, orgUnits, currentPeriod }) => ({
-            dimension: `dx:${dataElementOperands.join(';')},ou:${orgUnits.join(
-                ';'
-            )},pe:${currentPeriod}`,
+        params: ({
+            dataElementOperands,
+            orgUnits,
+            orgUnitGroup,
+            currentPeriod,
+        }) => ({
+            dimension: `dx:${dataElementOperands.join(';')},ou:${
+                orgUnits.join(';') + (orgUnitGroup ? ';' + orgUnitGroup : '')
+            },pe:${currentPeriod}`,
             aggregationType: 'COUNT',
         }),
     },
@@ -72,10 +116,13 @@ const reportQueries = {
             dataElementOperands,
             orgUnits,
             orgUnitLevel,
+            orgUnitGroup,
             currentPeriod,
         }) => ({
             dimension: `dx:${dataElementOperands.join(';')},ou:${
-                orgUnits.join(';') + ';' + orgUnitLevel
+                orgUnits.join(';') +
+                (orgUnitLevel ? ';' + orgUnitLevel : '') +
+                (orgUnitGroup ? ';' + orgUnitGroup : '')
             },pe:${currentPeriod}`,
             aggregationType: 'COUNT',
         }),

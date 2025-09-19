@@ -1,5 +1,9 @@
 import { getForecastValue, getMean } from '../utils/mathService.js'
-import { convertAnalyticsResponseToObject, getVal } from '../utils/utils.js'
+import {
+    convertAnalyticsResponseToObject,
+    getVal,
+    getVals,
+} from '../utils/utils.js'
 
 // gets a list of retions in which the reporting rate score was lower than the threshold
 const getRegionsWithLowScore = (filterd_datasets, key) => {
@@ -170,7 +174,7 @@ const getJsonObjectsFormatFromTableFormat = ({
             } else if (comparison === 'th') {
                 rowData['comparison'] = 'Current vs forecast'
             } else if (comparison == 'ou') {
-                rowData['comparison'] = metaData.items[row[ouHeaderIndex]].name
+                rowData['comparison'] = metaData.items[row[ouHeaderIndex]].name // for this one we use the top selected org unit name
             }
         }
 
@@ -460,7 +464,7 @@ const getSection1dChartInfo = ({ allOrgUnitsData, periodsIDs, ou }) => {
 
     for (const dx in formattedData) {
         const points = periods.map(
-            (pe) => getVal({ response: formattedData, dx, ou, pe }) ?? null
+            (pe) => getVals({ response: formattedData, dx, ou, pe }) ?? null
         )
 
         // if all points are null: skip; otherwise, add
@@ -480,14 +484,14 @@ const getSection1dChartInfo = ({ allOrgUnitsData, periodsIDs, ou }) => {
 const getExpectedValues = ({ numerator, response, pe, ou }) => {
     return numerator.dataSetID.reduce((totalExpected, dsUID) => {
         totalExpected += Number(
-            getVal({ response, dx: dsUID + '.EXPECTED_REPORTS', ou, pe }) ?? 0
+            getVals({ response, dx: dsUID + '.EXPECTED_REPORTS', ou, pe }) ?? 0
         )
         return totalExpected
     }, 0)
 }
 
 const getActualValue1C = ({ response, dx, pe, ou }) => {
-    return getVal({ response, dx, ou, pe })
+    return getVals({ response, dx, ou, pe })
 }
 
 const calculateSection1C = ({
@@ -533,12 +537,14 @@ const calculateSection1C = ({
         const threshold = numerator.missing
         const dataElementOperand = numerator.dataElementOperandID
 
+        // TODO: you might need to pass the ous of the selected ou group, then filter out the values whose ouss are not in the group
         const actualValues = getActualValue1C({
             response: overall_counts,
             pe: period,
             ou: overallOrgUnit,
             dx: dataElementOperand,
         })
+
         const expectedValues = getExpectedValues({
             response: overall_expected_reports,
             pe: period,
@@ -615,9 +621,9 @@ export const calculateSection1 = ({
         }), // list of objects for every dataset selected (regarding completeness)
         section1B: getFacilityReportingData({
             allOrgUnitsData:
-                reportQueryResponse.reporting_rate_over_all_org_units,
+                reportQueryResponse.reporting_timeliness_over_all_org_units,
             byOrgUnitLevelData:
-                reportQueryResponse.reporting_rate_by_org_unit_level,
+                reportQueryResponse.reporting_timeliness_by_org_unit_level,
             mappedConfigurations: mappedConfigurations,
             period: period,
             calculatingFor: 'section1B',
@@ -647,7 +653,7 @@ export const calculateSection1 = ({
         }), // list of objects for Consistency of dataset completeness over time
         chartInfo: getSection1dChartInfo({
             allOrgUnitsData:
-                reportQueryResponse.reporting_rate_over_all_org_units,
+                reportQueryResponse.reporting_rate_over_all_org_units_chart,
             periodsIDs,
             ou: overallOrgUnit,
         }),

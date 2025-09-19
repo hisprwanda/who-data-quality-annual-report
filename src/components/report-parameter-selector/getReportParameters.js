@@ -6,6 +6,8 @@ export const getReportParameters = ({
     orgUnitName,
     orgUnitLevel,
     orgUnitLevels,
+    orgUnitGroups,
+    orgUnitGroup,
     boundaryOrgUnitLevel,
     configurations,
     periods,
@@ -14,7 +16,7 @@ export const getReportParameters = ({
         !orgUnitID ||
         !groupID ||
         !configurations ||
-        !orgUnitLevel ||
+        (!orgUnitLevel && !orgUnitGroup) ||
         periods.length === 0 ||
         !boundaryOrgUnitLevel
     ) {
@@ -26,6 +28,7 @@ export const getReportParameters = ({
         groupID
     )
 
+    //TODO: work on this when org unit group is selected. this seems to be used in section 3 and 4 only.
     const orgUnitLevelNamesByLevel = new Map()
     orgUnitLevels.forEach(({ level, displayName }) => {
         orgUnitLevelNamesByLevel.set(level, displayName)
@@ -34,17 +37,16 @@ export const getReportParameters = ({
     const reportParameters = {
         orgUnits: [orgUnitID],
         orgUnitName: orgUnitName,
-        // selected org unit level info
-        orgUnitLevel: `LEVEL-${orgUnitLevel.level}`,
-        orgUnitLevelNumber: orgUnitLevel.level,
-        orgUnitLevelName: orgUnitLevel.displayName,
-        // all org unit levels, if needed for mapping:
+        orgUnitLevelNumber: orgUnitLevel?.level,
+        orgUnitLevelName:
+            orgUnitLevel?.displayName || orgUnitGroup?.displayName, //TODO: u might need to update the name of this variable (orgUnitLevelName) to orgUnitLevelGroupName
         orgUnitLevelNamesByLevel,
         boundaryOrgUnitLevel,
         groupID: groupID,
-        // note that `periods[0]` is the current period
         periods,
         mappedConfiguration,
+        orgUnitLevel: orgUnitLevel ? `OU_LEVEL-${orgUnitLevel.level}` : null,
+        orgUnitGroup: orgUnitGroup ? `OU_GROUP-${orgUnitGroup.id}` : null,
     }
     return reportParameters
 }

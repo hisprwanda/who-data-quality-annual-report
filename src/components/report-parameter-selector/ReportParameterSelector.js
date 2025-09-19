@@ -28,6 +28,14 @@ const configQuery = {
             order: 'level:asc',
         },
     },
+    orgUnitGroups: {
+        resource: 'organisationUnitGroups',
+        params: {
+            paging: false,
+            fields: ['id', 'displayName'],
+            order: 'displayName:asc',
+        },
+    },
 }
 
 export const ReportParameterSelector = ({
@@ -43,13 +51,21 @@ export const ReportParameterSelector = ({
     const [selectedGroup, setSelectedGroup] = useState(null)
     const [selectedOrgUnit, setSelectedOrgUnit] = useState({})
     const [selectedOrgUnitLevel, setSelectedOrgUnitLevel] = useState(null)
+    const [selectedOrgUnitGroup, setSelectedOrgUnitGroup] = useState(null)
     const [selectedPeriods, setSelectedPeriods] = useState([])
 
     const reportGenerateEnabled =
         selectedGroup &&
         selectedOrgUnit.id &&
-        selectedOrgUnitLevel &&
+        (selectedOrgUnitLevel || selectedOrgUnitGroup) &&
         selectedPeriods.length > 0
+
+    const clearSelectionEnabled =
+        selectedGroup ||
+        selectedOrgUnit.id ||
+        selectedOrgUnitLevel ||
+        selectedPeriods.length > 0
+
     const currentReportParameters = useMemo(
         () =>
             getReportParameters({
@@ -59,7 +75,9 @@ export const ReportParameterSelector = ({
                 boundaryOrgUnitLevel: selectedOrgUnit.level,
                 configurations,
                 orgUnitLevel: selectedOrgUnitLevel,
+                orgUnitGroup: selectedOrgUnitGroup,
                 orgUnitLevels: data?.orgUnitLevels.organisationUnitLevels,
+                orgUnitGroups: data?.orgUnitGroups.organisationUnitGroups,
                 periods: selectedPeriods,
             }),
         [
@@ -67,6 +85,7 @@ export const ReportParameterSelector = ({
             selectedGroup,
             configurations,
             selectedOrgUnitLevel,
+            selectedOrgUnitGroup,
             selectedPeriods,
             data,
         ]
@@ -74,6 +93,14 @@ export const ReportParameterSelector = ({
 
     const generateReport = () => {
         setReportParameters(currentReportParameters)
+    }
+
+    const clearSelection = () => {
+        setSelectedGroup(null)
+        setSelectedOrgUnit({})
+        setSelectedOrgUnitLevel(null)
+        setSelectedOrgUnitGroup(null)
+        setSelectedPeriods([])
     }
 
     if (loading) {
@@ -116,6 +143,7 @@ export const ReportParameterSelector = ({
                 />
                 <OrgUnitSelector
                     orgUnitLevels={data?.orgUnitLevels?.organisationUnitLevels}
+                    orgUnitGroups={data?.orgUnitGroups?.organisationUnitGroups}
                     rootOrgUnitsInfo={
                         data?.me?.dataViewOrganisationUnits?.length
                             ? data.me.dataViewOrganisationUnits
@@ -124,7 +152,9 @@ export const ReportParameterSelector = ({
                     selectedOrgUnit={selectedOrgUnit}
                     setSelectedOrgUnit={setSelectedOrgUnit}
                     selectedOrgUnitLevel={selectedOrgUnitLevel}
+                    selectedOrgUnitGroup={selectedOrgUnitGroup}
                     setSelectedOrgUnitLevel={setSelectedOrgUnitLevel}
+                    setSelectedOrgUnitGroup={setSelectedOrgUnitGroup}
                 />
                 <PeriodSelector
                     selectedPeriods={selectedPeriods}
@@ -154,6 +184,13 @@ export const ReportParameterSelector = ({
                             loading={printing}
                         >
                             {printing ? i18n.t('Printing...') : i18n.t('Print')}
+                        </Button>
+                        <Button
+                            small
+                            onClick={clearSelection}
+                            disabled={!clearSelectionEnabled}
+                        >
+                            {i18n.t('Clear selection')}
                         </Button>
                     </ButtonStrip>
                 </div>
