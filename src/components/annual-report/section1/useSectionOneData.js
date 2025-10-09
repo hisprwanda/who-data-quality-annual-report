@@ -9,7 +9,7 @@ const reportQueries = {
             dimension: `dx:${dataSets
                 .map((de) => de + '.REPORTING_RATE')
                 .join(';')},ou:${
-                orgUnits.join(';') + (orgUnitGroup ? ';' + orgUnitGroup : '')
+                orgUnits.join(';') + (orgUnitGroup ? ';' + orgUnitGroup : '') //TODO: remind yrself why we have ouGroup here while in main branch we dont, does it produce different results?
             },pe:${periods.join(';')}`,
         }),
     },

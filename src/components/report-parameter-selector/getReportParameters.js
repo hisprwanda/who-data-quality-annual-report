@@ -45,7 +45,7 @@ export const getReportParameters = ({
         groupID: groupID,
         periods,
         mappedConfiguration,
-        orgUnitLevel: orgUnitLevel ? `OU_LEVEL-${orgUnitLevel.level}` : null,
+        orgUnitLevel: orgUnitLevel ? `LEVEL-${orgUnitLevel.level}` : null,
         orgUnitGroup: orgUnitGroup ? `OU_GROUP-${orgUnitGroup.id}` : null,
     }
     return reportParameters
