@@ -6,3 +6,6 @@ build
 
 # Environment variables
 .env*
+
+# Project documentation
+CLAUDE.md
