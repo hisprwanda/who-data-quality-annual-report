@@ -1,9 +1,47 @@
 import { getForecastValue, getMean } from '../utils/mathService.js'
 import {
     convertAnalyticsResponseToObject,
-    getVal,
     getVals,
 } from '../utils/utils.js'
+
+// Extract unique dataset IDs from analytics response rows
+const getDatasetIDsFromRows = (rows, headers) => {
+    const datasetIDs = new Set()
+    const dxHeaderIndex = headers.findIndex((header) => header.name === 'dx')
+
+    if (dxHeaderIndex === -1) {
+        return datasetIDs
+    }
+
+    rows.forEach((row) => {
+        const dxValue = row[dxHeaderIndex]
+        // Extract dataset ID from values like "datasetID.REPORTING_RATE"
+        const datasetID = dxValue.split('.')[0]
+        datasetIDs.add(datasetID)
+    })
+
+    return datasetIDs
+}
+
+// Filter mapped configurations to only include datasets with data in response
+const filterMappedConfigurationsByRows = (
+    mappedConfigurations,
+    datasetIDsInResponse
+) => {
+    const filteredDataSets = {}
+
+    for (const datasetID in mappedConfigurations.dataSets) {
+        if (datasetIDsInResponse.has(datasetID)) {
+            filteredDataSets[datasetID] =
+                mappedConfigurations.dataSets[datasetID]
+        }
+    }
+
+    return {
+        ...mappedConfigurations,
+        dataSets: filteredDataSets,
+    }
+}
 
 // gets a list of retions in which the reporting rate score was lower than the threshold
 const getRegionsWithLowScore = (filterd_datasets, key) => {
@@ -148,6 +186,11 @@ const getJsonObjectsFormatFromTableFormat = ({
             metaData.items[row[ouHeaderIndex]].name
         rowData['dataset_name'] = metaData.items[row[dsNameIndex]].name
         const currentDataSetId = row[dsNameIndex].split('.')[0]
+
+        // Skip if dataset is not in mapped configurations (can happen with org unit groups)
+        if (!mappedConfigurations.dataSets[currentDataSetId]) {
+            continue
+        }
 
         // adding thresholds where they are not
         if (calculatingFor == 'section1A') {
@@ -298,17 +341,39 @@ const getFacilityReportingData = ({
     period,
     calculatingFor,
 }) => {
+    // Extract dataset IDs that have data in BOTH responses
+    const datasetIDsInAllOrgUnits = getDatasetIDsFromRows(
+        allOrgUnitsData.rows,
+        allOrgUnitsData.headers
+    )
+    const datasetIDsInByOrgUnitLevel = getDatasetIDsFromRows(
+        byOrgUnitLevelData.rows,
+        byOrgUnitLevelData.headers
+    )
+
+    // Use intersection (only datasets in BOTH responses)
+    // This ensures we only show datasets that have data at the selected level/group
+    const datasetIDsInResponse = new Set(
+        [...datasetIDsInAllOrgUnits].filter(id => datasetIDsInByOrgUnitLevel.has(id))
+    )
+
+    // Filter mapped configurations to only include datasets with data in both responses
+    const filteredMappedConfigurations = filterMappedConfigurationsByRows(
+        mappedConfigurations,
+        datasetIDsInResponse
+    )
+
     const reporting_rate_over_all_org_units_formatted =
         getJsonObjectsFormatFromTableFormat({
             ...allOrgUnitsData,
-            mappedConfigurations,
+            mappedConfigurations: filteredMappedConfigurations,
             calculatingFor,
         })
 
     const reporting_rate_by_org_unit_level_formatted =
         getJsonObjectsFormatFromTableFormat({
             ...byOrgUnitLevelData,
-            mappedConfigurations,
+            mappedConfigurations: filteredMappedConfigurations,
             calculatingFor,
         })
 

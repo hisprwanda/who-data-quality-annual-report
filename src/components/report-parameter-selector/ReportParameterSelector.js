@@ -52,12 +52,15 @@ export const ReportParameterSelector = ({
     const [selectedOrgUnit, setSelectedOrgUnit] = useState({})
     const [selectedOrgUnitLevel, setSelectedOrgUnitLevel] = useState(null)
     const [selectedOrgUnitGroup, setSelectedOrgUnitGroup] = useState(null)
+    const [disaggregationType, setDisaggregationType] = useState('level') // 'level' or 'group'
     const [selectedPeriods, setSelectedPeriods] = useState([])
 
     const reportGenerateEnabled =
         selectedGroup &&
         selectedOrgUnit.id &&
-        (selectedOrgUnitLevel || selectedOrgUnitGroup) &&
+        (disaggregationType === 'level'
+            ? selectedOrgUnitLevel
+            : selectedOrgUnitGroup) &&
         selectedPeriods.length > 0
 
     const clearSelectionEnabled =
@@ -100,6 +103,7 @@ export const ReportParameterSelector = ({
         setSelectedOrgUnit({})
         setSelectedOrgUnitLevel(null)
         setSelectedOrgUnitGroup(null)
+        setDisaggregationType('level')
         setSelectedPeriods([])
     }
 
@@ -152,9 +156,11 @@ export const ReportParameterSelector = ({
                     selectedOrgUnit={selectedOrgUnit}
                     setSelectedOrgUnit={setSelectedOrgUnit}
                     selectedOrgUnitLevel={selectedOrgUnitLevel}
-                    selectedOrgUnitGroup={selectedOrgUnitGroup}
                     setSelectedOrgUnitLevel={setSelectedOrgUnitLevel}
+                    selectedOrgUnitGroup={selectedOrgUnitGroup}
                     setSelectedOrgUnitGroup={setSelectedOrgUnitGroup}
+                    disaggregationType={disaggregationType}
+                    setDisaggregationType={setDisaggregationType}
                 />
                 <PeriodSelector
                     selectedPeriods={selectedPeriods}

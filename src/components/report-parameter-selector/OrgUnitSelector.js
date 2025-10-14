@@ -3,6 +3,7 @@ import {
     Button,
     Field,
     OrganisationUnitTree,
+    Radio,
     SelectorBarItem,
     SingleSelectField,
     SingleSelectOption,
@@ -15,18 +16,20 @@ const getSelectionLabel = ({
     selectedOrgUnit,
     selectedOrgUnitLevel,
     selectedOrgUnitGroup,
+    disaggregationType,
 }) => {
     let label = ''
     label += selectedOrgUnit.displayName ?? ''
-    label += label && selectedOrgUnitLevel ? '; ' : ''
-    if (selectedOrgUnitLevel) {
+    const hasDisaggregation =
+        disaggregationType === 'level'
+            ? selectedOrgUnitLevel
+            : selectedOrgUnitGroup
+    label += label && hasDisaggregation ? '; ' : ''
+    if (disaggregationType === 'level' && selectedOrgUnitLevel) {
         label += selectedOrgUnitLevel.displayName
-    }
-    label += label && selectedOrgUnitGroup ? '; ' : ''
-    if (selectedOrgUnitGroup) {
+    } else if (disaggregationType === 'group' && selectedOrgUnitGroup) {
         label += selectedOrgUnitGroup.displayName
     }
-
     return label
 }
 
@@ -37,9 +40,11 @@ export const OrgUnitSelector = ({
     selectedOrgUnit,
     setSelectedOrgUnit,
     selectedOrgUnitLevel,
-    selectedOrgUnitGroup,
     setSelectedOrgUnitLevel,
+    selectedOrgUnitGroup,
     setSelectedOrgUnitGroup,
+    disaggregationType,
+    setDisaggregationType,
 }) => {
     const [open, setOpen] = useState(false)
     const rootOrgUnits = rootOrgUnitsInfo.map(({ id }) => id)
@@ -51,8 +56,7 @@ export const OrgUnitSelector = ({
                 selectedOrgUnit,
                 selectedOrgUnitLevel,
                 selectedOrgUnitGroup,
-                orgUnitLevels,
-                orgUnitGroups,
+                disaggregationType,
             })}
             open={open}
             setOpen={setOpen}
@@ -93,57 +97,69 @@ export const OrgUnitSelector = ({
                             />
                         </div>
                     </Field>
-                    <SingleSelectField
-                        label={i18n.t('Choose an organisation unit level')}
-                        // format `selected` as just the ID so it's a string
-                        selected={selectedOrgUnitLevel?.id ?? ''}
-                        // parse the selected ID to save the full object in state
-                        onChange={({ selected }) => {
-                            const newSelected = orgUnitLevels.find(
-                                (level) => level.id === selected
-                            )
-                            setSelectedOrgUnitLevel(newSelected)
-                        }}
-                        disabled={!!selectedOrgUnitGroup?.id}
-                        clearable
-                    >
-                        {orgUnitLevels
-                            .filter(({ level }) => {
-                                return (
-                                    level > Number(selectedOrgUnit?.level ?? 1)
+                    <Field label={i18n.t('Disaggregate by')}>
+                        <Radio
+                            checked={disaggregationType === 'level'}
+                            label={i18n.t('Level')}
+                            value="level"
+                            onChange={() => setDisaggregationType('level')}
+                        />
+                        <Radio
+                            checked={disaggregationType === 'group'}
+                            label={i18n.t('Group')}
+                            value="group"
+                            onChange={() => setDisaggregationType('group')}
+                        />
+                    </Field>
+                    {disaggregationType === 'level' ? (
+                        <SingleSelectField
+                            label={i18n.t('Choose an organisation unit level')}
+                            // format `selected` as just the ID so it's a string
+                            selected={selectedOrgUnitLevel?.id ?? ''}
+                            // parse the selected ID to save the full object in state
+                            onChange={({ selected }) => {
+                                const newSelected = orgUnitLevels.find(
+                                    (level) => level.id === selected
                                 )
-                            })
-                            .map(({ id, displayName }) => (
+                                setSelectedOrgUnitLevel(newSelected)
+                            }}
+                        >
+                            {orgUnitLevels
+                                .filter(({ level }) => {
+                                    return (
+                                        level >
+                                        Number(selectedOrgUnit?.level ?? 1)
+                                    )
+                                })
+                                .map(({ id, displayName }) => (
+                                    <SingleSelectOption
+                                        key={id}
+                                        value={id}
+                                        label={displayName}
+                                    />
+                                ))}
+                        </SingleSelectField>
+                    ) : (
+                        <SingleSelectField
+                            label={i18n.t('Choose an organisation unit group')}
+                            selected={selectedOrgUnitGroup?.id ?? ''}
+                            onChange={({ selected }) => {
+                                const newSelected = orgUnitGroups?.find(
+                                    (group) => group.id === selected
+                                )
+                                setSelectedOrgUnitGroup(newSelected)
+                            }}
+                            filterable
+                        >
+                            {orgUnitGroups?.map(({ id, displayName }) => (
                                 <SingleSelectOption
                                     key={id}
                                     value={id}
                                     label={displayName}
                                 />
                             ))}
-                    </SingleSelectField>
-                    <SingleSelectField
-                        label={i18n.t('Choose an organisation unit group')}
-                        // format `selected` as just the ID so it's a string
-                        selected={selectedOrgUnitGroup?.id ?? ''}
-                        // parse the selected ID to save the full object in state
-                        onChange={({ selected }) => {
-                            const newSelected = orgUnitGroups.find(
-                                (group) => group.id === selected
-                            )
-                            setSelectedOrgUnitGroup(newSelected)
-                        }}
-                        disabled={!!selectedOrgUnitLevel?.id}
-                        clearable
-                        filterable
-                    >
-                        {orgUnitGroups.map(({ id, displayName }) => (
-                            <SingleSelectOption
-                                key={id}
-                                value={id}
-                                label={displayName}
-                            />
-                        ))}
-                    </SingleSelectField>
+                        </SingleSelectField>
+                    )}
                 </div>
                 <Button
                     secondary
@@ -160,6 +176,7 @@ export const OrgUnitSelector = ({
 }
 
 OrgUnitSelector.propTypes = {
+    disaggregationType: PropTypes.string,
     orgUnitGroups: PropTypes.array,
     orgUnitLevels: PropTypes.array,
     rootOrgUnitsInfo: PropTypes.array,
@@ -173,6 +190,7 @@ OrgUnitSelector.propTypes = {
         id: PropTypes.string,
         level: PropTypes.number,
     }),
+    setDisaggregationType: PropTypes.func,
     setSelectedOrgUnit: PropTypes.func,
     setSelectedOrgUnitGroup: PropTypes.func,
     setSelectedOrgUnitLevel: PropTypes.func,

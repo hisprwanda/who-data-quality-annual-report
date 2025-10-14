@@ -44,10 +44,12 @@ const reportQueries = {
     },
     reporting_timeliness_over_all_org_units: {
         resource: 'analytics.json',
-        params: ({ dataSets, orgUnits, currentPeriod }) => ({
+        params: ({ dataSets, orgUnits, orgUnitGroup, currentPeriod }) => ({
             dimension: `dx:${dataSets
                 .map((ds) => ds + '.REPORTING_RATE_ON_TIME')
-                .join(';')},ou:${orgUnits.join(';')},pe:${currentPeriod}`,
+                .join(';')},ou:${
+                orgUnits.join(';') + (orgUnitGroup ? ';' + orgUnitGroup : '')
+            },pe:${currentPeriod}`,
         }),
     },
     reporting_timeliness_by_org_unit_level: {
