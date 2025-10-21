@@ -67,7 +67,7 @@ const Section3A = ({
                 )
 
                 return (
-                    <div className={styles.section3Grid} key={dataRow.name}>
+                    <div className={styles.section3Grid} key={`${dataRow.name}-${index}`}>
                         <ReportTable>
                             <TableHead>
                                 <ReportRowHead>

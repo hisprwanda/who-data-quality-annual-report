@@ -11,6 +11,7 @@ export const getReportParameters = ({
     boundaryOrgUnitLevel,
     configurations,
     periods,
+    disaggregationType,
 }) => {
     if (
         !orgUnitID ||
@@ -45,8 +46,15 @@ export const getReportParameters = ({
         groupID: groupID,
         periods,
         mappedConfiguration,
-        orgUnitLevel: orgUnitLevel ? `LEVEL-${orgUnitLevel.level}` : null,
-        orgUnitGroup: orgUnitGroup ? `OU_GROUP-${orgUnitGroup.id}` : null,
+        disaggregationType,
+        orgUnitLevel:
+            disaggregationType === 'level' && orgUnitLevel
+                ? `LEVEL-${orgUnitLevel.level}`
+                : null,
+        orgUnitGroup:
+            disaggregationType === 'group' && orgUnitGroup
+                ? `OU_GROUP-${orgUnitGroup.id}`
+                : null,
     }
     return reportParameters
 }

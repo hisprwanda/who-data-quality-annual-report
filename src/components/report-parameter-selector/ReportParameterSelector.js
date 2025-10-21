@@ -67,6 +67,7 @@ export const ReportParameterSelector = ({
         selectedGroup ||
         selectedOrgUnit.id ||
         selectedOrgUnitLevel ||
+        selectedOrgUnitGroup ||
         selectedPeriods.length > 0
 
     const currentReportParameters = useMemo(
@@ -82,6 +83,7 @@ export const ReportParameterSelector = ({
                 orgUnitLevels: data?.orgUnitLevels.organisationUnitLevels,
                 orgUnitGroups: data?.orgUnitGroups.organisationUnitGroups,
                 periods: selectedPeriods,
+                disaggregationType,
             }),
         [
             selectedOrgUnit,
@@ -91,6 +93,7 @@ export const ReportParameterSelector = ({
             selectedOrgUnitGroup,
             selectedPeriods,
             data,
+            disaggregationType,
         ]
     )
 
@@ -105,6 +108,7 @@ export const ReportParameterSelector = ({
         setSelectedOrgUnitGroup(null)
         setDisaggregationType('level')
         setSelectedPeriods([])
+        setReportParameters({})
     }
 
     if (loading) {
