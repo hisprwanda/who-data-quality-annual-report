@@ -35,18 +35,18 @@ export function EditDenominatorModal({
         <Form
             onSubmit={(values) => {
                 // Pick data from values
-                // (some values like dataElementType are just for the form)
                 let newDenominatorData = {
                     name: values.name,
-                    lowLevel: values.level,
+                    lowLevel: values.level ? Number(values.level) : undefined,
                     type: values.type,
+                    dataElementType: values.dataElementType,
+                    dataItemGroupID: values.dataItemGroupID,
+                    dataItem: values.dataItem,
                 }
                 if (values.dataItem?.id) {
-                    // add this separately so we don't set 'undefined' for a
-                    // denominator we're editing with a dataID already.
+                    // add dataID separately for backwards compatibility
                     newDenominatorData = {
                         ...newDenominatorData,
-                        // note different form state structure:
                         dataID: values.dataItem.id,
                     }
                 }

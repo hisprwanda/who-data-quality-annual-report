@@ -31,6 +31,14 @@ export const OrgUnitLevelSelect = () => {
         [data]
     )
 
+    const validValues = useMemo(
+        () =>
+            dataElementGroupOptions
+                ? new Set(dataElementGroupOptions.map((opt) => opt.value))
+                : new Set(),
+        [dataElementGroupOptions]
+    )
+
     const placeholderText = useMemo(() => {
         if (loading) {
             return 'Loading...'
@@ -50,7 +58,9 @@ export const OrgUnitLevelSelect = () => {
                 label={'Org unit levels'}
                 placeholder={placeholderText}
                 disabled={loading || error || !dataElementGroupOptions}
-                parse={(value) => Number(value)}
+                format={(value) =>
+                    value && validValues.has(value) ? value : undefined
+                }
                 filterable
             />
         </div>

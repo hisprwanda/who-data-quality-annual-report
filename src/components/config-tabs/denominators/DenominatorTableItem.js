@@ -39,8 +39,11 @@ const EditDenominatorButton = ({ denominator }) => {
             name: denominator.name,
             code: denominator.code,
             type: denominator.type,
-            level: denominator.lowLevel,
+            level: denominator.lowLevel ? String(denominator.lowLevel) : undefined,
             dataID: denominator.dataID,
+            dataElementType: denominator.dataElementType,
+            dataItemGroupID: denominator.dataItemGroupID,
+            dataItem: denominator.dataItem,
         }),
         [denominator]
     )
