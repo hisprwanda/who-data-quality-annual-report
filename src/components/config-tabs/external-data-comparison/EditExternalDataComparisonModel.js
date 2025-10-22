@@ -44,6 +44,9 @@ export const EditExternalDataComparisonModel = ({
                         values.dataType === 'dataElement'
                             ? 'dataElements'
                             : 'indicators',
+                    dataElementType: values.dataElementType,
+                    dataItemGroupID: values.dataItemGroupID,
+                    dataItem: values.dataItem,
                 })
 
                 onClose()

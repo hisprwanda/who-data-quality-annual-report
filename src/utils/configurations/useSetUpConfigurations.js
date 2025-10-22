@@ -46,13 +46,45 @@ const updateDatastoreSharing = async (engine) => {
     }
 }
 
+const ensureExternalRelationsHaveCodes = (externalRelations) => {
+    let maxCodeNumber = 0
+
+    // First, find the highest existing code number
+    externalRelations.forEach((er) => {
+        if (er.code) {
+            const num = parseInt(er.code.replace('ER', ''), 10)
+            if (!isNaN(num) && num > maxCodeNumber) {
+                maxCodeNumber = num
+            }
+        }
+    })
+
+    // Then assign codes to items without codes
+    let nextCodeNumber = maxCodeNumber
+    return externalRelations.map((er) => {
+        if (er.code) {
+            return er
+        }
+        nextCodeNumber += 1
+        return { ...er, code: `ER${nextCodeNumber}` }
+    })
+}
+
 const convertOldConfigToNew = (oldConfigurations) => {
     // Add 'core' property directly on to numerators
     const { coreIndicators } = oldConfigurations
     const newNumerators = oldConfigurations.numerators.map((numerator) => {
         return { ...numerator, core: coreIndicators.includes(numerator.code) }
     })
-    return { ...oldConfigurations, numerators: newNumerators }
+    // Ensure all external relations have codes
+    const newExternalRelations = ensureExternalRelationsHaveCodes(
+        oldConfigurations.externalRelations || []
+    )
+    return {
+        ...oldConfigurations,
+        numerators: newNumerators,
+        externalRelations: newExternalRelations,
+    }
 }
 
 export const useSetUpConfigurations = (setConfigurations) => {
@@ -63,7 +95,14 @@ export const useSetUpConfigurations = (setConfigurations) => {
     const fetchAndSetConfigurations = useCallback(async () => {
         try {
             const data = await engine.query(CONFIGURATIONS_QUERY)
-            setConfigurations(data.configurations)
+            // Apply migration to ensure external relations have codes
+            const migratedConfigurations = {
+                ...data.configurations,
+                externalRelations: ensureExternalRelationsHaveCodes(
+                    data.configurations.externalRelations || []
+                ),
+            }
+            setConfigurations(migratedConfigurations)
             setLoading(false)
             return
         } catch (err) {
@@ -99,7 +138,12 @@ export const useSetUpConfigurations = (setConfigurations) => {
             // otherwise, we can set up the default configurations
             console.log('No previous configurations found; setting up defaults')
             // (currently these defaults are also from the old app)
-            newConfigurations = defaultConfigurations
+            newConfigurations = {
+                ...defaultConfigurations,
+                externalRelations: ensureExternalRelationsHaveCodes(
+                    defaultConfigurations.externalRelations || []
+                ),
+            }
         }
 
         // finally, send mutation of new configurations to set up data store
